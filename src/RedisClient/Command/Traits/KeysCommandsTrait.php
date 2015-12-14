@@ -9,7 +9,7 @@ use RedisClient\Command\Parameter\KeysParameter;
 use RedisClient\Command\Parameter\LimitParameter;
 use RedisClient\Command\Parameter\StringParameter;
 
-trait RedisKeysCommandsTrait {
+trait KeysCommandsTrait {
 
     /**
      * DEL key [key ...]
@@ -114,7 +114,7 @@ trait RedisKeysCommandsTrait {
      * @param string $key
      * @param string $destinationDb
      * @param int $timeout
-     * @return boolean The command returns TRUE on success.
+     * @return bool The command returns TRUE on success.
      */
     public function migrate($host, $port, $key, $destinationDb, $timeout) {
         return $this->returnCommand(
@@ -252,7 +252,7 @@ trait RedisKeysCommandsTrait {
      *
      * @param string $key
      * @param string $newkey
-     * @return boolean
+     * @return bool
      */
     public function rename($key, $newkey) {
         return $this->returnCommand(
@@ -290,7 +290,7 @@ trait RedisKeysCommandsTrait {
      * @param int $ttl
      * @param string $serializedValue
      * @param bool|false $replace
-     * @return boolean The command returns TRUE on success.
+     * @return bool The command returns TRUE on success.
      */
     public function restore($key, $ttl, $serializedValue, $replace = false) {
         $params = [
@@ -342,8 +342,8 @@ trait RedisKeysCommandsTrait {
      * @param string|null $pattern
      * @param int|array|null $limit
      * @param string|string[]|null $patterns
-     * @param boolean|null $asc
-     * @param boolean $alpha
+     * @param bool|null $asc
+     * @param bool $alpha
      * @param string|null $destination
      * @return mixed
      */

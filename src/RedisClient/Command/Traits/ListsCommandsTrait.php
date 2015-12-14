@@ -9,7 +9,7 @@ use RedisClient\Command\Parameter\KeysParameter;
 use RedisClient\Command\Parameter\StringParameter;
 use RedisClient\Command\Parameter\StringsParameter;
 
-trait RedisListsCommandsTrait {
+trait ListsCommandsTrait {
 
     /**
      * BLPOP key [key ...] timeout
@@ -222,7 +222,7 @@ trait RedisListsCommandsTrait {
      * @param string $key
      * @param int $index
      * @param string $value
-     * @return boolean
+     * @return bool
      */
     public function lset($key, $index, $value) {
         return $this->returnCommand(
@@ -242,7 +242,7 @@ trait RedisListsCommandsTrait {
      * @param string $key
      * @param int $start
      * @param int $stop
-     * @return boolean
+     * @return bool
      */
     public function ltrim($key, $start, $stop) {
         return $this->returnCommand(

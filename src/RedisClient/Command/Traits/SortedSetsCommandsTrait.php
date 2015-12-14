@@ -14,10 +14,9 @@ use RedisClient\Command\Parameter\MinMaxParameter;
 use RedisClient\Command\Parameter\NXOrXXParameter;
 use RedisClient\Command\Parameter\SpecifyIntervalParameter;
 use RedisClient\Command\Parameter\StringParameter;
-use RedisClient\Command\Parameter\StringsParameter;
 use RedisClient\Command\Response\AssocArrayResponseParser;
 
-trait RedisSetsCommandsTrait {
+trait SortedSetsCommandsTrait {
 
     /**
      * ZADD key [NX|XX] [CH] [INCR] score member [score member ...]
@@ -221,7 +220,7 @@ trait RedisSetsCommandsTrait {
      * @param string $key
      * @param string|int $min
      * @param string|int $max
-     * @param boolean|false $withscores
+     * @param bool|false $withscores
      * @param int|array|null $limit
      * @return string[]|array List of elements in the specified score range (optionally with their scores).
      */

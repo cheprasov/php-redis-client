@@ -13,13 +13,13 @@ use RedisClient\Command\Parameter\StringsParameter;
 use RedisClient\Command\Response\AssocArrayResponseParser;
 use RedisClient\Command\Response\TimeResponseParser;
 
-trait RedisServerCommandsTrait {
+trait ServerCommandsTrait {
 
     /**
      * BGREWRITEAOF
      * Available since 1.0.0.
      *
-     * @return boolean Always true
+     * @return bool Always true
      */
     public function bgrewriteaof() {
         return $this->returnCommand(
@@ -61,8 +61,8 @@ trait RedisServerCommandsTrait {
      * @param int|null $clientId
      * @param string|null $type
      * @param string|array|null $addr2
-     * @param boolean|null $skipme
-     * @return boolean|int
+     * @param bool|null $skipme
+     * @return bool|int
      * When called with the three arguments format:
      * Simple string reply: TRUE if the connection exists and has been closed
      * When called with the filter / value format:
@@ -127,7 +127,7 @@ trait RedisServerCommandsTrait {
      * Time complexity: O(1)
      *
      * @param string $connectionName
-     * @param boolean TRUE if the connection name was successfully set.
+     * @param bool TRUE if the connection name was successfully set.
      */
     public function clientSetname($connectionName) {
         return $this->returnCommand(
@@ -208,7 +208,7 @@ trait RedisServerCommandsTrait {
      * Available since 2.0.0.
      * Time complexity: O(1)
      *
-     * @return boolean always True
+     * @return bool always True
      */
     public function configResetstat() {
         return $this->returnCommand(
@@ -220,7 +220,7 @@ trait RedisServerCommandsTrait {
      * CONFIG REWRITE
      * Available since 2.8.0.
      *
-     * @return boolean True when the configuration was rewritten properly. Otherwise an error is returned.
+     * @return bool True when the configuration was rewritten properly. Otherwise an error is returned.
      */
     public function configRewrite() {
         return $this->returnCommand(
@@ -232,7 +232,7 @@ trait RedisServerCommandsTrait {
      * CONFIG SET parameter value
      * Available since 2.0.0.
      *
-     * @return boolean True when the configuration was set properly. Otherwise an error is returned.
+     * @return bool True when the configuration was set properly. Otherwise an error is returned.
      */
     public function configSet($parameter, $value) {
         return $this->returnCommand(
@@ -281,7 +281,7 @@ trait RedisServerCommandsTrait {
      * FLUSHALL
      * Available since 1.0.0.
      *
-     * @return boolean
+     * @return bool
      */
     public function flushall() {
         return $this->returnCommand(
@@ -293,7 +293,7 @@ trait RedisServerCommandsTrait {
      * FLUSHDB
      * Available since 1.0.0.
      *
-     * @return boolean
+     * @return bool
      */
     public function flushdb() {
         return $this->returnCommand(
@@ -352,7 +352,7 @@ trait RedisServerCommandsTrait {
      * SAVE
      * Available since 1.0.0.
      *
-     * @return boolean The commands returns True on success
+     * @return bool The commands returns True on success
      */
     public function save() {
         return $this->returnCommand(
@@ -378,7 +378,7 @@ trait RedisServerCommandsTrait {
      *
      * @param string $host
      * @param string $port
-     * @return boolean
+     * @return bool
      */
     public function slaveof($host, $port) {
         return $this->returnCommand(

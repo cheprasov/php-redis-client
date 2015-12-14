@@ -3,25 +3,16 @@
 namespace RedisClient;
 
 use RedisClient\Command\Pipeline;
-use RedisClient\Command\Traits\RedisServerCommandsTrait;
+use RedisClient\Command\Traits\AllCommandsTrait;
 use RedisClient\Connection\ConnectionInterface;
 use RedisClient\Connection\StreamConnection;
 use RedisClient\Protocol\ProtocolInterface;
 use RedisClient\Protocol\RedisProtocol;
 use RedisClient\Command\CommandInterface;
-use RedisClient\Command\Traits\RedisKeysCommandsTrait;
-use RedisClient\Command\Traits\RedisStringsCommandsTrait;
-use RedisClient\Command\Traits\RedisHashesCommandsTrait;
-use RedisClient\Command\Traits\RedisTransactionsCommandsTrait;
+
 
 class RedisClient {
-
-    use RedisKeysCommandsTrait;
-    use RedisStringsCommandsTrait;
-    use RedisHashesCommandsTrait;
-    use RedisTransactionsCommandsTrait;
-    use RedisServerCommandsTrait
-        ;
+    use AllCommandsTrait;
 
     /**
      * @var ConnectionInterface
@@ -65,20 +56,34 @@ class RedisClient {
         }
     }
 
+    /**
+     * @param CommandInterface $Command
+     * @return mixed
+     */
     public function executeCommand(CommandInterface $Command) {
         return $Command->execute($this->getRedisProtocol());
     }
 
+    /**
+     * @param \Closure|null $Closure
+     * @return $this|bool|mixed
+     */
     public function pipeline(\Closure $Closure = null) {
+        if ($this->Pipeline) {
+            //throw new Error();
+        }
         $this->Pipeline = new Pipeline($this->getRedisProtocol());
         if ($Closure) {
             $Closure($this);
-            return $this->execPipeline();
+            return $this->executePipeline();
         }
         return $this;
     }
 
-    public function execPipeline() {
+    /**
+     * @return bool|mixed
+     */
+    public function executePipeline() {
         if (!$Pipeline = $this->Pipeline) {
             return false;
         }

@@ -49,7 +49,7 @@ var_dump($res);
 
 $Redis->hget('hash', 'a1');
 $Redis->hget('hash', 'a2');
-var_dump($Redis->execPipeline());
+var_dump($Redis->executePipeline());
 /*
 $Redis->pipeline(function($Redis) {
     // ** @var \RedisClient\RedisClient $Redis * /

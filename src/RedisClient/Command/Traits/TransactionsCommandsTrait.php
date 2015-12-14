@@ -9,10 +9,10 @@ use RedisClient\Command\Parameter\KeysParameter;
  * Transactions
  * @link http://redis.io/topics/transactions
  *
- * Class RedisTransactionsCommandsTrait
+ * Class TransactionsCommandsTrait
  * @package RedisClient\Command\Traits
  */
-trait RedisTransactionsCommandsTrait {
+trait TransactionsCommandsTrait {
 
     /**
      * DISCARD

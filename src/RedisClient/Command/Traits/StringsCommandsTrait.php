@@ -2,8 +2,8 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use InvalidArgumentException;
+use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\AssocArrayParameter;
 use RedisClient\Command\Parameter\BitOperationParameter;
 use RedisClient\Command\Parameter\BitParameter;
@@ -14,7 +14,7 @@ use RedisClient\Command\Parameter\KeysParameter;
 use RedisClient\Command\Parameter\NXOrXXParameter;
 use RedisClient\Command\Parameter\StringParameter;
 
-trait RedisStringsCommandsTrait {
+trait StringsCommandsTrait {
 
     /**
      * APPEND key value

@@ -15,10 +15,10 @@ use RedisClient\Command\Response\AssocArrayResponseParser;
  * Hashes
  * @link http://redis.io/commands#hash
  *
- * Class RedisHashesCommandsTrait
+ * Class HashesCommandsTrait
  * @package RedisClient\Command\Traits
  */
-trait RedisHashesCommandsTrait {
+trait HashesCommandsTrait {
 
     /**
      * HDEL key field [field ...]
@@ -195,7 +195,7 @@ trait RedisHashesCommandsTrait {
      * Time complexity: O(N) where N is the number of fields being set.
      * @link http://redis.io/commands/hmset
      *
-     * @return boolean
+     * @return bool
      */
     public function hmset($key, array $fieldValue) {
         return $this->returnCommand(
@@ -203,7 +203,7 @@ trait RedisHashesCommandsTrait {
                 new KeyParameter($key),
                 new AssocArrayParameter($fieldValue),
             ], function($response) {
-                return (boolean) $response;
+                return (bool) $response;
             })
         );
     }

@@ -7,9 +7,8 @@ use RedisClient\Command\Parameter\IntegerParameter;
 use RedisClient\Command\Parameter\KeyParameter;
 use RedisClient\Command\Parameter\KeysParameter;
 use RedisClient\Command\Parameter\StringParameter;
-use RedisClient\Command\Parameter\StringsParameter;
 
-trait RedisSetsCommandsTrait {
+trait SetsCommandsTrait {
 
     /**
      * SADD key member [member ...]
