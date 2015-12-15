@@ -42,10 +42,16 @@ class Command implements CommandInterface {
         }
     }
 
+    /**
+     * @param ParameterInterface $Parameter
+     */
     protected function addParameter(ParameterInterface $Parameter) {
         $this->Parameters[] = $Parameter;
     }
 
+    /**
+     * @param ParameterInterface[] $Parameters
+     */
     protected function addParameters(array $Parameters) {
         foreach ($Parameters as $Parameter) {
             $this->addParameter($Parameter);
@@ -60,7 +66,7 @@ class Command implements CommandInterface {
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getStructure() {
         $structure = preg_split('/\s+/', $this->command);

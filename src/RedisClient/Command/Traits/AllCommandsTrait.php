@@ -5,6 +5,7 @@ namespace RedisClient\Command\Traits;
 trait AllCommandsTrait {
     use ConnectionCommandsTrait;
     use HashesCommandsTrait;
+    use HyperLogLogCommandsTrait;
     use KeysCommandsTrait;
     use ListsCommandsTrait;
     use ScriptingCommandsTrait;
