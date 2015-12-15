@@ -143,7 +143,7 @@ class RedisProtocol implements ProtocolInterface {
     public function send($structure) {
         if (func_num_args() === 1) {
             $raw = $this->pack($structure);
-            var_dump($raw);
+            echo str_replace(['\n','\r'], ' ', json_encode($raw))." => ";
             $this->write($raw);
             $response = $this->read();
         } else {

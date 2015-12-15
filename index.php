@@ -82,6 +82,15 @@ $r = $Redis->scriptExists([sha1("return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}"), sha
 $r = $Redis->scriptLoad("return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}");
 var_dump($r);
 
+var_dump($Redis->pfadd('hll','abc'));
+var_dump($Redis->pfadd('hll','abc'));
+var_dump($Redis->pfadd('hll',['abc', 'bcd']));
+var_dump($Redis->pfcount('hll'));
+var_dump($Redis->pfcount(['hll','hll']));
+
+
+var_dump($Redis->flushall());
+
 
 //$Redis->
 
