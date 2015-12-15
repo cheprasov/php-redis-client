@@ -167,7 +167,7 @@ trait ServerCommandsTrait {
      * Available since 2.8.13.
      * Time complexity: O(N) where N is the number of arguments to the command
      *
-     * @params Command $command
+     * @param Command $command
      * @return string[] List of keys from your command.
      */
     public function commandGetkeys($command) {
@@ -181,7 +181,7 @@ trait ServerCommandsTrait {
      * Available since 2.8.13.
      * Time complexity: O(N) when N is number of commands to look up
      *
-     * @params string[] $commandName
+     * @param string[] $commandName
      * @return array Nested list of command details.
      */
     public function commandInfo($commandName) {
@@ -194,7 +194,7 @@ trait ServerCommandsTrait {
      * CONFIG GET parameter
      * Available since 2.0.0.
      *
-     * @params string|string[]
+     * @param string|string[]
      * @return array
      */
     public function configGet($parameter) {
@@ -256,7 +256,7 @@ trait ServerCommandsTrait {
      * DEBUG OBJECT key
      * Available since 1.0.0.
      *
-     * @params string $key
+     * @param string $key
      * @return string
      */
     public function debugObject($key) {
@@ -364,7 +364,7 @@ trait ServerCommandsTrait {
      * SHUTDOWN [NOSAVE] [SAVE]
      * Available since 1.0.0.
      *
-     * @params string|null $save NOSAVE or SAVE
+     * @param string|null $save NOSAVE or SAVE
      */
     public function shutdown($save) {
         return $this->returnCommand(

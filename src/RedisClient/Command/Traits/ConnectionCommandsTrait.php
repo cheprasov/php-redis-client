@@ -31,7 +31,7 @@ trait ConnectionCommandsTrait {
      * ECHO message
      * Available since 1.0.0.
      *
-     * @params string $message
+     * @param string $message
      * @return string Returns message
      */
     public function echoMessage($message) {
@@ -44,7 +44,7 @@ trait ConnectionCommandsTrait {
      * PING
      * Available since 1.0.0.
      *
-     * @params string $message
+     * @param string $message
      * @return string Returns message
      */
     public function ping($message) {
@@ -72,7 +72,7 @@ trait ConnectionCommandsTrait {
      * @param int $db
      * @return bool
      */
-    public function SELECT($db) {
+    public function select($db) {
         return $this->returnCommand(
             new Command('SELECT', new IntegerParameter($db))
         );

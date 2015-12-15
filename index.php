@@ -41,9 +41,9 @@ var_dump($Redis->hget('hash', 'a2'));
 var_dump($Redis->hget('hash', 'a3'));
 
 
-$res = $Redis->pipeline()->hget('hash', 'a1')->hget('hash', 'a1')->execPipeline();
+$res = $Redis->pipeline()->hget('hash', 'a1')->hget('hash', 'a1')->executePipeline();
 var_dump($res);
-$res = $Redis->pipeline()->hget('hash', 'a2')->multi()->hget('hash', 'a2')->hget('hash', 'a3')->exec()->execPipeline();
+$res = $Redis->pipeline()->hget('hash', 'a2')->multi()->hget('hash', 'a2')->hget('hash', 'a3')->exec()->executePipeline();
 var_dump($res);
 
 
@@ -74,6 +74,12 @@ $r = $Redis->configGet('databases');
 $r = $Redis->debugObject('hash');
 $r = $Redis->time();
 
+$r = $Redis->evalScript("return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}", ['a','b'], [1, 2]);
+$r = $Redis->scriptExists(sha1("return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}"));
+var_dump($r);
+
+$r = $Redis->scriptExists([sha1("return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}"), sha1(11)]);
+$r = $Redis->scriptLoad("return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}");
 var_dump($r);
 
 
