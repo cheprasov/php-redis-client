@@ -7,11 +7,8 @@ use RedisClient\Command\Parameter\IntegerParameter;
 use RedisClient\Command\Parameter\StringParameter;
 
 /**
- * Transactions
- * @link http://redis.io/topics/transactions
- *
- * Class TransactionsCommandsTrait
- * @package RedisClient\Command\Traits
+ * Connection
+ * @link http://redis.io/commands#connection
  */
 trait ConnectionCommandsTrait {
 
