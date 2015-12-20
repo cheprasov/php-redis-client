@@ -3,13 +3,7 @@
 namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
-use RedisClient\Command\Parameter\AddressParameter;
-use RedisClient\Command\Parameter\CommandParameter;
-use RedisClient\Command\Parameter\EnumParameter;
-use RedisClient\Command\Parameter\IntegerParameter;
-use RedisClient\Command\Parameter\KeyParameter;
-use RedisClient\Command\Parameter\StringParameter;
-use RedisClient\Command\Parameter\StringsParameter;
+use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\AssocArrayResponseParser;
 use RedisClient\Command\Response\TimeResponseParser;
 
@@ -71,23 +65,23 @@ trait ServerCommandsTrait {
     public function clientKill($addr = null, $clientId = null, $type = null, $addr2 = null, $skipme = null) {
         $params = [];
         if ($addr) {
-            $params[] = new AddressParameter($addr);
+            $params[] = Parameter::address($addr);
         }
         if ($clientId) {
-            $params[] = new StringParameter('ID');
-            $params[] = new IntegerParameter($clientId);
+            $params[] = Parameter::string('ID');
+            $params[] = Parameter::integer($clientId);
         }
         if ($type && preg_match('/^(normal|slave|pubsub)$/i', $type)) {
-            $params[] = new StringParameter('TYPE');
-            $params[] = new StringParameter(strtolower(trim($type)));
+            $params[] = Parameter::string('TYPE');
+            $params[] = Parameter::string(strtolower(trim($type)));
         }
         if ($addr2) {
-            $params[] = new StringParameter('ADDR');
-            $params[] = new AddressParameter($addr2);
+            $params[] = Parameter::string('ADDR');
+            $params[] = Parameter::address($addr2);
         }
         if (!is_null($skipme)) {
-            $params[] = new StringParameter('SKIPME');
-            $params[] = new AddressParameter($skipme ? 'yes' : 'no');
+            $params[] = Parameter::string('SKIPME');
+            $params[] = Parameter::address($skipme ? 'yes' : 'no');
         }
         return $this->returnCommand(
             new Command('CLIENT KILL', $params)
@@ -117,7 +111,7 @@ trait ServerCommandsTrait {
      */
     public function clientPause($timeout) {
         return $this->returnCommand(
-            new Command('CLIENT PAUSE', new IntegerParameter($timeout))
+            new Command('CLIENT PAUSE', Parameter::integer($timeout))
         );
     }
 
@@ -131,7 +125,7 @@ trait ServerCommandsTrait {
      */
     public function clientSetname($connectionName) {
         return $this->returnCommand(
-            new Command('CLIENT SETNAME', new StringParameter($connectionName))
+            new Command('CLIENT SETNAME', Parameter::string($connectionName))
         );
     }
 
@@ -172,7 +166,7 @@ trait ServerCommandsTrait {
      */
     public function commandGetkeys($command) {
         return $this->returnCommand(
-            new Command('COMMAND GETKEYS', new CommandParameter($command))
+            new Command('COMMAND GETKEYS', Parameter::command($command))
         );
     }
 
@@ -186,7 +180,7 @@ trait ServerCommandsTrait {
      */
     public function commandInfo($commandName) {
         return $this->returnCommand(
-            new Command('COMMAND INFO', new StringsParameter($commandName))
+            new Command('COMMAND INFO', Parameter::strings($commandName))
         );
     }
 
@@ -199,7 +193,7 @@ trait ServerCommandsTrait {
      */
     public function configGet($parameter) {
         return $this->returnCommand(
-            new Command('CONFIG GET', new StringParameter($parameter), AssocArrayResponseParser::getInstance())
+            new Command('CONFIG GET', Parameter::string($parameter), AssocArrayResponseParser::getInstance())
         );
     }
 
@@ -261,7 +255,7 @@ trait ServerCommandsTrait {
      */
     public function debugObject($key) {
         return $this->returnCommand(
-            new Command('DEBUG OBJECT', new KeyParameter($key))
+            new Command('DEBUG OBJECT', Parameter::key($key))
         );
     }
 
@@ -310,7 +304,7 @@ trait ServerCommandsTrait {
      */
     public function info($section) {
         return $this->returnCommand(
-            new Command('INFO', new StringParameter($section))
+            new Command('INFO', Parameter::string($section))
         );
     }
 
@@ -368,7 +362,7 @@ trait ServerCommandsTrait {
      */
     public function shutdown($save) {
         return $this->returnCommand(
-            new Command('SHUTDOWN', new EnumParameter($save, ['', 'NOSAVE', 'SAVE'], 0))
+            new Command('SHUTDOWN', $save ? Parameter::enum($save, ['NOSAVE', 'SAVE']) : null)
         );
     }
 
@@ -383,8 +377,8 @@ trait ServerCommandsTrait {
     public function slaveof($host, $port) {
         return $this->returnCommand(
             new Command('SLAVEOF', [
-                new StringParameter($host),
-                new StringParameter($port)
+                Parameter::string($host),
+                Parameter::string($port)
             ])
         );
     }
@@ -399,10 +393,10 @@ trait ServerCommandsTrait {
      */
     public function slowlog($subcommand, $argument = null) {
         $params = [
-            new EnumParameter($subcommand, ['GET', 'LEN', 'RESET'])
+            Parameter::enum($subcommand, ['GET', 'LEN', 'RESET'])
         ];
         if (!is_null($argument)) {
-            $params[] = new StringParameter($argument);
+            $params[] = Parameter::string($argument);
         }
         return $this->returnCommand(
             new Command('SLOWLOG', $params)

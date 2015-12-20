@@ -3,7 +3,7 @@
 namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
-use RedisClient\Command\Parameter\KeysParameter;
+use RedisClient\Command\Parameter\Parameter;
 
 /**
  * Transactions
@@ -77,7 +77,7 @@ trait TransactionsCommandsTrait {
      */
     public function watch($keys) {
         return $this->returnCommand(
-            new Command('WATCH', new KeysParameter($keys))
+            new Command('WATCH', Parameter::keys($keys))
         );
     }
 

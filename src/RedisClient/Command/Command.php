@@ -16,7 +16,7 @@ class Command implements CommandInterface {
     /**
      * @var ParameterInterface[]
      */
-    protected $Parameters = [];
+    protected $parameters = [];
 
     /**
      * @var \Closure|ResponseParserInterface
@@ -25,16 +25,16 @@ class Command implements CommandInterface {
 
     /**
      * @param string $command
-     * @param ParameterInterface|ParameterInterface[] $Parameters
+     * @param mixed $parameters
      * @param ResponseParserInterface|\Closure|null $ResponseParser
      */
-    public function __construct($command, $Parameters = null, $ResponseParser = null) {
+    public function __construct($command, $parameters = null, $ResponseParser = null) {
         $this->command = $command;
-        if ($Parameters) {
-            if (is_array($Parameters)) {
-                $this->addParameters($Parameters);
+        if ($parameters) {
+            if (is_array($parameters)) {
+                $this->addParameters($parameters);
             } else {
-                $this->addParameter($Parameters);
+                $this->addParameter($parameters);
             }
         }
         if ($ResponseParser) {
@@ -43,14 +43,15 @@ class Command implements CommandInterface {
     }
 
     /**
-     * @param ParameterInterface $Parameter
+     * @param mixed $Parameter
      */
-    protected function addParameter(ParameterInterface $Parameter) {
-        $this->Parameters[] = $Parameter;
+    protected function addParameter(
+        $Parameter) {
+        $this->parameters[] = $Parameter;
     }
 
     /**
-     * @param ParameterInterface[] $Parameters
+     * @param array $Parameters
      */
     protected function addParameters(array $Parameters) {
         foreach ($Parameters as $Parameter) {
@@ -71,13 +72,11 @@ class Command implements CommandInterface {
     public function getStructure() {
         $structure = preg_split('/\s+/', $this->command);
 
-        foreach ($this->Parameters as $Parameter) {
-            /** @var ParameterInterface $Parameter */
-            $param = $Parameter->getStructure();
-            if (is_array($param)) {
-                $structure = array_merge($structure, $param);
+        foreach ($this->parameters as $parameter) {
+            if (is_array($parameter)) {
+                $structure = array_merge($structure, $parameter);
             } else {
-                $structure[] = $param;
+                $structure[] = $parameter;
             }
         }
 

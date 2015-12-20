@@ -4,15 +4,7 @@ namespace RedisClient\Command\Traits;
 
 use InvalidArgumentException;
 use RedisClient\Command\Command;
-use RedisClient\Command\Parameter\AssocArrayParameter;
-use RedisClient\Command\Parameter\BitOperationParameter;
-use RedisClient\Command\Parameter\BitParameter;
-use RedisClient\Command\Parameter\FloatParameter;
-use RedisClient\Command\Parameter\IntegerParameter;
-use RedisClient\Command\Parameter\KeyParameter;
-use RedisClient\Command\Parameter\KeysParameter;
-use RedisClient\Command\Parameter\NXOrXXParameter;
-use RedisClient\Command\Parameter\StringParameter;
+use RedisClient\Command\Parameter\Parameter;
 
 trait StringsCommandsTrait {
 
@@ -29,8 +21,8 @@ trait StringsCommandsTrait {
     public function append($key, $value) {
         return $this->returnCommand(
             new Command('APPEND', [
-                new KeyParameter($key),
-                new StringParameter($value),
+                Parameter::key($key),
+                Parameter::string($value),
             ])
         );
     }
@@ -50,10 +42,10 @@ trait StringsCommandsTrait {
         if (isset($start) xor isset($end)) {
             throw new InvalidArgumentException();
         }
-        $params = [new KeyParameter($key)];
+        $params = [Parameter::key($key)];
         if (isset($start) && isset($end)) {
-            $params[] = new IntegerParameter($start);
-            $params[] = new IntegerParameter($end);
+            $params[] = Parameter::integer($start);
+            $params[] = Parameter::integer($end);
         }
         return $this->returnCommand(
             new Command('BITCOUNT', $params)
@@ -75,9 +67,9 @@ trait StringsCommandsTrait {
     public function bitop($operation, $destkey, $keys) {
         return $this->returnCommand(
             new Command('BITOP', [
-                new BitOperationParameter($operation),
-                new KeyParameter($destkey),
-                new KeysParameter($keys),
+                Parameter::bitOperation($operation),
+                Parameter::key($destkey),
+                Parameter::keys($keys),
             ])
         );
     }
@@ -96,13 +88,13 @@ trait StringsCommandsTrait {
      */
     public function bitpos($key, $bit, $start = null, $end = null) {
         $params = [
-            new KeyParameter($key),
-            new StringParameter($bit),
+            Parameter::key($key),
+            Parameter::string($bit),
         ];
         if (isset($start)) {
-            $params[] = new IntegerParameter($start);
+            $params[] = Parameter::integer($start);
             if (isset($end)) {
-                $params[] = new IntegerParameter($end);
+                $params[] = Parameter::integer($end);
             }
         }
         return $this->returnCommand(
@@ -121,7 +113,7 @@ trait StringsCommandsTrait {
      */
     public function decr($key) {
         return $this->returnCommand(
-            new Command('DECR', new KeyParameter($key))
+            new Command('DECR', Parameter::key($key))
         );
     }
 
@@ -137,8 +129,8 @@ trait StringsCommandsTrait {
      */
     public function decrby($key, $decrement) {
         return $this->returnCommand(new Command('DECRBY', [
-            new KeyParameter($key),
-            new IntegerParameter($decrement),
+            Parameter::key($key),
+            Parameter::integer($decrement),
         ]));
     }
 
@@ -153,7 +145,7 @@ trait StringsCommandsTrait {
      */
     public function get($key) {
         return $this->returnCommand(
-            new Command('GET', new KeyParameter($key))
+            new Command('GET', Parameter::key($key))
         );
     }
 
@@ -170,8 +162,8 @@ trait StringsCommandsTrait {
     public function getbit($key, $offset) {
         return $this->returnCommand(
             new Command('GETBIT', [
-                new KeyParameter($key),
-                new IntegerParameter($offset),
+                Parameter::key($key),
+                Parameter::integer($offset),
             ])
         );
     }
@@ -190,9 +182,9 @@ trait StringsCommandsTrait {
     public function getrange($key, $start, $end) {
         return $this->returnCommand(
             new Command('GETRANGE', [
-                new KeyParameter($key),
-                new IntegerParameter($start),
-                new IntegerParameter($end),
+                Parameter::key($key),
+                Parameter::integer($start),
+                Parameter::integer($end),
             ])
         );
     }
@@ -210,8 +202,8 @@ trait StringsCommandsTrait {
     public function getset($key, $value) {
         return $this->returnCommand(
             new Command('GETSET', [
-                new KeyParameter($key),
-                new StringParameter($value),
+                Parameter::key($key),
+                Parameter::string($value),
             ])
         );
     }
@@ -227,7 +219,7 @@ trait StringsCommandsTrait {
      */
     public function incr($key) {
         return $this->returnCommand(
-            new Command('INCR', [new KeyParameter($key)])
+            new Command('INCR', [Parameter::key($key)])
         );
     }
 
@@ -244,8 +236,8 @@ trait StringsCommandsTrait {
     public function incrby($key, $increment) {
         return $this->returnCommand(
             new Command('INCRBY', [
-                new KeyParameter($key),
-                new IntegerParameter($key),
+                Parameter::key($key),
+                Parameter::integer($key),
             ])
         );
     }
@@ -263,8 +255,8 @@ trait StringsCommandsTrait {
     public function incrbyfloat($key, $increment) {
         return $this->returnCommand(
             new Command('INCRBYFLOAT', [
-                new KeyParameter($key),
-                new FloatParameter($increment),
+                Parameter::key($key),
+                Parameter::float($increment),
             ])
         );
     }
@@ -281,7 +273,7 @@ trait StringsCommandsTrait {
     public function mget($keys) {
         $keys = (array) $keys;
         $values = $this->returnCommand(
-            new Command('MGET', new KeysParameter($keys))
+            new Command('MGET', Parameter::keys($keys))
         );
         return array_combine($keys, $values);
     }
@@ -297,7 +289,7 @@ trait StringsCommandsTrait {
      */
     public function mset(array $keyValues) {
         return $this->returnCommand(
-            new Command('MSET', new AssocArrayParameter($keyValues))
+            new Command('MSET', Parameter::assocArray($keyValues))
         );
     }
 
@@ -312,7 +304,7 @@ trait StringsCommandsTrait {
      */
     public function msetnx(array $keyValues) {
         return $this->returnCommand(
-            new Command('MSETNX', new AssocArrayParameter($keyValues))
+            new Command('MSETNX', Parameter::assocArray($keyValues))
         );
     }
 
@@ -330,9 +322,9 @@ trait StringsCommandsTrait {
     public function psetex($key, $milliseconds, $value) {
         return $this->returnCommand(
             new Command('PSETEX', [
-                new KeyParameter($key),
-                new IntegerParameter($milliseconds),
-                new StringParameter($value),
+                Parameter::key($key),
+                Parameter::integer($milliseconds),
+                Parameter::string($value),
             ])
         );
     }
@@ -353,19 +345,19 @@ trait StringsCommandsTrait {
      */
     public function set($key, $value, $seconds = null, $milliseconds = null, $exist = null) {
         $params = [
-            new KeyParameter($key),
-            new StringParameter($value),
+            Parameter::key($key),
+            Parameter::string($value),
         ];
         if (isset($seconds)) {
-            $params[] = new StringParameter('EX');
-            $params[] = new IntegerParameter($seconds);
+            $params[] = Parameter::string('EX');
+            $params[] = Parameter::integer($seconds);
         }
         if (isset($milliseconds)) {
-            $params[] = new StringParameter('PX');
-            $params[] = new IntegerParameter($milliseconds);
+            $params[] = Parameter::string('PX');
+            $params[] = Parameter::integer($milliseconds);
         }
         if (isset($exist)) {
-            $params[] = new NXOrXXParameter($exist);
+            $params[] = Parameter::nxXx($exist);
         }
         return $this->returnCommand(
             new Command('SET', $params)
@@ -386,9 +378,9 @@ trait StringsCommandsTrait {
     public function setbit($key, $offset, $bit) {
         return $this->returnCommand(
             new Command('SETBIT', [
-                new KeyParameter($key),
-                new IntegerParameter($offset),
-                new BitParameter($bit),
+                Parameter::key($key),
+                Parameter::integer($offset),
+                Parameter::bit($bit),
             ])
         );
     }
@@ -421,8 +413,8 @@ trait StringsCommandsTrait {
     public function setnx($key, $value) {
         return $this->returnCommand(
             new Command('SETNX', [
-                new KeyParameter($key),
-                new StringParameter($value),
+                Parameter::key($key),
+                Parameter::string($value),
             ])
         );
     }
@@ -438,9 +430,9 @@ trait StringsCommandsTrait {
      */
     public function setrange($key, $offset, $value) {
         return $this->returnCommand(new Command('SETRANGE', [
-            new KeyParameter($key),
-            new IntegerParameter($offset),
-            new StringParameter($value),
+            Parameter::key($key),
+            Parameter::integer($offset),
+            Parameter::string($value),
         ]));
     }
 
@@ -455,7 +447,7 @@ trait StringsCommandsTrait {
      */
     public function strlen($key) {
         return $this->returnCommand(
-            new Command('STRLEN', new KeyParameter($key))
+            new Command('STRLEN', Parameter::key($key))
         );
     }
 

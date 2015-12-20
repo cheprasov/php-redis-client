@@ -3,13 +3,7 @@
 namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
-use RedisClient\Command\Parameter\AssocArrayParameter;
-use RedisClient\Command\Parameter\FloatParameter;
-use RedisClient\Command\Parameter\IntegerParameter;
-use RedisClient\Command\Parameter\KeyParameter;
-use RedisClient\Command\Parameter\KeysParameter;
-use RedisClient\Command\Parameter\StringParameter;
-use RedisClient\Command\Response\AssocArrayResponseParser;
+use RedisClient\Command\Parameter\Parameter;
 
 /**
  * Hashes
@@ -34,8 +28,8 @@ trait HashesCommandsTrait {
     public function hdel($key, $fields) {
         return $this->returnCommand(
             new Command('HDEL', [
-                new KeyParameter($key),
-                new KeysParameter($fields),
+                Parameter::key($key),
+                Parameter::keys($fields),
             ])
         );
     }
@@ -53,8 +47,8 @@ trait HashesCommandsTrait {
     public function hexists($key, $field) {
         return $this->returnCommand(
             new Command('HEXISTS', [
-                new KeyParameter($key),
-                new KeyParameter($field),
+                Parameter::key($key),
+                Parameter::key($field),
             ])
         );
     }
@@ -73,8 +67,8 @@ trait HashesCommandsTrait {
     public function hget($key, $field) {
         return $this->returnCommand(
             new Command('HGET', [
-                new KeyParameter($key),
-                new KeyParameter($field),
+                Parameter::key($key),
+                Parameter::key($field),
             ])
         );
     }
@@ -91,7 +85,7 @@ trait HashesCommandsTrait {
      */
     public function hgetall($key) {
         return $this->returnCommand(
-            new Command('HGETALL', new KeyParameter($key), AssocArrayResponseParser::getInstance())
+            new Command('HGETALL', Parameter::key($key), AssocArrayResponseParser::getInstance())
         );
     }
 
@@ -109,9 +103,9 @@ trait HashesCommandsTrait {
     public function hincrby($key, $field, $increment) {
         return $this->returnCommand(
             new Command('HINCRBY', [
-                new KeyParameter($key),
-                new KeyParameter($field),
-                new IntegerParameter($increment),
+                Parameter::key($key),
+                Parameter::key($field),
+                Parameter::integer($increment),
             ])
         );
     }
@@ -130,9 +124,9 @@ trait HashesCommandsTrait {
     public function hincrbyfloat($key, $field, $increment) {
         return $this->returnCommand(
             new Command('HINCRBYFLOAT', [
-                new KeyParameter($key),
-                new KeyParameter($field),
-                new FloatParameter($increment),
+                Parameter::key($key),
+                Parameter::key($field),
+                Parameter::float($increment),
             ])
         );
     }
@@ -148,7 +142,7 @@ trait HashesCommandsTrait {
      */
     public function hkeys($key) {
         return $this->returnCommand(
-            new Command('HKEYS', new KeyParameter($key))
+            new Command('HKEYS', Parameter::key($key))
         );
     }
 
@@ -163,7 +157,7 @@ trait HashesCommandsTrait {
      */
     public function hlen($key) {
         return $this->returnCommand(
-            new Command('HLEN', new KeyParameter($key))
+            new Command('HLEN', Parameter::key($key))
         );
     }
 
@@ -180,8 +174,8 @@ trait HashesCommandsTrait {
     public function hmget($key, $fields) {
         return $this->returnCommand(
             new Command('HMGET', [
-                new KeyParameter($key),
-                new KeysParameter($fields),
+                Parameter::key($key),
+                Parameter::keys($fields),
             ], function($response) use ($fields) {
                 $fields = (array) $fields;
                 return array_combine($fields, $response);
@@ -200,8 +194,8 @@ trait HashesCommandsTrait {
     public function hmset($key, array $fieldValue) {
         return $this->returnCommand(
             new Command('HMSET', [
-                new KeyParameter($key),
-                new AssocArrayParameter($fieldValue),
+                Parameter::key($key),
+                Parameter::assocArray($fieldValue),
             ], function($response) {
                 return (bool) $response;
             })
@@ -223,9 +217,9 @@ trait HashesCommandsTrait {
     public function hset($key, $field, $value) {
         return $this->returnCommand(
             new Command('HSET', [
-                new KeyParameter($key),
-                new KeyParameter($field),
-                new StringParameter($value),
+                Parameter::key($key),
+                Parameter::key($field),
+                Parameter::string($value),
             ])
         );
     }
@@ -245,9 +239,9 @@ trait HashesCommandsTrait {
     public function hsetnx($key, $field, $value) {
         return $this->returnCommand(
             new Command('HSETNX', [
-                new KeyParameter($key),
-                new KeyParameter($field),
-                new StringParameter($value),
+                Parameter::key($key),
+                Parameter::key($field),
+                Parameter::string($value),
             ])
         );
     }
@@ -266,8 +260,8 @@ trait HashesCommandsTrait {
     public function hstrlen($key, $field) {
         return $this->returnCommand(
             new Command('HSTRLEN', [
-                new KeyParameter($key),
-                new KeyParameter($field),
+                Parameter::key($key),
+                Parameter::key($field),
             ])
         );
     }
@@ -283,7 +277,7 @@ trait HashesCommandsTrait {
      */
     public function hvals($key) {
         return $this->returnCommand(
-            new Command('HVALS', new KeyParameter($key))
+            new Command('HVALS', Parameter::key($key))
         );
     }
 
@@ -301,16 +295,16 @@ trait HashesCommandsTrait {
      */
     public function hscan($key, $cursor, $pattern = null, $count = null) {
         $params = [
-            new KeyParameter($key),
-            new IntegerParameter($cursor),
+            Parameter::key($key),
+            Parameter::integer($cursor),
         ];
         if (isset($pattern)) {
-            $params[] = new StringParameter('MATCH');
-            $params[] = new StringParameter($pattern);
+            $params[] = Parameter::string('MATCH');
+            $params[] = Parameter::string($pattern);
         }
         if (isset($count)) {
-            $params[] = new StringParameter('COUNT');
-            $params[] = new IntegerParameter($count);
+            $params[] = Parameter::string('COUNT');
+            $params[] = Parameter::integer($count);
         }
         return $this->returnCommand(
             new Command('HSCAN', $params)
