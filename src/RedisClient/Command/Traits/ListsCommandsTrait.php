@@ -3,11 +3,7 @@
 namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
-use RedisClient\Command\Parameter\IntegerParameter;
-use RedisClient\Command\Parameter\KeyParameter;
-use RedisClient\Command\Parameter\KeysParameter;
-use RedisClient\Command\Parameter\StringParameter;
-use RedisClient\Command\Parameter\StringsParameter;
+use RedisClient\Command\Parameter\Parameter;
 
 trait ListsCommandsTrait {
 
@@ -23,8 +19,8 @@ trait ListsCommandsTrait {
     public function blpop($key, $timeout) {
         return $this->returnCommand(
             new Command('BLPOP', [
-                new KeysParameter($key),
-                new IntegerParameter($timeout),
+                Parameter::keys($key),
+                Parameter::integer($timeout),
             ])
         );
     }
@@ -41,8 +37,8 @@ trait ListsCommandsTrait {
     public function brpop($key, $timeout) {
         return $this->returnCommand(
             new Command('BRPOP', [
-                new KeysParameter($key),
-                new IntegerParameter($timeout),
+                Parameter::keys($key),
+                Parameter::integer($timeout),
             ])
         );
     }
@@ -61,9 +57,9 @@ trait ListsCommandsTrait {
     public function brpoplpush($source, $destination, $timeout) {
         return $this->returnCommand(
             new Command('BRPOPLPUSH', [
-                new KeyParameter($source),
-                new KeyParameter($destination),
-                new IntegerParameter($timeout)
+                Parameter::key($source),
+                Parameter::key($destination),
+                Parameter::integer($timeout)
             ])
         );
     }
@@ -80,8 +76,8 @@ trait ListsCommandsTrait {
     public function lindex($key, $index) {
         return $this->returnCommand(
             new Command('LINDEX', [
-                new KeysParameter($key),
-                new IntegerParameter($index),
+                Parameter::keys($key),
+                Parameter::integer($index),
             ])
         );
     }
@@ -100,10 +96,10 @@ trait ListsCommandsTrait {
     public function linsert($key, $before = true, $pivot, $value) {
         return $this->returnCommand(
             new Command('LINSERT', [
-                new KeyParameter($key),
-                new StringParameter($before ? 'BEFORE' : 'AFTER'),
-                new StringParameter($pivot),
-                new StringParameter($value),
+                Parameter::key($key),
+                Parameter::string($before ? 'BEFORE' : 'AFTER'),
+                Parameter::string($pivot),
+                Parameter::string($value),
             ])
         );
     }
@@ -118,7 +114,7 @@ trait ListsCommandsTrait {
      */
     public function llen($key) {
         return $this->returnCommand(
-            new Command('LLEN', new KeyParameter($key))
+            new Command('LLEN', Parameter::key($key))
         );
     }
 
@@ -133,7 +129,7 @@ trait ListsCommandsTrait {
      */
     public function lpop($key) {
         return $this->returnCommand(
-            new Command('LPOP', new KeyParameter($key))
+            new Command('LPOP', Parameter::key($key))
         );
     }
 
@@ -149,8 +145,8 @@ trait ListsCommandsTrait {
     public function lpush($key, $value) {
         return $this->returnCommand(
             new Command('LPUSH', [
-                new KeysParameter($key),
-                new StringsParameter($value),
+                Parameter::keys($key),
+                Parameter::strings($value),
             ])
         );
     }
@@ -167,8 +163,8 @@ trait ListsCommandsTrait {
     public function lpushx($key, $value) {
         return $this->returnCommand(
             new Command('LPUSHX', [
-                new KeysParameter($key),
-                new StringParameter($value),
+                Parameter::keys($key),
+                Parameter::string($value),
             ])
         );
     }
@@ -186,9 +182,9 @@ trait ListsCommandsTrait {
     public function lrange($key, $start, $stop) {
         return $this->returnCommand(
             new Command('LRANGE', [
-                new KeyParameter($key),
-                new IntegerParameter($start),
-                new IntegerParameter($stop)
+                Parameter::key($key),
+                Parameter::integer($start),
+                Parameter::integer($stop)
             ])
         );
     }
@@ -206,9 +202,9 @@ trait ListsCommandsTrait {
     public function lrem($key, $count, $value) {
         return $this->returnCommand(
             new Command('LREM', [
-                new KeyParameter($key),
-                new IntegerParameter($count),
-                new StringParameter($value)
+                Parameter::key($key),
+                Parameter::integer($count),
+                Parameter::string($value)
             ])
         );
     }
@@ -227,9 +223,9 @@ trait ListsCommandsTrait {
     public function lset($key, $index, $value) {
         return $this->returnCommand(
             new Command('LSET', [
-                new KeyParameter($key),
-                new IntegerParameter($index),
-                new StringParameter($value)
+                Parameter::key($key),
+                Parameter::integer($index),
+                Parameter::string($value)
             ])
         );
     }
@@ -247,9 +243,9 @@ trait ListsCommandsTrait {
     public function ltrim($key, $start, $stop) {
         return $this->returnCommand(
             new Command('LTRIM', [
-                new KeyParameter($key),
-                new IntegerParameter($start),
-                new IntegerParameter($stop)
+                Parameter::key($key),
+                Parameter::integer($start),
+                Parameter::integer($stop)
             ])
         );
     }
@@ -264,7 +260,7 @@ trait ListsCommandsTrait {
      */
     public function rpop($key) {
         return $this->returnCommand(
-            new Command('RPOP', new KeyParameter($key))
+            new Command('RPOP', Parameter::key($key))
         );
     }
 
@@ -280,8 +276,8 @@ trait ListsCommandsTrait {
     public function rpoplpush($source, $destination) {
         return $this->returnCommand(
             new Command('RPOPLPUSH', [
-                new KeyParameter($source),
-                new KeyParameter($destination),
+                Parameter::key($source),
+                Parameter::key($destination),
             ])
         );
     }
@@ -298,8 +294,8 @@ trait ListsCommandsTrait {
     public function rpush($key, $value) {
         return $this->returnCommand(
             new Command('RPUSH', [
-                new KeyParameter($key),
-                new StringsParameter($value)
+                Parameter::key($key),
+                Parameter::strings($value)
             ])
         );
     }
@@ -316,8 +312,8 @@ trait ListsCommandsTrait {
     public function rpushx($key, $value) {
         return $this->returnCommand(
             new Command('RPUSHX', [
-                new KeyParameter($key),
-                new StringsParameter($value)
+                Parameter::key($key),
+                Parameter::strings($value)
             ])
         );
     }

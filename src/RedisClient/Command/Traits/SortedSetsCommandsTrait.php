@@ -3,17 +3,7 @@
 namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
-use RedisClient\Command\Parameter\AggregateParameter;
-use RedisClient\Command\Parameter\AssocArrayParameter;
-use RedisClient\Command\Parameter\IntegerParameter;
-use RedisClient\Command\Parameter\IntegersParameter;
-use RedisClient\Command\Parameter\KeyParameter;
-use RedisClient\Command\Parameter\KeysParameter;
-use RedisClient\Command\Parameter\LimitParameter;
-use RedisClient\Command\Parameter\MinMaxParameter;
-use RedisClient\Command\Parameter\NXOrXXParameter;
-use RedisClient\Command\Parameter\SpecifyIntervalParameter;
-use RedisClient\Command\Parameter\StringParameter;
+use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\AssocArrayResponseParser;
 
 trait SortedSetsCommandsTrait {
@@ -32,18 +22,18 @@ trait SortedSetsCommandsTrait {
      */
     public function zadd($key, $nx = null, $ch = false, $incr = false, array $member) {
         $params = [
-            new KeyParameter($key),
+            Parameter::key($key),
         ];
         if ($nx) {
-            $params[] = new NXOrXXParameter($nx);
+            $params[] = Parameter::nxXx($nx);
         }
         if ($ch) {
-            $params[] = new StringParameter('CH');
+            $params[] = Parameter::string('CH');
         }
         if ($incr) {
-            $params[] = new StringParameter('INCR');
+            $params[] = Parameter::string('INCR');
         }
-        $params[] = new AssocArrayParameter($member);
+        $params[] = Parameter::assocArray($member);
         return $this->returnCommand(
             new Command('ZADD', $params)
         );
@@ -59,7 +49,7 @@ trait SortedSetsCommandsTrait {
      */
     public function zcard($key) {
         return $this->returnCommand(
-            new Command('ZCARD', new KeyParameter($key))
+            new Command('ZCARD', Parameter::key($key))
         );
     }
 
@@ -76,9 +66,9 @@ trait SortedSetsCommandsTrait {
     public function zcount($key, $min, $max) {
         return $this->returnCommand(
             new Command('ZCOUNT', [
-                new KeyParameter($key),
-                new MinMaxParameter($min),
-                new MinMaxParameter($max),
+                Parameter::key($key),
+                Parameter::minMax($min),
+                Parameter::minMax($max),
             ])
         );
     }
@@ -96,9 +86,9 @@ trait SortedSetsCommandsTrait {
     public function zincrby($key, $increment, $member) {
         return $this->returnCommand(
             new Command('ZINCRBY', [
-                new KeyParameter($key),
-                new IntegerParameter($increment),
-                new KeyParameter($member)
+                Parameter::key($key),
+                Parameter::integer($increment),
+                Parameter::key($member)
             ], function($response) {
                 return (int) $response;
             })
@@ -119,16 +109,16 @@ trait SortedSetsCommandsTrait {
      */
     public function zinterstore($destination, $key, $weight = null, $aggregate = null) {
         $params = [
-            new KeyParameter($destination),
-            new KeysParameter($key),
+            Parameter::key($destination),
+            Parameter::keys($key),
         ];
         if ($weight) {
-            $params[] = new StringParameter('WEIGHTS');
-            $params[] = new IntegersParameter($weight);
+            $params[] = Parameter::string('WEIGHTS');
+            $params[] = Parameter::integers($weight);
         }
         if ($aggregate) {
-            $params[] = new StringParameter('AGGREGATE');
-            $params[] = new AggregateParameter($aggregate);
+            $params[] = Parameter::string('AGGREGATE');
+            $params[] = Parameter::aggregate($aggregate);
         }
         return $this->returnCommand(
             new Command('ZINTERSTORE', $params)
@@ -148,9 +138,9 @@ trait SortedSetsCommandsTrait {
     public function zlexcount($key, $min, $max) {
         return $this->returnCommand(
             new Command('ZLEXCOUNT', [
-                new KeyParameter($key),
-                new SpecifyIntervalParameter($min),
-                new SpecifyIntervalParameter($max),
+                Parameter::key($key),
+                Parameter::specifyInterval($min),
+                Parameter::specifyInterval($max),
             ])
         );
     }
@@ -170,12 +160,12 @@ trait SortedSetsCommandsTrait {
      */
     public function zrange($key, $start, $stop, $withscores = false) {
         $params = [
-            new KeyParameter($key),
-            new IntegerParameter($start),
-            new IntegerParameter($stop),
+            Parameter::key($key),
+            Parameter::integer($start),
+            Parameter::integer($stop),
         ];
         if ($withscores) {
-            $params[] = new StringParameter('WITHSCORES');
+            $params[] = Parameter::string('WITHSCORES');
         }
         return $this->returnCommand(
             new Command('ZRANGE', $params, $withscores ? AssocArrayResponseParser::getInstance() : null)
@@ -197,13 +187,13 @@ trait SortedSetsCommandsTrait {
      */
     public function zrangebylex($key, $min, $max, $limit = null) {
         $params = [
-            new KeyParameter($key),
-            new SpecifyIntervalParameter($min),
-            new SpecifyIntervalParameter($max),
+            Parameter::key($key),
+            Parameter::specifyInterval($min),
+            Parameter::specifyInterval($max),
         ];
         if ($limit) {
-            $params[] = new StringParameter('LIMIT');
-            $params[] = new LimitParameter($limit);
+            $params[] = Parameter::string('LIMIT');
+            $params[] = Parameter::limit($limit);
         }
         return $this->returnCommand(
             new Command('ZRANGEBYLEX', $params)
@@ -226,16 +216,16 @@ trait SortedSetsCommandsTrait {
      */
     public function zrangebyscore($key, $min, $max, $withscores = false, $limit = null) {
         $params = [
-            new KeyParameter($key),
-            new MinMaxParameter($min),
-            new MinMaxParameter($max),
+            Parameter::key($key),
+            Parameter::minMax($min),
+            Parameter::minMax($max),
         ];
         if ($withscores) {
-            $params [] = new StringParameter('WITHSCORES');
+            $params [] = Parameter::string('WITHSCORES');
         }
         if ($limit) {
-            $params[] = new StringParameter('LIMIT');
-            $params[] = new LimitParameter($limit);
+            $params[] = Parameter::string('LIMIT');
+            $params[] = Parameter::limit($limit);
         }
         return $this->returnCommand(
             new Command('ZRANGEBYSCORE', $params, $withscores ? AssocArrayResponseParser::getInstance() : null)
@@ -254,8 +244,8 @@ trait SortedSetsCommandsTrait {
     public function zrank($key, $member) {
         return $this->returnCommand(
             new Command('ZRANK', [
-                new KeyParameter($key),
-                new KeyParameter($member)
+                Parameter::key($key),
+                Parameter::key($member)
             ])
         );
     }
@@ -273,8 +263,8 @@ trait SortedSetsCommandsTrait {
     public function zrem($key, $member) {
         return $this->returnCommand(
             new Command('ZREM', [
-                new KeyParameter($key),
-                new KeysParameter($member)
+                Parameter::key($key),
+                Parameter::keys($member)
             ])
         );
     }
@@ -293,9 +283,9 @@ trait SortedSetsCommandsTrait {
     public function zremrangebylex($key, $min, $max) {
         return $this->returnCommand(
             new Command('ZREMRANGEBYLEX', [
-                new KeyParameter($key),
-                new SpecifyIntervalParameter($min),
-                new SpecifyIntervalParameter($max),
+                Parameter::key($key),
+                Parameter::specifyInterval($min),
+                Parameter::specifyInterval($max),
             ])
         );
     }
@@ -314,9 +304,9 @@ trait SortedSetsCommandsTrait {
     public function zremrangebyrank($key, $start, $stop) {
         return $this->returnCommand(
             new Command('ZREMRANGEBYRANK', [
-                new KeyParameter($key),
-                new IntegerParameter($start),
-                new IntegerParameter($stop)
+                Parameter::key($key),
+                Parameter::integer($start),
+                Parameter::integer($stop)
             ])
         );
     }
@@ -335,9 +325,9 @@ trait SortedSetsCommandsTrait {
     public function zremrangebyscore($key, $min, $max) {
         return $this->returnCommand(
             new Command('ZREMRANGEBYSCORE', [
-                new KeyParameter($key),
-                new MinMaxParameter($min),
-                new MinMaxParameter($max),
+                Parameter::key($key),
+                Parameter::minMax($min),
+                Parameter::minMax($max),
             ])
         );
     }
@@ -357,12 +347,12 @@ trait SortedSetsCommandsTrait {
      */
     public function zrevrange($key, $start, $stop, $withscores = false) {
         $params = [
-            new KeyParameter($key),
-            new IntegerParameter($start),
-            new IntegerParameter($stop),
+            Parameter::key($key),
+            Parameter::integer($start),
+            Parameter::integer($stop),
         ];
         if ($withscores) {
-            $params[] = new StringParameter('WITHSCORES');
+            $params[] = Parameter::string('WITHSCORES');
         }
         return $this->returnCommand(
             new Command('ZREVRANGE', $params, $withscores ? AssocArrayResponseParser::getInstance() : null)
@@ -384,13 +374,13 @@ trait SortedSetsCommandsTrait {
      */
     public function zrevrangebylex($key, $max, $min, $limit = null) {
         $params = [
-            new KeyParameter($key),
-            new SpecifyIntervalParameter($max),
-            new SpecifyIntervalParameter($min),
+            Parameter::key($key),
+            Parameter::specifyInterval($max),
+            Parameter::specifyInterval($min),
         ];
         if ($limit) {
-            $params[] = new StringParameter('LIMIT');
-            $params[] = new LimitParameter($limit);
+            $params[] = Parameter::string('LIMIT');
+            $params[] = Parameter::limit($limit);
         }
         return $this->returnCommand(
             new Command('ZREVRANGEBYLEX', $params)
@@ -409,8 +399,8 @@ trait SortedSetsCommandsTrait {
     public function zrevrank($key, $member) {
         return $this->returnCommand(
             new Command('ZREVRANK', [
-                new KeyParameter($key),
-                new KeyParameter($member)
+                Parameter::key($key),
+                Parameter::key($member)
             ])
         );
     }
@@ -430,16 +420,16 @@ trait SortedSetsCommandsTrait {
      */
     public function zscan($key, $cursor, $pattern = null, $count = null) {
         $params = [
-            new KeyParameter($key),
-            new IntegerParameter($cursor),
+            Parameter::key($key),
+            Parameter::integer($cursor),
         ];
         if ($pattern) {
-            $params[] = new StringParameter('MATCH');
-            $params[] = new StringParameter($pattern);
+            $params[] = Parameter::string('MATCH');
+            $params[] = Parameter::string($pattern);
         }
         if ($count) {
-            $params[] = new StringParameter('COUNT');
-            $params[] = new IntegerParameter($count);
+            $params[] = Parameter::string('COUNT');
+            $params[] = Parameter::integer($count);
         }
         return $this->returnCommand(
             new Command('ZSCAN', $params)
@@ -458,8 +448,8 @@ trait SortedSetsCommandsTrait {
     public function zscore($key, $member) {
         return $this->returnCommand(
             new Command('ZSCORE', [
-                new KeyParameter($key),
-                new KeyParameter($this)
+                Parameter::key($key),
+                Parameter::key($this)
             ])
         );
     }
@@ -478,16 +468,16 @@ trait SortedSetsCommandsTrait {
      */
     public function zunionstore($destination, $key, $weight, $aggregate) {
         $params = [
-            new KeyParameter($destination),
-            new KeysParameter($key),
+            Parameter::key($destination),
+            Parameter::keys($key),
         ];
         if ($weight) {
-            $params[] = new StringParameter('WEIGHTS');
-            $params[] = new IntegersParameter($weight);
+            $params[] = Parameter::string('WEIGHTS');
+            $params[] = Parameter::integers($weight);
         }
         if ($aggregate) {
-            $params[] = new StringParameter('AGGREGATE');
-            $params[] = new AggregateParameter($aggregate);
+            $params[] = Parameter::string('AGGREGATE');
+            $params[] = Parameter::aggregate($aggregate);
         }
         return $this->returnCommand(
             new Command('ZUNIONSTORE', $params)

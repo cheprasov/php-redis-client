@@ -3,10 +3,7 @@
 namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
-use RedisClient\Command\Parameter\IntegerParameter;
-use RedisClient\Command\Parameter\KeysParameter;
-use RedisClient\Command\Parameter\StringParameter;
-use RedisClient\Command\Parameter\StringsParameter;
+use RedisClient\Command\Parameter\Parameter;
 
 /**
  * Scripting
@@ -26,16 +23,16 @@ trait ScriptingCommandsTrait {
      */
     public function evalScript($script, $keys = null, $args = null) {
         $params = [
-            new StringParameter($script)
+            Parameter::string($script)
         ];
         if (is_array($keys)) {
-            $params[] = new IntegerParameter(count($keys));
-            $params[] = new KeysParameter($keys);
+            $params[] = Parameter::integer(count($keys));
+            $params[] = Parameter::keys($keys);
         } else {
-            $params[] = new IntegerParameter(0);
+            $params[] = Parameter::integer(0);
         }
         if (is_array($args)) {
-            $params[] = new StringsParameter($args);
+            $params[] = Parameter::strings($args);
         }
         return $this->returnCommand(
             new Command('EVAL', $params)
@@ -54,16 +51,16 @@ trait ScriptingCommandsTrait {
      */
     public function evalsha($sha, $keys = null, $args = null) {
         $params = [
-            new StringParameter($sha)
+            Parameter::string($sha)
         ];
         if (is_array($keys)) {
-            $params[] = new IntegerParameter(count($keys));
-            $params[] = new KeysParameter($keys);
+            $params[] = Parameter::integer(count($keys));
+            $params[] = Parameter::keys($keys);
         } else {
-            $params[] = new IntegerParameter(0);
+            $params[] = Parameter::integer(0);
         }
         if (is_array($args)) {
-            $params[] = new IntegerParameter($args);
+            $params[] = Parameter::integer($args);
         }
         return $this->returnCommand(
             new Command('EVALSHA', $params)
@@ -83,7 +80,7 @@ trait ScriptingCommandsTrait {
         return $this->returnCommand(
             new Command(
                 'SCRIPT EXISTS',
-                new StringsParameter($script),
+                Parameter::strings($script),
                 is_array($script) ? null : function($result) {return $result[0];}
             )
         );
@@ -125,7 +122,7 @@ trait ScriptingCommandsTrait {
      */
     public function scriptLoad($script) {
         return $this->returnCommand(
-            new Command('SCRIPT LOAD', new StringParameter($script))
+            new Command('SCRIPT LOAD', Parameter::string($script))
         );
     }
 

@@ -3,10 +3,7 @@
 namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
-use RedisClient\Command\Parameter\IntegerParameter;
-use RedisClient\Command\Parameter\KeyParameter;
-use RedisClient\Command\Parameter\KeysParameter;
-use RedisClient\Command\Parameter\StringParameter;
+use RedisClient\Command\Parameter\Parameter;
 
 trait SetsCommandsTrait {
 
@@ -23,8 +20,8 @@ trait SetsCommandsTrait {
     public function sadd($key, $member) {
         return $this->returnCommand(
             new Command('SADD', [
-                new KeyParameter($key),
-                new KeysParameter($member)
+                Parameter::key($key),
+                Parameter::keys($member)
             ])
         );
     }
@@ -39,7 +36,7 @@ trait SetsCommandsTrait {
      */
     public function scard($key) {
         return $this->returnCommand(
-            new Command('SCARD', new KeyParameter($key))
+            new Command('SCARD', Parameter::key($key))
         );
     }
 
@@ -53,7 +50,7 @@ trait SetsCommandsTrait {
      */
     public function sdiff($key) {
         return $this->returnCommand(
-            new Command('SDIFF', new KeysParameter($key))
+            new Command('SDIFF', Parameter::keys($key))
         );
     }
 
@@ -69,8 +66,8 @@ trait SetsCommandsTrait {
     public function sdiffstore($destination, $key) {
         return $this->returnCommand(
             new Command('SDIFFSTORE', [
-                new KeyParameter($destination),
-                new KeysParameter($key)
+                Parameter::key($destination),
+                Parameter::keys($key)
             ])
         );
     }
@@ -85,7 +82,7 @@ trait SetsCommandsTrait {
      */
     public function sinter($key) {
         return $this->returnCommand(
-            new Command('SINTER', new KeysParameter($key))
+            new Command('SINTER', Parameter::keys($key))
         );
     }
 
@@ -101,8 +98,8 @@ trait SetsCommandsTrait {
     public function sinterstore($destination, $key) {
         return $this->returnCommand(
             new Command('SINTERSTORE', [
-                new KeyParameter($destination),
-                new KeysParameter($key)
+                Parameter::key($destination),
+                Parameter::keys($key)
             ])
         );
     }
@@ -120,8 +117,8 @@ trait SetsCommandsTrait {
     public function sismember($key, $member) {
         return $this->returnCommand(
             new Command('SISMEMBER', [
-                new KeyParameter($key),
-                new KeysParameter($member)
+                Parameter::key($key),
+                Parameter::keys($member)
             ])
         );
     }
@@ -136,7 +133,7 @@ trait SetsCommandsTrait {
      */
     public function smembers($key) {
         return $this->returnCommand(
-            new Command('SMEMBERS', new KeyParameter($key))
+            new Command('SMEMBERS', Parameter::key($key))
         );
     }
 
@@ -154,9 +151,9 @@ trait SetsCommandsTrait {
     public function smove($source, $destination, $member) {
         return $this->returnCommand(
             new Command('SMOVE', [
-                new KeyParameter($source),
-                new KeyParameter($destination),
-                new KeyParameter($member)
+                Parameter::key($source),
+                Parameter::key($destination),
+                Parameter::key($member)
             ])
         );
     }
@@ -172,10 +169,10 @@ trait SetsCommandsTrait {
      */
     public function spop($key, $count = null) {
         $params = [
-            new KeyParameter($key)
+            Parameter::key($key)
         ];
         if ($count) {
-            $params[] = new IntegerParameter($count);
+            $params[] = Parameter::integer($count);
         }
         return $this->returnCommand(
             new Command('SPOP', $params)
@@ -194,10 +191,10 @@ trait SetsCommandsTrait {
      */
     public function srandmember($key, $count = null) {
         $params = [
-            new KeyParameter($key)
+            Parameter::key($key)
         ];
         if ($count) {
-            $params[] = new IntegerParameter($count);
+            $params[] = Parameter::integer($count);
         }
         return $this->returnCommand(
             new Command('SRANDMEMBER', $params)
@@ -216,8 +213,8 @@ trait SetsCommandsTrait {
     public function srem($key, $member) {
         return $this->returnCommand(
             new Command('SREM', [
-                new KeyParameter($key),
-                new KeysParameter($member),
+                Parameter::key($key),
+                Parameter::keys($member),
             ])
         );
     }
@@ -237,16 +234,16 @@ trait SetsCommandsTrait {
      */
     public function sscan($key, $cursor, $pattern = null, $count = null) {
         $params = [
-            new KeyParameter($key),
-            new IntegerParameter($cursor),
+            Parameter::key($key),
+            Parameter::integer($cursor),
         ];
         if ($pattern) {
-            $params[] = new StringParameter('MATCH');
-            $params[] = new StringParameter($pattern);
+            $params[] = Parameter::string('MATCH');
+            $params[] = Parameter::string($pattern);
         }
         if ($count) {
-            $params[] = new StringParameter('COUNT');
-            $params[] = new IntegerParameter($count);
+            $params[] = Parameter::string('COUNT');
+            $params[] = Parameter::integer($count);
         }
         return $this->returnCommand(
             new Command('SSCAN', $params)
@@ -263,7 +260,7 @@ trait SetsCommandsTrait {
      */
     public function sunion($key) {
         return $this->returnCommand(
-            new Command('SUNION', new KeysParameter($key))
+            new Command('SUNION', Parameter::keys($key))
         );
     }
 
@@ -279,8 +276,8 @@ trait SetsCommandsTrait {
     public function sunionstore($destination, $key) {
         return $this->returnCommand(
             new Command('SUNIONSTORE', [
-                new KeyParameter($destination),
-                new KeysParameter($key)
+                Parameter::key($destination),
+                Parameter::keys($key)
             ])
         );
     }

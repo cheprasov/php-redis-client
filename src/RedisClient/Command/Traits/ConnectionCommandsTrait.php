@@ -3,8 +3,7 @@
 namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
-use RedisClient\Command\Parameter\IntegerParameter;
-use RedisClient\Command\Parameter\StringParameter;
+use RedisClient\Command\Parameter\Parameter;
 
 /**
  * Connection
@@ -33,7 +32,7 @@ trait ConnectionCommandsTrait {
      */
     public function echoMessage($message) {
         return $this->returnCommand(
-            new Command('ECHO', new StringParameter($message))
+            new Command('ECHO', Parameter::string($message))
         );
     }
 
@@ -46,7 +45,7 @@ trait ConnectionCommandsTrait {
      */
     public function ping($message) {
         return $this->returnCommand(
-            new Command('PING', new StringParameter($message))
+            new Command('PING', Parameter::string($message))
         );
     }
 
@@ -71,7 +70,7 @@ trait ConnectionCommandsTrait {
      */
     public function select($db) {
         return $this->returnCommand(
-            new Command('SELECT', new IntegerParameter($db))
+            new Command('SELECT', Parameter::integer($db))
         );
     }
 
