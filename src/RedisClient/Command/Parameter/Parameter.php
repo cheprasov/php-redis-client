@@ -144,8 +144,7 @@ class Parameter {
      */
     public static function integers($integers) {
         $integers = (array) $integers;
-        array_walk($integers, 'static::integer');
-        return $integers;
+        return array_map('static::integer', $integers);
     }
 
     /**
@@ -162,8 +161,7 @@ class Parameter {
      */
     public static function keys($keys) {
         $keys = (array) $keys;
-        array_walk($keys, 'static::key');
-        return $keys;
+        return array_map('static::key', $keys);
     }
 
     /**
@@ -253,8 +251,7 @@ class Parameter {
      */
     public static function strings($strings) {
         $strings = (array) $strings;
-        array_walk($strings, 'static::string');
-        return $strings;
+        return array_map('static::string', $strings);
     }
 
 }
