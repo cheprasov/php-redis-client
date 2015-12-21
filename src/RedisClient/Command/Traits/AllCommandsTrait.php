@@ -3,6 +3,7 @@
 namespace RedisClient\Command\Traits;
 
 trait AllCommandsTrait {
+    use ClusterCommandsTrait;
     use ConnectionCommandsTrait;
     use HashesCommandsTrait;
     use HyperLogLogCommandsTrait;

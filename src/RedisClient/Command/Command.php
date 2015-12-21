@@ -43,18 +43,17 @@ class Command implements CommandInterface {
     }
 
     /**
-     * @param mixed $Parameter
+     * @param mixed $parameter
      */
-    protected function addParameter(
-        $Parameter) {
-        $this->parameters[] = $Parameter;
+    protected function addParameter($parameter) {
+        $this->parameters[] = $parameter;
     }
 
     /**
-     * @param array $Parameters
+     * @param array $parameters
      */
-    protected function addParameters(array $Parameters) {
-        foreach ($Parameters as $Parameter) {
+    protected function addParameters(array $parameters) {
+        foreach ($parameters as $Parameter) {
             $this->addParameter($Parameter);
         }
     }
