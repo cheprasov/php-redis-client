@@ -2,22 +2,34 @@
 
 namespace RedisClient;
 
+use RedisClient\Command\CommandInterface;
 use RedisClient\Command\Pipeline;
 use RedisClient\Command\Traits\AllCommandsTrait;
-use RedisClient\Connection\ConnectionInterface;
 use RedisClient\Connection\StreamConnection;
+use RedisClient\Exception\RedisException;
 use RedisClient\Protocol\ProtocolInterface;
 use RedisClient\Protocol\RedisProtocol;
-use RedisClient\Command\CommandInterface;
 
-
+/**
+ * Class RedisClient
+ * @package RedisClient
+ */
 class RedisClient {
     use AllCommandsTrait;
 
+    const CONFIG_SERVER = 'server';
+    const CONFIG_TIMEOUT = 'timeout';
+    const CONFIG_THROW_REDIS_EXCEPTIONS = 'throw-redis-exceptions';
+
     /**
-     * @var ConnectionInterface
+     * Default configuration
+     * @var array
      */
-    protected $Connection;
+    protected static $defaultConfig = [
+        self::CONFIG_SERVER => 'tcp://127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
+        self::CONFIG_TIMEOUT => 0.1, // seconds
+        self::CONFIG_THROW_REDIS_EXCEPTIONS => true,
+    ];
 
     /**
      * @var ProtocolInterface
@@ -30,17 +42,41 @@ class RedisClient {
     protected $Pipeline;
 
     /**
-     * @return StreamConnection
+     * @var array
      */
-    protected function getConnection() {
-        return $this->Connection ?: $this->Connection = new StreamConnection();
+    protected $config;
+
+    /**
+     * @param array|null $config
+     */
+    public function __construct(array $config = null) {
+        $this->config = $config ? array_merge(static::$defaultConfig, $config) : static::$defaultConfig;
     }
 
     /**
-     * @return RedisProtocol
+     * @param string|null $param
+     * @return mixed|null
      */
-    protected function getRedisProtocol() {
-        return $this->Protocol ?: $this->Protocol = new RedisProtocol($this->getConnection());
+    protected function getConfig($param = null) {
+        if (!$param) {
+            return $this->config;
+        }
+        return empty($this->config[$param]) ? null : $this->config[$param];
+    }
+
+    /**
+     * @return ProtocolInterface
+     */
+    protected function getProtocol() {
+        if (!$this->Protocol) {
+            $this->Protocol = new RedisProtocol(
+                new StreamConnection(
+                    $this->getConfig(self::CONFIG_SERVER),
+                    $this->getConfig(self::CONFIG_TIMEOUT)
+                )
+            );
+        }
+        return $this->Protocol;
     }
 
     /**
@@ -52,16 +88,24 @@ class RedisClient {
             $this->Pipeline->addCommand($Command);
             return $this;
         } else {
-            return $Command->execute($this->getRedisProtocol());
+            return $this->executeCommand($Command);
         }
     }
 
     /**
      * @param CommandInterface $Command
-     * @return mixed
+     * @return mixed|null
+     * @throws \Exception
      */
     public function executeCommand(CommandInterface $Command) {
-        return $Command->execute($this->getRedisProtocol());
+        try {
+            return $Command->execute($this->getProtocol());
+        } catch (RedisException $Exception) {
+            if ($this->getConfig(self::CONFIG_THROW_REDIS_EXCEPTIONS)) {
+                throw $Exception;
+            }
+            return null;
+        }
     }
 
     /**
@@ -72,7 +116,7 @@ class RedisClient {
         if ($this->Pipeline) {
             //throw new Error();
         }
-        $this->Pipeline = new Pipeline($this->getRedisProtocol());
+        $this->Pipeline = new Pipeline($this->getProtocol());
         if ($Closure) {
             $Closure($this);
             return $this->executePipeline();

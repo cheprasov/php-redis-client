@@ -12,6 +12,9 @@ interface CommandInterface {
      */
     public function execute(ProtocolInterface $Protocol);
 
+    /**
+     * @return string[]
+     */
     public function getStructure();
 
 }

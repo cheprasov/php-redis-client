@@ -14,7 +14,7 @@ class Command implements CommandInterface {
     protected $command;
 
     /**
-     * @var ParameterInterface[]
+     * @var array
      */
     protected $parameters = [];
 

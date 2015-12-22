@@ -3,7 +3,6 @@
 namespace RedisClient\Protocol;
 
 use RedisClient\Connection\ConnectionInterface;
-use RedisClient\Exception\ErrorException;
 use RedisClient\Exception\ErrorResponseException;
 use RedisClient\Exception\UnknownTypeException;
 
@@ -86,19 +85,20 @@ class RedisProtocol implements ProtocolInterface {
 
     /**
      * @return array|int|null|string
-     * @throws \Exception
+     * @throws UnknownTypeException
+     * @throws ErrorResponseException
      */
     protected function read() {
         $line = $this->Connection->readLine();
 
-        if ($line === false || $line === '') {
-            throw new ErrorException();
+        if (!$line) {
+            throw new ErrorResponseException('Response is empty');
         }
 
-        $prefix = $line[0];
+        $type = $line[0];
         $data = substr($line, 1, -2);
 
-        switch ($prefix) {
+        switch ($type) {
             case static::TYPE_SIMPLE_STRINGS:
                 if ($data === 'OK') {
                     return true;
@@ -130,20 +130,23 @@ class RedisProtocol implements ProtocolInterface {
                 for ($i = 0; $i < $count; $i++) {
                     $array[] = $this->read();
                 }
-            return $array;
-        }
+                return $array;
 
+            default:
+                throw new UnknownTypeException(
+                    sprintf('Unknown protocol type %s', $type)
+                );
+        }
     }
 
     /**
      * @param array $structure
      * @return mixed
-     * @throws \Exception
      */
     public function send($structure) {
         if (func_num_args() === 1) {
             $raw = $this->pack($structure);
-            echo str_replace(['\n','\r'], ' ', json_encode($raw))." => ";
+            //echo str_replace(['\n','\r'], ' ', json_encode($raw))." => ";
             $this->write($raw);
             $response = $this->read();
         } else {
