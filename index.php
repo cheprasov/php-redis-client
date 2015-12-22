@@ -25,7 +25,9 @@ $hash2 = [
     'a5' => '555',
 ];
 
-$Redis = new \RedisClient\RedisClient();
+$Redis = new \RedisClient\RedisClient([
+    'server' => 'tcp://127.0.0.1:6379'
+]);
 
 //var_dump($Redis->del(['a1', 'a2', 'a3']));
 
@@ -88,6 +90,33 @@ var_dump($Redis->pfadd('hll',['abc', 'bcd']));
 var_dump($Redis->pfcount('hll'));
 var_dump($Redis->pfcount(['hll','hll']));
 
+var_dump(memory_get_usage() / 1024 / 1024);
+$time = microtime(true);
+for ($i = 0; $i <= 1000; $i++) {
+    $key = 'key'.$i;
+    $Redis->set($key, mt_rand(0, 99999));
+    $Redis->get($key);
+    $Redis->del($key);
+}
+var_dump(microtime(true) - $time);
+var_dump(memory_get_usage() / 1024 / 1024);
+var_dump(memory_get_peak_usage() / 1024 / 1024);
+
+
+var_dump(memory_get_usage() / 1024 / 1024);
+$time = microtime(true);
+$Redis->pipeline();
+for ($i = 0; $i <= 1000; $i++) {
+    $key = 'key'.$i;
+    $Redis->set($key, mt_rand(0, 99999));
+    $Redis->get($key);
+    $Redis->del($key);
+}
+$Redis->executePipeline()
+;
+var_dump(microtime(true) - $time);
+var_dump(memory_get_usage() / 1024 / 1024);
+var_dump(memory_get_peak_usage() / 1024 / 1024);
 
 var_dump($Redis->flushall());
 

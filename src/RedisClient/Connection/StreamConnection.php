@@ -2,11 +2,9 @@
 
 namespace RedisClient\Connection;
 
+use RedisClient\Exception\ConnectionException;
+
 class StreamConnection implements ConnectionInterface {
-
-    const READ_LENGTH = 4096;
-
-    const TIMEOUT = 10;
 
     /**
      * @var resource
@@ -16,10 +14,18 @@ class StreamConnection implements ConnectionInterface {
     /**
      * @var string
      */
-    protected $address;
+    protected $server;
 
-    public function __construct($address = 'tcp://127.0.0.1:6379') {
-        $this->address = $address;
+    /**
+     * @var int|null
+     */
+    protected $timeout;
+
+    public function __construct($server, $timeout = null) {
+        $this->server = $server;
+        if (is_numeric($timeout)) {
+            $this->timeout = ceil($timeout * 1000000);
+        }
     }
 
     public function __destruct() {
@@ -30,8 +36,14 @@ class StreamConnection implements ConnectionInterface {
 
     protected function getResource() {
         if (!$this->resource) {
-            $this->resource = stream_socket_client($this->address);
-            stream_set_timeout($this->resource, self::TIMEOUT);
+            if (!$this->resource = stream_socket_client($this->server)) {
+                throw new ConnectionException(sprintf(
+                    'Unable to connect to %s', $this->server
+                ));
+            }
+            if ($this->timeout) {
+                stream_set_timeout($this->resource, 0, $this->timeout);
+            }
         }
         return $this->resource;
     }
