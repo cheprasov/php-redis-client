@@ -126,12 +126,20 @@ class RedisClient {
 
     /**
      * @return bool|mixed
+     * @throws \Exception
      */
     public function executePipeline() {
         if (!$Pipeline = $this->Pipeline) {
             return false;
         }
         $this->Pipeline = null;
-        return $Pipeline->execute();
+        try {
+            return $Pipeline->execute();
+        } catch (RedisException $Exception) {
+            if ($this->getConfig(self::CONFIG_THROW_REDIS_EXCEPTIONS)) {
+                throw $Exception;
+            }
+            return null;
+        }
     }
 }

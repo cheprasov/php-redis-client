@@ -4,7 +4,7 @@ namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
-use RedisClient\Command\Response\AssocArrayResponseParser;
+use RedisClient\Command\Response\ResponseParser;
 
 trait SortedSetsCommandsTrait {
 
@@ -168,7 +168,7 @@ trait SortedSetsCommandsTrait {
             $params[] = Parameter::string('WITHSCORES');
         }
         return $this->returnCommand(
-            new Command('ZRANGE', $params, $withscores ? AssocArrayResponseParser::getInstance() : null)
+            new Command('ZRANGE', $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null)
         );
     }
 
@@ -228,7 +228,7 @@ trait SortedSetsCommandsTrait {
             $params[] = Parameter::limit($limit);
         }
         return $this->returnCommand(
-            new Command('ZRANGEBYSCORE', $params, $withscores ? AssocArrayResponseParser::getInstance() : null)
+            new Command('ZRANGEBYSCORE', $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null)
         );
     }
 
@@ -355,7 +355,7 @@ trait SortedSetsCommandsTrait {
             $params[] = Parameter::string('WITHSCORES');
         }
         return $this->returnCommand(
-            new Command('ZREVRANGE', $params, $withscores ? AssocArrayResponseParser::getInstance() : null)
+            new Command('ZREVRANGE', $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null)
         );
     }
 

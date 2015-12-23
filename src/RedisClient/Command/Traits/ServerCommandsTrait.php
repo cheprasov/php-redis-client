@@ -4,8 +4,7 @@ namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
-use RedisClient\Command\Response\AssocArrayResponseParser;
-use RedisClient\Command\Response\TimeResponseParser;
+use RedisClient\Command\Response\ResponseParser;
 
 trait ServerCommandsTrait {
 
@@ -193,7 +192,7 @@ trait ServerCommandsTrait {
      */
     public function configGet($parameter) {
         return $this->returnCommand(
-            new Command('CONFIG GET', Parameter::string($parameter), AssocArrayResponseParser::getInstance())
+            new Command('CONFIG GET', Parameter::string($parameter), ResponseParser::PARSE_ASSOC_ARRAY)
         );
     }
 
@@ -423,7 +422,7 @@ trait ServerCommandsTrait {
      */
     public function time() {
         return $this->returnCommand(
-            new Command('TIME', null, TimeResponseParser::getInstance())
+            new Command('TIME', null, ResponseParser::PARSE_TIME)
         );
     }
 
