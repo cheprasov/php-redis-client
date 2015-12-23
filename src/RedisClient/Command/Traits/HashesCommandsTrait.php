@@ -4,6 +4,7 @@ namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
+use RedisClient\Command\Response\ResponseParser;
 
 /**
  * Hashes
@@ -85,7 +86,7 @@ trait HashesCommandsTrait {
      */
     public function hgetall($key) {
         return $this->returnCommand(
-            new Command('HGETALL', Parameter::key($key), AssocArrayResponseParser::getInstance())
+            new Command('HGETALL', Parameter::key($key), ResponseParser::PARSE_ASSOC_ARRAY)
         );
     }
 

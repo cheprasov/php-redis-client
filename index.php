@@ -25,6 +25,7 @@ $hash2 = [
     'a5' => '555',
 ];
 
+
 $Redis = new \RedisClient\RedisClient([
     'server' => 'tcp://127.0.0.1:6379'
 ]);
@@ -32,91 +33,9 @@ $Redis = new \RedisClient\RedisClient([
 //var_dump($Redis->del(['a1', 'a2', 'a3']));
 
 var_dump($Redis->hmset('hash', $hash));
-//var_dump($Redis->hgetall('hash'));
-//var_dump($Redis->hmget('hash', array_keys($hash2)));
-var_dump($Redis->keys('k?y'));
-
-//ar_dump($Redis->multi());
-
-var_dump($Redis->hget('hash', 'a1'));
-var_dump($Redis->hget('hash', 'a2'));
-var_dump($Redis->hget('hash', 'a3'));
-
-
-$res = $Redis->pipeline()->hget('hash', 'a1')->hget('hash', 'a1')->executePipeline();
-var_dump($res);
-$res = $Redis->pipeline()->hget('hash', 'a2')->multi()->hget('hash', 'a2')->hget('hash', 'a3')->exec()->executePipeline();
-var_dump($res);
-
-
-$Redis->hget('hash', 'a1');
-$Redis->hget('hash', 'a2');
-var_dump($Redis->executePipeline());
-/*
-$Redis->pipeline(function($Redis) {
-    // ** @var \RedisClient\RedisClient $Redis * /
-    $Redis->multi();
-    //$Redis->multi();
-    $Redis->hget('hash', 'a1');
-    $Redis->hget('hash', 'a1');
-    $Redis->hget('hash', 'a1');
-    $Redis->hget('hash', 'a1');
-    $Redis->keys('*');
-    $Redis->exec();
-});
-*/
-
-var_dump($Redis->executeCommand(new \RedisClient\Command\Command('HGETALL hash') ));
-var_dump($Redis->executeCommand(new \RedisClient\Command\Command('HGETALL hash') ));
-var_dump($Redis->executeCommand(new \RedisClient\Command\Command('COMMAND GETKEYS keys *') ));
-var_dump($Redis->executeCommand(new \RedisClient\Command\Command('COMMAND COUNT') ));
-
-$r = $Redis->commandInfo(['mget','mset']);
-$r = $Redis->configGet('databases');
-$r = $Redis->debugObject('hash');
-$r = $Redis->time();
-
-$r = $Redis->evalScript("return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}", ['a','b'], [1, 2]);
-$r = $Redis->scriptExists(sha1("return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}"));
-var_dump($r);
-
-$r = $Redis->scriptExists([sha1("return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}"), sha1(11)]);
-$r = $Redis->scriptLoad("return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}");
-var_dump($r);
-
-var_dump($Redis->pfadd('hll','abc'));
-var_dump($Redis->pfadd('hll','abc'));
-var_dump($Redis->pfadd('hll',['abc', 'bcd']));
-var_dump($Redis->pfcount('hll'));
-var_dump($Redis->pfcount(['hll','hll']));
-
-var_dump(memory_get_usage() / 1024 / 1024);
-$time = microtime(true);
-for ($i = 0; $i <= 1000; $i++) {
-    $key = 'key'.$i;
-    $Redis->set($key, mt_rand(0, 99999));
-    $Redis->get($key);
-    $Redis->del($key);
-}
-var_dump(microtime(true) - $time);
-var_dump(memory_get_usage() / 1024 / 1024);
-var_dump(memory_get_peak_usage() / 1024 / 1024);
-
-
-var_dump(memory_get_usage() / 1024 / 1024);
-$time = microtime(true);
-$Redis->pipeline();
-for ($i = 0; $i <= 1000; $i++) {
-    $key = 'key'.$i;
-    $Redis->set($key, mt_rand(0, 99999));
-    $Redis->get($key);
-    $Redis->del($key);
-}
-$Redis->executePipeline()
-;
-var_dump(microtime(true) - $time);
-var_dump(memory_get_usage() / 1024 / 1024);
-var_dump(memory_get_peak_usage() / 1024 / 1024);
+var_dump($Redis->hgetall('hash'));
+var_dump($Redis->hmget('hash', array_keys($hash2)));
+var_dump($Redis->time());
 
 var_dump($Redis->flushall());
 

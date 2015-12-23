@@ -2,7 +2,7 @@
 
 namespace RedisClient\Command;
 
-use RedisClient\Command\Parameter\ParameterInterface;
+use RedisClient\Command\Response\ResponseParser;
 use RedisClient\Command\Response\ResponseParserInterface;
 use RedisClient\Protocol\ProtocolInterface;
 
@@ -21,14 +21,14 @@ class Command implements CommandInterface {
     /**
      * @var \Closure|ResponseParserInterface
      */
-    protected $ResponseParser;
+    protected $responseParser;
 
     /**
      * @param string $command
      * @param mixed $parameters
-     * @param ResponseParserInterface|\Closure|null $ResponseParser
+     * @param \Closure|int|string|null $responseParser
      */
-    public function __construct($command, $parameters = null, $ResponseParser = null) {
+    public function __construct($command, $parameters = null, $responseParser = null) {
         $this->command = $command;
         if ($parameters) {
             if (is_array($parameters)) {
@@ -37,8 +37,8 @@ class Command implements CommandInterface {
                 $this->addParameter($parameters);
             }
         }
-        if ($ResponseParser) {
-            $this->ResponseParser = $ResponseParser;
+        if ($responseParser) {
+            $this->responseParser = $responseParser;
         }
     }
 
@@ -98,11 +98,13 @@ class Command implements CommandInterface {
      * @return mixed
      */
     protected function parseResponse($response) {
-        if ($this->ResponseParser instanceof ResponseParserInterface) {
-            return $this->ResponseParser->parseResponse($response);
-        } elseif ($this->ResponseParser instanceof \Closure) {
-            $Parser = $this->ResponseParser;
+        if (is_int($this->responseParser)) {
+            return ResponseParser::parse($this->responseParser, $response);
+        } elseif ($this->responseParser instanceof \Closure) {
+            $Parser = $this->responseParser;
             return $Parser($response);
+        } elseif (is_string($this->responseParser)) {
+            return call_user_func($this->responseParser, $response);
         }
         return $response;
     }
