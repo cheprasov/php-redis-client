@@ -37,6 +37,7 @@ class RedisProtocol implements ProtocolInterface {
         switch ($type = gettype($data)) {
             case 'array':
                 return $this->packProtocolArray($data);
+            case 'boolean':
             case 'string':
             case 'double':
             case 'integer':
@@ -89,10 +90,12 @@ class RedisProtocol implements ProtocolInterface {
      * @throws ErrorResponseException
      */
     protected function read() {
-        $line = $this->Connection->readLine();
 
-        if (!$line) {
-            throw new ErrorResponseException('Response is empty');
+        if (!$line = $this->Connection->readLine()) {
+            //todo: usleep
+            if (!$line = $this->Connection->readLine()) {
+                throw new ErrorResponseException('Response is empty');
+            }
         }
 
         $type = $line[0];
@@ -146,7 +149,7 @@ class RedisProtocol implements ProtocolInterface {
     public function send($structure) {
         if (func_num_args() === 1) {
             $raw = $this->pack($structure);
-            //echo str_replace(['\n','\r'], ' ', json_encode($raw))." => ";
+            //echo str_replace(['\n','\r'], '-', json_encode($raw))." => ";
             $this->write($raw);
             $response = $this->read();
         } else {

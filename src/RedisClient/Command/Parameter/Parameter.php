@@ -19,13 +19,13 @@ class Parameter {
         if (is_array($param)) {
             if (isset($param[0]) && isset($param[1])) {
                 return [
-                    $param[0],
-                    $param[1],
+                    static::string($param[0]),
+                    static::string($param[1]),
                 ];
             } elseif (isset($param['ip']) && isset($param['port'])) {
                 return [
-                    $param['ip'],
-                    $param['port'],
+                    static::string($param['ip']),
+                    static::string($param['port']),
                 ];
             }
         }
@@ -52,17 +52,19 @@ class Parameter {
 
     /**
      * @param array $array
+     * @param bool $flip
      * @return string[]
      * @throws InvalidArgumentException
      */
-    public static function assocArray($array) {
+    public static function assocArray($array, $flip = false) {
         if (!is_array($array)) {
             throw new InvalidArgumentException($array);
         }
+        $flip = (bool) $flip;
         $structure = [];
         foreach ($array as $key => $value) {
-            $structure[] = $key;
-            $structure[] = $value;
+            $value = static::string($value);
+            $flip && array_push($structure, $value, $key) || array_push($structure, $key, $value);
         }
         return $structure;
     }
@@ -90,7 +92,7 @@ class Parameter {
      * @return int
      */
     public static function bit($bit) {
-        return (int) ((bool) $bit);
+        return (int) (bool) $bit;
     }
 
     /**

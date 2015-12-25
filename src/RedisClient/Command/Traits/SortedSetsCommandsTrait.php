@@ -14,13 +14,13 @@ trait SortedSetsCommandsTrait {
      * Time complexity: O(log(N)) for each item added, where N is the number of elements in the sorted set.
      *
      * @param string $key
+     * @param array $member array(member => score [, member => score ...])
      * @param string|null $nx NX or XX
      * @param bool|false $ch
      * @param bool|false $incr
-     * @param array $member array(member => score [, member => score ...])
      * @return int|string
      */
-    public function zadd($key, $nx = null, $ch = false, $incr = false, array $member) {
+    public function zadd($key, array $member, $nx = null, $ch = false, $incr = false) {
         $params = [
             Parameter::key($key),
         ];
@@ -33,7 +33,7 @@ trait SortedSetsCommandsTrait {
         if ($incr) {
             $params[] = Parameter::string('INCR');
         }
-        $params[] = Parameter::assocArray($member);
+        $params[] = Parameter::assocArray($member, true);
         return $this->returnCommand(
             new Command('ZADD', $params)
         );

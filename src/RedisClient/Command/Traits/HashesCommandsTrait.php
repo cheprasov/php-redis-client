@@ -190,7 +190,7 @@ trait HashesCommandsTrait {
      * Time complexity: O(N) where N is the number of fields being set.
      * @link http://redis.io/commands/hmset
      *
-     * @return bool
+     * @return bool True
      */
     public function hmset($key, array $fieldValue) {
         return $this->returnCommand(
