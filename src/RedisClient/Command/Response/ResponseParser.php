@@ -52,6 +52,9 @@ class ResponseParser {
      */
     public static function parseTime($response) {
         if (is_array($response) && count($response) === 2) {
+            if (($len = strlen($response[1])) < 6) {
+                $response[1] = str_repeat('0', 6 - $len) . $response[1];
+            }
             return implode('.', $response);
         }
         return $response;

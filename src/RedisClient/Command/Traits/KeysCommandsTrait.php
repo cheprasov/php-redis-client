@@ -361,7 +361,7 @@ trait KeysCommandsTrait {
                 $params[] = Parameter::string($p);
             }
         }
-        if (!is_null($asc)) {
+        if (isset($asc)) {
             $params[] = Parameter::string($asc ? 'ASC' : 'DESC');
         }
         if ($alpha) {

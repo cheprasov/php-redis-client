@@ -30,7 +30,7 @@ class Command implements CommandInterface {
      */
     public function __construct($command, $parameters = null, $responseParser = null) {
         $this->command = $command;
-        if ($parameters) {
+        if (isset($parameters)) {
             if (is_array($parameters)) {
                 $this->addParameters($parameters);
             } else {

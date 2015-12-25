@@ -78,7 +78,7 @@ trait ServerCommandsTrait {
             $params[] = Parameter::string('ADDR');
             $params[] = Parameter::address($addr2);
         }
-        if (!is_null($skipme)) {
+        if (isset($skipme)) {
             $params[] = Parameter::string('SKIPME');
             $params[] = Parameter::address($skipme ? 'yes' : 'no');
         }
@@ -394,7 +394,7 @@ trait ServerCommandsTrait {
         $params = [
             Parameter::enum($subcommand, ['GET', 'LEN', 'RESET'])
         ];
-        if (!is_null($argument)) {
+        if (isset($argument)) {
             $params[] = Parameter::string($argument);
         }
         return $this->returnCommand(
