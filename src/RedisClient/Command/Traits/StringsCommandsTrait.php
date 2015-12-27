@@ -40,7 +40,7 @@ trait StringsCommandsTrait {
      */
     public function bitcount($key, $start = null, $end = null) {
         if (isset($start) xor isset($end)) {
-            throw new InvalidArgumentException();
+            throw new InvalidArgumentException('Start and End must be used together');
         }
         $params = [Parameter::key($key)];
         if (isset($start) && isset($end)) {
@@ -237,7 +237,7 @@ trait StringsCommandsTrait {
         return $this->returnCommand(
             new Command('INCRBY', [
                 Parameter::key($key),
-                Parameter::integer($key),
+                Parameter::integer($increment),
             ])
         );
     }
@@ -284,12 +284,12 @@ trait StringsCommandsTrait {
      * Time complexity: O(N) where N is the number of keys to set.
      * @link http://redis.io/commands/mset
      *
-     * @param array $keyValues
+     * @param array $keyValue
      * @return bool always TRUE since MSET can't fail.
      */
-    public function mset(array $keyValues) {
+    public function mset(array $keyValue) {
         return $this->returnCommand(
-            new Command('MSET', Parameter::assocArray($keyValues))
+            new Command('MSET', Parameter::assocArray($keyValue))
         );
     }
 
@@ -330,7 +330,7 @@ trait StringsCommandsTrait {
     }
 
     /**
-     * SET key value [EX seconds] [PX milliseconds] [NX|XX]
+     * SET key value [EX seconds | PX milliseconds] [NX|XX]
      * Available since 1.0.0.
      * Time complexity: O(1)
      * @link http://redis.io/commands/set
@@ -344,15 +344,18 @@ trait StringsCommandsTrait {
      * @throw InvalidArgumentException
      */
     public function set($key, $value, $seconds = null, $milliseconds = null, $exist = null) {
+        if (!empty($seconds) && !empty($milliseconds)) {
+            throw new InvalidArgumentException('Seconds and Milliseconds must not be used together');
+        }
         $params = [
             Parameter::key($key),
             Parameter::string($value),
         ];
-        if (isset($seconds)) {
+        if (!empty($seconds)) {
             $params[] = Parameter::string('EX');
             $params[] = Parameter::integer($seconds);
         }
-        if (isset($milliseconds)) {
+        if (!empty($milliseconds)) {
             $params[] = Parameter::string('PX');
             $params[] = Parameter::integer($milliseconds);
         }
@@ -397,8 +400,13 @@ trait StringsCommandsTrait {
      * @return bool
      */
     public function setex($key, $seconds, $value) {
-        $Command = new Command('SETEX', $key);
-        return $this->returnCommand($Command);
+        return $this->returnCommand(
+            new Command('SETEX', [
+                Parameter::key($key),
+                Parameter::integer($seconds),
+                Parameter::string($value)
+            ])
+        );
     }
 
     /**

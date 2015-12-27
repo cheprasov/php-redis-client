@@ -31,6 +31,9 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
         ]);
     }
 
+    /**
+     * @inheritdoc
+     */
     public static function tearDownAfterClass() {
         self::$Redis->flushdb();
     }
@@ -179,7 +182,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
         }
 
         try {
-            // I don't know why it is happens, but it is real Redis behavior
+            // I don't know why it happens, but it is real Redis behavior
             $this->assertSame(3, $Redis->hincrby('hash', 'bin', 3));
             //$this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
