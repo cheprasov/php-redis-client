@@ -8,7 +8,7 @@ use RedisClient\Command\Command;
 class Parameter {
 
     /**
-     * @param string|string[]|array $param
+     * @param string|string[]|array $param Example: '127.0.0.1:6379' or ['127.0.0.1', '6379'] or ['ip'=>'127.0.0.1', 'port'=>'6379']
      * @return string[]
      * @throws InvalidArgumentException;
      */
@@ -20,16 +20,16 @@ class Parameter {
             if (isset($param[0]) && isset($param[1])) {
                 return [
                     static::string($param[0]),
-                    static::string($param[1]),
+                    static::port($param[1]),
                 ];
             } elseif (isset($param['ip']) && isset($param['port'])) {
                 return [
                     static::string($param['ip']),
-                    static::string($param['port']),
+                    static::port($param['port']),
                 ];
             }
         }
-        throw new InvalidArgumentException($param);
+        throw new InvalidArgumentException('Invalid address '. $param);
     }
 
     /**
@@ -47,7 +47,7 @@ class Parameter {
         if (in_array($param, static::$aggregateParams)) {
             return $param;
         }
-        throw new InvalidArgumentException($param);
+        throw new InvalidArgumentException('Invalid aggregate '. $param);
     }
 
     /**
@@ -56,10 +56,7 @@ class Parameter {
      * @return string[]
      * @throws InvalidArgumentException
      */
-    public static function assocArray($array, $flip = false) {
-        if (!is_array($array)) {
-            throw new InvalidArgumentException($array);
-        }
+    public static function assocArray(array $array, $flip = false) {
         $flip = (bool) $flip;
         $structure = [];
         foreach ($array as $key => $value) {
@@ -84,7 +81,7 @@ class Parameter {
         if (in_array($operation, static::$bitOperationParams)) {
             return $operation;
         }
-        throw new InvalidArgumentException($operation);
+        throw new InvalidArgumentException('Invalid bit operator '. $operation);
     }
 
     /**
@@ -119,7 +116,7 @@ class Parameter {
             $param = strtoupper($param);
         }
         if (!in_array($param, $enum)) {
-            throw new InvalidArgumentException($param);
+            throw new InvalidArgumentException('Invalid enum '. $param);
         }
         return (string) $param;
     }
@@ -191,7 +188,7 @@ class Parameter {
                 return [0, (int) $limit[0]];
             }
         }
-        throw new InvalidArgumentException($limit);
+        throw new InvalidArgumentException('Invalid limit '. $limit);
     }
 
     const MIN_MAX_PREG = '/^([-+]inf|\(?\d+)$/';
@@ -205,7 +202,7 @@ class Parameter {
         if (preg_match(static::MIN_MAX_PREG, $param)) {
             return $param;
         }
-        throw new InvalidArgumentException($param);
+        throw new InvalidArgumentException('Invalid param '.$param);
     }
 
     /**
@@ -222,7 +219,19 @@ class Parameter {
         if (in_array($param, static::$nxXxParams)) {
             return $param;
         }
-        throw new InvalidArgumentException($param);
+        throw new InvalidArgumentException('Invalid param '. $param);
+    }
+
+    /**
+     * @param int|float|string $int
+     * @return int
+     */
+    public static function port($int) {
+        $int = (int) $int;
+        if ($int > 0 && $int <= 65535) {
+            return $int;
+        }
+        throw new InvalidArgumentException('Port number must be more than 0 and less than or equal 65535');
     }
 
     const SPECIFY_INTERVAL_PREG = '/^(-|+|[\(\[]\w)$/';
@@ -236,7 +245,7 @@ class Parameter {
         if (preg_match(static::SPECIFY_INTERVAL_PREG, $param)) {
             return $param;
         }
-        throw new InvalidArgumentException($param);
+        throw new InvalidArgumentException('Invalid specify interval '. $param);
     }
 
     /**

@@ -11,6 +11,7 @@ trait KeysCommandsTrait {
      * DEL key [key ...]
      * Available since 1.0.0.
      * Time complexity: O(N) where N is the number of keys that will be removed.
+     * @link http://redis.io/commands/del
      *
      * @param string|string[] $keys
      * @return int The number of keys that were removed.
@@ -26,6 +27,7 @@ trait KeysCommandsTrait {
      * Available since 2.6.0.
      * Time complexity: O(1) to access the key and additional O(N*M) to serialized it,
      * where N is the number of Redis objects composing the value and M their average size.
+     * @link http://redis.io/commands/dump
      *
      * @param string $key
      * @return string The serialized value.
@@ -40,6 +42,7 @@ trait KeysCommandsTrait {
      * EXISTS key [key ...]
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/exists
      *
      * @param string|string[] $key
      * @return int 1 if the key exists. 0 if the key does not exist.
@@ -55,6 +58,7 @@ trait KeysCommandsTrait {
      * EXPIRE key seconds
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/expire
      *
      * @param string $key
      * @param int $seconds
@@ -73,6 +77,7 @@ trait KeysCommandsTrait {
      * EXPIREAT key timestamp
      * Available since 1.2.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/expireat
      *
      * @param string $key
      * @param int $timestamp
@@ -91,6 +96,7 @@ trait KeysCommandsTrait {
      * KEYS pattern
      * Available since 1.0.0.
      * Time complexity: O(N)
+     * @link http://redis.io/commands/keys
      *
      * @param string $pattern
      * @return array List of keys matching pattern.
@@ -104,23 +110,33 @@ trait KeysCommandsTrait {
     /**
      * MIGRATE host port key destination-db timeout [COPY] [REPLACE]
      * Available since 2.6.0.
+     * @link http://redis.io/commands/migrate
      *
      * @param string $host
      * @param int $port
      * @param string $key
-     * @param string $destinationDb
-     * @param int $timeout
+     * @param int $destinationDb
+     * @param int $timeout In milliseconds
+     * @param bool $copy Available in 3.0 and are not available in 2.6 or 2.8
+     * @param bool $replace Available in 3.0 and are not available in 2.6 or 2.8
      * @return bool The command returns TRUE on success.
      */
-    public function migrate($host, $port, $key, $destinationDb, $timeout) {
+    public function migrate($host, $port, $key, $destinationDb, $timeout, $copy = false, $replace = false) {
+        $params = [
+            Parameter::string($host),
+            Parameter::port($port),
+            Parameter::key($key),
+            Parameter::integer($destinationDb),
+            Parameter::integer($timeout)
+        ];
+        if ($copy) {
+            $params[] = Parameter::string('COPY');
+        }
+        if ($replace) {
+            $params[] = Parameter::string('REPLACE');
+        }
         return $this->returnCommand(
-            new Command('MIGRATE', [
-                Parameter::string($host),
-                Parameter::integer($port),
-                Parameter::key($key),
-                Parameter::string($destinationDb),
-                Parameter::integer($timeout)
-            ])
+            new Command('MIGRATE', $params)
         );
     }
 
@@ -128,6 +144,7 @@ trait KeysCommandsTrait {
      * MOVE key db
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/move
      *
      * @param string $key
      * @param int $db
@@ -146,14 +163,15 @@ trait KeysCommandsTrait {
      * OBJECT subcommand [arguments [arguments ...]]
      * Available since 2.2.3.
      * Time complexity: O(1) for all the currently implemented subcommands.
+     * @link http://redis.io/commands/object
      *
-     * @param string $subcommand
+     * @param string $subcommand REFCOUNT|ENCODING|IDLETIME
      * @param null|string|string[] $arguments
-     * @return mixed
+     * @return int|string
      */
     public function object($subcommand, $arguments = null) {
         $params = [
-            Parameter::string($subcommand)
+            Parameter::enum($subcommand, ['REFCOUNT', 'ENCODING', 'IDLETIME'])
         ];
         if ($arguments) {
             $params[] = Parameter::keys($arguments);
@@ -167,6 +185,7 @@ trait KeysCommandsTrait {
      * PERSIST key
      * Available since 2.2.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/persist
      *
      * @param string $key
      * @return int 1 if the timeout was removed.
@@ -182,6 +201,7 @@ trait KeysCommandsTrait {
      * PEXPIRE key milliseconds
      * Available since 2.6.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/pexpire
      *
      * @param $key
      * @return int 1 if the timeout was set.
@@ -200,6 +220,7 @@ trait KeysCommandsTrait {
      * PEXPIREAT key milliseconds-timestamp
      * Available since 2.6.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/pexpireat
      *
      * @param string $key
      * @param int $millisecondsTimestamp
@@ -218,9 +239,10 @@ trait KeysCommandsTrait {
      * PTTL key
      * Available since 2.6.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/pttl
      *
      * @param $key
-     * @return int TTL in milliseconds, or a negative value in order to signal an error (see the description above).
+     * @return int TTL in milliseconds, or a negative value in order to signal an error.
      */
     public function pttl($key) {
         return $this->returnCommand(
@@ -232,6 +254,7 @@ trait KeysCommandsTrait {
      * RANDOMKEY
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/randomkey
      *
      * @return string|null The random key, or null when the database is empty.
      */
@@ -245,10 +268,11 @@ trait KeysCommandsTrait {
      * RENAME key newkey
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/rename
      *
      * @param string $key
      * @param string $newkey
-     * @return bool
+     * @return bool True
      */
     public function rename($key, $newkey) {
         return $this->returnCommand(
@@ -263,6 +287,7 @@ trait KeysCommandsTrait {
      * RENAMENX key newkey
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/renamenx
      *
      * @param string $key
      * @param string $newkey
@@ -281,11 +306,12 @@ trait KeysCommandsTrait {
      * RESTORE key ttl serialized-value [REPLACE]
      * Available since 2.6.0.
      * Time complexity: O(1) to create the new key and additional O(N*M) to reconstruct the serialized value
+     * @link http://redis.io/commands/restore
      *
      * @param string $key
-     * @param int $ttl
+     * @param int $ttl In milliseconds
      * @param string $serializedValue
-     * @param bool|false $replace
+     * @param bool|false $replace Redis 3.0 or greater
      * @return bool The command returns TRUE on success.
      */
     public function restore($key, $ttl, $serializedValue, $replace = false) {
@@ -295,7 +321,7 @@ trait KeysCommandsTrait {
             Parameter::string($serializedValue),
         ];
         if ($replace) {
-            $params[] = Parameter::string($replace);
+            $params[] = Parameter::string('REPLACE');
         }
         return $this->returnCommand(
             new Command('RESTORE', $params)
@@ -306,6 +332,7 @@ trait KeysCommandsTrait {
      * SCAN cursor [MATCH pattern] [COUNT count]
      * Available since 2.8.0.
      * Time complexity: O(1) for every call. O(N) for a complete iteration.
+     * @link http://redis.io/commands/scan
      *
      * @param int $cursor
      * @param string|null $pattern
@@ -333,6 +360,7 @@ trait KeysCommandsTrait {
      * SORT key [BY pattern] [LIMIT offset count] [GET pattern [GET pattern ...]] [ASC|DESC] [ALPHA] [STORE destination]
      * Available since 1.0.0.
      * Time complexity: O(N+M*log(M)) or O(N)
+     * @link http://redis.io/commands/sort
      *
      * @param string $key
      * @param string|null $pattern
@@ -380,6 +408,7 @@ trait KeysCommandsTrait {
      * TTL key
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/ttl
      *
      * @param $key
      * @return int TTL in seconds, or a negative value in order to signal an error
@@ -394,6 +423,7 @@ trait KeysCommandsTrait {
      * TYPE key
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/type
      *
      * @param string $key
      * @return string
@@ -408,15 +438,16 @@ trait KeysCommandsTrait {
      * WAIT numslaves timeout
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/wait
      *
      * @param int $numslaves
-     * @param int $timeout
+     * @param int $timeout In milliseconds
      * @return int The command returns the number of slaves reached
      * by all the writes performed in the context of the current connection.
      */
     public function wait($numslaves, $timeout) {
         return $this->returnCommand(
-            new Command('TYPE', [
+            new Command('WAIT', [
                 Parameter::integer($numslaves),
                 Parameter::integer($timeout),
             ])
