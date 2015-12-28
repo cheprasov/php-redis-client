@@ -377,7 +377,7 @@ trait ServerCommandsTrait {
         return $this->returnCommand(
             new Command('SLAVEOF', [
                 Parameter::string($host),
-                Parameter::string($port)
+                Parameter::port($port)
             ])
         );
     }

@@ -16,6 +16,11 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
     /**
      * @var array
      */
+    protected static $config;
+
+    /**
+     * @var array
+     */
     protected static $fields;
 
     const REDIS_RESPONSE_ERROR_WRONGTYPE = 'WRONGTYPE Operation against a key holding the wrong kind of value';
@@ -26,9 +31,8 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
      * @inheritdoc
      */
     public static function setUpBeforeClass() {
-        self::$Redis = new RedisClient([
-            'server' => 'tcp://127.0.0.1:6379'
-        ]);
+        self::$config = include(__DIR__. '/redis-test-config.php');
+        self::$Redis = new RedisClient(self::$config[0]);
     }
 
     /**

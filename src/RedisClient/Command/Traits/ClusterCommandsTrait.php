@@ -161,7 +161,7 @@ trait ClusterCommandsTrait {
         return $this->returnCommand(
             new Command('CLUSTER MEET', [
                 Parameter::string($ip),
-                Parameter::integer($port)
+                Parameter::port($port)
             ])
         );
     }
