@@ -11,6 +11,7 @@ trait SetsCommandsTrait {
      * SADD key member [member ...]
      * Available since 1.0.0.
      * Time complexity: O(N) where N is the number of members to be added.
+     * @link http://redis.io/commands/sadd
      *
      * @param string $key
      * @param string|string[] $member
@@ -30,6 +31,7 @@ trait SetsCommandsTrait {
      * SCARD key
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/scard
      *
      * @param string $key
      * @return int The cardinality (number of elements) of the set, or 0 if key does not exist.
@@ -44,13 +46,14 @@ trait SetsCommandsTrait {
      * SDIFF key [key ...]
      * Available since 1.0.0.
      * Time complexity: O(N) where N is the total number of elements in all given sets.
+     * @link http://redis.io/commands/sdiff
      *
-     * @param string|string[] $key
+     * @param string|string[] $keys
      * @return array List with members of the resulting set.
      */
-    public function sdiff($key) {
+    public function sdiff($keys) {
         return $this->returnCommand(
-            new Command('SDIFF', Parameter::keys($key))
+            new Command('SDIFF', Parameter::keys($keys))
         );
     }
 
@@ -58,16 +61,17 @@ trait SetsCommandsTrait {
      * SDIFFSTORE destination key [key ...]
      * Available since 1.0.0.
      * Time complexity: O(N) where N is the total number of elements in all given sets.
+     * @link http://redis.io/commands/sdiffstore
      *
      * @param string $destination
-     * @param string|string[] $key
+     * @param string|string[] $keys
      * @return int The number of elements in the resulting set.
      */
-    public function sdiffstore($destination, $key) {
+    public function sdiffstore($destination, $keys) {
         return $this->returnCommand(
             new Command('SDIFFSTORE', [
                 Parameter::key($destination),
-                Parameter::keys($key)
+                Parameter::keys($keys)
             ])
         );
     }
@@ -76,13 +80,14 @@ trait SetsCommandsTrait {
      * SINTER key [key ...]
      * Available since 1.0.0.
      * Time complexity: O(N*M) worst case where N is the cardinality of the smallest set and M is the number of sets.
+     * @link http://redis.io/commands/sinter
      *
-     * @param string|string[] $key
+     * @param string|string[] $keys
      * @return array List with members of the resulting set.
      */
-    public function sinter($key) {
+    public function sinter($keys) {
         return $this->returnCommand(
-            new Command('SINTER', Parameter::keys($key))
+            new Command('SINTER', Parameter::keys($keys))
         );
     }
 
@@ -90,16 +95,17 @@ trait SetsCommandsTrait {
      * SINTERSTORE destination key [key ...]
      * Available since 1.0.0.
      * Time complexity: O(N*M) worst case where N is the cardinality of the smallest set and M is the number of sets.
+     * @link http://redis.io/commands/sinterstore
      *
      * @param string $destination
-     * @param string|string[] $key
+     * @param string|string[] $keys
      * @return int The number of elements in the resulting set.
      */
-    public function sinterstore($destination, $key) {
+    public function sinterstore($destination, $keys) {
         return $this->returnCommand(
             new Command('SINTERSTORE', [
                 Parameter::key($destination),
-                Parameter::keys($key)
+                Parameter::keys($keys)
             ])
         );
     }
@@ -108,9 +114,10 @@ trait SetsCommandsTrait {
      * SISMEMBER key member
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/sismember
      *
      * @param string $key
-     * @param string|string[] $member
+     * @param string $member
      * @return int 1 if the element is a member of the set.
      * 0 if the element is not a member of the set, or if key does not exist.
      */
@@ -118,7 +125,7 @@ trait SetsCommandsTrait {
         return $this->returnCommand(
             new Command('SISMEMBER', [
                 Parameter::key($key),
-                Parameter::keys($member)
+                Parameter::key($member)
             ])
         );
     }
@@ -127,6 +134,7 @@ trait SetsCommandsTrait {
      * SMEMBERS key
      * Available since 1.0.0.
      * Time complexity: O(N) where N is the set cardinality.
+     * @link http://redis.io/commands/smembers
      *
      * @param string $key
      * @return string[] All elements of the set.
@@ -141,6 +149,7 @@ trait SetsCommandsTrait {
      * SMOVE source destination member
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/smove
      *
      * @param string $source
      * @param string $destination
@@ -162,10 +171,11 @@ trait SetsCommandsTrait {
      * SPOP key [count]
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/spop
      *
      * @param string $key
-     * @param int|null $count
-     * @return string|null The removed element, or null when key does not exist.
+     * @param int|null $count Redis >= 3.2
+     * @return string|string[]|null The removed element, or null when key does not exist.
      */
     public function spop($key, $count = null) {
         $params = [
@@ -184,6 +194,7 @@ trait SetsCommandsTrait {
      * Available since 1.0.0.
      * Time complexity: Without the count argument O(1),
      * otherwise O(N) where N is the absolute value of the passed count.
+     * @link http://redis.io/commands/srandmember
      *
      * @param string $key
      * @param int|null $count
@@ -205,6 +216,7 @@ trait SetsCommandsTrait {
      * SREM key member [member ...]
      * Available since 1.0.0.
      * Time complexity: O(N) where N is the number of members to be removed.
+     * @link http://redis.io/commands/srem
      *
      * @param string $key
      * @param string|string[] $member
@@ -225,6 +237,7 @@ trait SetsCommandsTrait {
      * Time complexity: O(1) for every call. O(N) for a complete iteration,
      * including enough command calls for the cursor to return back to 0.
      * N is the number of elements inside the collection.
+     * @link http://redis.io/commands/sscan
      *
      * @param string $key
      * @param int $cursor
@@ -254,13 +267,14 @@ trait SetsCommandsTrait {
      * SUNION key [key ...]
      * Available since 1.0.0.
      * Time complexity: O(N) where N is the total number of elements in all given sets.
+     * @link http://redis.io/commands/sunion
      *
-     * @param string|string[] $key
+     * @param string|string[] $keys
      * @return string[] List with members of the resulting set.
      */
-    public function sunion($key) {
+    public function sunion($keys) {
         return $this->returnCommand(
-            new Command('SUNION', Parameter::keys($key))
+            new Command('SUNION', Parameter::keys($keys))
         );
     }
 
@@ -268,16 +282,17 @@ trait SetsCommandsTrait {
      * SUNIONSTORE destination key [key ...]
      * Available since 1.0.0.
      * Time complexity: O(N) where N is the total number of elements in all given sets.
+     * @link http://redis.io/commands/sunionstore
      *
      * @param string $destination
-     * @param string|string[] $key
+     * @param string|string[] $keys
      * @return int The number of elements in the resulting set.
      */
-    public function sunionstore($destination, $key) {
+    public function sunionstore($destination, $keys) {
         return $this->returnCommand(
             new Command('SUNIONSTORE', [
                 Parameter::key($destination),
-                Parameter::keys($key)
+                Parameter::keys($keys)
             ])
         );
     }

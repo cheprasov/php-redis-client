@@ -16,12 +16,12 @@ trait ClusterCommandsTrait {
      * Available since 3.0.0.
      * Time complexity: O(N) where N is the total number of hash slot arguments
      *
-     * @param int|int[] $slot
+     * @param int|int[] $slots
      * @return bool True if the command was successful. Otherwise an error is returned.
      */
-    public function clusterAddslots($slot) {
+    public function clusterAddslots($slots) {
         return $this->returnCommand(
-            new Command('CLUSTER ADDSLOTS', Parameter::integers($slot))
+            new Command('CLUSTER ADDSLOTS', Parameter::integers($slots))
         );
     }
 
@@ -35,7 +35,7 @@ trait ClusterCommandsTrait {
      */
     public function clusterCountFailureReports($nodeId) {
         return $this->returnCommand(
-            new Command('PUBLISH', Parameter::integers($nodeId))
+            new Command('PUBLISH', Parameter::integer($nodeId))
         );
     }
 
@@ -58,12 +58,12 @@ trait ClusterCommandsTrait {
      * Available since 3.0.0.
      * Time complexity: O(N) where N is the total number of hash slot arguments
      *
-     * @param int|int[] $slot
+     * @param int|int[] $slots
      * @return bool True if the command was successful. Otherwise an error is returned.
      */
-    public function clusterDelslots($slot) {
+    public function clusterDelslots($slots) {
         return $this->returnCommand(
-            new Command('CLUSTER DELSLOTS', Parameter::integers($slot))
+            new Command('CLUSTER DELSLOTS', Parameter::integers($slots))
         );
     }
 

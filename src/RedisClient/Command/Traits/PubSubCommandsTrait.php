@@ -15,9 +15,9 @@ trait PubSubCommandsTrait {
      * Available since 2.0.0.
      * Time complexity: O(N) where N is the number of patterns the client is already subscribed to.
      */
-    public function psubscribe($pattern) {
+    public function psubscribe($patterns) {
         return $this->returnCommand(
-            new Command('PSUBSCRIBE', Parameter::strings($pattern))
+            new Command('PSUBSCRIBE', Parameter::strings($patterns))
         );
     }
 
@@ -49,15 +49,15 @@ trait PubSubCommandsTrait {
      * O(1) for the NUMPAT subcommand.
      *
      * @param string $subcommand
-     * @param string|string[] argument
+     * @param string|string[] $arguments
      * @return array|int
      */
-    public function pubsub($subcommand, $argument = null) {
+    public function pubsub($subcommand, $arguments = null) {
         $params = [
             Parameter::enum($subcommand, ['CHANNELS', 'NUMSUB', 'NUMPAT'])
         ];
-        if (isset($argument)) {
-            $params[] = Parameter::strings($argument);
+        if (isset($arguments)) {
+            $params[] = Parameter::strings($arguments);
         }
         return $this->returnCommand(
             new Command('PUBSUB', $params)
@@ -70,12 +70,12 @@ trait PubSubCommandsTrait {
      * Time complexity: O(N+M) where N is the number of patterns the client is already subscribed
      * and M is the number of total patterns subscribed in the system (by any client).
      *
-     * @param string|string[]|null $pattern
+     * @param string|string[]|null $patterns
      * @return
      */
-    public function punsubscribe($pattern = null) {
+    public function punsubscribe($patterns = null) {
         return $this->returnCommand(
-            new Command('PUNSUBSCRIBE', isset($pattern) ? Parameter::strings($pattern) : null)
+            new Command('PUNSUBSCRIBE', isset($patterns) ? Parameter::strings($patterns) : null)
         );
     }
 
@@ -84,12 +84,12 @@ trait PubSubCommandsTrait {
      * Available since 2.0.0.
      * Time complexity: O(N) where N is the number of channels to subscribe to.
      *
-     * @param string|string[] $channel
+     * @param string|string[] $channels
      * @return
      */
-    public function subscribe($channel) {
+    public function subscribe($channels) {
         return $this->returnCommand(
-            new Command('SUBSCRIBE', Parameter::strings($channel))
+            new Command('SUBSCRIBE', Parameter::strings($channels))
         );
     }
 
@@ -98,12 +98,12 @@ trait PubSubCommandsTrait {
      * Available since 2.0.0.
      * Time complexity: O(N) where N is the number of clients already subscribed to a channel.
      *
-     * @param string|string[]|null $channel
+     * @param string|string[]|null $channels
      * @return
      */
-    public function unsubscribe($channel) {
+    public function unsubscribe($channels) {
         return $this->returnCommand(
-            new Command('UNSUBSCRIBE', isset($channel) ? Parameter::strings($channel) : null)
+            new Command('UNSUBSCRIBE', isset($channels) ? Parameter::strings($channels) : null)
         );
     }
 

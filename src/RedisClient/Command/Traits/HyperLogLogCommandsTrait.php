@@ -17,14 +17,14 @@ trait HyperLogLogCommandsTrait {
      * Time complexity: O(1) to add every element.
      *
      * @param string $key
-     * @param string|string[] $element
+     * @param string|string[] $elements
      * @return int
      */
-    public function pfadd($key, $element) {
+    public function pfadd($key, $elements) {
         return $this->returnCommand(
             new Command('PFADD', [
                 Parameter::key($key),
-                Parameter::strings($element)
+                Parameter::strings($elements)
             ])
         );
     }
@@ -35,12 +35,12 @@ trait HyperLogLogCommandsTrait {
      * Time complexity: O(1) with every small average constant times when called with a single key.
      * O(N) with N being the number of keys, and much bigger constant times, when called with multiple keys.
      *
-     * @param string|string[] $key
+     * @param string|string[] $keys
      * @return int
      */
-    public function pfcount($key) {
+    public function pfcount($keys) {
         return $this->returnCommand(
-            new Command('PFCOUNT', Parameter::keys($key))
+            new Command('PFCOUNT', Parameter::keys($keys))
         );
     }
 

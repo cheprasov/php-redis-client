@@ -18,6 +18,11 @@ class AbstractCommandsTest extends PHPUnit_Framework_TestCase {
     protected static $config;
 
     /**
+     * @var string
+     */
+    protected static $version;
+
+    /**
      * @var array
      */
     protected static $fields;
@@ -36,22 +41,23 @@ class AbstractCommandsTest extends PHPUnit_Framework_TestCase {
      * @inheritdoc
      */
     public static function setUpBeforeClass() {
-        self::$config = include(__DIR__. '/redis-test-config.php');
-        self::$Redis = new RedisClient(self::$config[0]);
+        static::$config = include(__DIR__. '/redis-test-config.php');
+        static::$Redis = new RedisClient(self::$config[0]);
+        static::$version = static::$Redis->info('server')['redis_version'];
     }
 
     /**
      * @inheritdoc
      */
     public static function tearDownAfterClass() {
-        self::$Redis->flushall();
+        static::$Redis->flushall();
     }
 
     /**
      * @inheritdoc
      */
     protected function setUp() {
-        self::$Redis->flushall();
+        static::$Redis->flushall();
     }
 
     public function test_abstract() {

@@ -14,14 +14,14 @@ trait ListsCommandsTrait {
      * Time complexity: O(1)
      * @link http://redis.io/commands/blpop
      *
-     * @param string|string[] $key
+     * @param string|string[] $keys
      * @param int $timeout In seconds
      * @return array|null [list => value]
      */
-    public function blpop($key, $timeout) {
+    public function blpop($keys, $timeout) {
         return $this->returnCommand(
             new Command('BLPOP', [
-                Parameter::keys($key),
+                Parameter::keys($keys),
                 Parameter::integer($timeout),
             ], function($response) {
                 if (!$response) {
@@ -38,14 +38,14 @@ trait ListsCommandsTrait {
      * Time complexity: O(1)
      * @link http://redis.io/commands/brpop
      *
-     * @param string $key
+     * @param string|string[] $keys
      * @param int $timeout
      * @return array|null [list => value]
      */
-    public function brpop($key, $timeout) {
+    public function brpop($keys, $timeout) {
         return $this->returnCommand(
             new Command('BRPOP', [
-                Parameter::keys($key),
+                Parameter::keys($keys),
                 Parameter::integer($timeout),
             ], function($response) {
                 if (!$response) {
@@ -91,7 +91,7 @@ trait ListsCommandsTrait {
     public function lindex($key, $index) {
         return $this->returnCommand(
             new Command('LINDEX', [
-                Parameter::keys($key),
+                Parameter::key($key),
                 Parameter::integer($index),
             ])
         );
@@ -159,14 +159,14 @@ trait ListsCommandsTrait {
      * @link http://redis.io/commands/lpush
      *
      * @param string $key
-     * @param string|string[] $value
+     * @param string|string[] $values
      * @return int The length of the list after the push operations.
      */
-    public function lpush($key, $value) {
+    public function lpush($key, $values) {
         return $this->returnCommand(
             new Command('LPUSH', [
-                Parameter::keys($key),
-                Parameter::strings($value),
+                Parameter::key($key),
+                Parameter::strings($values),
             ])
         );
     }
@@ -184,7 +184,7 @@ trait ListsCommandsTrait {
     public function lpushx($key, $value) {
         return $this->returnCommand(
             new Command('LPUSHX', [
-                Parameter::keys($key),
+                Parameter::key($key),
                 Parameter::string($value),
             ])
         );
@@ -316,14 +316,14 @@ trait ListsCommandsTrait {
      * @link http://redis.io/commands/rpush
      *
      * @param string $key
-     * @param string|string[] $value
+     * @param string|string[] $values
      * @return int The length of the list after the push operation.
      */
-    public function rpush($key, $value) {
+    public function rpush($key, $values) {
         return $this->returnCommand(
             new Command('RPUSH', [
                 Parameter::key($key),
-                Parameter::strings($value)
+                Parameter::strings($values)
             ])
         );
     }
@@ -342,7 +342,7 @@ trait ListsCommandsTrait {
         return $this->returnCommand(
             new Command('RPUSHX', [
                 Parameter::key($key),
-                Parameter::strings($value)
+                Parameter::string($value)
             ])
         );
     }
