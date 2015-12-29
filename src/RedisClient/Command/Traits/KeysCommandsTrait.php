@@ -44,13 +44,13 @@ trait KeysCommandsTrait {
      * Time complexity: O(1)
      * @link http://redis.io/commands/exists
      *
-     * @param string|string[] $key
+     * @param string|string[] $keys
      * @return int 1 if the key exists. 0 if the key does not exist.
      * Or the number of keys existing among the ones specified as arguments.
      */
-    public function exists($key) {
+    public function exists($keys) {
         return $this->returnCommand(
-            new Command('EXISTS', Parameter::keys($key))
+            new Command('EXISTS', Parameter::keys($keys))
         );
     }
 

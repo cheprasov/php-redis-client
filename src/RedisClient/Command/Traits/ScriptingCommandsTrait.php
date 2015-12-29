@@ -73,15 +73,15 @@ trait ScriptingCommandsTrait {
      * Time complexity: O(N) with N being the number of scripts to check
      * (so checking a single script is an O(1) operation).
      *
-     * @param string|string[] $script
+     * @param string|string[] $scripts
      * @return int|int[]
      */
-    public function scriptExists($script) {
+    public function scriptExists($scripts) {
         return $this->returnCommand(
             new Command(
                 'SCRIPT EXISTS',
-                Parameter::strings($script),
-                is_array($script) ? null : function($result) {return $result[0];}
+                Parameter::strings($scripts),
+                is_array($scripts) ? null : function($result) {return $result[0];}
             )
         );
     }

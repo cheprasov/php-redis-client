@@ -10,7 +10,7 @@ use RedisClient\RedisClient;
 class KeysCommandsTest extends AbstractCommandsTest {
 
     public function test_del() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->del('key'));
         $this->assertSame(0, $Redis->del(['key', 'key1', 'key2']));
@@ -33,7 +33,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_dump() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(null, $Redis->dump('key'));
 
@@ -51,7 +51,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_exists() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->exists('key'));
 
@@ -70,7 +70,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_expire() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->expire('key', 10));
 
@@ -88,7 +88,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_expireat() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->expireat('key', 10 + time()));
 
@@ -106,7 +106,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_keys() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame([], $Redis->keys('*'));
 
@@ -132,7 +132,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_migrate() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
         $Redis2 = new RedisClient(self::$config[1]);
         $this->assertSame(true, $Redis2->flushall());
 
@@ -163,7 +163,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_move() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(true, $Redis->set('one', 1));
         $this->assertSame('1', $Redis->get('one'));
@@ -182,7 +182,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_object() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->lpush('mylist', 'Hello World 1'));
         $this->assertSame(2, $Redis->lpush('mylist', 'Hello World 2'));
@@ -200,7 +200,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_persist() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(true, $Redis->set('foo', 'bar', 10));
         $this->assertLessThanOrEqual(10, $Redis->ttl('foo'));
@@ -211,7 +211,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_pexpire() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->pexpire('key', 10000));
 
@@ -229,7 +229,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_pexpireat() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->pexpireat('key', 1000 * (10 + time())));
 
@@ -247,7 +247,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_pttl() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(-2, $Redis->pttl('key'));
         $Redis->set('key', 'value');
@@ -258,7 +258,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_randomkey() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(null, $Redis->randomkey());
         $Redis->set('key', 'value');
@@ -272,7 +272,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_rename() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         try {
             $this->assertSame(true, $Redis->rename('key', 'foo'));
@@ -302,7 +302,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_renamenx() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         try {
             $this->assertSame(0, $Redis->renamenx('key', 'foo'));
@@ -332,7 +332,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_restore() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(true, $Redis->restore('key', 0, "\x00\x01\x00\x06\x00\xcd\x15\x4d\x4c\x99\x42\x7f\xc5"));
         $this->assertSame("\x00", $Redis->get('key'));
@@ -355,14 +355,14 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_scan() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(true, $Redis->mset(['key' => 'value', 'foo' => 'bar', 'hello' => 'world']));
         $this->assertSame(['0', ['hello', 'foo', 'key']], $Redis->scan(0));
     }
 
     public function test_sort() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->lpush('ages', '18'));
         $this->assertSame(2, $Redis->lpush('ages', '17'));
@@ -391,7 +391,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_ttl() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(-2, $Redis->ttl('key'));
         $Redis->set('key', 'value');
@@ -402,7 +402,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_type() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame('none', $Redis->type('key'));
         $this->assertSame('none', $Redis->type(''));
@@ -424,7 +424,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_wait() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertTrue(is_int($Redis->wait(2, 1)));
     }

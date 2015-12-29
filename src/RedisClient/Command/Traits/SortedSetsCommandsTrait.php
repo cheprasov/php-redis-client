@@ -102,19 +102,19 @@ trait SortedSetsCommandsTrait {
      * K being the number of input sorted sets and M being the number of elements in the resulting sorted set.
      *
      * @param string $destination
-     * @param string|string[] $key
-     * @param string|string[] null $weight
+     * @param string|string[] $keys
+     * @param int|int[] null $weight
      * @param string|null $aggregate
      * @return int The number of elements in the resulting sorted set at destination.
      */
-    public function zinterstore($destination, $key, $weight = null, $aggregate = null) {
+    public function zinterstore($destination, $keys, $weights = null, $aggregate = null) {
         $params = [
             Parameter::key($destination),
-            Parameter::keys($key),
+            Parameter::keys($keys),
         ];
-        if ($weight) {
+        if ($weights) {
             $params[] = Parameter::string('WEIGHTS');
-            $params[] = Parameter::integers($weight);
+            $params[] = Parameter::integers($weights);
         }
         if ($aggregate) {
             $params[] = Parameter::string('AGGREGATE');
@@ -461,19 +461,19 @@ trait SortedSetsCommandsTrait {
      * and M being the number of elements in the resulting sorted set.
      *
      * @param string $destination
-     * @param string|string[] $key
-     * @param int|int[] $weight
+     * @param string|string[] $keys
+     * @param int|int[] $weights
      * @param string $aggregate
      * @return int The number of elements in the resulting sorted set at destination.
      */
-    public function zunionstore($destination, $key, $weight, $aggregate) {
+    public function zunionstore($destination, $keys, $weights, $aggregate) {
         $params = [
             Parameter::key($destination),
-            Parameter::keys($key),
+            Parameter::keys($keys),
         ];
-        if ($weight) {
+        if ($weights) {
             $params[] = Parameter::string('WEIGHTS');
-            $params[] = Parameter::integers($weight);
+            $params[] = Parameter::integers($weights);
         }
         if ($aggregate) {
             $params[] = Parameter::string('AGGREGATE');

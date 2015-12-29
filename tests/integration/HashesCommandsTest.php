@@ -12,7 +12,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
      * @inheritdoc
      */
     protected function setUp() {
-        self::$Redis->flushdb();
+        static::$Redis->flushdb();
         self::$fields = [
             'string'  => 'value',
             'integer' => 42,
@@ -25,13 +25,13 @@ class HashesCommandsTest extends AbstractCommandsTest {
             'empty'   => '',
             'bin'     => call_user_func_array('pack', ['N*'] + range(0, 255))
         ];
-        self::$Redis->hmset('hash', self::$fields);
-        self::$Redis->hmset('', self::$fields);
-        self::$Redis->set('string', 'value');
+        static::$Redis->hmset('hash', self::$fields);
+        static::$Redis->hmset('', self::$fields);
+        static::$Redis->set('string', 'value');
     }
 
     public function test_hdel() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->hdel('key-does-not-exist', 'field'));
 
@@ -55,7 +55,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hexists() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->hexists('key-does-not-exist', 'field'));
         $this->assertSame(0, $Redis->hexists('hash', 'field-does-not-exist'));
@@ -81,7 +81,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hget() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(null, $Redis->hget('key-does-not-exist', 'field'));
         $this->assertSame(null, $Redis->hget('hash', 'field-does-not-exist'));
@@ -105,7 +105,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hgetall() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame([], $Redis->hgetall('key-does-not-exist'));
 
@@ -130,7 +130,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hincrby() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(11, $Redis->hincrby('key-does-not-exist', 'field', 11));
         $this->assertSame(11, $Redis->hincrby('hash', 'field-does-not-exist', 11));
@@ -177,7 +177,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hincrbyfloat() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame('1.1', $Redis->hincrbyfloat('key-does-not-exist', 'field', 1.1));
         $this->assertSame('1.1', $Redis->hincrbyfloat('hash', 'field-does-not-exist', '1.1'));
@@ -212,7 +212,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hkeys() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame([], $Redis->hkeys('key-does-not-exist'));
 
@@ -237,7 +237,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hlen() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->hlen('key-does-not-exist'));
         $this->assertSame(count(self::$fields), $Redis->hlen('hash'));
@@ -252,7 +252,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hmget() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(['field' => null], $Redis->hmget('key-does-not-exist', 'field'));
         $this->assertSame(['field-does-not-exist' => null], $Redis->hmget('hash', ['field-does-not-exist']));
@@ -280,7 +280,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hmset() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(true, $Redis->hmset('hash', ['some-field' => 'good']));
         $this->assertSame(true, $Redis->hmset('hash', ['some-field' => 'good']));
@@ -294,7 +294,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hset() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->hset('hash', 'some-field', 'good'));
         $this->assertSame('good', $Redis->hget('hash', 'some-field'));
@@ -311,7 +311,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hsetnx() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->hsetnx('hash', 'some-field', 'good'));
         $this->assertSame('good', $Redis->hget('hash', 'some-field'));
@@ -328,9 +328,12 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hstrlen() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
-        return;
+        if (static::$version < '3.2') {
+            $this->assertTrue(true);
+            return;
+        }
 
         $this->assertSame(0, $Redis->hstrlen('hash', 'some-field'));
         $this->assertSame(1, $Redis->hsetnx('hash', 'some-field', 'good'));
@@ -345,7 +348,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hvals() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame([], $Redis->hvals('key-does-not-exist'));
 
@@ -373,7 +376,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_hscan() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(['0', []], $Redis->hscan('key-does-not-exist', 0));
 

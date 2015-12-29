@@ -174,12 +174,12 @@ trait ServerCommandsTrait {
      * Available since 2.8.13.
      * Time complexity: O(N) when N is number of commands to look up
      *
-     * @param string[] $commandName
+     * @param string[] $commandNames
      * @return array Nested list of command details.
      */
-    public function commandInfo($commandName) {
+    public function commandInfo($commandNames) {
         return $this->returnCommand(
-            new Command('COMMAND INFO', Parameter::strings($commandName))
+            new Command('COMMAND INFO', Parameter::strings($commandNames))
         );
     }
 
@@ -301,9 +301,9 @@ trait ServerCommandsTrait {
      * @param string $section
      * @return string
      */
-    public function info($section) {
+    public function info($section = null) {
         return $this->returnCommand(
-            new Command('INFO', Parameter::string($section))
+            new Command('INFO', $section ? Parameter::string($section) : null, ResponseParser::PARSE_INFO)
         );
     }
 

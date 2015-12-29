@@ -12,7 +12,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
      * @inheritdoc
      */
     protected function setUp() {
-        self::$Redis->flushdb();
+        static::$Redis->flushdb();
         self::$fields = [
             'string'  => 'value',
             'integer' => 42,
@@ -25,14 +25,14 @@ class StringsCommandsTest extends AbstractCommandsTest {
             'empty'   => '',
             'bin'     => call_user_func_array('pack', ['N*'] + range(0, 255))
         ];
-        self::$Redis->hmset('hash', self::$fields);
+        static::$Redis->hmset('hash', self::$fields);
         foreach (self::$fields as $key => $value) {
-            self::$Redis->set($key, $value);
+            static::$Redis->set($key, $value);
         }
     }
 
     public function test_append() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(strlen('append-string'), $Redis->append('new-key', 'append-string'));
         $this->assertSame('append-string', $Redis->get('new-key'));
@@ -52,7 +52,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_bitcount() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->bitcount('new-key'));
 
@@ -75,7 +75,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_bitop() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->bitop('AND', 'new-key', ['key1', 'key2']));
         $this->assertSame(0, $Redis->bitop('AND', 'new-key', 'key3'));
@@ -99,7 +99,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_bitpos() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(true, $Redis->set('mykey', "\xff\xf0\x00"));
         $this->assertSame(12, $Redis->bitpos('mykey', 0));
@@ -145,7 +145,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_decr() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(-1, $Redis->decr('key'));
         $this->assertSame(-2, $Redis->decr('key'));
@@ -179,7 +179,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_decrby() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(-7, $Redis->decrby('key', 7));
         $this->assertSame(-11, $Redis->decrby('key', 4));
@@ -213,7 +213,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_get() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(null, $Redis->get('new-key'));
 
@@ -231,7 +231,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_getrange() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame('', $Redis->getrange('new-key', 0, 10));
 
@@ -251,7 +251,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_getset() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(null, $Redis->getset('new-key', 'new-value-1'));
         $this->assertSame('new-value-1', $Redis->getset('new-key', 'new-value-2'));
@@ -269,7 +269,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_incr() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->incr('key'));
         $this->assertSame(2, $Redis->incr('key'));
@@ -303,7 +303,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_incrby() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(7, $Redis->incrby('key', 7));
         $this->assertSame(11, $Redis->incrby('key', 4));
@@ -337,7 +337,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_incrbyfloat() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame('7.7', $Redis->incrbyfloat('key', 7.7));
         $this->assertSame('11.7', $Redis->incrbyfloat('key', 4));
@@ -367,7 +367,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_mget() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(['key' => null], $Redis->mget('key'));
         $this->assertSame(['key' => null], $Redis->mget(['key', 'key']));
@@ -386,7 +386,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_msetnx() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->msetnx(['key'=>'value']));
         $this->assertSame(1, $Redis->msetnx(['key1'=>'value1', 'key2'=>'value2']));
@@ -408,7 +408,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_psetex() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(true, $Redis->psetex('key', 1000, 'value'));
         $this->assertSame('value', $Redis->get('key'));
@@ -420,7 +420,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_set() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(true, $Redis->set('key','value'));
         $this->assertSame(true, $Redis->set('key','value2', null, null, 'XX'));
@@ -456,7 +456,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_setbit() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(true, $Redis->set('mykey', chr(0b00000000)));
 
@@ -496,7 +496,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_setex() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(true, $Redis->setex('key', 10, 'value'));
         $this->assertSame(true, $Redis->setex('key', 20 ,'value2'));
@@ -523,7 +523,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_setnx() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->setnx('key', 'value'));
         $this->assertSame(0, $Redis->setnx('key', 'value2'));
@@ -537,7 +537,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_setrange() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(true, $Redis->set('key1', 'Hello World'));
         $this->assertSame(11, $Redis->setrange('key1', 6, 'Redis'));
@@ -555,7 +555,7 @@ class StringsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_strlen() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->strlen('key'));
 

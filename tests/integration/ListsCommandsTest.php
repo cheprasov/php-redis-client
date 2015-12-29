@@ -9,7 +9,7 @@ use RedisClient\Exception\ErrorResponseException;
 class ListsCommandsTest extends AbstractCommandsTest {
 
     public function test_blpop() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list1', 10));
         $this->assertSame(2, $Redis->rpush('list1', 11));
@@ -41,7 +41,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_brpop() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list1', 10));
         $this->assertSame(2, $Redis->rpush('list1', 11));
@@ -73,7 +73,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_brpoplpush() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list1', 10));
         $this->assertSame(2, $Redis->rpush('list1', 11));
@@ -92,7 +92,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
         $this->assertSame(null, $Redis->brpoplpush('list3', 'list4', 1));
         $timeout = microtime(true) - $time;
         $this->assertGreaterThanOrEqual(1, $timeout);
-        $this->assertLessThanOrEqual(1.1, $timeout);
+        $this->assertLessThanOrEqual(1.5, $timeout);
 
         $Redis->set('foo', 'bar');
         try {
@@ -110,7 +110,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_lindex() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list', 111));
         $this->assertSame(2, $Redis->rpush('list', 222));
@@ -136,7 +136,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_linsert() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list', 100));
         $this->assertSame(2, $Redis->rpush('list', 200));
@@ -160,7 +160,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_llen() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->llen('list'));
         $this->assertSame(1, $Redis->rpush('list', 100));
@@ -180,7 +180,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_lpop() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list', 100));
         $this->assertSame(2, $Redis->rpush('list', 200));
@@ -203,7 +203,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_lpush() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->lpush('list', 100));
         $this->assertSame(2, $Redis->lpush('list', 200));
@@ -221,7 +221,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_lpushx() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->lpushx('list', 100));
         $this->assertSame(1, $Redis->lpush('list', 100));
@@ -240,7 +240,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_lrange() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list', 10));
         $this->assertSame(2, $Redis->rpush('list', 20));
@@ -264,7 +264,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_lrem() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list', 10));
         $this->assertSame(2, $Redis->rpush('list', 50));
@@ -305,7 +305,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_lset() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list', 10));
         $this->assertSame(2, $Redis->rpush('list', 50));
@@ -348,7 +348,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
 
 
     public function test_ltrim() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list', 10));
         $this->assertSame(2, $Redis->rpush('list', 50));
@@ -389,7 +389,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_rpop() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list', 100));
         $this->assertSame(2, $Redis->rpush('list', 200));
@@ -412,7 +412,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_rpoplpush() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list1', 10));
         $this->assertSame(2, $Redis->rpush('list1', 11));
@@ -445,7 +445,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_rpush() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(1, $Redis->rpush('list', 100));
         $this->assertSame(2, $Redis->rpush('list', 200));
@@ -463,7 +463,7 @@ class ListsCommandsTest extends AbstractCommandsTest {
     }
 
     public function test_rpushx() {
-        $Redis = self::$Redis;
+        $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->rpushx('list', 100));
         $this->assertSame(1, $Redis->rpush('list', 100));
