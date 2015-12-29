@@ -4,6 +4,7 @@ namespace RedisClient\Command\Traits;
 
 use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
+use RedisClient\Command\Response\ResponseParser;
 
 trait ListsCommandsTrait {
 
@@ -11,17 +12,23 @@ trait ListsCommandsTrait {
      * BLPOP key [key ...] timeout
      * Available since 2.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/blpop
      *
-     * @param string $key
-     * @param int $timeout
-     * @return array
+     * @param string|string[] $key
+     * @param int $timeout In seconds
+     * @return array|null [list => value]
      */
     public function blpop($key, $timeout) {
         return $this->returnCommand(
             new Command('BLPOP', [
                 Parameter::keys($key),
                 Parameter::integer($timeout),
-            ])
+            ], function($response) {
+                if (!$response) {
+                    return $response;
+                }
+                return ResponseParser::parseAssocArray($response);
+            })
         );
     }
 
@@ -29,17 +36,23 @@ trait ListsCommandsTrait {
      * BRPOP key [key ...] timeout
      * Available since 2.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/brpop
      *
      * @param string $key
      * @param int $timeout
-     * @return array
+     * @return array|null [list => value]
      */
     public function brpop($key, $timeout) {
         return $this->returnCommand(
             new Command('BRPOP', [
                 Parameter::keys($key),
                 Parameter::integer($timeout),
-            ])
+            ], function($response) {
+                if (!$response) {
+                    return $response;
+                }
+                return ResponseParser::parseAssocArray($response);
+            })
         );
     }
 
@@ -47,6 +60,7 @@ trait ListsCommandsTrait {
      * BRPOPLPUSH source destination timeout
      * Available since 2.2.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/brpoplpush
      *
      * @param string $source
      * @param string $destination
@@ -68,6 +82,7 @@ trait ListsCommandsTrait {
      * LINDEX key index
      * Available since 1.0.0.
      * Time complexity: O(N) or O(1)
+     * @link http://redis.io/commands/lindex
      *
      * @param string $key
      * @param int $index
@@ -86,18 +101,20 @@ trait ListsCommandsTrait {
      * LINSERT key BEFORE|AFTER pivot value
      * Available since 2.2.0.
      * Time complexity: O(N) or O(1)
+     * @link http://redis.io/commands/linsert
      *
      * @param string $key
-     * @param bool|true $before
+     * @param bool|true $after
      * @param string $pivot
      * @param string $value
-     * @return int The length of the list after the insert operation, or -1 when the value pivot was not found.
+     * @return int The length of the list after the insert operation,
+     * or -1 when the value pivot was not found. Or 0 when key was not found.
      */
-    public function linsert($key, $before = true, $pivot, $value) {
+    public function linsert($key, $after = true, $pivot, $value) {
         return $this->returnCommand(
             new Command('LINSERT', [
                 Parameter::key($key),
-                Parameter::string($before ? 'BEFORE' : 'AFTER'),
+                Parameter::string($after ? 'AFTER' : 'BEFORE' ),
                 Parameter::string($pivot),
                 Parameter::string($value),
             ])
@@ -108,6 +125,7 @@ trait ListsCommandsTrait {
      * LLEN key
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/llen
      *
      * @param string $key
      * @return int The length of the list at key.
@@ -123,6 +141,7 @@ trait ListsCommandsTrait {
      * LPOP key
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/lpop
      *
      * @param string $key
      * @return string|null The value of the first element, or null when key does not exist.
@@ -137,6 +156,7 @@ trait ListsCommandsTrait {
      * LPUSH key value [value ...]
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/lpush
      *
      * @param string $key
      * @param string|string[] $value
@@ -155,6 +175,7 @@ trait ListsCommandsTrait {
      * LPUSHX key value
      * Available since 2.2.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/lpushx
      *
      * @param string $key
      * @param string $value
@@ -172,7 +193,8 @@ trait ListsCommandsTrait {
     /**
      * LRANGE key start stop
      * Available since 1.0.0.
-     * Time complexity: O(S+N) where S is the distance of start offset from HEAD for small lists
+     * Time complexity: O(S+N) where S is the distance of start offset from HEAD for small lists.
+     * @link http://redis.io/commands/lrange
      *
      * @param string $key
      * @param int $start
@@ -193,6 +215,7 @@ trait ListsCommandsTrait {
      * LREM key count value
      * Available since 1.0.0.
      * Time complexity: O(N) where N is the length of the list.
+     * @link http://redis.io/commands/lrem
      *
      * @param string $key
      * @param int $count
@@ -214,6 +237,7 @@ trait ListsCommandsTrait {
      * Available since 1.0.0.
      * Time complexity: O(N) where N is the length of the list.
      * Setting either the first or the last element of the list is O(1).
+     * @link http://redis.io/commands/lset
      *
      * @param string $key
      * @param int $index
@@ -234,6 +258,7 @@ trait ListsCommandsTrait {
      * LTRIM key start stop
      * Available since 1.0.0.
      * Time complexity: O(N) where N is the number of elements to be removed by the operation.
+     * @link http://redis.io/commands/ltrim
      *
      * @param string $key
      * @param int $start
@@ -254,6 +279,7 @@ trait ListsCommandsTrait {
      * RPOP key
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/rpop
      *
      * @param string $key
      * @return string|null The value of the last element, or null when key does not exist.
@@ -268,6 +294,7 @@ trait ListsCommandsTrait {
      * RPOPLPUSH source destination
      * Available since 1.2.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/rpoplpush
      *
      * @param string $source
      * @param string $destination
@@ -286,6 +313,7 @@ trait ListsCommandsTrait {
      * RPUSH key value [value ...]
      * Available since 1.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/rpush
      *
      * @param string $key
      * @param string|string[] $value
@@ -304,6 +332,7 @@ trait ListsCommandsTrait {
      * RPUSHX key value
      * Available since 2.2.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/rpushx
      *
      * @param string $key
      * @param string $value

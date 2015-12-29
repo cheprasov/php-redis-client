@@ -2,48 +2,12 @@
 
 namespace Test\Integration;
 
-use PHPUnit_Framework_TestCase;
+include_once(__DIR__. '/AbstractCommandsTest.php');
+
 use RedisClient\Exception\ErrorResponseException;
 use RedisClient\RedisClient;
 
-class KeysCommandsTest extends PHPUnit_Framework_TestCase {
-
-    /**
-     * @var RedisClient
-     */
-    protected static $Redis;
-
-    /**
-     * @var array
-     */
-    protected static $config;
-
-    /**
-     * @var array
-     */
-    protected static $fields;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        self::$config = include(__DIR__. '/redis-test-config.php');
-        self::$Redis = new RedisClient(self::$config[0]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function tearDownAfterClass() {
-        self::$Redis->flushall();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp() {
-        self::$Redis->flushall();
-    }
+class KeysCommandsTest extends AbstractCommandsTest {
 
     public function test_del() {
         $Redis = self::$Redis;

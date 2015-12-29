@@ -2,47 +2,11 @@
 
 namespace Test\Integration;
 
-use PHPUnit_Framework_TestCase;
+include_once(__DIR__. '/AbstractCommandsTest.php');
+
 use RedisClient\Exception\ErrorResponseException;
-use RedisClient\RedisClient;
 
-class StringsCommandsTest extends PHPUnit_Framework_TestCase {
-
-    /**
-     * @var RedisClient
-     */
-    protected static $Redis;
-
-    /**
-     * @var array
-     */
-    protected static $config;
-
-    /**
-     * @var array
-     */
-    protected static $fields;
-
-    const REDIS_RESPONSE_ERROR_WRONGTYPE = 'WRONGTYPE Operation against a key holding the wrong kind of value';
-    const REDIS_RESPONSE_ERROR_NOT_INTEGER = 'ERR value is not an integer or out of range';
-    const REDIS_RESPONSE_ERROR_NOT_FLOAT = 'ERR value is not a valid float';
-    const REDIS_RESPONSE_ERROR_EXPIRE_TIME = 'ERR invalid expire time in set';
-    const REDIS_RESPONSE_ERROR_EXPIRE_TIME_SETEX = 'ERR invalid expire time in setex';
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        self::$config = include(__DIR__. '/redis-test-config.php');
-        self::$Redis = new RedisClient(self::$config[0]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function tearDownAfterClass() {
-        self::$Redis->flushdb();
-    }
+class StringsCommandsTest extends AbstractCommandsTest {
 
     /**
      * @inheritdoc
@@ -83,7 +47,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->append('hash', 'field');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -106,7 +70,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->bitcount('hash');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -176,7 +140,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->bitpos('hash', 0);
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -193,7 +157,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(3.14159265, $Redis->decr('float'));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_INTEGER, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_NOT_INTEGER, $Ex->getMessage());
         }
 
         // I don't know why it happens, but it is real Redis behavior
@@ -203,14 +167,14 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(-1, $Redis->decr('string'));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_INTEGER, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_NOT_INTEGER, $Ex->getMessage());
         }
 
         try {
             $Redis->decr('hash');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -227,7 +191,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(3.14159265, $Redis->decrby('float', 1));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_INTEGER, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_NOT_INTEGER, $Ex->getMessage());
         }
 
         // I don't know why it happens, but it is real Redis behavior
@@ -237,14 +201,14 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(-8, $Redis->decrby('string', 8));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_INTEGER, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_NOT_INTEGER, $Ex->getMessage());
         }
 
         try {
             $Redis->decrby('hash', 2);
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -262,7 +226,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->get('hash');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -282,7 +246,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->get('hash');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -300,7 +264,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->getset('hash', 'value');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -317,7 +281,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(3.14159265, $Redis->incr('float'));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_INTEGER, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_NOT_INTEGER, $Ex->getMessage());
         }
 
         // I don't know why it happens, but it is real Redis behavior
@@ -327,14 +291,14 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(1, $Redis->incr('string'));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_INTEGER, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_NOT_INTEGER, $Ex->getMessage());
         }
 
         try {
             $Redis->incr('hash');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -351,7 +315,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(3.14159265, $Redis->incrby('float', 1));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_INTEGER, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_NOT_INTEGER, $Ex->getMessage());
         }
 
         // I don't know why it happens, but it is real Redis behavior
@@ -361,14 +325,14 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(8, $Redis->incrby('string', 8));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_INTEGER, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_NOT_INTEGER, $Ex->getMessage());
         }
 
         try {
             $Redis->incrby('hash', 2);
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -391,14 +355,14 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(8, $Redis->incrbyfloat('string', 8));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_FLOAT, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_NOT_FLOAT, $Ex->getMessage());
         }
 
         try {
             $Redis->decr('hash');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -480,14 +444,14 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(true, $Redis->set('key1','value1', -100));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_EXPIRE_TIME, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_EXPIRE_TIME, $Ex->getMessage());
         }
 
         try {
             $this->assertSame(true, $Redis->set('key1','value1', 0, -100));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_EXPIRE_TIME, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_EXPIRE_TIME, $Ex->getMessage());
         }
     }
 
@@ -527,7 +491,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->bitpos('hash', 0);
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -547,14 +511,14 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(true, $Redis->setex('key1', 0,'value1'));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_EXPIRE_TIME_SETEX, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_EXPIRE_TIME_SETEX, $Ex->getMessage());
         }
 
         try {
             $this->assertSame(true, $Redis->setex('key1', -100, 'value1'));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_EXPIRE_TIME_SETEX, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_STRING_EXPIRE_TIME_SETEX, $Ex->getMessage());
         }
     }
 
@@ -586,7 +550,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(11, $Redis->setrange('hash', 6, 'Redis'));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -604,7 +568,7 @@ class StringsCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->strlen('hash');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 

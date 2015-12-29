@@ -2,45 +2,11 @@
 
 namespace Test\Integration;
 
-use PHPUnit_Framework_TestCase;
+include_once(__DIR__. '/AbstractCommandsTest.php');
+
 use RedisClient\Exception\ErrorResponseException;
-use RedisClient\RedisClient;
 
-class HashesCommandsTest extends PHPUnit_Framework_TestCase {
-
-    /**
-     * @var RedisClient
-     */
-    protected static $Redis;
-
-    /**
-     * @var array
-     */
-    protected static $config;
-
-    /**
-     * @var array
-     */
-    protected static $fields;
-
-    const REDIS_RESPONSE_ERROR_WRONGTYPE = 'WRONGTYPE Operation against a key holding the wrong kind of value';
-    const REDIS_RESPONSE_ERROR_NOT_INTEGER = 'ERR hash value is not an integer';
-    const REDIS_RESPONSE_ERROR_NOT_FLOAT = 'ERR hash value is not a valid float';
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        self::$config = include(__DIR__. '/redis-test-config.php');
-        self::$Redis = new RedisClient(self::$config[0]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function tearDownAfterClass() {
-        self::$Redis->flushdb();
-    }
+class HashesCommandsTest extends AbstractCommandsTest {
 
     /**
      * @inheritdoc
@@ -84,7 +50,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hdel('string', 'field');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -110,7 +76,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hexists('string', 'value');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -134,7 +100,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hget('string', 'some-field');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -159,7 +125,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hgetall('string');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -175,14 +141,14 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(2, $Redis->hincrby('hash', 'string', 2));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_INTEGER, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_HASH_NOT_INTEGER, $Ex->getMessage());
         }
 
         try {
             $this->assertSame(1, $Redis->hincrby('hash', 'float', 3));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_INTEGER, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_HASH_NOT_INTEGER, $Ex->getMessage());
         }
 
         try {
@@ -190,7 +156,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame(3, $Redis->hincrby('hash', 'bin', 3));
             //$this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_INTEGER, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_HASH_NOT_INTEGER, $Ex->getMessage());
         }
 
         $this->assertSame(4, $Redis->hincrby('hash', 'null', 4));
@@ -206,7 +172,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hincrby('string', 'value', 2);
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -222,7 +188,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $this->assertSame('2.2', $Redis->hincrbyfloat('hash', 'string', 2.2));
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_NOT_FLOAT, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_HASH_NOT_FLOAT, $Ex->getMessage());
         }
 
         $this->assertSame('4.25159265', $Redis->hincrbyfloat('hash', 'float', 1.11));
@@ -241,7 +207,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hincrbyfloat('string', 'value', 2.2);
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -266,7 +232,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hkeys('string');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -281,7 +247,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hlen('string');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -309,7 +275,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hmget('string', 'some-field');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -323,7 +289,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hmset('string', ['field' => 'test']);
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -340,7 +306,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hset('string', 'field', 'test');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -357,7 +323,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hsetnx('string', 'field', 'test');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -374,7 +340,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hstrlen('string', 'field');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -402,7 +368,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hvals('string');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
@@ -424,7 +390,7 @@ class HashesCommandsTest extends PHPUnit_Framework_TestCase {
             $Redis->hscan('string', 'field');
             $this->assertTrue(false);
         } catch (ErrorResponseException $Ex) {
-            $this->assertSame(self::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
         }
     }
 
