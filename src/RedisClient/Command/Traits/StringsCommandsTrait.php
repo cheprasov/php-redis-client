@@ -284,12 +284,12 @@ trait StringsCommandsTrait {
      * Time complexity: O(N) where N is the number of keys to set.
      * @link http://redis.io/commands/mset
      *
-     * @param array $keyValue
+     * @param array $keyValues
      * @return bool always TRUE since MSET can't fail.
      */
-    public function mset(array $keyValue) {
+    public function mset(array $keyValues) {
         return $this->returnCommand(
-            new Command('MSET', Parameter::assocArray($keyValue))
+            new Command('MSET', Parameter::assocArray($keyValues))
         );
     }
 

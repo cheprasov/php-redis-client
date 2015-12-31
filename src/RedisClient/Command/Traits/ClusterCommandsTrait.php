@@ -6,7 +6,7 @@ use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 
 /**
- * Cluster
+ * trait ClusterCommandsTrait
  * @link http://redis.io/commands#pubsub
  */
 trait ClusterCommandsTrait {
