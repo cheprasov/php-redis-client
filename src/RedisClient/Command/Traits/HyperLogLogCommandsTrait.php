@@ -50,14 +50,14 @@ trait HyperLogLogCommandsTrait {
      * Time complexity: O(N) to merge N HyperLogLogs, but with high constant times.
      *
      * @param string $destkey
-     * @param string|string[] $sourcekey
+     * @param string|string[] $sourcekeys
      * @return bool The command just returns True.
      */
-    public function pfmerge($destkey, $sourcekey) {
+    public function pfmerge($destkey, $sourcekeys) {
         return $this->returnCommand(
             new Command('PFMERGE', [
                 Parameter::key($destkey),
-                Parameter::keys($sourcekey),
+                Parameter::keys($sourcekeys),
             ])
         );
     }

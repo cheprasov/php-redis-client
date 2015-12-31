@@ -219,14 +219,14 @@ trait SetsCommandsTrait {
      * @link http://redis.io/commands/srem
      *
      * @param string $key
-     * @param string|string[] $member
+     * @param string|string[] $members
      * @return int The number of members that were removed from the set, not including non existing members.
      */
-    public function srem($key, $member) {
+    public function srem($key, $members) {
         return $this->returnCommand(
             new Command('SREM', [
                 Parameter::key($key),
-                Parameter::keys($member),
+                Parameter::keys($members),
             ])
         );
     }

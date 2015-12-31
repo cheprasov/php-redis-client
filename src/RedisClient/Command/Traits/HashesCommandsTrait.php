@@ -7,11 +7,8 @@ use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\ResponseParser;
 
 /**
- * Hashes
+ * trait HashesCommandsTrait
  * @link http://redis.io/commands#hash
- *
- * Class HashesCommandsTrait
- * @package RedisClient\Command\Traits
  */
 trait HashesCommandsTrait {
 
@@ -192,11 +189,11 @@ trait HashesCommandsTrait {
      *
      * @return bool True
      */
-    public function hmset($key, array $fieldValue) {
+    public function hmset($key, array $fieldValues) {
         return $this->returnCommand(
             new Command('HMSET', [
                 Parameter::key($key),
-                Parameter::assocArray($fieldValue),
+                Parameter::assocArray($fieldValues),
             ], function($response) {
                 return (bool) $response;
             })

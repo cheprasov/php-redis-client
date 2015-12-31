@@ -191,7 +191,7 @@ class Parameter {
         throw new InvalidArgumentException('Invalid limit '. $limit);
     }
 
-    const MIN_MAX_PREG = '/^([-+]inf|\(?\d+)$/';
+    const MIN_MAX_PREG = '/^([-+]inf|\(?-?\d+)$/';
 
     /**
      * @param int|string $param
@@ -234,7 +234,7 @@ class Parameter {
         throw new InvalidArgumentException('Port number must be more than 0 and less than or equal 65535');
     }
 
-    const SPECIFY_INTERVAL_PREG = '/^(-|+|[\(\[]\w)$/';
+    const SPECIFY_INTERVAL_PREG = '/^(-|\+|[\(\[]\w+)$/';
 
     /**
      * @param string|int $param
