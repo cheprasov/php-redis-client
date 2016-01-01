@@ -3,6 +3,7 @@
 namespace RedisClient\Protocol;
 
 use RedisClient\Connection\ConnectionInterface;
+use RedisClient\Exception\EmptyResponseException;
 use RedisClient\Exception\ErrorResponseException;
 use RedisClient\Exception\UnknownTypeException;
 
@@ -87,14 +88,14 @@ class RedisProtocol implements ProtocolInterface {
     /**
      * @return array|int|null|string
      * @throws UnknownTypeException
-     * @throws ErrorResponseException
+     * @throws EmptyResponseException
      */
     protected function read() {
 
         if (!$line = $this->Connection->readLine()) {
-            //todo: usleep
+            //todo: timeout usleep
             if (!$line = $this->Connection->readLine()) {
-                throw new ErrorResponseException('Response is empty');
+                throw new EmptyResponseException();
             }
         }
 
@@ -109,9 +110,7 @@ class RedisProtocol implements ProtocolInterface {
                 return $data;
 
             case static::TYPE_ERRORS:
-                //$errs = explode(" ", $data, 2);
-                throw new ErrorResponseException($data);
-                break;
+                return new ErrorResponseException($data);
 
             case static::TYPE_INTEGERS:
                 return (int) $data;
@@ -143,24 +142,23 @@ class RedisProtocol implements ProtocolInterface {
     }
 
     /**
-     * @param array $structure
-     * @return mixed
+     * @inheritdoc
      */
-    public function send($structure) {
-        if (func_num_args() === 1) {
-            $raw = $this->pack($structure);
+    public function send($structures, $multi = false) {
+        if (!$multi) {
+            $raw = $this->pack($structures);
             //echo str_replace(['\n','\r'], '-', json_encode($raw))." => ";
             $this->write($raw);
             $response = $this->read();
         } else {
             $args = func_get_args();
             $raw = '';
-            foreach ($args as $arg) {
-                $raw .= $this->pack($arg);
+            foreach ($structures as $structure) {
+                $raw .= $this->pack($structure);
             }
             $this->write($raw);
             $response = [];
-            for ($i = count($args); $i > 0; $i--) {
+            for ($i = count($structures); $i > 0; $i--) {
                 $response[] = $this->read();
             }
         }

@@ -2,19 +2,22 @@
 
 namespace RedisClient\Command;
 
-use RedisClient\Protocol\ProtocolInterface;
-
 interface CommandInterface {
 
     /**
-     * @param ProtocolInterface $Protocol
-     * @return mixed
+     * @return string
      */
-    public function execute(ProtocolInterface $Protocol);
+    public function getCommand();
 
     /**
      * @return string[]
      */
     public function getStructure();
+
+    /**
+     * @param mixed $response
+     * @return mixed
+     */
+    public function parseResponse($response);
 
 }

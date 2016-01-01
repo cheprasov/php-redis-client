@@ -10,7 +10,6 @@ trait AllCommandsTrait {
     use KeysCommandsTrait;
     use ListsCommandsTrait;
     use ScriptingCommandsTrait;
-
     use ServerCommandsTrait;
     use SetsCommandsTrait;
     use SortedSetsCommandsTrait;

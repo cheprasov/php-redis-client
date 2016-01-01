@@ -57,7 +57,7 @@ trait ServerCommandsTrait {
      * @param bool|null $skipme
      * @return bool|int
      * When called with the three arguments format:
-     * Simple string reply: TRUE if the connection exists and has been closed
+     * Simple string reply: True if the connection exists and has been closed
      * When called with the filter / value format:
      * Integer reply: the number of clients killed.
      */
@@ -106,7 +106,7 @@ trait ServerCommandsTrait {
      * Time complexity: O(1)
      *
      * @param int $timeout
-     * @return true The command returns TRUE or an error if the timeout is invalid.
+     * @return true The command returns True or an error if the timeout is invalid.
      */
     public function clientPause($timeout) {
         return $this->returnCommand(
@@ -120,7 +120,7 @@ trait ServerCommandsTrait {
      * Time complexity: O(1)
      *
      * @param string $connectionName
-     * @param bool TRUE if the connection name was successfully set.
+     * @param bool True if the connection name was successfully set.
      */
     public function clientSetname($connectionName) {
         return $this->returnCommand(

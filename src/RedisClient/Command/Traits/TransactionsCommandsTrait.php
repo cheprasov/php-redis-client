@@ -6,11 +6,8 @@ use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 
 /**
- * Transactions
+ * trait TransactionsCommandsTrait
  * @link http://redis.io/topics/transactions
- *
- * Class TransactionsCommandsTrait
- * @package RedisClient\Command\Traits
  */
 trait TransactionsCommandsTrait {
 
@@ -19,7 +16,7 @@ trait TransactionsCommandsTrait {
      * Available since 2.0.0.
      * @link http://redis.io/commands/discard
      *
-     * @return bool Always TRUE
+     * @return bool Always True
      */
     public function discard() {
         return $this->returnCommand(
@@ -45,7 +42,7 @@ trait TransactionsCommandsTrait {
      * Available since 1.2.0.
      * @link http://redis.io/commands/multi
      *
-     * @return bool Always TRUE
+     * @return bool Always True
      */
     public function multi() {
         return $this->returnCommand(
@@ -59,7 +56,7 @@ trait TransactionsCommandsTrait {
      * Time complexity: O(1)
      * @link http://redis.io/commands/unwatch
      *
-     * @return bool Always TRUE
+     * @return bool Always True
      */
     public function unwatch() {
         return $this->returnCommand(
@@ -73,7 +70,7 @@ trait TransactionsCommandsTrait {
      * Time complexity: O(1) for every key.
      *
      * @param string|string[] $keys
-     * @return bool Always TRUE
+     * @return bool Always True
      */
     public function watch($keys) {
         return $this->returnCommand(

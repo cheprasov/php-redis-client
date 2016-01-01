@@ -6,7 +6,7 @@ use RedisClient\Command\CommandInterface;
 use RedisClient\Command\Pipeline;
 use RedisClient\Command\Traits\AllCommandsTrait;
 use RedisClient\Connection\StreamConnection;
-use RedisClient\Exception\RedisException;
+use RedisClient\Exception\ErrorResponseException;
 use RedisClient\Protocol\ProtocolInterface;
 use RedisClient\Protocol\RedisProtocol;
 
@@ -27,7 +27,7 @@ class RedisClient {
      */
     protected static $defaultConfig = [
         self::CONFIG_SERVER => 'tcp://127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
-        self::CONFIG_TIMEOUT => 0.1, // seconds
+        self::CONFIG_TIMEOUT => 0.1, // in seconds
         self::CONFIG_THROW_REDIS_EXCEPTIONS => true,
     ];
 
@@ -98,25 +98,27 @@ class RedisClient {
      * @throws \Exception
      */
     public function executeCommand(CommandInterface $Command) {
-        try {
-            return $Command->execute($this->getProtocol());
-        } catch (RedisException $Exception) {
+        $response = $this->getProtocol()->send($Command->getStructure());
+        if ($response instanceof ErrorResponseException) {
             if ($this->getConfig(self::CONFIG_THROW_REDIS_EXCEPTIONS)) {
-                throw $Exception;
+                throw $response;
             }
-            return null;
+            return $response;
+        } else {
+            $result = $Command->parseResponse($response);
         }
+        return $result;
     }
 
     /**
      * @param \Closure|null $Closure
-     * @return $this|bool|mixed
+     * @return self|bool|mixed
      */
     public function pipeline(\Closure $Closure = null) {
         if ($this->Pipeline) {
             //throw new Error();
         }
-        $this->Pipeline = new Pipeline($this->getProtocol());
+        $this->Pipeline = new Pipeline();
         if ($Closure) {
             $Closure($this);
             return $this->executePipeline();
@@ -133,13 +135,14 @@ class RedisClient {
             return false;
         }
         $this->Pipeline = null;
-        try {
-            return $Pipeline->execute();
-        } catch (RedisException $Exception) {
+        $responses = $this->getProtocol()->send($Pipeline->getStructure(), true);
+        if ($responses instanceof ErrorResponseException) {
             if ($this->getConfig(self::CONFIG_THROW_REDIS_EXCEPTIONS)) {
-                throw $Exception;
+                throw $responses;
             }
-            return null;
+            return $responses;
+        } else {
+            return $Pipeline->parseResponse($responses);
         }
     }
 }

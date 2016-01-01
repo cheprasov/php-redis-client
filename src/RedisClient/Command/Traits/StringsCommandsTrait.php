@@ -272,10 +272,11 @@ trait StringsCommandsTrait {
      */
     public function mget($keys) {
         $keys = (array) $keys;
-        $values = $this->returnCommand(
-            new Command('MGET', Parameter::keys($keys))
+        return $this->returnCommand(
+            new Command('MGET', Parameter::keys($keys), function($response) use ($keys) {
+                return array_combine($keys, $response);
+            })
         );
-        return array_combine($keys, $values);
     }
 
     /**
@@ -285,7 +286,7 @@ trait StringsCommandsTrait {
      * @link http://redis.io/commands/mset
      *
      * @param array $keyValues
-     * @return bool always TRUE since MSET can't fail.
+     * @return bool always True since MSET can't fail.
      */
     public function mset(array $keyValues) {
         return $this->returnCommand(
