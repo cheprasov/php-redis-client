@@ -53,7 +53,7 @@ trait ConnectionCommandsTrait {
      * QUIT
      * Available since 1.0.0.
      *
-     * @return bool Always TRUE
+     * @return bool Always True
      */
     public function quit() {
         return $this->returnCommand(

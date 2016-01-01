@@ -119,7 +119,7 @@ trait KeysCommandsTrait {
      * @param int $timeout In milliseconds
      * @param bool $copy Available in 3.0 and are not available in 2.6 or 2.8
      * @param bool $replace Available in 3.0 and are not available in 2.6 or 2.8
-     * @return bool The command returns TRUE on success.
+     * @return bool The command returns True on success.
      */
     public function migrate($host, $port, $key, $destinationDb, $timeout, $copy = false, $replace = false) {
         $params = [
@@ -312,7 +312,7 @@ trait KeysCommandsTrait {
      * @param int $ttl In milliseconds
      * @param string $serializedValue
      * @param bool|false $replace Redis 3.0 or greater
-     * @return bool The command returns TRUE on success.
+     * @return bool The command returns True on success.
      */
     public function restore($key, $ttl, $serializedValue, $replace = false) {
         $params = [

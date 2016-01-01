@@ -3,8 +3,6 @@
 namespace RedisClient\Command;
 
 use RedisClient\Command\Response\ResponseParser;
-use RedisClient\Command\Response\ResponseParserInterface;
-use RedisClient\Protocol\ProtocolInterface;
 
 class Command implements CommandInterface {
 
@@ -19,7 +17,7 @@ class Command implements CommandInterface {
     protected $parameters = [];
 
     /**
-     * @var \Closure|ResponseParserInterface
+     * @var \Closure
      */
     protected $responseParser;
 
@@ -83,21 +81,10 @@ class Command implements CommandInterface {
     }
 
     /**
-     * @inheritdoc
-     */
-    public function execute(ProtocolInterface $Protocol) {
-        $command = $this->getStructure();
-        $response = $Protocol->send($command);
-        $response = $this->parseResponse($response);
-        $result = $this->processResponse($response);
-        return $result;
-    }
-
-    /**
      * @param mixed $response
      * @return mixed
      */
-    protected function parseResponse($response) {
+    public function parseResponse($response) {
         if (is_int($this->responseParser)) {
             return ResponseParser::parse($this->responseParser, $response);
         } elseif ($this->responseParser instanceof \Closure) {
@@ -106,14 +93,6 @@ class Command implements CommandInterface {
         } elseif (is_string($this->responseParser)) {
             return call_user_func($this->responseParser, $response);
         }
-        return $response;
-    }
-
-    /**
-     * @param mixed $response
-     * @return mixed
-     */
-    public function processResponse($response) {
         return $response;
     }
 

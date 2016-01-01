@@ -6,18 +6,8 @@ use RedisClient\Protocol\ProtocolInterface;
 
 class Pipeline {
 
-    /** @var ProtocolInterface  */
-    protected $Protocol;
-
     /** @var CommandInterface[] */
     protected $Commands = [];
-
-    /**
-     * @param ProtocolInterface $Protocol
-     */
-    public function __construct(ProtocolInterface $Protocol) {
-        $this->Protocol = $Protocol;
-    }
 
     /**
      * @param CommandInterface $Command
@@ -29,12 +19,27 @@ class Pipeline {
     /**
      * @return mixed
      */
-    public function execute() {
+    public function getStructure() {
         $structures = [];
         foreach ($this->Commands as $Command) {
             $structures[] = $Command->getStructure();
         }
-        return call_user_func_array([$this->Protocol, 'send'], $structures);
+        return $structures;
+    }
+
+    /**
+     * @param array $responses
+     * @return mixed
+     */
+    public function parseResponse($responses) {
+        $structures = [];
+        foreach ($responses as $n => $response) {
+            if (!isset($this->Commands[$n])) {
+                // todo: check
+            }
+            $structures[] = $this->Commands[$n]->parseResponse($response);
+        }
+        return $structures;
     }
 
 }

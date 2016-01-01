@@ -6,7 +6,7 @@ include_once(__DIR__. '/AbstractCommandsTest.php');
 
 use RedisClient\Exception\ErrorResponseException;
 
-class ScriptsCommandsTest extends AbstractCommandsTest {
+class ScriptingCommandsTest extends AbstractCommandsTest {
 
     public function test_eval() {
         $Redis = static::$Redis;
