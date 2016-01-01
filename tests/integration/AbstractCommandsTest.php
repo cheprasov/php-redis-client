@@ -51,6 +51,7 @@ class AbstractCommandsTest extends PHPUnit_Framework_TestCase {
      */
     public static function tearDownAfterClass() {
         static::$Redis->flushall();
+        static::$Redis->scriptFlush();
     }
 
     /**
@@ -58,6 +59,7 @@ class AbstractCommandsTest extends PHPUnit_Framework_TestCase {
      */
     protected function setUp() {
         static::$Redis->flushall();
+        static::$Redis->scriptFlush();
     }
 
     public function test_abstract() {

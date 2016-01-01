@@ -6,7 +6,7 @@ use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 
 /**
- * Scripting
+ * ScriptingCommandsTrait
  * @link http://redis.io/commands#scripting
  */
 trait ScriptingCommandsTrait {
@@ -15,6 +15,7 @@ trait ScriptingCommandsTrait {
      * EVAL script numkeys key [key ...] arg [arg ...]
      * Available since 2.6.0.
      * Time complexity: Depends on the script that is executed.
+     * @link http://redis.io/commands/eval
      *
      * @param string $script
      * @param array|null $keys
@@ -43,6 +44,7 @@ trait ScriptingCommandsTrait {
      * EVALSHA sha1 numkeys key [key ...] arg [arg ...]
      * Available since 2.6.0.
      * Time complexity: Depends on the script that is executed.
+     * @link http://redis.io/commands/evalsha
      *
      * @param string $sha
      * @param array|null $keys
@@ -60,7 +62,7 @@ trait ScriptingCommandsTrait {
             $params[] = Parameter::integer(0);
         }
         if (is_array($args)) {
-            $params[] = Parameter::integer($args);
+            $params[] = Parameter::strings($args);
         }
         return $this->returnCommand(
             new Command('EVALSHA', $params)
@@ -72,16 +74,19 @@ trait ScriptingCommandsTrait {
      * Available since 2.6.0.
      * Time complexity: O(N) with N being the number of scripts to check
      * (so checking a single script is an O(1) operation).
+     * @link http://redis.io/commands/script-exists
      *
-     * @param string|string[] $scripts
+     * @param string|string[] $scriptsSha
      * @return int|int[]
      */
-    public function scriptExists($scripts) {
+    public function scriptExists($scriptsSha) {
         return $this->returnCommand(
             new Command(
                 'SCRIPT EXISTS',
-                Parameter::strings($scripts),
-                is_array($scripts) ? null : function($result) {return $result[0];}
+                Parameter::strings($scriptsSha),
+                function($result) use ($scriptsSha) {
+                    return is_array($scriptsSha) ? array_combine($scriptsSha, $result) : $result[0];
+                }
             )
         );
     }
@@ -89,9 +94,10 @@ trait ScriptingCommandsTrait {
     /**
      * SCRIPT FLUSH
      * Available since 2.6.0.
-     * Time complexity: O(N) with N being the number of scripts in cache
+     * Time complexity: O(N) with N being the number of scripts in cache.
+     * @link http://redis.io/commands/script-flush
      *
-     * @return bool
+     * @return bool True
      */
     public function scriptFlush() {
         return $this->returnCommand(
@@ -103,6 +109,7 @@ trait ScriptingCommandsTrait {
      * SCRIPT KILL
      * Available since 2.6.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/script-kill
      *
      * @return bool
      */
@@ -116,6 +123,7 @@ trait ScriptingCommandsTrait {
      * SCRIPT LOAD script
      * Available since 2.6.0.
      * Time complexity: O(N) with N being the length in bytes of the script body.
+     * @link http://redis.io/commands/script-load
      *
      * @param string $script
      * @return string
