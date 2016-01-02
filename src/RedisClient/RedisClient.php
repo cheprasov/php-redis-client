@@ -145,4 +145,5 @@ class RedisClient {
             return $Pipeline->parseResponse($responses);
         }
     }
+
 }
