@@ -15,11 +15,12 @@ trait ConnectionCommandsTrait {
      * AUTH password
      * Available since 1.0.0.
      *
-     * @return bool
+     * @param string $password
+     * @return bool True
      */
-    public function auth() {
+    public function auth($password) {
         return $this->returnCommand(
-            new Command('AUTH')
+            new Command('AUTH', Parameter::string($password))
         );
     }
 
@@ -37,15 +38,15 @@ trait ConnectionCommandsTrait {
     }
 
     /**
-     * PING
+     * PING [message]
      * Available since 1.0.0.
      *
      * @param string $message
      * @return string Returns message
      */
-    public function ping($message) {
+    public function ping($message = null) {
         return $this->returnCommand(
-            new Command('PING', Parameter::string($message))
+            new Command('PING', isset($message) ? Parameter::string($message) : null)
         );
     }
 

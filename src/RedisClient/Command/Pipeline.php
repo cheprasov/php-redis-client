@@ -2,8 +2,6 @@
 
 namespace RedisClient\Command;
 
-use RedisClient\Protocol\ProtocolInterface;
-
 class Pipeline {
 
     /** @var CommandInterface[] */
