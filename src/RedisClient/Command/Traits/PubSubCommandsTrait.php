@@ -2,8 +2,8 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
+
 /**
  * PubSub
  * @link http://redis.io/commands#pubsub
@@ -16,9 +16,7 @@ trait PubSubCommandsTrait {
      * Time complexity: O(N) where N is the number of patterns the client is already subscribed to.
      */
     public function psubscribe($patterns) {
-        return $this->returnCommand(
-            new Command('PSUBSCRIBE', Parameter::strings($patterns))
-        );
+        return $this->returnCommand(['PSUBSCRIBE'], Parameter::strings($patterns));
     }
 
     /**
@@ -32,12 +30,10 @@ trait PubSubCommandsTrait {
      * @return int The number of clients that received the message.e
      */
     public function publish($channel, $message) {
-        return $this->returnCommand(
-            new Command('PUBLISH', [
-                Parameter::string($channel),
-                Parameter::string($message)
-            ])
-        );
+        return $this->returnCommand(['PUBLISH'], [
+            Parameter::string($channel),
+            Parameter::string($message)
+        ]);
     }
 
     /**
@@ -59,9 +55,7 @@ trait PubSubCommandsTrait {
         if (isset($arguments)) {
             $params[] = Parameter::strings($arguments);
         }
-        return $this->returnCommand(
-            new Command('PUBSUB', $params)
-        );
+        return $this->returnCommand(['PUBSUB'], $params);
     }
 
     /**
@@ -74,9 +68,7 @@ trait PubSubCommandsTrait {
      * @return
      */
     public function punsubscribe($patterns = null) {
-        return $this->returnCommand(
-            new Command('PUNSUBSCRIBE', isset($patterns) ? Parameter::strings($patterns) : null)
-        );
+        return $this->returnCommand(['PUNSUBSCRIBE'], isset($patterns) ? Parameter::strings($patterns) : null);
     }
 
     /**
@@ -88,9 +80,7 @@ trait PubSubCommandsTrait {
      * @return
      */
     public function subscribe($channels) {
-        return $this->returnCommand(
-            new Command('SUBSCRIBE', Parameter::strings($channels))
-        );
+        return $this->returnCommand(['SUBSCRIBE'], Parameter::strings($channels));
     }
 
     /**
@@ -102,9 +92,7 @@ trait PubSubCommandsTrait {
      * @return
      */
     public function unsubscribe($channels) {
-        return $this->returnCommand(
-            new Command('UNSUBSCRIBE', isset($channels) ? Parameter::strings($channels) : null)
-        );
+        return $this->returnCommand(['UNSUBSCRIBE'], isset($channels) ? Parameter::strings($channels) : null);
     }
 
 }

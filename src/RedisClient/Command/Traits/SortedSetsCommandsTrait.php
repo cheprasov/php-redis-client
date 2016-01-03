@@ -2,7 +2,6 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\ResponseParser;
 
@@ -38,10 +37,8 @@ trait SortedSetsCommandsTrait {
         if ($incr) {
             $params[] = Parameter::string('INCR');
         }
-        $params[] = Parameter::assocArray($members, true);
-        return $this->returnCommand(
-            new Command('ZADD', $params)
-        );
+        $params[] = Parameter::assocArrayFlip($members);
+        return $this->returnCommand(['ZADD'], $params);
     }
 
     /**
@@ -54,9 +51,7 @@ trait SortedSetsCommandsTrait {
      * @return int The cardinality (number of elements) of the sorted set, or 0 if key does not exist.
      */
     public function zcard($key) {
-        return $this->returnCommand(
-            new Command('ZCARD', Parameter::key($key))
-        );
+        return $this->returnCommand(['ZCARD'], [Parameter::key($key)]);
     }
 
     /**
@@ -71,13 +66,11 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements in the specified score range.
      */
     public function zcount($key, $min, $max) {
-        return $this->returnCommand(
-            new Command('ZCOUNT', [
-                Parameter::key($key),
-                Parameter::minMax($min),
-                Parameter::minMax($max),
-            ])
-        );
+        return $this->returnCommand(['ZCOUNT'], [
+            Parameter::key($key),
+            Parameter::minMax($min),
+            Parameter::minMax($max),
+        ]);
     }
 
     /**
@@ -92,13 +85,11 @@ trait SortedSetsCommandsTrait {
      * @return string The new score of member
      */
     public function zincrby($key, $increment, $member) {
-        return $this->returnCommand(
-            new Command('ZINCRBY', [
-                Parameter::key($key),
-                Parameter::string($increment),
-                Parameter::key($member)
-            ])
-        );
+        return $this->returnCommand(['ZINCRBY'], [
+            Parameter::key($key),
+            Parameter::string($increment),
+            Parameter::key($member)
+        ]);
     }
 
     /**
@@ -129,9 +120,7 @@ trait SortedSetsCommandsTrait {
             $params[] = Parameter::string('AGGREGATE');
             $params[] = Parameter::aggregate($aggregate);
         }
-        return $this->returnCommand(
-            new Command('ZINTERSTORE', $params)
-        );
+        return $this->returnCommand(['ZINTERSTORE'], $params);
     }
 
     /**
@@ -146,13 +135,11 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements in the specified score range.
      */
     public function zlexcount($key, $min, $max) {
-        return $this->returnCommand(
-            new Command('ZLEXCOUNT', [
-                Parameter::key($key),
-                Parameter::specifyInterval($min),
-                Parameter::specifyInterval($max),
-            ])
-        );
+        return $this->returnCommand(['ZLEXCOUNT'], [
+            Parameter::key($key),
+            Parameter::specifyInterval($min),
+            Parameter::specifyInterval($max),
+        ]);
     }
 
     /**
@@ -178,9 +165,7 @@ trait SortedSetsCommandsTrait {
         if ($withscores) {
             $params[] = Parameter::string('WITHSCORES');
         }
-        return $this->returnCommand(
-            new Command('ZRANGE', $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null)
-        );
+        return $this->returnCommand(['ZRANGE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
     }
 
     /**
@@ -207,9 +192,7 @@ trait SortedSetsCommandsTrait {
             $params[] = Parameter::string('LIMIT');
             $params[] = Parameter::limit($limit);
         }
-        return $this->returnCommand(
-            new Command('ZRANGEBYLEX', $params)
-        );
+        return $this->returnCommand(['ZRANGEBYLEX'], $params);
     }
 
     /**
@@ -240,9 +223,7 @@ trait SortedSetsCommandsTrait {
             $params[] = Parameter::string('LIMIT');
             $params[] = Parameter::limit($limit);
         }
-        return $this->returnCommand(
-            new Command('ZRANGEBYSCORE', $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null)
-        );
+        return $this->returnCommand(['ZRANGEBYSCORE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
     }
 
     /**
@@ -256,12 +237,10 @@ trait SortedSetsCommandsTrait {
      * @return int|null
      */
     public function zrank($key, $member) {
-        return $this->returnCommand(
-            new Command('ZRANK', [
-                Parameter::key($key),
-                Parameter::key($member)
-            ])
-        );
+        return $this->returnCommand(['ZRANK'], [
+            Parameter::key($key),
+            Parameter::key($member)
+        ]);
     }
 
     /**
@@ -276,12 +255,10 @@ trait SortedSetsCommandsTrait {
      * @return int The number of members removed from the sorted set, not including non existing members.
      */
     public function zrem($key, $members) {
-        return $this->returnCommand(
-            new Command('ZREM', [
-                Parameter::key($key),
-                Parameter::keys($members)
-            ])
-        );
+        return $this->returnCommand(['ZREM'], [
+            Parameter::key($key),
+            Parameter::keys($members)
+        ]);
     }
 
     /**
@@ -297,13 +274,11 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements removed.
      */
     public function zremrangebylex($key, $min, $max) {
-        return $this->returnCommand(
-            new Command('ZREMRANGEBYLEX', [
-                Parameter::key($key),
-                Parameter::specifyInterval($min),
-                Parameter::specifyInterval($max),
-            ])
-        );
+        return $this->returnCommand(['ZREMRANGEBYLEX'], [
+            Parameter::key($key),
+            Parameter::specifyInterval($min),
+            Parameter::specifyInterval($max),
+        ]);
     }
 
     /**
@@ -319,13 +294,11 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements removed.
      */
     public function zremrangebyrank($key, $start, $stop) {
-        return $this->returnCommand(
-            new Command('ZREMRANGEBYRANK', [
-                Parameter::key($key),
-                Parameter::integer($start),
-                Parameter::integer($stop)
-            ])
-        );
+        return $this->returnCommand(['ZREMRANGEBYRANK'], [
+            Parameter::key($key),
+            Parameter::integer($start),
+            Parameter::integer($stop)
+        ]);
     }
 
     /**
@@ -341,13 +314,11 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements removed.
      */
     public function zremrangebyscore($key, $min, $max) {
-        return $this->returnCommand(
-            new Command('ZREMRANGEBYSCORE', [
-                Parameter::key($key),
-                Parameter::minMax($min),
-                Parameter::minMax($max),
-            ])
-        );
+        return $this->returnCommand(['ZREMRANGEBYSCORE'], [
+            Parameter::key($key),
+            Parameter::minMax($min),
+            Parameter::minMax($max),
+        ]);
     }
 
     /**
@@ -373,9 +344,7 @@ trait SortedSetsCommandsTrait {
         if ($withscores) {
             $params[] = Parameter::string('WITHSCORES');
         }
-        return $this->returnCommand(
-            new Command('ZREVRANGE', $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null)
-        );
+        return $this->returnCommand(['ZREVRANGE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
     }
 
     /**
@@ -402,9 +371,7 @@ trait SortedSetsCommandsTrait {
             $params[] = Parameter::string('LIMIT');
             $params[] = Parameter::limit($limit);
         }
-        return $this->returnCommand(
-            new Command('ZREVRANGEBYLEX', $params)
-        );
+        return $this->returnCommand(['ZREVRANGEBYLEX'], $params);
     }
 
     /**
@@ -435,9 +402,7 @@ trait SortedSetsCommandsTrait {
             $params[] = Parameter::string('LIMIT');
             $params[] = Parameter::limit($limit);
         }
-        return $this->returnCommand(
-            new Command('ZREVRANGEBYSCORE', $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null)
-        );
+        return $this->returnCommand(['ZREVRANGEBYSCORE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
     }
 
     /**
@@ -451,12 +416,10 @@ trait SortedSetsCommandsTrait {
      * @return int|null
      */
     public function zrevrank($key, $member) {
-        return $this->returnCommand(
-            new Command('ZREVRANK', [
-                Parameter::key($key),
-                Parameter::key($member)
-            ])
-        );
+        return $this->returnCommand(['ZREVRANK'], [
+            Parameter::key($key),
+            Parameter::key($member)
+        ]);
     }
 
     /**
@@ -486,9 +449,7 @@ trait SortedSetsCommandsTrait {
             $params[] = Parameter::string('COUNT');
             $params[] = Parameter::integer($count);
         }
-        return $this->returnCommand(
-            new Command('ZSCAN', $params)
-        );
+        return $this->returnCommand(['ZSCAN'], $params);
     }
 
     /**
@@ -502,12 +463,10 @@ trait SortedSetsCommandsTrait {
      * @return int The score of member (a double precision floating point number), represented as string.
      */
     public function zscore($key, $member) {
-        return $this->returnCommand(
-            new Command('ZSCORE', [
-                Parameter::key($key),
-                Parameter::key($member)
-            ])
-        );
+        return $this->returnCommand(['ZSCORE'], [
+            Parameter::key($key),
+            Parameter::key($member)
+        ]);
     }
 
     /**
@@ -538,9 +497,7 @@ trait SortedSetsCommandsTrait {
             $params[] = Parameter::string('AGGREGATE');
             $params[] = Parameter::aggregate($aggregate);
         }
-        return $this->returnCommand(
-            new Command('ZUNIONSTORE', $params)
-        );
+        return $this->returnCommand(['ZUNIONSTORE'], $params);
     }
 
 }

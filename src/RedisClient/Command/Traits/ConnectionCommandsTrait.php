@@ -2,7 +2,6 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 
 /**
@@ -19,9 +18,7 @@ trait ConnectionCommandsTrait {
      * @return bool True
      */
     public function auth($password) {
-        return $this->returnCommand(
-            new Command('AUTH', Parameter::string($password))
-        );
+        return $this->returnCommand(['AUTH'], [Parameter::string($password)]);
     }
 
     /**
@@ -32,9 +29,7 @@ trait ConnectionCommandsTrait {
      * @return string Returns message
      */
     public function echoMessage($message) {
-        return $this->returnCommand(
-            new Command('ECHO', Parameter::string($message))
-        );
+        return $this->returnCommand(['ECHO'], [Parameter::string($message)]);
     }
 
     /**
@@ -45,9 +40,7 @@ trait ConnectionCommandsTrait {
      * @return string Returns message
      */
     public function ping($message = null) {
-        return $this->returnCommand(
-            new Command('PING', isset($message) ? Parameter::string($message) : null)
-        );
+        return $this->returnCommand(['PING'], isset($message) ? [Parameter::string($message)] : null);
     }
 
     /**
@@ -57,9 +50,7 @@ trait ConnectionCommandsTrait {
      * @return bool Always True
      */
     public function quit() {
-        return $this->returnCommand(
-            new Command('QUIT')
-        );
+        return $this->returnCommand(['QUIT']);
     }
 
     /**
@@ -70,9 +61,7 @@ trait ConnectionCommandsTrait {
      * @return bool
      */
     public function select($db) {
-        return $this->returnCommand(
-            new Command('SELECT', Parameter::integer($db))
-        );
+        return $this->returnCommand(['SELECT'], [Parameter::integer($db)]);
     }
 
 }

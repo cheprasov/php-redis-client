@@ -3,7 +3,6 @@
 namespace RedisClient\Command\Parameter;
 
 use InvalidArgumentException;
-use RedisClient\Command\Command;
 
 class Parameter {
 
@@ -52,16 +51,26 @@ class Parameter {
 
     /**
      * @param array $array
-     * @param bool $flip
      * @return string[]
-     * @throws InvalidArgumentException
      */
-    public static function assocArray(array $array, $flip = false) {
-        $flip = (bool) $flip;
+    public static function assocArray(array $array) {
         $structure = [];
         foreach ($array as $key => $value) {
-            $value = static::string($value);
-            $flip && array_push($structure, $value, $key) || array_push($structure, $key, $value);
+            $structure[] = $key;
+            $structure[] = static::string($value);
+        }
+        return $structure;
+    }
+
+    /**
+     * @param array $array
+     * @return string[]
+     */
+    public static function assocArrayFlip(array $array) {
+        $structure = [];
+        foreach ($array as $key => $value) {
+            $structure[] = static::string($value);
+            $structure[] = $key;
         }
         return $structure;
     }
@@ -93,11 +102,11 @@ class Parameter {
     }
 
     /**
-     * @param Command $Command
+     * @param string $command
      * @return string[]
      */
-    public static function command(Command $Command) {
-        return $Command->getStructure();
+    public static function command($command) {
+        return preg_split('/\s+/', $command);
     }
 
     /**
@@ -105,13 +114,7 @@ class Parameter {
      * @param int[]|string[] $enum
      * @return string
      */
-    public static function enum($param, $enum) {
-        if (!is_numeric($param) && !is_string($param)) {
-            throw new InvalidArgumentException($param);
-        }
-        if (!is_array($enum)) {
-            throw new InvalidArgumentException($enum);
-        }
+    public static function enum($param, array $enum) {
         if (is_string($param)) {
             $param = strtoupper($param);
         }
@@ -206,17 +209,18 @@ class Parameter {
     }
 
     /**
-     * @var string[]
-     */
-    protected static $nxXxParams = ['NX', 'XX'];
-
-    /**
      * @param string $param
      * @return string
      */
     public static function nxXx($param) {
-        $param = strtoupper((string) $param);
-        if (in_array($param, static::$nxXxParams)) {
+        if ($param === 'NX' || $param === 'XX') {
+            return $param;
+        }
+        if ($param === 'nx' || $param === 'xx') {
+            return strtoupper($param);
+        }
+        $param = strtoupper(trim($param));
+        if ($param === 'NX' || $param === 'XX') {
             return $param;
         }
         throw new InvalidArgumentException('Invalid param '. $param);

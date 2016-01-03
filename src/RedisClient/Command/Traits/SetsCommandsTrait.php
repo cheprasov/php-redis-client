@@ -2,7 +2,6 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 
 trait SetsCommandsTrait {
@@ -14,17 +13,15 @@ trait SetsCommandsTrait {
      * @link http://redis.io/commands/sadd
      *
      * @param string $key
-     * @param string|string[] $member
+     * @param string|string[] $members
      * @return int The number of elements that were added to the set,
      * not including all the elements already present into the set.
      */
-    public function sadd($key, $member) {
-        return $this->returnCommand(
-            new Command('SADD', [
-                Parameter::key($key),
-                Parameter::keys($member)
-            ])
-        );
+    public function sadd($key, $members) {
+        return $this->returnCommand(['SADD'], [
+            Parameter::key($key),
+            Parameter::keys($members)
+        ]);
     }
 
     /**
@@ -37,9 +34,7 @@ trait SetsCommandsTrait {
      * @return int The cardinality (number of elements) of the set, or 0 if key does not exist.
      */
     public function scard($key) {
-        return $this->returnCommand(
-            new Command('SCARD', Parameter::key($key))
-        );
+        return $this->returnCommand(['SCARD'], [Parameter::key($key)]);
     }
 
     /**
@@ -52,9 +47,7 @@ trait SetsCommandsTrait {
      * @return array List with members of the resulting set.
      */
     public function sdiff($keys) {
-        return $this->returnCommand(
-            new Command('SDIFF', Parameter::keys($keys))
-        );
+        return $this->returnCommand(['SDIFF'], Parameter::keys($keys));
     }
 
     /**
@@ -68,12 +61,10 @@ trait SetsCommandsTrait {
      * @return int The number of elements in the resulting set.
      */
     public function sdiffstore($destination, $keys) {
-        return $this->returnCommand(
-            new Command('SDIFFSTORE', [
-                Parameter::key($destination),
-                Parameter::keys($keys)
-            ])
-        );
+        return $this->returnCommand(['SDIFFSTORE'], [
+            Parameter::key($destination),
+            Parameter::keys($keys)
+        ]);
     }
 
     /**
@@ -86,9 +77,7 @@ trait SetsCommandsTrait {
      * @return array List with members of the resulting set.
      */
     public function sinter($keys) {
-        return $this->returnCommand(
-            new Command('SINTER', Parameter::keys($keys))
-        );
+        return $this->returnCommand(['SINTER'], Parameter::keys($keys));
     }
 
     /**
@@ -102,12 +91,10 @@ trait SetsCommandsTrait {
      * @return int The number of elements in the resulting set.
      */
     public function sinterstore($destination, $keys) {
-        return $this->returnCommand(
-            new Command('SINTERSTORE', [
-                Parameter::key($destination),
-                Parameter::keys($keys)
-            ])
-        );
+        return $this->returnCommand(['SINTERSTORE'], [
+            Parameter::key($destination),
+            Parameter::keys($keys)
+        ]);
     }
 
     /**
@@ -122,12 +109,10 @@ trait SetsCommandsTrait {
      * 0 if the element is not a member of the set, or if key does not exist.
      */
     public function sismember($key, $member) {
-        return $this->returnCommand(
-            new Command('SISMEMBER', [
-                Parameter::key($key),
-                Parameter::key($member)
-            ])
-        );
+        return $this->returnCommand(['SISMEMBER'], [
+            Parameter::key($key),
+            Parameter::key($member)
+        ]);
     }
 
     /**
@@ -140,9 +125,7 @@ trait SetsCommandsTrait {
      * @return string[] All elements of the set.
      */
     public function smembers($key) {
-        return $this->returnCommand(
-            new Command('SMEMBERS', Parameter::key($key))
-        );
+        return $this->returnCommand(['SMEMBERS'], [Parameter::key($key)]);
     }
 
     /**
@@ -158,13 +141,11 @@ trait SetsCommandsTrait {
      * 0 if the element is not a member of source and no operation was performed.
      */
     public function smove($source, $destination, $member) {
-        return $this->returnCommand(
-            new Command('SMOVE', [
-                Parameter::key($source),
-                Parameter::key($destination),
-                Parameter::key($member)
-            ])
-        );
+        return $this->returnCommand(['SMOVE'], [
+            Parameter::key($source),
+            Parameter::key($destination),
+            Parameter::key($member)
+        ]);
     }
 
     /**
@@ -184,9 +165,7 @@ trait SetsCommandsTrait {
         if ($count) {
             $params[] = Parameter::integer($count);
         }
-        return $this->returnCommand(
-            new Command('SPOP', $params)
-        );
+        return $this->returnCommand(['SPOP'], $params);
     }
 
     /**
@@ -207,9 +186,7 @@ trait SetsCommandsTrait {
         if ($count) {
             $params[] = Parameter::integer($count);
         }
-        return $this->returnCommand(
-            new Command('SRANDMEMBER', $params)
-        );
+        return $this->returnCommand(['SRANDMEMBER'], $params);
     }
 
     /**
@@ -223,12 +200,10 @@ trait SetsCommandsTrait {
      * @return int The number of members that were removed from the set, not including non existing members.
      */
     public function srem($key, $members) {
-        return $this->returnCommand(
-            new Command('SREM', [
-                Parameter::key($key),
-                Parameter::keys($members),
-            ])
-        );
+        return $this->returnCommand(['SREM'], [
+            Parameter::key($key),
+            Parameter::keys($members),
+        ]);
     }
 
     /**
@@ -258,9 +233,7 @@ trait SetsCommandsTrait {
             $params[] = Parameter::string('COUNT');
             $params[] = Parameter::integer($count);
         }
-        return $this->returnCommand(
-            new Command('SSCAN', $params)
-        );
+        return $this->returnCommand(['SSCAN'], $params);
     }
 
     /**
@@ -273,9 +246,7 @@ trait SetsCommandsTrait {
      * @return string[] List with members of the resulting set.
      */
     public function sunion($keys) {
-        return $this->returnCommand(
-            new Command('SUNION', Parameter::keys($keys))
-        );
+        return $this->returnCommand(['SUNION'], Parameter::keys($keys));
     }
 
     /**
@@ -289,12 +260,10 @@ trait SetsCommandsTrait {
      * @return int The number of elements in the resulting set.
      */
     public function sunionstore($destination, $keys) {
-        return $this->returnCommand(
-            new Command('SUNIONSTORE', [
-                Parameter::key($destination),
-                Parameter::keys($keys)
-            ])
-        );
+        return $this->returnCommand(['SUNIONSTORE'], [
+            Parameter::key($destination),
+            Parameter::keys($keys)
+        ]);
     }
 
 }

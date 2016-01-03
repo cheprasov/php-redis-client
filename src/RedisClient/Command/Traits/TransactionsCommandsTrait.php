@@ -2,7 +2,6 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 
 /**
@@ -19,9 +18,7 @@ trait TransactionsCommandsTrait {
      * @return bool Always True
      */
     public function discard() {
-        return $this->returnCommand(
-            new Command('DISCARD')
-        );
+        return $this->returnCommand(['DISCARD']);
     }
 
     /**
@@ -32,9 +29,7 @@ trait TransactionsCommandsTrait {
      * @return mixed
      */
     public function exec() {
-        return $this->returnCommand(
-            new Command('EXEC')
-        );
+        return $this->returnCommand(['EXEC']);
     }
 
     /**
@@ -45,9 +40,7 @@ trait TransactionsCommandsTrait {
      * @return bool Always True
      */
     public function multi() {
-        return $this->returnCommand(
-            new Command('MULTI')
-        );
+        return $this->returnCommand(['MULTI']);
     }
 
     /**
@@ -59,9 +52,7 @@ trait TransactionsCommandsTrait {
      * @return bool Always True
      */
     public function unwatch() {
-        return $this->returnCommand(
-            new Command('UNWATCH')
-        );
+        return $this->returnCommand(['UNWATCH']);
     }
 
     /**
@@ -73,9 +64,7 @@ trait TransactionsCommandsTrait {
      * @return bool Always True
      */
     public function watch($keys) {
-        return $this->returnCommand(
-            new Command('WATCH', Parameter::keys($keys))
-        );
+        return $this->returnCommand(['WATCH'], Parameter::keys($keys));
     }
 
 }

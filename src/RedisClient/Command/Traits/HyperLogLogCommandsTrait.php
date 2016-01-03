@@ -2,7 +2,6 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 
 /**
@@ -21,12 +20,10 @@ trait HyperLogLogCommandsTrait {
      * @return int
      */
     public function pfadd($key, $elements) {
-        return $this->returnCommand(
-            new Command('PFADD', [
-                Parameter::key($key),
-                Parameter::strings($elements)
-            ])
-        );
+        return $this->returnCommand(['PFADD'], [
+            Parameter::key($key),
+            Parameter::strings($elements)
+        ]);
     }
 
     /**
@@ -39,9 +36,7 @@ trait HyperLogLogCommandsTrait {
      * @return int
      */
     public function pfcount($keys) {
-        return $this->returnCommand(
-            new Command('PFCOUNT', Parameter::keys($keys))
-        );
+        return $this->returnCommand(['PFCOUNT'], Parameter::keys($keys));
     }
 
     /**
@@ -54,12 +49,10 @@ trait HyperLogLogCommandsTrait {
      * @return bool The command just returns True.
      */
     public function pfmerge($destkey, $sourcekeys) {
-        return $this->returnCommand(
-            new Command('PFMERGE', [
-                Parameter::key($destkey),
-                Parameter::keys($sourcekeys),
-            ])
-        );
+        return $this->returnCommand(['PFMERGE'], [
+            Parameter::key($destkey),
+            Parameter::keys($sourcekeys),
+        ]);
     }
 
 }

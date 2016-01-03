@@ -2,7 +2,6 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\ResponseParser;
 
@@ -19,17 +18,10 @@ trait ListsCommandsTrait {
      * @return array|null [list => value]
      */
     public function blpop($keys, $timeout) {
-        return $this->returnCommand(
-            new Command('BLPOP', [
-                Parameter::keys($keys),
-                Parameter::integer($timeout),
-            ], function($response) {
-                if (!$response) {
-                    return $response;
-                }
-                return ResponseParser::parseAssocArray($response);
-            })
-        );
+        return $this->returnCommand(['BLPOP'], [
+            Parameter::keys($keys),
+            Parameter::integer($timeout),
+        ], ResponseParser::PARSE_ASSOC_ARRAY);
     }
 
     /**
@@ -43,17 +35,10 @@ trait ListsCommandsTrait {
      * @return array|null [list => value]
      */
     public function brpop($keys, $timeout) {
-        return $this->returnCommand(
-            new Command('BRPOP', [
-                Parameter::keys($keys),
-                Parameter::integer($timeout),
-            ], function($response) {
-                if (!$response) {
-                    return $response;
-                }
-                return ResponseParser::parseAssocArray($response);
-            })
-        );
+        return $this->returnCommand(['BRPOP'], [
+            Parameter::keys($keys),
+            Parameter::integer($timeout),
+        ], ResponseParser::PARSE_ASSOC_ARRAY);
     }
 
     /**
@@ -69,13 +54,11 @@ trait ListsCommandsTrait {
      * If timeout is reached, a Null reply is returned.
      */
     public function brpoplpush($source, $destination, $timeout) {
-        return $this->returnCommand(
-            new Command('BRPOPLPUSH', [
-                Parameter::key($source),
-                Parameter::key($destination),
-                Parameter::integer($timeout)
-            ])
-        );
+        return $this->returnCommand(['BRPOPLPUSH'], [
+            Parameter::key($source),
+            Parameter::key($destination),
+            Parameter::integer($timeout)
+        ]);
     }
 
     /**
@@ -89,12 +72,10 @@ trait ListsCommandsTrait {
      * @return string|null The requested element, or null when index is out of range.
      */
     public function lindex($key, $index) {
-        return $this->returnCommand(
-            new Command('LINDEX', [
-                Parameter::key($key),
-                Parameter::integer($index),
-            ])
-        );
+        return $this->returnCommand(['LINDEX'], [
+            Parameter::key($key),
+            Parameter::integer($index),
+        ]);
     }
 
     /**
@@ -111,14 +92,12 @@ trait ListsCommandsTrait {
      * or -1 when the value pivot was not found. Or 0 when key was not found.
      */
     public function linsert($key, $after = true, $pivot, $value) {
-        return $this->returnCommand(
-            new Command('LINSERT', [
-                Parameter::key($key),
-                Parameter::string($after ? 'AFTER' : 'BEFORE' ),
-                Parameter::string($pivot),
-                Parameter::string($value),
-            ])
-        );
+        return $this->returnCommand(['LINSERT'], [
+            Parameter::key($key),
+            Parameter::string($after ? 'AFTER' : 'BEFORE'),
+            Parameter::string($pivot),
+            Parameter::string($value),
+        ]);
     }
 
     /**
@@ -131,9 +110,7 @@ trait ListsCommandsTrait {
      * @return int The length of the list at key.
      */
     public function llen($key) {
-        return $this->returnCommand(
-            new Command('LLEN', Parameter::key($key))
-        );
+        return $this->returnCommand(['LLEN'], [Parameter::key($key)]);
     }
 
 
@@ -147,9 +124,7 @@ trait ListsCommandsTrait {
      * @return string|null The value of the first element, or null when key does not exist.
      */
     public function lpop($key) {
-        return $this->returnCommand(
-            new Command('LPOP', Parameter::key($key))
-        );
+        return $this->returnCommand(['LPOP'], [Parameter::key($key)]);
     }
 
     /**
@@ -163,12 +138,10 @@ trait ListsCommandsTrait {
      * @return int The length of the list after the push operations.
      */
     public function lpush($key, $values) {
-        return $this->returnCommand(
-            new Command('LPUSH', [
-                Parameter::key($key),
-                Parameter::strings($values),
-            ])
-        );
+        return $this->returnCommand(['LPUSH'], [
+            Parameter::key($key),
+            Parameter::strings($values),
+        ]);
     }
 
     /**
@@ -182,12 +155,10 @@ trait ListsCommandsTrait {
      * @return int The length of the list after the push operation.
      */
     public function lpushx($key, $value) {
-        return $this->returnCommand(
-            new Command('LPUSHX', [
-                Parameter::key($key),
-                Parameter::string($value),
-            ])
-        );
+        return $this->returnCommand(['LPUSHX'], [
+            Parameter::key($key),
+            Parameter::string($value),
+        ]);
     }
 
     /**
@@ -202,13 +173,11 @@ trait ListsCommandsTrait {
      * @return array List of elements in the specified range.
      */
     public function lrange($key, $start, $stop) {
-        return $this->returnCommand(
-            new Command('LRANGE', [
-                Parameter::key($key),
-                Parameter::integer($start),
-                Parameter::integer($stop)
-            ])
-        );
+        return $this->returnCommand(['LRANGE'], [
+            Parameter::key($key),
+            Parameter::integer($start),
+            Parameter::integer($stop)
+        ]);
     }
 
     /**
@@ -223,13 +192,11 @@ trait ListsCommandsTrait {
      * @return int The number of removed elements.
      */
     public function lrem($key, $count, $value) {
-        return $this->returnCommand(
-            new Command('LREM', [
-                Parameter::key($key),
-                Parameter::integer($count),
-                Parameter::string($value)
-            ])
-        );
+        return $this->returnCommand(['LREM'], [
+            Parameter::key($key),
+            Parameter::integer($count),
+            Parameter::string($value)
+        ]);
     }
 
     /**
@@ -245,13 +212,11 @@ trait ListsCommandsTrait {
      * @return bool
      */
     public function lset($key, $index, $value) {
-        return $this->returnCommand(
-            new Command('LSET', [
-                Parameter::key($key),
-                Parameter::integer($index),
-                Parameter::string($value)
-            ])
-        );
+        return $this->returnCommand(['LSET'], [
+            Parameter::key($key),
+            Parameter::integer($index),
+            Parameter::string($value)
+        ]);
     }
 
     /**
@@ -266,13 +231,11 @@ trait ListsCommandsTrait {
      * @return bool
      */
     public function ltrim($key, $start, $stop) {
-        return $this->returnCommand(
-            new Command('LTRIM', [
-                Parameter::key($key),
-                Parameter::integer($start),
-                Parameter::integer($stop)
-            ])
-        );
+        return $this->returnCommand(['LTRIM'], [
+            Parameter::key($key),
+            Parameter::integer($start),
+            Parameter::integer($stop)
+        ]);
     }
 
     /**
@@ -285,9 +248,7 @@ trait ListsCommandsTrait {
      * @return string|null The value of the last element, or null when key does not exist.
      */
     public function rpop($key) {
-        return $this->returnCommand(
-            new Command('RPOP', Parameter::key($key))
-        );
+        return $this->returnCommand(['RPOP'], [Parameter::key($key)]);
     }
 
     /**
@@ -301,12 +262,10 @@ trait ListsCommandsTrait {
      * @return string The element being popped and pushed.
      */
     public function rpoplpush($source, $destination) {
-        return $this->returnCommand(
-            new Command('RPOPLPUSH', [
-                Parameter::key($source),
-                Parameter::key($destination),
-            ])
-        );
+        return $this->returnCommand(['RPOPLPUSH'], [
+            Parameter::key($source),
+            Parameter::key($destination),
+        ]);
     }
 
     /**
@@ -320,12 +279,10 @@ trait ListsCommandsTrait {
      * @return int The length of the list after the push operation.
      */
     public function rpush($key, $values) {
-        return $this->returnCommand(
-            new Command('RPUSH', [
-                Parameter::key($key),
-                Parameter::strings($values)
-            ])
-        );
+        return $this->returnCommand(['RPUSH'], [
+            Parameter::key($key),
+            Parameter::strings($values)
+        ]);
     }
 
     /**
@@ -339,12 +296,10 @@ trait ListsCommandsTrait {
      * @return int The length of the list after the push operation.
      */
     public function rpushx($key, $value) {
-        return $this->returnCommand(
-            new Command('RPUSHX', [
-                Parameter::key($key),
-                Parameter::string($value)
-            ])
-        );
+        return $this->returnCommand(['RPUSHX'], [
+            Parameter::key($key),
+            Parameter::string($value)
+        ]);
     }
 
 }

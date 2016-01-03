@@ -12,7 +12,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
      * @inheritdoc
      */
     protected function setUp() {
-        static::$Redis->flushdb();
+        static::$Redis->flushall();
         self::$fields = [
             'string'  => 'value',
             'integer' => 42,
@@ -254,22 +254,17 @@ class HashesCommandsTest extends AbstractCommandsTest {
     public function test_hmget() {
         $Redis = static::$Redis;
 
-        $this->assertSame(['field' => null], $Redis->hmget('key-does-not-exist', 'field'));
-        $this->assertSame(['field-does-not-exist' => null], $Redis->hmget('hash', ['field-does-not-exist']));
+        $this->assertSame([null], $Redis->hmget('key-does-not-exist', 'field'));
+        $this->assertSame([null], $Redis->hmget('hash', ['field-does-not-exist']));
 
-        $this->assertSame(['string' => 'value'], $Redis->hmget('hash', 'string'));
-        $this->assertSame(['integer' => '42'], $Redis->hmget('hash', ['integer']));
-        $this->assertSame(['true'=>'1', 'false'=>''], $Redis->hmget('hash', ['true', 'false']));
-        $this->assertSame([
-            'float' => '3.14159265',
-            'e'=>'5.0e3',
-            'null' => '',
-            'empty' => '',
-            '' => 'empty',
-            ],
+        $this->assertSame(['value'], $Redis->hmget('hash', 'string'));
+        $this->assertSame(['42'], $Redis->hmget('hash', ['integer']));
+        $this->assertSame(['1', ''], $Redis->hmget('hash', ['true', 'false']));
+        $this->assertSame(
+            ['3.14159265', '5.0e3', '', '', 'empty',],
             $Redis->hmget('hash', ['float', 'e', 'null', 'empty', ''])
         );
-        $this->assertEquals(self::$fields, $Redis->hmget('hash', array_keys(self::$fields)));
+        $this->assertEquals(array_values(self::$fields), $Redis->hmget('hash', array_keys(self::$fields)));
 
         try {
             $Redis->hmget('string', 'some-field');
