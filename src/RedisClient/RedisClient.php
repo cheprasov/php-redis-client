@@ -19,7 +19,6 @@ class RedisClient {
 
     const CONFIG_SERVER = 'server';
     const CONFIG_TIMEOUT = 'timeout';
-    const CONFIG_THROW_REDIS_EXCEPTIONS = 'throw-redis-exceptions';
 
     /**
      * Default configuration
@@ -28,7 +27,6 @@ class RedisClient {
     protected static $defaultConfig = [
         self::CONFIG_SERVER => 'tcp://127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
         self::CONFIG_TIMEOUT => 0.1, // in seconds
-        self::CONFIG_THROW_REDIS_EXCEPTIONS => true,
     ];
 
     /**

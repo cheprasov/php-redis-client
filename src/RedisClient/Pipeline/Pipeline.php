@@ -216,6 +216,9 @@ class Pipeline {
      */
     protected $commandLines = [];
 
+    /**
+     * @param \Closure|null $Closure
+     */
     public function __construct(\Closure $Closure = null) {
         if ($Closure) {
             $Closure($this);

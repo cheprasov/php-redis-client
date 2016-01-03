@@ -6,7 +6,6 @@ include_once(__DIR__. '/AbstractCommandsTest.php');
 
 use RedisClient\Exception\ErrorResponseException;
 use RedisClient\Pipeline\Pipeline;
-use RedisClient\RedisClient;
 
 class PipelineTest extends AbstractCommandsTest {
 
@@ -24,11 +23,7 @@ class PipelineTest extends AbstractCommandsTest {
         $this->assertSame($Pipeline, $Pipeline->incr('bar'));
         $this->assertSame($Pipeline, $Pipeline->get('bar'));
         $this->assertSame($Pipeline, $Pipeline->mget(['foo', 'bar']));
-        $this->assertSame([
-            true, 5, '5',
-            true, 3, '3',
-            ['5', '3']
-        ], $Redis->pipeline($Pipeline));
+        $this->assertSame([true, 5, '5', true, 3, '3', ['5', '3']], $Redis->pipeline($Pipeline));
 
         /** @var Pipeline $Pipeline */
         $Pipeline = $Redis->pipeline();
