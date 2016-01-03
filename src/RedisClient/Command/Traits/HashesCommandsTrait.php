@@ -2,7 +2,6 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\ResponseParser;
 
@@ -24,12 +23,10 @@ trait HashesCommandsTrait {
      * not including specified but non existing fields.
      */
     public function hdel($key, $fields) {
-        return $this->returnCommand(
-            new Command('HDEL', [
-                Parameter::key($key),
-                Parameter::keys($fields),
-            ])
-        );
+        return $this->returnCommand(['HDEL'], [
+            Parameter::key($key),
+            Parameter::keys($fields),
+        ]);
     }
 
     /**
@@ -43,12 +40,10 @@ trait HashesCommandsTrait {
      * @return int 1 if the hash contains field. 0 if the hash does not contain field, or key does not exist.
      */
     public function hexists($key, $field) {
-        return $this->returnCommand(
-            new Command('HEXISTS', [
-                Parameter::key($key),
-                Parameter::key($field),
-            ])
-        );
+        return $this->returnCommand(['HEXISTS'], [
+            Parameter::key($key),
+            Parameter::key($field),
+        ]);
     }
 
     /**
@@ -63,12 +58,10 @@ trait HashesCommandsTrait {
      * or nil when field is not present in the hash or key does not exist.
      */
     public function hget($key, $field) {
-        return $this->returnCommand(
-            new Command('HGET', [
-                Parameter::key($key),
-                Parameter::key($field),
-            ])
-        );
+        return $this->returnCommand(['HGET'], [
+            Parameter::key($key),
+            Parameter::key($field),
+        ]);
     }
 
     /**
@@ -82,9 +75,7 @@ trait HashesCommandsTrait {
      * or an empty list when key does not exist.
      */
     public function hgetall($key) {
-        return $this->returnCommand(
-            new Command('HGETALL', Parameter::key($key), ResponseParser::PARSE_ASSOC_ARRAY)
-        );
+        return $this->returnCommand(['HGETALL'], [Parameter::key($key)], ResponseParser::PARSE_ASSOC_ARRAY);
     }
 
     /**
@@ -99,13 +90,11 @@ trait HashesCommandsTrait {
      * @return int The value at field after the increment operation.
      */
     public function hincrby($key, $field, $increment) {
-        return $this->returnCommand(
-            new Command('HINCRBY', [
-                Parameter::key($key),
-                Parameter::key($field),
-                Parameter::integer($increment),
-            ])
-        );
+        return $this->returnCommand(['HINCRBY'], [
+            Parameter::key($key),
+            Parameter::key($field),
+            Parameter::integer($increment),
+        ]);
     }
 
     /**
@@ -120,13 +109,11 @@ trait HashesCommandsTrait {
      * @return string The value of field after the increment.
      */
     public function hincrbyfloat($key, $field, $increment) {
-        return $this->returnCommand(
-            new Command('HINCRBYFLOAT', [
-                Parameter::key($key),
-                Parameter::key($field),
-                Parameter::float($increment),
-            ])
-        );
+        return $this->returnCommand(['HINCRBYFLOAT'], [
+            Parameter::key($key),
+            Parameter::key($field),
+            Parameter::float($increment),
+        ]);
     }
 
     /**
@@ -139,9 +126,7 @@ trait HashesCommandsTrait {
      * @return string[] List of fields in the hash, or an empty list when key does not exist.
      */
     public function hkeys($key) {
-        return $this->returnCommand(
-            new Command('HKEYS', Parameter::key($key))
-        );
+        return $this->returnCommand(['HKEYS'], [Parameter::key($key)]);
     }
 
     /**
@@ -154,9 +139,7 @@ trait HashesCommandsTrait {
      * @return int Number of fields in the hash, or 0 when key does not exist.
      */
     public function hlen($key) {
-        return $this->returnCommand(
-            new Command('HLEN', Parameter::key($key))
-        );
+        return $this->returnCommand(['HLEN'], [Parameter::key($key)]);
     }
 
     /**
@@ -170,15 +153,10 @@ trait HashesCommandsTrait {
      * @return array List of values associated with the given fields, in the same order as they are requested.
      */
     public function hmget($key, $fields) {
-        return $this->returnCommand(
-            new Command('HMGET', [
-                Parameter::key($key),
-                Parameter::keys($fields),
-            ], function($response) use ($fields) {
-                $fields = (array) $fields;
-                return array_combine($fields, $response);
-            })
-        );
+        return $this->returnCommand(['HMGET'], [
+            Parameter::key($key),
+            Parameter::keys($fields),
+        ]);
     }
 
     /**
@@ -190,14 +168,10 @@ trait HashesCommandsTrait {
      * @return bool True
      */
     public function hmset($key, array $fieldValues) {
-        return $this->returnCommand(
-            new Command('HMSET', [
-                Parameter::key($key),
-                Parameter::assocArray($fieldValues),
-            ], function($response) {
-                return (bool) $response;
-            })
-        );
+        return $this->returnCommand(['HMSET'], [
+            Parameter::key($key),
+            Parameter::assocArray($fieldValues),
+        ]);
     }
 
     /**
@@ -213,13 +187,11 @@ trait HashesCommandsTrait {
      * 0 if field already exists in the hash and the value was updated.
      */
     public function hset($key, $field, $value) {
-        return $this->returnCommand(
-            new Command('HSET', [
-                Parameter::key($key),
-                Parameter::key($field),
-                Parameter::string($value),
-            ])
-        );
+        return $this->returnCommand(['HSET'], [
+            Parameter::key($key),
+            Parameter::key($field),
+            Parameter::string($value),
+        ]);
     }
 
     /**
@@ -227,7 +199,6 @@ trait HashesCommandsTrait {
      * Available since 2.0.0.
      * Time complexity: O(1)
      * @link http://redis.io/commands/hsetnx
-
      * @param string $key
      * @param string $field
      * @param string $value
@@ -235,13 +206,11 @@ trait HashesCommandsTrait {
      * 0 if field already exists in the hash and no operation was performed.
      */
     public function hsetnx($key, $field, $value) {
-        return $this->returnCommand(
-            new Command('HSETNX', [
-                Parameter::key($key),
-                Parameter::key($field),
-                Parameter::string($value),
-            ])
-        );
+        return $this->returnCommand(['HSETNX'], [
+            Parameter::key($key),
+            Parameter::key($field),
+            Parameter::string($value),
+        ]);
     }
 
     /**
@@ -256,12 +225,10 @@ trait HashesCommandsTrait {
      * or 0 when field is not present in the hash or key does not exist at all.
      */
     public function hstrlen($key, $field) {
-        return $this->returnCommand(
-            new Command('HSTRLEN', [
-                Parameter::key($key),
-                Parameter::key($field),
-            ])
-        );
+        return $this->returnCommand(['HSTRLEN'], [
+            Parameter::key($key),
+            Parameter::key($field),
+        ]);
     }
 
     /**
@@ -274,9 +241,7 @@ trait HashesCommandsTrait {
      * @return string[] List of values in the hash, or an empty list when key does not exist.
      */
     public function hvals($key) {
-        return $this->returnCommand(
-            new Command('HVALS', Parameter::key($key))
-        );
+        return $this->returnCommand(['HVALS'], [Parameter::key($key)]);
     }
 
     /**
@@ -292,10 +257,7 @@ trait HashesCommandsTrait {
      * @return mixed
      */
     public function hscan($key, $cursor, $pattern = null, $count = null) {
-        $params = [
-            Parameter::key($key),
-            Parameter::integer($cursor),
-        ];
+        $params = [Parameter::key($key), Parameter::integer($cursor),];
         if (isset($pattern)) {
             $params[] = Parameter::string('MATCH');
             $params[] = Parameter::string($pattern);
@@ -304,9 +266,7 @@ trait HashesCommandsTrait {
             $params[] = Parameter::string('COUNT');
             $params[] = Parameter::integer($count);
         }
-        return $this->returnCommand(
-            new Command('HSCAN', $params)
-        );
+        return $this->returnCommand(['HSCAN'], $params);
     }
 
 

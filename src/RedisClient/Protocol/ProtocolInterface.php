@@ -5,10 +5,15 @@ namespace RedisClient\Protocol;
 interface ProtocolInterface {
 
     /**
-     * @param string[] $structures
-     * @param bool $multi
+     * @param string[] $structure
      * @return mixed
      */
-    public function send($structures, $multi = false);
+    public function send(array $structure);
+
+    /**
+     * @param array[] $structures
+     * @return mixed
+     */
+    public function sendMulti(array $structures);
 
 }

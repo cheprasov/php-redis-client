@@ -2,7 +2,6 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\ResponseParser;
 
@@ -15,9 +14,7 @@ trait ServerCommandsTrait {
      * @return bool Always true
      */
     public function bgrewriteaof() {
-        return $this->returnCommand(
-            new Command('BGREWRITEAOF')
-        );
+        return $this->returnCommand(['BGREWRITEAOF']);
     }
 
     /**
@@ -27,9 +24,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function bgsave() {
-        return $this->returnCommand(
-            new Command('BGSAVE')
-        );
+        return $this->returnCommand(['BGSAVE']);
     }
 
     /**
@@ -40,9 +35,8 @@ trait ServerCommandsTrait {
      * @return string|null The connection name, or a null bulk reply if no name is set.
      */
     public function clientGetname() {
-        return $this->returnCommand(
-            new Command('CLIENT GETNAME', [])
-        );
+        // todo: check
+        return $this->returnCommand(['CLIENT', 'GETNAME'], []);
     }
 
     /**
@@ -82,9 +76,7 @@ trait ServerCommandsTrait {
             $params[] = Parameter::string('SKIPME');
             $params[] = Parameter::address($skipme ? 'yes' : 'no');
         }
-        return $this->returnCommand(
-            new Command('CLIENT KILL', $params)
-        );
+        return $this->returnCommand(['CLIENT', 'KILL'], $params);
     }
 
     /**
@@ -95,9 +87,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function clientList() {
-        return $this->returnCommand(
-            new Command('CLIENT LIST')
-        );
+        return $this->returnCommand(['CLIENT', 'LIST']);
     }
 
     /**
@@ -109,9 +99,7 @@ trait ServerCommandsTrait {
      * @return true The command returns True or an error if the timeout is invalid.
      */
     public function clientPause($timeout) {
-        return $this->returnCommand(
-            new Command('CLIENT PAUSE', Parameter::integer($timeout))
-        );
+        return $this->returnCommand(['CLIENT', 'PAUSE'], [Parameter::integer($timeout)]);
     }
 
     /**
@@ -123,9 +111,7 @@ trait ServerCommandsTrait {
      * @param bool True if the connection name was successfully set.
      */
     public function clientSetname($connectionName) {
-        return $this->returnCommand(
-            new Command('CLIENT SETNAME', Parameter::string($connectionName))
-        );
+        return $this->returnCommand(['CLIENT', 'SETNAME'], [Parameter::string($connectionName)]);
     }
 
     /**
@@ -137,9 +123,7 @@ trait ServerCommandsTrait {
      * @return array
      */
     public function command() {
-        return $this->returnCommand(
-            new Command('COMMAND')
-        );
+        return $this->returnCommand(['COMMAND']);
     }
 
     /**
@@ -150,9 +134,8 @@ trait ServerCommandsTrait {
      * @return int Number of commands returned by COMMAND
      */
     public function commandCount() {
-        return $this->returnCommand(
-            new Command('COMMAND COUNT', [])
-        );
+        // todo: check
+        return $this->returnCommand(['COMMAND', 'COUNT'], []);
     }
 
     /**
@@ -160,13 +143,11 @@ trait ServerCommandsTrait {
      * Available since 2.8.13.
      * Time complexity: O(N) where N is the number of arguments to the command
      *
-     * @param Command $command
+     * @param string $command
      * @return string[] List of keys from your command.
      */
     public function commandGetkeys($command) {
-        return $this->returnCommand(
-            new Command('COMMAND GETKEYS', Parameter::command($command))
-        );
+        return $this->returnCommand(['COMMAND', 'GETKEYS'], [Parameter::command($command)]);
     }
 
     /**
@@ -178,9 +159,7 @@ trait ServerCommandsTrait {
      * @return array Nested list of command details.
      */
     public function commandInfo($commandNames) {
-        return $this->returnCommand(
-            new Command('COMMAND INFO', Parameter::strings($commandNames))
-        );
+        return $this->returnCommand(['COMMAND', 'INFO'], Parameter::strings($commandNames));
     }
 
     /**
@@ -191,9 +170,7 @@ trait ServerCommandsTrait {
      * @return array
      */
     public function configGet($parameter) {
-        return $this->returnCommand(
-            new Command('CONFIG GET', Parameter::string($parameter), ResponseParser::PARSE_ASSOC_ARRAY)
-        );
+        return $this->returnCommand(['CONFIG', 'GET'], [Parameter::string($parameter)], ResponseParser::PARSE_ASSOC_ARRAY);
     }
 
     /**
@@ -204,9 +181,7 @@ trait ServerCommandsTrait {
      * @return bool always True
      */
     public function configResetstat() {
-        return $this->returnCommand(
-            new Command('CONFIG RESETSTAT')
-        );
+        return $this->returnCommand(['CONFIG', 'RESETSTAT']);
     }
 
     /**
@@ -216,9 +191,7 @@ trait ServerCommandsTrait {
      * @return bool True when the configuration was rewritten properly. Otherwise an error is returned.
      */
     public function configRewrite() {
-        return $this->returnCommand(
-            new Command('CONFIG REWRITE')
-        );
+        return $this->returnCommand(['CONFIG', 'REWRITE']);
     }
 
     /**
@@ -228,9 +201,7 @@ trait ServerCommandsTrait {
      * @return bool True when the configuration was set properly. Otherwise an error is returned.
      */
     public function configSet($parameter, $value) {
-        return $this->returnCommand(
-            new Command('CONFIG SET')
-        );
+        return $this->returnCommand(['CONFIG', 'SET']);
     }
 
     /**
@@ -240,9 +211,7 @@ trait ServerCommandsTrait {
      * @return int The number of keys in the currently-selected database.
      */
     public function dbsize() {
-        return $this->returnCommand(
-            new Command('DBSIZE')
-        );
+        return $this->returnCommand(['DBSIZE']);
     }
 
     /**
@@ -253,9 +222,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function debugObject($key) {
-        return $this->returnCommand(
-            new Command('DEBUG OBJECT', Parameter::key($key))
-        );
+        return $this->returnCommand(['DEBUG', 'OBJECT'], [Parameter::key($key)]);
     }
 
     /**
@@ -265,9 +232,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function debugSegfault() {
-        return $this->returnCommand(
-            new Command('DEBUG SEGFAULT')
-        );
+        return $this->returnCommand(['DEBUG', 'SEGFAULT']);
     }
 
     /**
@@ -277,9 +242,7 @@ trait ServerCommandsTrait {
      * @return bool
      */
     public function flushall() {
-        return $this->returnCommand(
-            new Command('FLUSHALL')
-        );
+        return $this->returnCommand(['FLUSHALL']);
     }
 
     /**
@@ -289,9 +252,7 @@ trait ServerCommandsTrait {
      * @return bool
      */
     public function flushdb() {
-        return $this->returnCommand(
-            new Command('FLUSHDB')
-        );
+        return $this->returnCommand(['FLUSHDB']);
     }
 
     /**
@@ -302,9 +263,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function info($section = null) {
-        return $this->returnCommand(
-            new Command('INFO', $section ? Parameter::string($section) : null, ResponseParser::PARSE_INFO)
-        );
+        return $this->returnCommand(['INFO'], $section ? [Parameter::string($section)] : null, ResponseParser::PARSE_INFO);
     }
 
     /**
@@ -314,9 +273,7 @@ trait ServerCommandsTrait {
      * @return int an UNIX time stamp.
      */
     public function lastsave() {
-        return $this->returnCommand(
-            new Command('LASTSAVE')
-        );
+        return $this->returnCommand(['LASTSAVE']);
     }
 
     /**
@@ -324,9 +281,7 @@ trait ServerCommandsTrait {
      * Available since 1.0.0.
      */
     public function monitor() {
-        return $this->returnCommand(
-            new Command('MONITOR')
-        );
+        return $this->returnCommand(['MONITOR']);
     }
 
     /**
@@ -336,9 +291,7 @@ trait ServerCommandsTrait {
      * @return array
      */
     public function role() {
-        return $this->returnCommand(
-            new Command('ROLE')
-        );
+        return $this->returnCommand(['ROLE']);
     }
 
     /**
@@ -348,9 +301,7 @@ trait ServerCommandsTrait {
      * @return bool The commands returns True on success
      */
     public function save() {
-        return $this->returnCommand(
-            new Command('SAVE')
-        );
+        return $this->returnCommand(['SAVE']);
     }
 
     /**
@@ -360,9 +311,7 @@ trait ServerCommandsTrait {
      * @param string|null $save NOSAVE or SAVE
      */
     public function shutdown($save) {
-        return $this->returnCommand(
-            new Command('SHUTDOWN', $save ? Parameter::enum($save, ['NOSAVE', 'SAVE']) : null)
-        );
+        return $this->returnCommand(['SHUTDOWN'], $save ? Parameter::enum($save, ['NOSAVE', 'SAVE']) : null);
     }
 
     /**
@@ -374,12 +323,10 @@ trait ServerCommandsTrait {
      * @return bool
      */
     public function slaveof($host, $port) {
-        return $this->returnCommand(
-            new Command('SLAVEOF', [
-                Parameter::string($host),
-                Parameter::port($port)
-            ])
-        );
+        return $this->returnCommand(['SLAVEOF'], [
+            Parameter::string($host),
+            Parameter::port($port)
+        ]);
     }
 
     /**
@@ -397,9 +344,7 @@ trait ServerCommandsTrait {
         if (isset($argument)) {
             $params[] = Parameter::string($argument);
         }
-        return $this->returnCommand(
-            new Command('SLOWLOG', $params)
-        );
+        return $this->returnCommand(['SLOWLOG'], $params);
     }
 
     /**
@@ -408,9 +353,7 @@ trait ServerCommandsTrait {
      *
      */
     public function sync() {
-        return $this->returnCommand(
-            new Command('SYNC')
-        );
+        return $this->returnCommand(['SYNC']);
     }
 
     /**
@@ -421,9 +364,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function time() {
-        return $this->returnCommand(
-            new Command('TIME', null, ResponseParser::PARSE_TIME)
-        );
+        return $this->returnCommand(['TIME'], null, ResponseParser::PARSE_TIME);
     }
 
 }

@@ -15,4 +15,11 @@ trait AllCommandsTrait {
     use SortedSetsCommandsTrait;
     use StringsCommandsTrait;
     use TransactionsCommandsTrait;
+
+    /**
+     * @param array $command
+     * @param array|null $params
+     * @param int|null $parserId
+     */
+    abstract protected function returnCommand(array $command, array $params = null, $parserId = null);
 }

@@ -52,20 +52,17 @@ class ScriptingCommandsTest extends AbstractCommandsTest {
         $script2 = "return {KEYS[1],KEYS[2],ARGV[1]}";
         $script3 = "return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}";
 
-        $this->assertSame(0, $Redis->scriptExists($script1));
+        $this->assertSame([0], $Redis->scriptExists($script1));
         $this->assertSame(sha1($script1), $Redis->scriptLoad($script1));
-        $this->assertSame(1, $Redis->scriptExists(sha1($script1)));
+        $this->assertSame([1], $Redis->scriptExists(sha1($script1)));
 
-        $this->assertSame(0, $Redis->scriptExists(sha1($script2)));
+        $this->assertSame([0], $Redis->scriptExists(sha1($script2)));
         $this->assertSame(sha1($script2), $Redis->scriptLoad($script2));
-        $this->assertSame(1, $Redis->scriptExists(sha1($script2)));
+        $this->assertSame([1], $Redis->scriptExists(sha1($script2)));
 
-        $this->assertSame(
-            [sha1($script1) => 1, sha1($script2) => 1, sha1($script3) => 0],
-            $Redis->scriptExists([sha1($script1), sha1($script2), sha1($script3)])
-        );
+        $this->assertSame([1, 1, 0], $Redis->scriptExists([sha1($script1), sha1($script2), sha1($script3)]));
 
-        $this->assertSame(0, $Redis->scriptExists($script3));
+        $this->assertSame([0], $Redis->scriptExists($script3));
     }
 
     public function test_scriptflush() {
@@ -79,17 +76,9 @@ class ScriptingCommandsTest extends AbstractCommandsTest {
         $this->assertSame(sha1($script2), $Redis->scriptLoad($script2));
         $this->assertSame(sha1($script3), $Redis->scriptLoad($script3));
 
-        $this->assertSame(
-            [sha1($script1) => 1, sha1($script2) => 1, sha1($script3) => 1],
-            $Redis->scriptExists([sha1($script1), sha1($script2), sha1($script3)])
-        );
-
+        $this->assertSame([1, 1, 1], $Redis->scriptExists([sha1($script1), sha1($script2), sha1($script3)]));
         $this->assertSame(true, $Redis->scriptFlush());
-
-        $this->assertSame(
-            [sha1($script1) => 0, sha1($script2) => 0, sha1($script3) => 0],
-            $Redis->scriptExists([sha1($script1), sha1($script2), sha1($script3)])
-        );
+        $this->assertSame([0, 0, 0], $Redis->scriptExists([sha1($script1), sha1($script2), sha1($script3)]));
     }
 
     public function test_scriptkill() {
@@ -113,19 +102,13 @@ class ScriptingCommandsTest extends AbstractCommandsTest {
         $script2 = "return {KEYS[1],KEYS[2],ARGV[1]}";
         $script3 = "return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}";
 
-        $this->assertSame(
-            [sha1($script1) => 0, sha1($script2) => 0, sha1($script3) => 0],
-            $Redis->scriptExists([sha1($script1), sha1($script2), sha1($script3)])
-        );
+        $this->assertSame([0, 0, 0], $Redis->scriptExists([sha1($script1), sha1($script2), sha1($script3)]));
 
         $this->assertSame(sha1($script1), $Redis->scriptLoad($script1));
         $this->assertSame(sha1($script2), $Redis->scriptLoad($script2));
         $this->assertSame(sha1($script3), $Redis->scriptLoad($script3));
 
-        $this->assertSame(
-            [sha1($script1) => 1, sha1($script2) => 1, sha1($script3) => 1],
-            $Redis->scriptExists([sha1($script1), sha1($script2), sha1($script3)])
-        );
+        $this->assertSame([1, 1, 1], $Redis->scriptExists([sha1($script1), sha1($script2), sha1($script3)]));
     }
 
 }

@@ -369,20 +369,14 @@ class StringsCommandsTest extends AbstractCommandsTest {
     public function test_mget() {
         $Redis = static::$Redis;
 
-        $this->assertSame(['key' => null], $Redis->mget('key'));
-        $this->assertSame(['key' => null], $Redis->mget(['key', 'key']));
-
-        $this->assertSame([
-                'key' => null,
-                'string' => 'value',
-                'integer' => '42',
-                '' => 'empty',
-                'hash' => null
-            ],
+        $this->assertSame([null], $Redis->mget('key'));
+        $this->assertSame([null, null], $Redis->mget(['key', 'key']));
+        $this->assertSame(
+            [null, 'value', '42', 'empty', '42', null],
             $Redis->mget(['key', 'string' , 'integer', '', 'integer', 'hash'])
         );
 
-        $this->assertSame(['hash' => null], $Redis->mget('hash'));
+        $this->assertSame([null], $Redis->mget('hash'));
     }
 
     public function test_msetnx() {
@@ -390,21 +384,10 @@ class StringsCommandsTest extends AbstractCommandsTest {
 
         $this->assertSame(1, $Redis->msetnx(['key'=>'value']));
         $this->assertSame(1, $Redis->msetnx(['key1'=>'value1', 'key2'=>'value2']));
-        $this->assertSame([
-            'key' => 'value',
-            'key1' => 'value1',
-            'key2' => 'value2',
-        ],
-            $Redis->mget(['key', 'key1', 'key2'])
-        );
+        $this->assertSame(['value', 'value1', 'value2',], $Redis->mget(['key', 'key1', 'key2']));
 
         $this->assertSame(0, $Redis->msetnx(['hash'=>'value1', 'test'=>'value2']));
-        $this->assertSame([
-            'hash' => null,
-            'test' => null,
-        ],
-            $Redis->mget(['hash', 'test'])
-        );
+        $this->assertSame([null, null], $Redis->mget(['hash', 'test']));
     }
 
     public function test_psetex() {

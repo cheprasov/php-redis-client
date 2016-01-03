@@ -2,7 +2,6 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 
 /**
@@ -20,9 +19,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was successful. Otherwise an error is returned.
      */
     public function clusterAddslots($slots) {
-        return $this->returnCommand(
-            new Command('CLUSTER ADDSLOTS', Parameter::integers($slots))
-        );
+        return $this->returnCommand(['CLUSTER', 'ADDSLOTS'], Parameter::integers($slots));
     }
 
     /**
@@ -34,9 +31,7 @@ trait ClusterCommandsTrait {
      * @return int The number of active failure reports for the node.
      */
     public function clusterCountFailureReports($nodeId) {
-        return $this->returnCommand(
-            new Command('PUBLISH', Parameter::integer($nodeId))
-        );
+        return $this->returnCommand(['PUBLISH'], [Parameter::integer($nodeId)]);
     }
 
     /**
@@ -48,9 +43,7 @@ trait ClusterCommandsTrait {
      * @return int
      */
     public function clusterCountkeysinslot($slot) {
-        return $this->returnCommand(
-            new Command('CLUSTER COUNTKEYSINSLOT', Parameter::integer($slot))
-        );
+        return $this->returnCommand(['CLUSTER', 'COUNTKEYSINSLOT'], [Parameter::integer($slot)]);
     }
 
     /**
@@ -62,9 +55,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was successful. Otherwise an error is returned.
      */
     public function clusterDelslots($slots) {
-        return $this->returnCommand(
-            new Command('CLUSTER DELSLOTS', Parameter::integers($slots))
-        );
+        return $this->returnCommand(['CLUSTER', 'DELSLOTS'], Parameter::integers($slots));
     }
 
     /**
@@ -76,11 +67,8 @@ trait ClusterCommandsTrait {
      * @return
      */
     public function clusterFailover($option = null) {
-        return $this->returnCommand(
-            new Command(
-                'CLUSTER FAILOVER',
-                $option ? Parameter::enum($option, ['FORCE', 'TAKEOVER']) : null
-            )
+        return $this->returnCommand(['CLUSTER', 'FAILOVER'],
+            $option ? [Parameter::enum($option, ['FORCE', 'TAKEOVER'])] : null
         );
     }
 
@@ -93,9 +81,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was executed successfully, otherwise an error is returned.
      */
     public function clusterForget($nodeId) {
-        return $this->returnCommand(
-            new Command('CLUSTER FORGET', Parameter::integer($nodeId))
-        );
+        return $this->returnCommand(['CLUSTER', 'FORGET'], [Parameter::integer($nodeId)]);
     }
 
     /**
@@ -108,12 +94,10 @@ trait ClusterCommandsTrait {
      * @return array From 0 to count key names in a Redis array reply.
      */
     public function clusterGetkeysinslot($slot, $count) {
-        return $this->returnCommand(
-            new Command('CLUSTER GETKEYSINSLOT', [
-                Parameter::integer($slot),
-                Parameter::integer($count)
-            ])
-        );
+        return $this->returnCommand(['CLUSTER', 'GETKEYSINSLOT'], [
+            Parameter::integer($slot),
+            Parameter::integer($count)
+        ]);
     }
 
     /**
@@ -125,12 +109,10 @@ trait ClusterCommandsTrait {
      * lines separated by newlines composed by the two bytes CRLF.
      */
     public function clusterInfo($slot, $count) {
-        return $this->returnCommand(
-            new Command('CLUSTER INFO', [
-                Parameter::integer($slot),
-                Parameter::integer($count)
-            ])
-        );
+        return $this->returnCommand(['CLUSTER', 'INFO'], [
+            Parameter::integer($slot),
+            Parameter::integer($count)
+        ]);
     }
 
     /**
@@ -142,9 +124,7 @@ trait ClusterCommandsTrait {
      * @return int The hash slot number.
      */
     public function clusterKeyslot($key) {
-        return $this->returnCommand(
-            new Command('CLUSTER KEYSLOT', Parameter::string($key))
-        );
+        return $this->returnCommand(['CLUSTER', 'KEYSLOT'], [Parameter::string($key)]);
     }
 
     /**
@@ -158,12 +138,10 @@ trait ClusterCommandsTrait {
      * If the address or port specified are invalid an error is returned.
      */
     public function clusterMeet($ip, $port) {
-        return $this->returnCommand(
-            new Command('CLUSTER MEET', [
-                Parameter::string($ip),
-                Parameter::port($port)
-            ])
-        );
+        return $this->returnCommand(['CLUSTER', 'MEET'], [
+            Parameter::string($ip),
+            Parameter::port($port)
+        ]);
     }
 
     /**
@@ -174,9 +152,7 @@ trait ClusterCommandsTrait {
      * @return string The serialized cluster configuration.
      */
     public function clusterNodes() {
-        return $this->returnCommand(
-            new Command('CLUSTER NODES')
-        );
+        return $this->returnCommand(['CLUSTER', 'NODES']);
     }
 
     /**
@@ -188,9 +164,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was executed successfully, otherwise an error is returned.
      */
     public function clusterReplicate($nodeId) {
-        return $this->returnCommand(
-            new Command('CLUSTER REPLICATE', Parameter::integer($nodeId))
-        );
+        return $this->returnCommand(['CLUSTER', 'REPLICATE'], [Parameter::integer($nodeId)]);
     }
 
     /**
@@ -202,9 +176,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was successful. Otherwise an error is returned.
      */
     public function clusterReset($option = null) {
-        return $this->returnCommand(
-            new Command('CLUSTER RESET', $option ? Parameter::enum($option, ['HARD', 'SOFT']) : null)
-        );
+        return $this->returnCommand(['CLUSTER', 'RESET'], $option ? [Parameter::enum($option, ['HARD', 'SOFT'])] : null);
     }
 
     /**
@@ -215,9 +187,7 @@ trait ClusterCommandsTrait {
      * @return bool
      */
     public function clusterSaveconfig() {
-        return $this->returnCommand(
-            new Command('CLUSTER SAVECONFIG')
-        );
+        return $this->returnCommand(['CLUSTER SAVECONFIG']);
     }
 
     /**
@@ -229,9 +199,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was executed successfully, otherwise an error is returned.
      */
     public function clusterSetConfigEpoch($config) {
-        return $this->returnCommand(
-            new Command('CLUSTER SET-CONFIG-EPOCH', Parameter::string($config))
-        );
+        return $this->returnCommand(['CLUSTER', 'SET-CONFIG-EPOCH'], [Parameter::string($config)]);
     }
 
     /**
@@ -252,9 +220,7 @@ trait ClusterCommandsTrait {
         if ($nodeId) {
             $params[] = Parameter::integer($nodeId);
         }
-        return $this->returnCommand(
-            new Command('CLUSTER SETSLOT', $params)
-        );
+        return $this->returnCommand(['CLUSTER', 'SETSLOT'], $params);
     }
 
     /**
@@ -266,9 +232,7 @@ trait ClusterCommandsTrait {
      * @return string The serialized cluster configuration.
      */
     public function clusterSlaves($nodeId) {
-        return $this->returnCommand(
-            new Command('CLUSTER SLAVES', Parameter::integer($nodeId))
-        );
+        return $this->returnCommand(['CLUSTER', 'SLAVES'], [Parameter::integer($nodeId)]);
     }
 
     /**
@@ -279,9 +243,7 @@ trait ClusterCommandsTrait {
      * @return array Nested list of slot ranges with IP/Port mappings.
      */
     public function clusterSlots() {
-        return $this->returnCommand(
-            new Command('CLUSTER SLOTS')
-        );
+        return $this->returnCommand(['CLUSTER', 'SLOTS']);
     }
 
     /**
@@ -292,9 +254,7 @@ trait ClusterCommandsTrait {
      * @return bool
      */
     public function readonly() {
-        return $this->returnCommand(
-            new Command('READONLY')
-        );
+        return $this->returnCommand(['READONLY']);
     }
 
     /**
@@ -305,9 +265,7 @@ trait ClusterCommandsTrait {
      * @return bool
      */
     public function readwrite() {
-        return $this->returnCommand(
-            new Command('READWRITE')
-        );
+        return $this->returnCommand(['READWRITE']);
     }
 
 }

@@ -34,6 +34,9 @@ class ResponseParser {
      * @return array
      */
     public static function parseAssocArray($response) {
+        if (!is_array($response)) {
+            return $response;
+        }
         $array = [];
         for ($i = 0, $count = count($response); $i < $count; $i += 2) {
             $array[$response[$i]] = $response[$i + 1];
@@ -46,6 +49,9 @@ class ResponseParser {
      * @return string[]|array
      */
     public static function parseInfo($response) {
+        if (!$response) {
+            return $response;
+        }
         $response = trim((string) $response);
         $result = [];
         $link = &$result;

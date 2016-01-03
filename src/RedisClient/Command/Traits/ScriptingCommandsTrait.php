@@ -2,7 +2,6 @@
 
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Command;
 use RedisClient\Command\Parameter\Parameter;
 
 /**
@@ -35,9 +34,7 @@ trait ScriptingCommandsTrait {
         if (is_array($args)) {
             $params[] = Parameter::strings($args);
         }
-        return $this->returnCommand(
-            new Command('EVAL', $params)
-        );
+        return $this->returnCommand(['EVAL'], $params);
     }
 
     /**
@@ -64,9 +61,7 @@ trait ScriptingCommandsTrait {
         if (is_array($args)) {
             $params[] = Parameter::strings($args);
         }
-        return $this->returnCommand(
-            new Command('EVALSHA', $params)
-        );
+        return $this->returnCommand(['EVALSHA'], $params);
     }
 
     /**
@@ -80,15 +75,7 @@ trait ScriptingCommandsTrait {
      * @return int|int[]
      */
     public function scriptExists($scriptsSha) {
-        return $this->returnCommand(
-            new Command(
-                'SCRIPT EXISTS',
-                Parameter::strings($scriptsSha),
-                function($result) use ($scriptsSha) {
-                    return is_array($scriptsSha) ? array_combine($scriptsSha, $result) : $result[0];
-                }
-            )
-        );
+        return $this->returnCommand(['SCRIPT', 'EXISTS'], Parameter::strings($scriptsSha));
     }
 
     /**
@@ -100,9 +87,7 @@ trait ScriptingCommandsTrait {
      * @return bool True
      */
     public function scriptFlush() {
-        return $this->returnCommand(
-            new Command('SCRIPT FLUSH')
-        );
+        return $this->returnCommand(['SCRIPT', 'FLUSH']);
     }
 
     /**
@@ -114,9 +99,7 @@ trait ScriptingCommandsTrait {
      * @return bool
      */
     public function scriptKill() {
-        return $this->returnCommand(
-            new Command('SCRIPT KILL')
-        );
+        return $this->returnCommand(['SCRIPT', 'KILL']);
     }
 
     /**
@@ -129,9 +112,7 @@ trait ScriptingCommandsTrait {
      * @return string
      */
     public function scriptLoad($script) {
-        return $this->returnCommand(
-            new Command('SCRIPT LOAD', Parameter::string($script))
-        );
+        return $this->returnCommand(['SCRIPT', 'LOAD'], [Parameter::string($script)]);
     }
 
 }

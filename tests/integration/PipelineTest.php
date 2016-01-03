@@ -5,6 +5,7 @@ namespace Test\Integration;
 include_once(__DIR__. '/AbstractCommandsTest.php');
 
 use RedisClient\Exception\ErrorResponseException;
+use RedisClient\Pipeline\Pipeline;
 use RedisClient\RedisClient;
 
 class PipelineTest extends AbstractCommandsTest {
@@ -12,25 +13,32 @@ class PipelineTest extends AbstractCommandsTest {
     public function test_separate() {
         $Redis = static::$Redis;
 
-        $this->assertSame($Redis, $Redis->pipeline());
-        $this->assertSame($Redis, $Redis->set('foo', '4'));
-        $this->assertSame($Redis, $Redis->incr('foo'));
-        $this->assertSame($Redis, $Redis->get('foo'));
-        $this->assertSame($Redis, $Redis->set('bar', '2'));
-        $this->assertSame($Redis, $Redis->incr('bar'));
-        $this->assertSame($Redis, $Redis->get('bar'));
-        $this->assertSame($Redis, $Redis->mget(['foo', 'bar']));
+        /** @var Pipeline $Pipeline */
+        $Pipeline = $Redis->pipeline();
+        $this->assertInstanceOf(Pipeline::class, $Pipeline);
+
+        $this->assertSame($Pipeline, $Pipeline->set('foo', '4'));
+        $this->assertSame($Pipeline, $Pipeline->incr('foo'));
+        $this->assertSame($Pipeline, $Pipeline->get('foo'));
+        $this->assertSame($Pipeline, $Pipeline->set('bar', '2'));
+        $this->assertSame($Pipeline, $Pipeline->incr('bar'));
+        $this->assertSame($Pipeline, $Pipeline->get('bar'));
+        $this->assertSame($Pipeline, $Pipeline->mget(['foo', 'bar']));
         $this->assertSame([
             true, 5, '5',
             true, 3, '3',
-            ['foo' => '5', 'bar' => '3']
-        ], $Redis->executePipeline());
+            ['5', '3']
+        ], $Redis->pipeline($Pipeline));
 
-        $this->assertSame($Redis, $Redis->pipeline());
-        $this->assertSame($Redis, $Redis->incr('foo'));
-        $this->assertSame($Redis, $Redis->hincrby('foo', 'bar', '1'));
-        $this->assertSame($Redis, $Redis->incr('foo'));
-        $result = $Redis->executePipeline();
+        /** @var Pipeline $Pipeline */
+        $Pipeline = $Redis->pipeline();
+        $this->assertInstanceOf(Pipeline::class, $Pipeline);
+
+        $this->assertSame($Pipeline, $Pipeline->incr('foo'));
+        $this->assertSame($Pipeline, $Pipeline->hincrby('foo', 'bar', '1'));
+        $this->assertSame($Pipeline, $Pipeline->incr('foo'));
+
+        $result = $Redis->pipeline($Pipeline);
 
         $this->assertSame(3, count($result));
         $this->assertSame(6, $result[0]);
@@ -40,24 +48,25 @@ class PipelineTest extends AbstractCommandsTest {
 
     public function test_pipeline() {
         $Redis = static::$Redis;
-        $this->assertSame([
-                true, 5, '5',
-                true, 3, '3',
-                ['foo' => '5', 'bar' => '3']
-            ],
-            $Redis->pipeline()
-                ->set('foo', '4')->incr('foo')->get('foo')
-                ->set('bar', '2')->incr('bar')->get('bar')
-                ->mget(['foo', 'bar'])
-                ->executePipeline()
+
+        /** @var Pipeline $Pipeline */
+        $Pipeline = $Redis->pipeline();
+        $this->assertInstanceOf(Pipeline::class, $Pipeline);
+
+        $this->assertSame(
+            [true, 5, '5', true, 3, '3', ['5', '3']],
+            $Redis->pipeline(
+                $Pipeline->set('foo', '4')->incr('foo')->get('foo')
+                    ->set('bar', '2')->incr('bar')->get('bar')
+                    ->mget(['foo', 'bar'])
+            )
         );
 
-        $result = $Redis->pipeline()
-            ->incr('foo')
-            ->hincrby('foo', 'bar', '1')
-            ->incr('foo')
-            ->executePipeline();
+        /** @var Pipeline $Pipeline */
+        $Pipeline = $Redis->pipeline();
+        $this->assertInstanceOf(Pipeline::class, $Pipeline);
 
+        $result = $Redis->pipeline($Pipeline->incr('foo')->hincrby('foo', 'bar', '1')->incr('foo'));
         $this->assertSame(3, count($result));
         $this->assertSame(6, $result[0]);
         $this->assertInstanceOf(ErrorResponseException::class, $result[1]);
@@ -67,25 +76,21 @@ class PipelineTest extends AbstractCommandsTest {
     public function test_closure() {
         $Redis = static::$Redis;
 
-        $this->assertSame([
-            true, 5, '5',
-            true, 3, '3',
-            ['foo' => '5', 'bar' => '3']
-        ], $Redis->pipeline(function(RedisClient $Redis) {
-            $Redis->set('foo', '4');
-            $Redis->incr('foo');
-            $Redis->get('foo');
-            $Redis->set('bar', '2');
-            $Redis->incr('bar');
-            $Redis->get('bar');
-            $Redis->mget(['foo', 'bar']);
+        /** @var Pipeline $Pipeline */
+        $Pipeline = $Redis->pipeline();
+        $this->assertInstanceOf(Pipeline::class, $Pipeline);
+
+        $this->assertSame([true, 5, '5', true, 3, '3', ['5', '3']],
+            $Redis->pipeline(function(Pipeline $Pipeline) {
+                $Pipeline->set('foo', '4')->incr('foo')->get('foo');
+                $Pipeline->set('bar', '2')->incr('bar')->get('bar');
+                $Pipeline->mget(['foo', 'bar']);
         }));
 
-        $result = $Redis->pipeline(function(RedisClient $Redis) {
-            $Redis->pipeline();
-            $Redis->incr('foo');
-            $Redis->hincrby('foo', 'bar', '1');
-            $Redis->incr('foo');
+        $result = $Redis->pipeline(function(Pipeline $Pipeline) {
+            $Pipeline->incr('foo');
+            $Pipeline->hincrby('foo', 'bar', '1');
+            $Pipeline->incr('foo');
         });
 
         $this->assertSame(3, count($result));

@@ -2,8 +2,8 @@
 
 namespace RedisClient;
 
-use RedisClient\Command\CommandInterface;
-use RedisClient\Command\Pipeline;
+use RedisClient\Pipeline\Pipeline;
+use RedisClient\Command\Response\ResponseParser;
 use RedisClient\Command\Traits\AllCommandsTrait;
 use RedisClient\Connection\StreamConnection;
 use RedisClient\Exception\ErrorResponseException;
@@ -35,11 +35,6 @@ class RedisClient {
      * @var ProtocolInterface
      */
     protected $Protocol;
-
-    /**
-     * @var Pipeline
-     */
-    protected $Pipeline;
 
     /**
      * @var array
@@ -80,70 +75,84 @@ class RedisClient {
     }
 
     /**
-     * @param CommandInterface $Command
-     * @return mixed
+     * @inheritdoc
      */
-    protected function returnCommand(CommandInterface $Command) {
-        if ($this->Pipeline) {
-            $this->Pipeline->addCommand($Command);
-            return $this;
-        } else {
-            return $this->executeCommand($Command);
-        }
+    protected function returnCommand(array $command, array $params = null, $parserId = null) {
+        return $this->executeCommand($command, $params, $parserId);
     }
 
     /**
-     * @param CommandInterface $Command
-     * @return mixed|null
-     * @throws \Exception
+     * @param array $command
+     * @param array|null $params
+     * @param int|null $parserId
+     * @return mixed
+     * @throws ErrorResponseException
      */
-    public function executeCommand(CommandInterface $Command) {
-        $response = $this->getProtocol()->send($Command->getStructure());
-        if ($response instanceof ErrorResponseException) {
-            if ($this->getConfig(self::CONFIG_THROW_REDIS_EXCEPTIONS)) {
+    public function executeCommand(array $command, array $params = null, $parserId = null) {
+        $response = $this->getProtocol()->send($this->getStructure($command, $params));
+        if (is_object($response)) {
+            if ($response instanceof ErrorResponseException) {
                 throw $response;
             }
-            return $response;
-        } else {
-            $result = $Command->parseResponse($response);
         }
-        return $result;
+        if (isset($parserId)) {
+            return ResponseParser::parse($parserId, $response);
+        }
+        return $response;
     }
 
     /**
-     * @param \Closure|null $Closure
-     * @return self|bool|mixed
+     * @param null|Pipeline|\Closure $Pipeline
+     * @return mixed|Pipeline
+     * @throws \InvalidArgumentException
      */
-    public function pipeline(\Closure $Closure = null) {
-        if ($this->Pipeline) {
-            //throw new Error();
+    public function pipeline($Pipeline = null) {
+        if (!$Pipeline) {
+            return new Pipeline();
         }
-        $this->Pipeline = new Pipeline();
-        if ($Closure) {
-            $Closure($this);
-            return $this->executePipeline();
+        if ($Pipeline instanceof \Closure) {
+            $Pipeline = new Pipeline($Pipeline);
         }
-        return $this;
+        if ($Pipeline instanceof Pipeline) {
+            return $this->executePipeline($Pipeline);
+        }
+        throw new \InvalidArgumentException();
     }
 
     /**
-     * @return bool|mixed
-     * @throws \Exception
+     * @param Pipeline $Pipeline
+     * @return mixed
+     * @throws ErrorResponseException
      */
-    public function executePipeline() {
-        if (!$Pipeline = $this->Pipeline) {
-            return false;
-        }
-        $this->Pipeline = null;
-        $responses = $this->getProtocol()->send($Pipeline->getStructure(), true);
-        if ($responses instanceof ErrorResponseException) {
-            if ($this->getConfig(self::CONFIG_THROW_REDIS_EXCEPTIONS)) {
+    protected function executePipeline(Pipeline $Pipeline) {
+        $responses = $this->getProtocol()->sendMulti($Pipeline->getStructure());
+        if (is_object($responses)) {
+            if ($responses instanceof ErrorResponseException) {
                 throw $responses;
             }
-            return $responses;
-        } else {
-            return $Pipeline->parseResponse($responses);
         }
+        return $Pipeline->parseResponse($responses);
+    }
+
+    /**
+     * @param string[] $command
+     * @param array|null $params
+     * @return string[]
+     */
+    protected function getStructure(array $command, array $params = null) {
+        if (!isset($params)) {
+            return $command;
+        }
+        foreach ($params as $param) {
+            if (is_array($param)) {
+                foreach($param as $p) {
+                    $command[] = $p;
+                }
+            } else {
+                $command[] = $param;
+            }
+        }
+        return $command;
     }
 
 }
