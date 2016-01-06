@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * This file is part of RedisClient.
+ * git: https://github.com/cheprasov/php-redis-client
+ *
+ * (C) Alexander Cheprasov <cheprasov.84@ya.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace RedisClient\Protocol;
 
 use RedisClient\Connection\ConnectionInterface;
@@ -123,7 +131,7 @@ class RedisProtocol implements ProtocolInterface {
                 return null;
             }
             $array = [];
-            for ($i = 0; $i < $count; $i++) {
+            for ($i = 0; $i < $count; ++$i) {
                 $array[] = $this->read();
             }
             return $array;
@@ -156,7 +164,7 @@ class RedisProtocol implements ProtocolInterface {
         }
         $this->write($raw);
         $response = [];
-        for ($i = count($structures); $i > 0; $i--) {
+        for ($i = count($structures); $i > 0; --$i) {
             $response[] = $this->read();
         }
         return $response;

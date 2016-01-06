@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * This file is part of RedisClient.
+ * git: https://github.com/cheprasov/php-redis-client
+ *
+ * (C) Alexander Cheprasov <cheprasov.84@ya.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Test\Integration;
 
 include_once(__DIR__. '/AbstractCommandsTest.php');
@@ -92,6 +100,47 @@ class PipelineTest extends AbstractCommandsTest {
         $this->assertSame(6, $result[0]);
         $this->assertInstanceOf(ErrorResponseException::class, $result[1]);
         $this->assertSame(7, $result[2]);
+    }
+
+    public function test_transaction() {
+        $Redis = static::$Redis;
+
+        /** @var Pipeline $Pipeline */
+        $Pipeline = $Redis->pipeline();
+        $this->assertInstanceOf(Pipeline::class, $Pipeline);
+        $result = $Redis->pipeline(function(Pipeline $Pipeline) {
+            $Pipeline
+                ->multi()
+                ->set('foo', 'foo')
+                ->set('bar', 'bar')
+                ->get('bar')
+                ->hincrby('foo', 'foo', 1)
+                ->lpush('bar', 'bar')
+                ->set('bar', 'new')
+                ->get('bar')
+                ->exec();
+        });
+
+        $this->assertSame(9, count($result));
+        $this->assertSame(true, $result[0]);
+        $this->assertSame('QUEUED', $result[1]);
+        $this->assertSame('QUEUED', $result[2]);
+        $this->assertSame('QUEUED', $result[3]);
+        $this->assertSame('QUEUED', $result[4]);
+        $this->assertSame('QUEUED', $result[5]);
+        $this->assertSame('QUEUED', $result[6]);
+        $this->assertSame('QUEUED', $result[7]);
+
+        $result = $result[8];
+
+        $this->assertSame(7, count($result));
+        $this->assertSame(true, $result[0]);
+        $this->assertSame(true, $result[1]);
+        $this->assertSame('bar', $result[2]);
+        $this->assertInstanceOf(ErrorResponseException::class, $result[3]);
+        $this->assertInstanceOf(ErrorResponseException::class, $result[4]);
+        $this->assertSame(true, $result[5]);
+        $this->assertSame('new', $result[6]);
     }
 
 }
