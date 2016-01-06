@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * This file is part of RedisClient.
+ * git: https://github.com/cheprasov/php-redis-client
+ *
+ * (C) Alexander Cheprasov <cheprasov.84@ya.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace RedisClient;
 
 use RedisClient\Pipeline\Pipeline;
@@ -16,6 +24,8 @@ use RedisClient\Protocol\RedisProtocol;
  */
 class RedisClient {
     use AllCommandsTrait;
+
+    const VERSION = '1.0.0';
 
     const CONFIG_SERVER = 'server';
     const CONFIG_TIMEOUT = 'timeout';
@@ -86,17 +96,58 @@ class RedisClient {
      * @return mixed
      * @throws ErrorResponseException
      */
-    public function executeCommand(array $command, array $params = null, $parserId = null) {
+    protected function executeCommand(array $command, array $params = null, $parserId = null) {
         $response = $this->getProtocol()->send($this->getStructure($command, $params));
-        if (is_object($response)) {
-            if ($response instanceof ErrorResponseException) {
-                throw $response;
-            }
+        if ($response instanceof ErrorResponseException) {
+            throw $response;
         }
         if (isset($parserId)) {
             return ResponseParser::parse($parserId, $response);
         }
         return $response;
+    }
+
+    /**
+     * @param string[] $structure
+     * @return mixed
+     * @throws ErrorResponseException
+     */
+    public function executeRaw($structure) {
+        $response = $this->getProtocol()->send($structure);
+        if ($response instanceof ErrorResponseException) {
+            throw $response;
+        }
+        return $response;
+    }
+
+    /**
+     * @param string $stringCommand
+     * @return mixed
+     * @throws ErrorResponseException
+     */
+    public function executeRawString($stringCommand) {
+        return $this->executeRaw(explode(' ', $stringCommand));
+    }
+
+    /**
+     * @param string[] $command
+     * @param array|null $params
+     * @return string[]
+     */
+    protected function getStructure(array $command, array $params = null) {
+        if (!isset($params)) {
+            return $command;
+        }
+        foreach ($params as $param) {
+            if (is_array($param)) {
+                foreach($param as $p) {
+                    $command[] = $p;
+                }
+            } else {
+                $command[] = $param;
+            }
+        }
+        return $command;
     }
 
     /**
@@ -130,27 +181,6 @@ class RedisClient {
             }
         }
         return $Pipeline->parseResponse($responses);
-    }
-
-    /**
-     * @param string[] $command
-     * @param array|null $params
-     * @return string[]
-     */
-    protected function getStructure(array $command, array $params = null) {
-        if (!isset($params)) {
-            return $command;
-        }
-        foreach ($params as $param) {
-            if (is_array($param)) {
-                foreach($param as $p) {
-                    $command[] = $p;
-                }
-            } else {
-                $command[] = $param;
-            }
-        }
-        return $command;
     }
 
 }
