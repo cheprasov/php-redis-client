@@ -11,7 +11,7 @@
 namespace RedisClient\Pipeline;
 
 use RedisClient\Command\Response\ResponseParser;
-use RedisClient\Command\Traits\AllCommandsTrait;
+use RedisClient\Command\Traits\LastVersionCommandsTrait;
 
 /**
  * Cluster
@@ -217,7 +217,7 @@ use RedisClient\Command\Traits\AllCommandsTrait;
  * @method $this watch($keys)
  */
 class Pipeline {
-    use AllCommandsTrait;
+    use LastVersionCommandsTrait;
 
     /**
      * @var array[]

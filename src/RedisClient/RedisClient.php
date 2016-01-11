@@ -10,11 +10,11 @@
  */
 namespace RedisClient;
 
-use RedisClient\Pipeline\Pipeline;
+use RedisClient\Command\Traits\LastVersionCommandsTrait;
 use RedisClient\Command\Response\ResponseParser;
-use RedisClient\Command\Traits\AllCommandsTrait;
 use RedisClient\Connection\StreamConnection;
 use RedisClient\Exception\ErrorResponseException;
+use RedisClient\Pipeline\Pipeline;
 use RedisClient\Protocol\ProtocolInterface;
 use RedisClient\Protocol\RedisProtocol;
 
@@ -23,7 +23,7 @@ use RedisClient\Protocol\RedisProtocol;
  * @package RedisClient
  */
 class RedisClient {
-    use AllCommandsTrait;
+    use LastVersionCommandsTrait;
 
     const VERSION = '1.0.0';
 

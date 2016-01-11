@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RedisClient\Command\Traits;
+namespace RedisClient\Command\Traits\Version_2_6;
 
 use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\ResponseParser;
@@ -222,24 +222,6 @@ trait HashesCommandsTrait {
     }
 
     /**
-     * HSTRLEN key field
-     * Available since 3.2.0.
-     * Time complexity: O(1)
-     * @link http://redis.io/commands/hstrlen
-     *
-     * @param string $key
-     * @param string $field
-     * @return int the string length of the value associated with field,
-     * or 0 when field is not present in the hash or key does not exist at all.
-     */
-    public function hstrlen($key, $field) {
-        return $this->returnCommand(['HSTRLEN'], [
-            Parameter::key($key),
-            Parameter::key($field),
-        ]);
-    }
-
-    /**
      * HVALS key
      * Available since 2.0.0.
      * Time complexity: O(N) where N is the size of the hash.
@@ -251,31 +233,5 @@ trait HashesCommandsTrait {
     public function hvals($key) {
         return $this->returnCommand(['HVALS'], [Parameter::key($key)]);
     }
-
-    /**
-     * HSCAN key cursor [MATCH pattern] [COUNT count]
-     * Available since 2.8.0.
-     * Time complexity: O(1) for every call.
-     * @link http://redis.io/commands/hscan
-     *
-     * @param string $key
-     * @param int $cursor
-     * @param null|string $pattern
-     * @param null|int $count
-     * @return mixed
-     */
-    public function hscan($key, $cursor, $pattern = null, $count = null) {
-        $params = [Parameter::key($key), Parameter::integer($cursor),];
-        if (isset($pattern)) {
-            $params[] = Parameter::string('MATCH');
-            $params[] = Parameter::string($pattern);
-        }
-        if (isset($count)) {
-            $params[] = Parameter::string('COUNT');
-            $params[] = Parameter::integer($count);
-        }
-        return $this->returnCommand(['HSCAN'], $params);
-    }
-
 
 }

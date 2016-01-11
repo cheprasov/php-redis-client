@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RedisClient\Command\Traits;
+namespace RedisClient\Command\Traits\Version_2_6;
 
 use RedisClient\Command\Parameter\Parameter;
 
@@ -100,7 +100,7 @@ trait KeysCommandsTrait {
     }
 
     /**
-     * MIGRATE host port key destination-db timeout [COPY] [REPLACE]
+     * MIGRATE host port key destination-db timeout
      * Available since 2.6.0.
      * @link http://redis.io/commands/migrate
      *
@@ -109,19 +109,16 @@ trait KeysCommandsTrait {
      * @param string $key
      * @param int $destinationDb
      * @param int $timeout In milliseconds
-     * @param bool $copy Available in 3.0 and are not available in 2.6 or 2.8
-     * @param bool $replace Available in 3.0 and are not available in 2.6 or 2.8
      * @return bool The command returns True on success.
      */
-    public function migrate($host, $port, $key, $destinationDb, $timeout, $copy = false, $replace = false) {
-        $params = [Parameter::string($host), Parameter::port($port), Parameter::key($key), Parameter::integer($destinationDb), Parameter::integer($timeout)];
-        if ($copy) {
-            $params[] = Parameter::string('COPY');
-        }
-        if ($replace) {
-            $params[] = Parameter::string('REPLACE');
-        }
-        return $this->returnCommand(['MIGRATE'], $params);
+    public function migrate($host, $port, $key, $destinationDb, $timeout) {
+        return $this->returnCommand(['MIGRATE'], [
+            Parameter::string($host),
+            Parameter::port($port),
+            Parameter::key($key),
+            Parameter::integer($destinationDb),
+            Parameter::integer($timeout)
+        ]);
     }
 
     /**
@@ -260,39 +257,14 @@ trait KeysCommandsTrait {
      * @param string $key
      * @param int $ttl In milliseconds
      * @param string $serializedValue
-     * @param bool|false $replace Redis 3.0 or greater
      * @return bool The command returns True on success.
      */
-    public function restore($key, $ttl, $serializedValue, $replace = false) {
-        $params = [Parameter::key($key), Parameter::integer($ttl), Parameter::string($serializedValue),];
-        if ($replace) {
-            $params[] = Parameter::string('REPLACE');
-        }
-        return $this->returnCommand(['RESTORE'], $params);
-    }
-
-    /**
-     * SCAN cursor [MATCH pattern] [COUNT count]
-     * Available since 2.8.0.
-     * Time complexity: O(1) for every call. O(N) for a complete iteration.
-     * @link http://redis.io/commands/scan
-     *
-     * @param int $cursor
-     * @param string|null $pattern
-     * @param int|null $count
-     * @return mixed
-     */
-    public function scan($cursor, $pattern = null, $count = null) {
-        $params = [Parameter::integer($cursor)];
-        if ($pattern) {
-            $params[] = Parameter::string('MATCH');
-            $params[] = Parameter::string($pattern);
-        }
-        if ($count) {
-            $params[] = Parameter::string('COUNT');
-            $params[] = Parameter::integer($count);
-        }
-        return $this->returnCommand(['SCAN'], $params);
+    public function restore($key, $ttl, $serializedValue) {
+        return $this->returnCommand(['RESTORE'], [
+            Parameter::key($key),
+            Parameter::integer($ttl),
+            Parameter::string($serializedValue)
+        ]);
     }
 
     /**
@@ -363,21 +335,6 @@ trait KeysCommandsTrait {
      */
     public function type($key) {
         return $this->returnCommand(['TYPE'], [Parameter::key($key)]);
-    }
-
-    /**
-     * WAIT numslaves timeout
-     * Available since 3.0.0.
-     * Time complexity: O(1)
-     * @link http://redis.io/commands/wait
-     *
-     * @param int $numslaves
-     * @param int $timeout In milliseconds
-     * @return int The command returns the number of slaves reached
-     * by all the writes performed in the context of the current connection.
-     */
-    public function wait($numslaves, $timeout) {
-        return $this->returnCommand(['WAIT'], [Parameter::integer($numslaves), Parameter::integer($timeout),]);
     }
 
 }

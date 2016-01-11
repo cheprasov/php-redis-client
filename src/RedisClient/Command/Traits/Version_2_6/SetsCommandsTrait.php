@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RedisClient\Command\Traits;
+namespace RedisClient\Command\Traits\Version_2_6;
 
 use RedisClient\Command\Parameter\Parameter;
 
@@ -157,23 +157,16 @@ trait SetsCommandsTrait {
     }
 
     /**
-     * SPOP key [count]
+     * SPOP key
      * Available since 1.0.0.
      * Time complexity: O(1)
      * @link http://redis.io/commands/spop
      *
      * @param string $key
-     * @param int|null $count Redis >= 3.2
-     * @return string|string[]|null The removed element, or null when key does not exist.
+     * @return string|null The removed element, or null when key does not exist.
      */
-    public function spop($key, $count = null) {
-        $params = [
-            Parameter::key($key)
-        ];
-        if ($count) {
-            $params[] = Parameter::integer($count);
-        }
-        return $this->returnCommand(['SPOP'], $params);
+    public function spop($key) {
+        return $this->returnCommand(['SPOP'], [Parameter::key($key)]);
     }
 
     /**
@@ -212,36 +205,6 @@ trait SetsCommandsTrait {
             Parameter::key($key),
             Parameter::keys($members),
         ]);
-    }
-
-    /**
-     * SSCAN key cursor [MATCH pattern] [COUNT count]
-     * Available since 2.8.0.
-     * Time complexity: O(1) for every call. O(N) for a complete iteration,
-     * including enough command calls for the cursor to return back to 0.
-     * N is the number of elements inside the collection.
-     * @link http://redis.io/commands/sscan
-     *
-     * @param string $key
-     * @param int $cursor
-     * @param string|null $pattern
-     * @param int|null $count
-     * @return mixed
-     */
-    public function sscan($key, $cursor, $pattern = null, $count = null) {
-        $params = [
-            Parameter::key($key),
-            Parameter::integer($cursor),
-        ];
-        if ($pattern) {
-            $params[] = Parameter::string('MATCH');
-            $params[] = Parameter::string($pattern);
-        }
-        if ($count) {
-            $params[] = Parameter::string('COUNT');
-            $params[] = Parameter::integer($count);
-        }
-        return $this->returnCommand(['SSCAN'], $params);
     }
 
     /**

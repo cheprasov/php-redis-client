@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RedisClient\Command\Traits;
+namespace RedisClient\Command\Traits\Version_3_0;
 
 use RedisClient\Command\Parameter\Parameter;
 

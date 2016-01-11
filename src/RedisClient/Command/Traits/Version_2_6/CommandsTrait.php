@@ -8,13 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RedisClient\Command\Traits;
+namespace RedisClient\Command\Traits\Version_2_6;
 
-trait AllCommandsTrait {
-    use ClusterCommandsTrait;
+use RedisClient\Command\Traits\AbstractCommandsTrait;
+
+trait CommandsTrait {
+
+    use AbstractCommandsTrait;
+
     use ConnectionCommandsTrait;
     use HashesCommandsTrait;
-    use HyperLogLogCommandsTrait;
     use KeysCommandsTrait;
     use ListsCommandsTrait;
     use ScriptingCommandsTrait;
@@ -25,9 +28,10 @@ trait AllCommandsTrait {
     use TransactionsCommandsTrait;
 
     /**
-     * @param array $command
-     * @param array|null $params
-     * @param int|null $parserId
+     * @return string
      */
-    abstract protected function returnCommand(array $command, array $params = null, $parserId = null);
+    public function getVersion() {
+        return '2.6';
+    }
+
 }
