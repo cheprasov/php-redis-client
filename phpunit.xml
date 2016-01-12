@@ -19,5 +19,10 @@
     beStrictAboutOutputDuringTests      = "true"
     beStrictAboutTestSize               = "true"
 >
+    <testsuites>
+        <testsuite name="All tests">
+            <directory suffix="Test.php" >./tests/</directory>
+        </testsuite>
+    </testsuites>
 
 </phpunit>

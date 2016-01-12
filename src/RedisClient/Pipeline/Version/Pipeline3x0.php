@@ -258,7 +258,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * SortedSets
  * @method $this zadd($key, array $members, $nx = null, $ch = false, $incr = false)
- *
+ * 
  */
 class Pipeline3x0 extends AbstractPipeline {
     use CommandsTrait;

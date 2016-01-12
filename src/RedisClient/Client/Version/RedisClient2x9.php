@@ -11,15 +11,15 @@
 namespace RedisClient\Client\Version;
 
 use RedisClient\Client\AbstractRedisClient;
-use RedisClient\Command\Traits\Version3x2\CommandsTrait;
+use RedisClient\Command\Traits\Version2x9\CommandsTrait;
 use RedisClient\Pipeline\PipelineInterface;
-use RedisClient\Pipeline\Version\Pipeline3x2;
+use RedisClient\Pipeline\Version\Pipeline2x9;
 
 /**
  * Class RedisClient
  * @package RedisClient
  */
-class RedisClient3x2 extends AbstractRedisClient {
+class RedisClient2x9 extends AbstractRedisClient {
     use CommandsTrait;
 
     /**
@@ -27,7 +27,7 @@ class RedisClient3x2 extends AbstractRedisClient {
      * @return PipelineInterface
      */
     protected function createPipeline(\Closure $Pipeline = null) {
-        return new Pipeline3x2($Pipeline);
+        return new Pipeline2x9($Pipeline);
     }
 
 }

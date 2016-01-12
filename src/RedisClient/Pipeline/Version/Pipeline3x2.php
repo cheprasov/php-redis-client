@@ -266,7 +266,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * Sets
  * @method $this spop($key, $count = null)
- *
+ * 
  */
 class Pipeline3x2 extends AbstractPipeline {
     use CommandsTrait;

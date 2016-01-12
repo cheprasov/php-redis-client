@@ -9,11 +9,13 @@
  * file that was distributed with this source code.
  */
 
+const EOL = "\n";
+
 if ($argc === 2 && $argv[1] === '--help') {
-    echo '---'. PHP_EOL,
-        'Tools for generations annotations for Pipelines by versions'. PHP_EOL,
-        'Using: php ./tools/'. basename(__FILE__) .' > /save/to/file/path'. PHP_EOL,
-         '---'. PHP_EOL;
+    echo '---'. EOL,
+        'Tools for generations annotations for Pipelines by versions'. EOL,
+        'Using: php ./tools/'. basename(__FILE__) .' [update [backup]]'. EOL,
+         '---'. EOL;
     exit;
 }
 
@@ -21,7 +23,7 @@ $lines = `grep -r 'function' ./src/RedisClient/Command/Traits/`;
 
 //Version3x0/SortedSetsCommandsTrait.php:    public function zrange($key, $start, $stop, $withscores = false)
 if (!preg_match_all('/Version(\d+x\d+)\/(\w+)CommandsTrait\.php.+public function (.+)\((.*)\)/im', $lines, $matches, PREG_SET_ORDER)) {
-    echo 'Not found'. PHP_EOL;
+    echo 'Not found'. EOL;
 }
 
 $versions = [];
@@ -42,20 +44,55 @@ foreach ($matches as $m) {
 
 ksort($versions);
 
-$annotations = [];
-foreach ($versions as $version => $groups) {
-    $annotations[] = '';
-    $annotations[] = 'Redis version '. str_replace('x', '.', $version);
-    foreach ($groups as $group => $commands) {
+if (in_array('update', $argv)) {
+
+    $text = '';
+    foreach ($versions as $version => $groups) {
+        $annotations = [''];
+        $annotations[] = 'Redis version ' . ($ver = str_replace('x', '.', $version));
+        foreach ($groups as $group => $commands) {
+            $annotations[] = '';
+            $annotations[] = $group;
+            foreach ($commands as $command => $params) {
+                $annotations[] = '@method $this ' . $command . '(' . $params . ')';
+                // deactivation old version of commands
+                $text = str_replace('@method $this ' . $command . '(', '-method $this ' . $command . '(', $text);
+            }
+        }
         $annotations[] = '';
-        $annotations[] = $group;
-        //$annotations[] = '';
-        foreach ($commands as $command => $params) {
-            $annotations[] = '@method $this '. $command .'('. $params .')';
+        $text .= implode("\n * ", $annotations);
+        $text = str_replace("\n * \n", "\n *\n", $text);
+
+        if (!file_exists($file = './src/RedisClient/Pipeline/Version/Pipeline'.$version.'.php')) {
+            continue;
+        }
+
+        $old = file_get_contents($file);
+        $new = preg_replace('/(?<=\/\*\*)\n (.+\n)+(?= \*\/\nclass Pipeline'.$version.')/', ($text).EOL, $old);
+        if ($new) {
+            echo 'File '. $file .' - updated'. EOL;
+            if (in_array('backup', $argv)) {
+                copy($file, $back = __DIR__ . '/back/Pipeline' . $version . '.php.' . date('Ymd.His'));
+            }
+            file_put_contents($file, $new);
         }
     }
 
-}
-$annotations[] = '';
+} else {
 
-echo "/**". implode("\n * ", $annotations) ."\n */";
+    $annotations = [];
+    foreach ($versions as $version => $groups) {
+        $annotations[] = '';
+        $annotations[] = 'Redis version ' . str_replace('x', '.', $version);
+        foreach ($groups as $group => $commands) {
+            $annotations[] = '';
+            $annotations[] = $group;
+            foreach ($commands as $command => $params) {
+                $annotations[] = '@method $this ' . $command . '(' . $params . ')';
+            }
+        }
+
+    }
+    $annotations[] = '';
+    echo "/**" . implode("\n * ", $annotations) . "\n */";
+}

@@ -225,7 +225,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * Server
  * @method $this clientPause($timeout)
- *
+ * 
  */
 class Pipeline2x9 extends AbstractPipeline {
     use CommandsTrait;

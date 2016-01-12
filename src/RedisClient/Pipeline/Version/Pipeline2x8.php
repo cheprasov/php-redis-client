@@ -220,7 +220,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * Strings
  * @method $this bitpos($key, $bit, $start = null, $end = null)
- *
+ * 
  */
 class Pipeline2x8 extends AbstractPipeline {
     use CommandsTrait;

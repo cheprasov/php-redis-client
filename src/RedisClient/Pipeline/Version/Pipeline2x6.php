@@ -183,7 +183,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method $this multi()
  * @method $this unwatch()
  * @method $this watch($keys)
- *
+ * 
  */
 class Pipeline2x6 extends AbstractPipeline {
     use CommandsTrait;
