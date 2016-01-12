@@ -10,7 +10,7 @@
  */
 namespace RedisClient\Command\Traits;
 
-use RedisClient\Command\Traits\Version_3_2\CommandsTrait;
+use RedisClient\Command\Traits\Version3x2\CommandsTrait;
 
 trait LastVersionCommandsTrait {
 

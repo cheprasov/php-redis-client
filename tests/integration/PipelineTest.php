@@ -14,6 +14,7 @@ include_once(__DIR__. '/AbstractCommandsTest.php');
 
 use RedisClient\Exception\ErrorResponseException;
 use RedisClient\Pipeline\Pipeline;
+use RedisClient\Pipeline\PipelineInterface;
 
 class PipelineTest extends AbstractCommandsTest {
 
@@ -22,7 +23,7 @@ class PipelineTest extends AbstractCommandsTest {
 
         /** @var Pipeline $Pipeline */
         $Pipeline = $Redis->pipeline();
-        $this->assertInstanceOf(Pipeline::class, $Pipeline);
+        $this->assertInstanceOf(PipelineInterface::class, $Pipeline);
 
         $this->assertSame($Pipeline, $Pipeline->set('foo', '4'));
         $this->assertSame($Pipeline, $Pipeline->incr('foo'));
@@ -35,7 +36,7 @@ class PipelineTest extends AbstractCommandsTest {
 
         /** @var Pipeline $Pipeline */
         $Pipeline = $Redis->pipeline();
-        $this->assertInstanceOf(Pipeline::class, $Pipeline);
+        $this->assertInstanceOf(PipelineInterface::class, $Pipeline);
 
         $this->assertSame($Pipeline, $Pipeline->incr('foo'));
         $this->assertSame($Pipeline, $Pipeline->hincrby('foo', 'bar', '1'));
@@ -54,7 +55,7 @@ class PipelineTest extends AbstractCommandsTest {
 
         /** @var Pipeline $Pipeline */
         $Pipeline = $Redis->pipeline();
-        $this->assertInstanceOf(Pipeline::class, $Pipeline);
+        $this->assertInstanceOf(PipelineInterface::class, $Pipeline);
 
         $this->assertSame(
             [true, 5, '5', true, 3, '3', ['5', '3']],
@@ -67,7 +68,7 @@ class PipelineTest extends AbstractCommandsTest {
 
         /** @var Pipeline $Pipeline */
         $Pipeline = $Redis->pipeline();
-        $this->assertInstanceOf(Pipeline::class, $Pipeline);
+        $this->assertInstanceOf(PipelineInterface::class, $Pipeline);
 
         $result = $Redis->pipeline($Pipeline->incr('foo')->hincrby('foo', 'bar', '1')->incr('foo'));
         $this->assertSame(3, count($result));
@@ -81,7 +82,7 @@ class PipelineTest extends AbstractCommandsTest {
 
         /** @var Pipeline $Pipeline */
         $Pipeline = $Redis->pipeline();
-        $this->assertInstanceOf(Pipeline::class, $Pipeline);
+        $this->assertInstanceOf(PipelineInterface::class, $Pipeline);
 
         $this->assertSame([true, 5, '5', true, 3, '3', ['5', '3']],
             $Redis->pipeline(function(Pipeline $Pipeline) {
@@ -107,7 +108,7 @@ class PipelineTest extends AbstractCommandsTest {
 
         /** @var Pipeline $Pipeline */
         $Pipeline = $Redis->pipeline();
-        $this->assertInstanceOf(Pipeline::class, $Pipeline);
+        $this->assertInstanceOf(PipelineInterface::class, $Pipeline);
         $result = $Redis->pipeline(function(Pipeline $Pipeline) {
             $Pipeline
                 ->multi()
