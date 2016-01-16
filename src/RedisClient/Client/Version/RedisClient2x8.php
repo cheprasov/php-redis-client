@@ -8,24 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RedisClient;
-use RedisClient\Client\Version\RedisClient3x2 as RedisClientLastVersion;
-use RedisClient\Pipeline\Pipeline;
-use RedisClient\Pipeline\PipelineInterface;
+namespace RedisClient\Client\Version;
 
+use RedisClient\Client\AbstractRedisClient;
+use RedisClient\Command\Traits\Version2x8\CommandsTrait;
+use RedisClient\Pipeline\PipelineInterface;
+use RedisClient\Pipeline\Version\Pipeline2x8;
 
 /**
  * Class RedisClient
  * @package RedisClient
  */
-class RedisClient extends RedisClientLastVersion {
+class RedisClient2x8 extends AbstractRedisClient {
+    use CommandsTrait;
 
     /**
      * @param \Closure|null $Pipeline
      * @return PipelineInterface
      */
     protected function createPipeline(\Closure $Pipeline = null) {
-        return new Pipeline($Pipeline);
+        return new Pipeline2x8($Pipeline);
     }
 
 }

@@ -123,11 +123,8 @@ class Parameter {
      * @return string
      */
     public static function enum($param, array $enum) {
-        if (is_string($param)) {
-            $param = strtoupper($param);
-        }
         if (!in_array($param, $enum)) {
-            throw new InvalidArgumentException('Invalid enum '. $param);
+            //throw new InvalidArgumentException('Incorrect param "'. $param .'" for enum('. implode(', ', $enum) .') ');
         }
         return (string) $param;
     }
@@ -138,6 +135,25 @@ class Parameter {
      */
     public static function float($float) {
         return (float) $float;
+    }
+
+    /**
+     * @var string[]
+     * @link http://redis.io/commands/geodist
+     */
+    protected static $geoUnits = ['m', 'km', 'mi', 'ft'];
+
+    /**
+     * @param string $unit
+     * @return string mixed
+     */
+    public static function geoUnit($unit) {
+        if (!in_array($unit, static::$geoUnits)) {
+            throw new InvalidArgumentException(
+                'Incorrect param "'. $unit .'" for enum('. implode(', ', static::$geoUnits) .')'
+            );
+        }
+        return $unit;
     }
 
     /**

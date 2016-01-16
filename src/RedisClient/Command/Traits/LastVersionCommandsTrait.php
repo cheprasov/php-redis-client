@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RedisClient\Pipeline;
+namespace RedisClient\Command\Traits;
 
-use RedisClient\Pipeline\Version\Pipeline3x2 as PipelineLastVersion;
+use RedisClient\Command\Traits\Version3x2\CommandsTrait;
 
-/**
- * @inheritdoc
- */
-class Pipeline extends PipelineLastVersion {
+trait LastVersionCommandsTrait {
+
+    use CommandsTrait;
+
 }
