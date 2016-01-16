@@ -8,15 +8,45 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Integration;
+namespace Test\Integration\Version2x6;
 
-include_once(__DIR__. '/AbstractCommandsTest.php');
-
+use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 use RedisClient\Pipeline\Pipeline;
 use RedisClient\Pipeline\PipelineInterface;
 
-class PipelineTest extends AbstractCommandsTest {
+class PipelineTest extends \PHPUnit_Framework_TestCase {
+
+    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;
+
+    /**
+     * @var RedisClient2x6
+     */
+    protected static $Redis;
+
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass() {
+        static::$Redis = new RedisClient2x6([
+            'server' =>  static::TEST_REDIS_SERVER_1,
+            'timeout' => 2,
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function tearDownAfterClass() {
+        static::$Redis->flushall();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp() {
+        static::$Redis->flushall();
+    }
 
     public function test_separate() {
         $Redis = static::$Redis;
@@ -85,13 +115,15 @@ class PipelineTest extends AbstractCommandsTest {
         $this->assertInstanceOf(PipelineInterface::class, $Pipeline);
 
         $this->assertSame([true, 5, '5', true, 3, '3', ['5', '3']],
-            $Redis->pipeline(function(Pipeline $Pipeline) {
+            $Redis->pipeline(function(PipelineInterface $Pipeline) {
+                /** @var Pipeline $Pipeline */
                 $Pipeline->set('foo', '4')->incr('foo')->get('foo');
                 $Pipeline->set('bar', '2')->incr('bar')->get('bar');
                 $Pipeline->mget(['foo', 'bar']);
         }));
 
-        $result = $Redis->pipeline(function(Pipeline $Pipeline) {
+        $result = $Redis->pipeline(function(PipelineInterface $Pipeline) {
+            /** @var Pipeline $Pipeline */
             $Pipeline->incr('foo');
             $Pipeline->hincrby('foo', 'bar', '1');
             $Pipeline->incr('foo');
@@ -109,7 +141,8 @@ class PipelineTest extends AbstractCommandsTest {
         /** @var Pipeline $Pipeline */
         $Pipeline = $Redis->pipeline();
         $this->assertInstanceOf(PipelineInterface::class, $Pipeline);
-        $result = $Redis->pipeline(function(Pipeline $Pipeline) {
+        $result = $Redis->pipeline(function(PipelineInterface $Pipeline) {
+            /** @var Pipeline $Pipeline */
             $Pipeline
                 ->multi()
                 ->set('foo', 'foo')

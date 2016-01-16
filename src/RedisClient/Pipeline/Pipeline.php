@@ -12,5 +12,8 @@ namespace RedisClient\Pipeline;
 
 use RedisClient\Pipeline\Version\Pipeline3x2 as PipelineLastVersion;
 
+/**
+ * @inheritdoc
+ */
 class Pipeline extends PipelineLastVersion {
 }

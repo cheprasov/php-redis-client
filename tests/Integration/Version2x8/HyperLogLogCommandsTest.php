@@ -8,16 +8,39 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Integration;
+namespace Test\Integration\Version2x8;
 
-include_once(__DIR__. '/AbstractCommandsTest.php');
-
+use RedisClient\Client\Version\RedisClient2x8;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
  * @see HyperLogLogCommandsTrait
  */
-class HyperLogLogCommandsTest extends AbstractCommandsTest {
+class HyperLogLogCommandsTest extends \PHPUnit_Framework_TestCase {
+
+    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x8_1;
+
+    /**
+     * @var RedisClient2x8
+     */
+    protected static $Redis;
+
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass() {
+        static::$Redis = new RedisClient2x8([
+            'server' =>  static::TEST_REDIS_SERVER_1,
+            'timeout' => 2,
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setUp() {
+        static::$Redis->flushall();
+    }
 
     /**
      * @see HyperLogLogCommandsTrait::pfadd
@@ -44,8 +67,8 @@ class HyperLogLogCommandsTest extends AbstractCommandsTest {
         try {
             $this->assertSame(0, $Redis->pfadd('foo', ['a', 'b', 'c']));
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -71,8 +94,8 @@ class HyperLogLogCommandsTest extends AbstractCommandsTest {
         try {
             $this->assertSame(0, $Redis->pfcount('foo'));
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -106,8 +129,8 @@ class HyperLogLogCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->pfmerge('hll', 'poo');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 

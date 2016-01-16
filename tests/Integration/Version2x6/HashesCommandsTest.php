@@ -8,23 +8,51 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Integration;
+namespace Test\Integration\Version2x6;
 
-include_once(__DIR__. '/AbstractCommandsTest.php');
-
+use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
  * @see HashesCommandsTrait
  */
-class HashesCommandsTest extends AbstractCommandsTest {
+class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
+
+    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;
+
+    /**
+     * @var RedisClient2x6
+     */
+    protected static $Redis;
+
+    /**
+     * @var array
+     */
+    protected static $fields;
+
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass() {
+        static::$Redis = new RedisClient2x6([
+            'server' =>  static::TEST_REDIS_SERVER_1,
+            'timeout' => 2,
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function tearDownAfterClass() {
+        static::$Redis->flushall();
+    }
 
     /**
      * @inheritdoc
      */
     protected function setUp() {
         static::$Redis->flushall();
-        self::$fields = [
+        static::$fields = [
             'string'  => 'value',
             'integer' => 42,
             'true'    => true,
@@ -36,8 +64,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
             'empty'   => '',
             'bin'     => call_user_func_array('pack', ['N*'] + range(0, 255))
         ];
-        static::$Redis->hmset('hash', self::$fields);
-        static::$Redis->hmset('', self::$fields);
+        static::$Redis->hmset('hash', static::$fields);
+        static::$Redis->hmset('', static::$fields);
         static::$Redis->set('string', 'value');
     }
 
@@ -60,8 +88,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->hdel('string', 'field');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -86,8 +114,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->hexists('string', 'value');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -105,13 +133,13 @@ class HashesCommandsTest extends AbstractCommandsTest {
         $this->assertSame('', $Redis->hget('hash', 'null'));
         $this->assertSame('empty', $Redis->hget('hash', ''));
         $this->assertSame('', $Redis->hget('hash', 'empty'));
-        $this->assertSame(self::$fields['bin'], $Redis->hget('hash', 'bin'));
+        $this->assertSame(static::$fields['bin'], $Redis->hget('hash', 'bin'));
 
         try {
             $Redis->hget('string', 'some-field');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -126,7 +154,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
         $hash2 = $Redis->hgetall('');
         ksort($hash2);
 
-        $fields = self::$fields;
+        $fields = static::$fields;
         ksort($fields);
 
         $this->assertEquals($fields, $hash);
@@ -135,8 +163,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->hgetall('string');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -151,23 +179,23 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $this->assertSame(2, $Redis->hincrby('hash', 'string', 2));
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_HASH_NOT_INTEGER, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
         try {
             $this->assertSame(1, $Redis->hincrby('hash', 'float', 3));
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_HASH_NOT_INTEGER, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
         try {
             // I don't know why it happens, but it is real Redis behavior
             $this->assertSame(3, $Redis->hincrby('hash', 'bin', 3));
             //$this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_HASH_NOT_INTEGER, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
         $this->assertSame(4, $Redis->hincrby('hash', 'null', 4));
@@ -182,8 +210,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->hincrby('string', 'value', 2);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -198,8 +226,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $this->assertSame('2.2', $Redis->hincrbyfloat('hash', 'string', 2.2));
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_HASH_NOT_FLOAT, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
         $this->assertSame('4.25159265', $Redis->hincrbyfloat('hash', 'float', 1.11));
@@ -217,8 +245,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->hincrbyfloat('string', 'value', 2.2);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -227,7 +255,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
 
         $this->assertSame([], $Redis->hkeys('key-does-not-exist'));
 
-        $keys = array_keys(self::$fields);
+        $keys = array_keys(static::$fields);
         sort($keys);
 
         $storedKeys = $Redis->hkeys('hash');
@@ -242,8 +270,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->hkeys('string');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -251,14 +279,14 @@ class HashesCommandsTest extends AbstractCommandsTest {
         $Redis = static::$Redis;
 
         $this->assertSame(0, $Redis->hlen('key-does-not-exist'));
-        $this->assertSame(count(self::$fields), $Redis->hlen('hash'));
-        $this->assertSame(count(self::$fields), $Redis->hlen(''));
+        $this->assertSame(count(static::$fields), $Redis->hlen('hash'));
+        $this->assertSame(count(static::$fields), $Redis->hlen(''));
 
         try {
             $Redis->hlen('string');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -275,13 +303,13 @@ class HashesCommandsTest extends AbstractCommandsTest {
             ['3.14159265', '5.0e3', '', '', 'empty',],
             $Redis->hmget('hash', ['float', 'e', 'null', 'empty', ''])
         );
-        $this->assertEquals(array_values(self::$fields), $Redis->hmget('hash', array_keys(self::$fields)));
+        $this->assertEquals(array_values(static::$fields), $Redis->hmget('hash', array_keys(static::$fields)));
 
         try {
             $Redis->hmget('string', 'some-field');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -294,8 +322,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->hmset('string', ['field' => 'test']);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -311,8 +339,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->hset('string', 'field', 'test');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -328,28 +356,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->hsetnx('string', 'field', 'test');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
-        }
-    }
-
-    public function test_hstrlen() {
-        $Redis = static::$Redis;
-
-        if (static::$version < '3.2') {
-            $this->assertTrue(true);
-            return;
-        }
-
-        $this->assertSame(0, $Redis->hstrlen('hash', 'some-field'));
-        $this->assertSame(1, $Redis->hsetnx('hash', 'some-field', 'good'));
-        $this->assertSame(4, $Redis->hstrlen('hash', 'some-field'));
-
-        try {
-            $Redis->hstrlen('string', 'field');
-            $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -358,7 +366,7 @@ class HashesCommandsTest extends AbstractCommandsTest {
 
         $this->assertSame([], $Redis->hvals('key-does-not-exist'));
 
-        $values = array_values(self::$fields);
+        $values = array_values(static::$fields);
         array_walk($values, function(&$a) {
            $a = (string) $a;
         });
@@ -376,30 +384,8 @@ class HashesCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->hvals('string');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
-        }
-    }
-
-    public function test_hscan() {
-        $Redis = static::$Redis;
-
-        $this->assertSame(['0', []], $Redis->hscan('key-does-not-exist', 0));
-
-        $hscan = $Redis->hscan('hash', 0);
-        $this->assertSame(count(self::$fields) * 2, count($hscan[1]));
-
-        for ($i = 0; $i < count($hscan[1]) ; $i += 2) {
-            $key = $hscan[1][$i];
-            $value = $hscan[1][$i + 1];
-            $this->assertSame((string) self::$fields[$key], $value);
-        }
-
-        try {
-            $Redis->hscan('string', 'field');
-            $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 

@@ -19,7 +19,7 @@ if ($argc === 2 && $argv[1] === '--help') {
     exit;
 }
 
-$lines = `grep -r 'function' ./src/RedisClient/Command/Traits/`;
+$lines = `grep -r 'public function' ./src/RedisClient/Command/Traits/`;
 
 //Version3x0/SortedSetsCommandsTrait.php:    public function zrange($key, $start, $stop, $withscores = false)
 if (!preg_match_all('/Version(\d+x\d+)\/(\w+)CommandsTrait\.php.+public function (.+)\((.*)\)/im', $lines, $matches, PREG_SET_ORDER)) {

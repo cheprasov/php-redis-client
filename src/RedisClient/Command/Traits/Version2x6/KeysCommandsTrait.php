@@ -146,7 +146,12 @@ trait KeysCommandsTrait {
      * @return int|string
      */
     public function object($subcommand, $arguments = null) {
-        $params = [Parameter::enum($subcommand, ['REFCOUNT', 'ENCODING', 'IDLETIME'])];
+        $params = [
+            Parameter::enum($subcommand, [
+                'REFCOUNT', 'ENCODING', 'IDLETIME',
+                'refcount', 'encoding', 'idletime'
+            ])
+        ];
         if ($arguments) {
             $params[] = Parameter::keys($arguments);
         }

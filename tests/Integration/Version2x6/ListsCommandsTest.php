@@ -8,16 +8,46 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Integration;
+namespace Test\Integration\Version2x6;
 
-include_once(__DIR__. '/AbstractCommandsTest.php');
-
+use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
  * @see ListsCommandsTrait
  */
-class ListsCommandsTest extends AbstractCommandsTest {
+class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
+
+    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;
+
+    /**
+     * @var RedisClient2x6
+     */
+    protected static $Redis;
+
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass() {
+        static::$Redis = new RedisClient2x6([
+            'server' =>  static::TEST_REDIS_SERVER_1,
+            'timeout' => 2,
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function tearDownAfterClass() {
+        static::$Redis->flushall();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp() {
+        static::$Redis->flushall();
+    }
 
     public function test_blpop() {
         $Redis = static::$Redis;
@@ -40,14 +70,14 @@ class ListsCommandsTest extends AbstractCommandsTest {
         $this->assertSame(null, $Redis->blpop(['list3', 'list4'], 1));
         $timeout = microtime(true) - $time;
         $this->assertGreaterThanOrEqual(1, $timeout);
-        $this->assertLessThanOrEqual(1.5, $timeout);
+        $this->assertLessThanOrEqual(2.5, $timeout);
 
         $Redis->set('foo', 'bar');
         try {
             $Redis->blpop('foo', 1);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -72,14 +102,14 @@ class ListsCommandsTest extends AbstractCommandsTest {
         $this->assertSame(null, $Redis->brpop(['list3', 'list4'], 1));
         $timeout = microtime(true) - $time;
         $this->assertGreaterThanOrEqual(1, $timeout);
-        $this->assertLessThanOrEqual(1.5, $timeout);
+        $this->assertLessThanOrEqual(2.5, $timeout);
 
         $Redis->set('foo', 'bar');
         try {
             $Redis->brpop('foo', 1);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -103,20 +133,20 @@ class ListsCommandsTest extends AbstractCommandsTest {
         $this->assertSame(null, $Redis->brpoplpush('list3', 'list4', 1));
         $timeout = microtime(true) - $time;
         $this->assertGreaterThanOrEqual(1, $timeout);
-        $this->assertLessThanOrEqual(1.5, $timeout);
+        $this->assertLessThanOrEqual(2.5, $timeout);
 
         $Redis->set('foo', 'bar');
         try {
             $Redis->brpoplpush('foo', 'bar', 1);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
         try {
             $Redis->brpoplpush('list2', 'foo', 1);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -141,8 +171,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->lindex('foo', 1);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -165,8 +195,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->linsert('foo', true, 400, 400);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -185,8 +215,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->llen('foo');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -208,8 +238,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->lpop('foo');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -226,8 +256,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->lpush('foo', 'bar');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -245,8 +275,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->lpushx('foo', 'bar');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -269,8 +299,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->lrange('foo', 0, -1);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -310,8 +340,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->lrem('foo', 0, 'bar');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -344,16 +374,16 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $this->assertSame(true, $Redis->lset('list', 20, 'bar'));
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('ERR index out of range', $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
         $Redis->set('foo', 'bar');
         try {
             $Redis->lrem('foo', 0, 'bar');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -394,8 +424,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->ltrim('foo', 0, 10);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -417,8 +447,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->rpop('foo');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -444,14 +474,14 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->rpoplpush('foo', 'bar');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
         try {
             $Redis->rpoplpush('list2', 'foo');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -468,8 +498,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->rpush('foo', 'bar');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -487,8 +517,8 @@ class ListsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->rpushx('foo', 'bar');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 

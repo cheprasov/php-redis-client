@@ -8,16 +8,46 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Integration;
+namespace Test\Integration\Version2x6;
 
-include_once(__DIR__. '/AbstractCommandsTest.php');
-
+use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
  * @see TransactionsCommandsTrait
  */
-class TransactionsCommandsTest extends AbstractCommandsTest {
+class TransactionsCommandsTest extends \PHPUnit_Framework_TestCase {
+
+    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;
+
+    /**
+     * @var RedisClient2x6
+     */
+    protected static $Redis;
+
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass() {
+        static::$Redis = new RedisClient2x6([
+            'server' =>  static::TEST_REDIS_SERVER_1,
+            'timeout' => 2,
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function tearDownAfterClass() {
+        static::$Redis->flushall();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp() {
+        static::$Redis->flushall();
+    }
 
     public function test_discard() {
         $Redis = static::$Redis;

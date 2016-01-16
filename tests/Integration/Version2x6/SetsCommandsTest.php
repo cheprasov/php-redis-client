@@ -8,16 +8,46 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Integration;
+namespace Test\Integration\Version2x6;
 
-include_once(__DIR__. '/AbstractCommandsTest.php');
-
+use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
  * @see SetsCommandsTrait
  */
-class SetsCommandsTest extends AbstractCommandsTest {
+class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
+
+    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;
+
+    /**
+     * @var RedisClient2x6
+     */
+    protected static $Redis;
+
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass() {
+        static::$Redis = new RedisClient2x6([
+            'server' =>  static::TEST_REDIS_SERVER_1,
+            'timeout' => 2,
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function tearDownAfterClass() {
+        static::$Redis->flushall();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp() {
+        static::$Redis->flushall();
+    }
 
     public function test_sadd() {
         $Redis = static::$Redis;
@@ -32,8 +62,8 @@ class SetsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->sadd('foo', 'bar');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -52,8 +82,8 @@ class SetsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->scard('foo');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -84,8 +114,8 @@ class SetsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->sdiff(['foo', 'bar']);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -121,8 +151,8 @@ class SetsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->sdiffstore('store', ['foo', 'bar']);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -156,8 +186,8 @@ class SetsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->sinter(['foo', 'bar']);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -196,8 +226,8 @@ class SetsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->sinterstore('store', ['foo', 'bar']);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -214,8 +244,8 @@ class SetsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->sismember('foo', 'bar');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -233,8 +263,8 @@ class SetsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->smembers('foo');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -264,8 +294,8 @@ class SetsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->smove('foo', 'bar', 'd');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -274,48 +304,22 @@ class SetsCommandsTest extends AbstractCommandsTest {
 
         $this->assertSame(5, $Redis->sadd('bar', $foo = ['a', 'b', 'c', 'd', 'e']));
 
-        if (static::$version >= '3.2') {
-            $moo = [];
-
-            $m = $Redis->spop('bar', 1);
-            $this->assertSame(1, count($m));
-            $this->assertSame(true, in_array($m[0], $foo));
-            $this->assertSame(false, in_array($m[0], $moo));
-            $moo += $m;
-
-            $m = $Redis->spop('bar', 2);
-            $this->assertSame(2, count($m));
-            $this->assertSame(true, in_array($m[0], $foo));
-            $this->assertSame(true, in_array($m[1], $foo));
-            $this->assertSame(false, in_array($m[0], $moo));
-            $this->assertSame(false, in_array($m[1], $moo));
-            $moo += $m;
-
-            $m = $Redis->spop('bar', 3);
-            $this->assertSame(2, count($m));
-            $this->assertSame(true, in_array($m[0], $foo));
-            $this->assertSame(true, in_array($m[1], $foo));
-            $this->assertSame(false, in_array($m[0], $moo));
-            $this->assertSame(false, in_array($m[1], $moo));
-            $moo += $m;
-        } else {
-            $moo = [];
-            foreach ($foo as $f) {
-                $m = $Redis->spop('bar');
-                $this->assertSame(true, in_array($m, $foo));
-                $this->assertSame(false, in_array($m, $moo));
-                $moo[] = $m;
-            }
-            $this->assertSame(null, $Redis->spop('bar'));
-            $this->assertSame(null, $Redis->spop('foo'));
+        $moo = [];
+        foreach ($foo as $f) {
+            $m = $Redis->spop('bar');
+            $this->assertSame(true, in_array($m, $foo));
+            $this->assertSame(false, in_array($m, $moo));
+            $moo[] = $m;
         }
+        $this->assertSame(null, $Redis->spop('bar'));
+        $this->assertSame(null, $Redis->spop('foo'));
 
         $Redis->set('foo', 'bar');
         try {
             $Redis->spop('foo');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -329,27 +333,12 @@ class SetsCommandsTest extends AbstractCommandsTest {
         $this->assertSame(true, in_array($Redis->srandmember('bar'), $foo));
         $this->assertSame(5, $Redis->scard('bar'));
 
-        if (static::$version >= '2.6') {
-            $list = $Redis->srandmember('bar', 2);
-            $this->assertSame(2, count($list));
-            $this->assertSame(true, in_array($list[0], $foo));
-            $this->assertSame(true, in_array($list[1], $foo));
-
-            $list = $Redis->srandmember('bar', 10);
-            $this->assertSame(5, count($list));
-            $this->assertSame(true, in_array($list[0], $foo));
-            $this->assertSame(true, in_array($list[1], $foo));
-            $this->assertSame(true, in_array($list[2], $foo));
-            $this->assertSame(true, in_array($list[3], $foo));
-            $this->assertSame(true, in_array($list[4], $foo));
-        }
-
         $Redis->set('foo', 'bar');
         try {
             $Redis->srandmember('foo');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -363,40 +352,17 @@ class SetsCommandsTest extends AbstractCommandsTest {
         $this->assertSame(0, $Redis->srem('bar', 'a'));
         $this->assertSame(0, $Redis->sismember('bar', 'a'));
 
-        if (static::$version >= '2.4') {
-            $this->assertSame(0, $Redis->srem('bar', ['foo', 'a']));
-            $this->assertSame(2, $Redis->srem('bar', ['b', 'c']));
-            $this->assertSame(0, $Redis->sismember('bar', 'b'));
-            $this->assertSame(0, $Redis->sismember('bar', 'c'));
-        }
+        $this->assertSame(0, $Redis->srem('bar', ['foo', 'a']));
+        $this->assertSame(2, $Redis->srem('bar', ['b', 'c']));
+        $this->assertSame(0, $Redis->sismember('bar', 'b'));
+        $this->assertSame(0, $Redis->sismember('bar', 'c'));
 
         $Redis->set('foo', 'bar');
         try {
             $Redis->srem('foo', 'bar');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
-        }
-    }
-
-    public function test_sscan() {
-        $Redis = static::$Redis;
-
-        $this->assertSame(['0', []], $Redis->sscan('bar', 0));
-        $this->assertSame(5, $Redis->sadd('bar', $foo = ['aa', 'ba', 'ca', 'da', 'ea']));
-        $list = $Redis->sscan('bar', 0);
-        sort($list[1]);
-        $this->assertEquals(['0', $foo], $list);
-
-        $list = $Redis->sscan('bar', 0, 'a*');
-        $this->assertEquals(['0', ['aa']], $list);
-
-        $Redis->set('foo', 'bar');
-        try {
-            $Redis->sscan('foo', 0);
-            $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -425,8 +391,8 @@ class SetsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->sunion(['foo', 'bar']);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -460,8 +426,8 @@ class SetsCommandsTest extends AbstractCommandsTest {
         try {
             $Redis->sunionstore('store', ['foo', 'bar']);
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame(static::REDIS_RESPONSE_ERROR_WRONGTYPE, $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 

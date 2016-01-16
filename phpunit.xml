@@ -7,8 +7,8 @@
     convertNoticesToExceptions  = "true"
     convertWarningsToExceptions = "true"
     processIsolation            = "false"
-    stopOnFailure               = "false"
-    stopOnError                 = "false"
+    stopOnFailure               = "true"
+    stopOnError                 = "true"
     stopOnIncomplete            = "false"
     stopOnSkipped               = "false"
     bootstrap                   = "vendor/autoload.php"
@@ -24,5 +24,16 @@
             <directory suffix="Test.php" >./tests/</directory>
         </testsuite>
     </testsuites>
+
+    <php>
+        <const name="TEST_REDIS_SERVER_2x6_1" value="tcp://127.0.0.1:6381" />
+        <const name="TEST_REDIS_SERVER_2x6_2" value="tcp://127.0.0.1:6382" />
+        <const name="TEST_REDIS_SERVER_2x8_1" value="tcp://127.0.0.1:6383" />
+        <const name="TEST_REDIS_SERVER_2x8_2" value="tcp://127.0.0.1:6384" />
+        <const name="TEST_REDIS_SERVER_3x0_1" value="tcp://127.0.0.1:6385" />
+        <const name="TEST_REDIS_SERVER_3x0_2" value="tcp://127.0.0.1:6386" />
+        <const name="TEST_REDIS_SERVER_3x2_1" value="tcp://127.0.0.1:6387" />
+        <const name="TEST_REDIS_SERVER_3x2_2" value="tcp://127.0.0.1:6388" />
+    </php>
 
 </phpunit>

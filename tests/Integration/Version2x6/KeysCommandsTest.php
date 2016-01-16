@@ -8,17 +8,59 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Integration;
+namespace Test\Integration\Version2x6;
 
-include_once(__DIR__. '/AbstractCommandsTest.php');
-
+use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
-use RedisClient\RedisClient;
 
 /**
  * @see KeysCommandsTrait
  */
-class KeysCommandsTest extends AbstractCommandsTest {
+class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
+
+    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;
+    const TEST_REDIS_SERVER_2 = TEST_REDIS_SERVER_2x6_2;
+
+    /**
+     * @var RedisClient2x6
+     */
+    protected static $Redis;
+
+    /**
+     * @var RedisClient2x6
+     */
+    protected static $Redis2;
+
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass() {
+        static::$Redis = new RedisClient2x6([
+            'server' =>  static::TEST_REDIS_SERVER_1,
+            'timeout' => 2,
+        ]);
+        static::$Redis2 = new RedisClient2x6([
+            'server' =>  static::TEST_REDIS_SERVER_2,
+            'timeout' => 2,
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function tearDownAfterClass() {
+        static::$Redis->flushall();
+        static::$Redis2->flushall();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp() {
+        static::$Redis->flushall();
+        static::$Redis2->flushall();
+    }
+
 
     public function test_del() {
         $Redis = static::$Redis;
@@ -71,13 +113,6 @@ class KeysCommandsTest extends AbstractCommandsTest {
 
         $Redis->del('key');
         $this->assertSame(0, $Redis->exists('key'));
-
-        $Redis->set('key', 'value');
-        $this->assertSame(3, $Redis->exists(['key', 'key', 'key']));
-        $this->assertSame(3, $Redis->exists(['key', 'key', 'key', 'key1', 'key2']));
-
-        $Redis->set('key1', 'value');
-        $this->assertSame(4, $Redis->exists(['key', 'key', 'key', 'key1', 'key2']));
     }
 
     public function test_expire() {
@@ -123,54 +158,48 @@ class KeysCommandsTest extends AbstractCommandsTest {
 
         $this->assertSame(true, $Redis->mset(['one' => 1, 'two' => 2, 'three' => 3, 'four' => 4]));
 
-        $keys = $Redis->keys('*'); ksort($keys);
+        $keys = $Redis->keys('*'); sort($keys);
         $this->assertSame(['four', 'one', 'three', 'two'], $keys);
 
-        $keys = $Redis->keys('*o*'); ksort($keys);
+        $keys = $Redis->keys('*o*'); sort($keys);
         $this->assertSame(['four', 'one', 'two'], $keys);
 
-        $keys = $Redis->keys('t??'); ksort($keys);
+        $keys = $Redis->keys('t??'); sort($keys);
         $this->assertSame(['two'], $keys);
 
-        $keys = $Redis->keys('[to][wn][oe]'); ksort($keys);
+        $keys = $Redis->keys('[to][wn][oe]'); sort($keys);
         $this->assertSame(['one', 'two'], $keys);
 
-        $keys = $Redis->keys('[a-g]*'); ksort($keys);
+        $keys = $Redis->keys('[a-g]*'); sort($keys);
         $this->assertSame(['four'], $keys);
 
-        $keys = $Redis->keys('[^t]*'); ksort($keys);
+        $keys = $Redis->keys('[^t]*'); sort($keys);
         $this->assertSame(['four', 'one'], $keys);
     }
 
     public function test_migrate() {
         $Redis = static::$Redis;
-        $Redis2 = new RedisClient(self::$config[1]);
+        $Redis2 = static::$Redis2;
+
         $this->assertSame(true, $Redis2->flushall());
 
-        list(, $host, $port) = explode(':', str_replace('/', '', self::$config[1]['server']), 3);
+        list(, $host, $port) = explode(':', str_replace('/', '', static::TEST_REDIS_SERVER_2), 3);
 
         $this->assertSame(true, $Redis->set('one', 1));
 
         $this->assertSame(null, $Redis2->get('one'));
-        $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100, true));
+        $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100));
         $this->assertSame('1', $Redis2->get('one'));
-        $this->assertSame('1', $Redis->get('one'));
+        $this->assertSame(null, $Redis->get('one'));
 
         $this->assertSame(true, $Redis->set('one', 11));
 
         try {
-            $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100, true));
+            $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100));
             $this->assertTrue(false);
-        }catch (ErrorResponseException $Ex) {
-            $this->assertSame(
-                    'ERR Target instance replied with error: BUSYKEY Target key name already exists.',
-                    $Ex->getMessage()
-                );
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
-
-        $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100, false, true));
-        $this->assertSame('11', $Redis2->get('one'));
-        $this->assertSame(null, $Redis->get('one'));
     }
 
     public function test_move() {
@@ -260,7 +289,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     public function test_pttl() {
         $Redis = static::$Redis;
 
-        $this->assertSame(-2, $Redis->pttl('key'));
+        $this->assertSame(-1, $Redis->pttl('key'));
         $Redis->set('key', 'value');
         $this->assertSame(-1, $Redis->pttl('key'));
         $Redis->pexpire('key', 1000);
@@ -288,18 +317,18 @@ class KeysCommandsTest extends AbstractCommandsTest {
         try {
             $this->assertSame(true, $Redis->rename('key', 'foo'));
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('ERR no such key', $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
         $Redis->set('key', 'value1');
         $Redis->set('bar', 'value2');
 
         try {
-            $this->assertSame(null, $Redis->rename('key', 'key'));
+            $Redis->rename('key', 'key');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('ERR source and destination objects are the same', $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
         $this->assertSame(true, $Redis->rename('key', 'foo'));
@@ -318,18 +347,19 @@ class KeysCommandsTest extends AbstractCommandsTest {
         try {
             $this->assertSame(0, $Redis->renamenx('key', 'foo'));
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('ERR no such key', $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
         $Redis->set('key', 'value1');
         $Redis->set('bar', 'value2');
+        $Redis->renamenx('key', 'key');
 
         try {
-            $this->assertSame(0, $Redis->renamenx('key', 'key'));
+            $Redis->renamenx('key', 'key');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('ERR source and destination objects are the same', $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
         $this->assertSame(1, $Redis->renamenx('key', 'foo'));
@@ -348,28 +378,14 @@ class KeysCommandsTest extends AbstractCommandsTest {
         $this->assertSame(true, $Redis->restore('key', 0, "\x00\x01\x00\x06\x00\xcd\x15\x4d\x4c\x99\x42\x7f\xc5"));
         $this->assertSame("\x00", $Redis->get('key'));
 
-        $this->assertSame(true, $Redis->restore('key', 0, "\x00\xc0\x01\x06\x00\xb0\x95\x8f6\$T-o", true));
-        $this->assertSame('1', $Redis->get('key'));
+        $this->assertSame(true, $Redis->restore('key1', 0, "\x00\xc0\x01\x06\x00\xb0\x95\x8f6\$T-o"));
+        $this->assertSame('1', $Redis->get('key1'));
 
-        $this->assertSame(true, $Redis->restore('key', 0, "\x00\xc0\n\x06\x00\xf8r?\xc5\xfb\xfb_(", true));
-        $this->assertSame('10', $Redis->get('key'));
+        $this->assertSame(true, $Redis->restore('key2', 0, "\x00\xc0\n\x06\x00\xf8r?\xc5\xfb\xfb_("));
+        $this->assertSame('10', $Redis->get('key2'));
 
-        $this->assertSame(true, $Redis->restore('hash', 0, "\x0d\x19\x19\x00\x00\x00\x11\x00\x00\x00\x02\x00\x00\x05field\x07\x05value\xff\x06\x00\xfa\x0es>*\x09\xe9Y"));
-        $this->assertSame('value', $Redis->hget('hash', 'field'));
-
-        try {
-            $this->assertSame(true, $Redis->restore('key', 0, "\x00\x01\x00\x06\x00\xcd\x15\x4d\x4c\x99\x42\x7f\xc5"));
-            $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('BUSYKEY Target key name already exists.', $Ex->getMessage());
-        }
-    }
-
-    public function test_scan() {
-        $Redis = static::$Redis;
-
-        $this->assertSame(true, $Redis->mset(['key' => 'value', 'foo' => 'bar', 'hello' => 'world']));
-        $this->assertSame(['0', ['hello', 'foo', 'key']], $Redis->scan(0));
+        $this->assertSame(true, $Redis->restore('hash3', 0, "\x0d\x19\x19\x00\x00\x00\x11\x00\x00\x00\x02\x00\x00\x05field\x07\x05value\xff\x06\x00\xfa\x0es>*\x09\xe9Y"));
+        $this->assertSame('value', $Redis->hget('hash3', 'field'));
     }
 
     public function test_sort() {
@@ -404,7 +420,7 @@ class KeysCommandsTest extends AbstractCommandsTest {
     public function test_ttl() {
         $Redis = static::$Redis;
 
-        $this->assertSame(-2, $Redis->ttl('key'));
+        $this->assertSame(-1, $Redis->ttl('key'));
         $Redis->set('key', 'value');
         $this->assertSame(-1, $Redis->ttl('key'));
         $Redis->expire('key', 10);
@@ -432,12 +448,6 @@ class KeysCommandsTest extends AbstractCommandsTest {
 
         $Redis->sadd('set', 'member');
         $this->assertSame('set', $Redis->type('set'));
-    }
-
-    public function test_wait() {
-        $Redis = static::$Redis;
-
-        $this->assertTrue(is_int($Redis->wait(2, 1)));
     }
 
 }

@@ -149,7 +149,7 @@ class RedisProtocol implements ProtocolInterface {
      * @inheritdoc
      */
     public function send(array $structures) {
-        //echo str_replace(['\n','\r'], '-', json_encode($raw))." => ";
+        //echo str_replace(['\n','\r'], '-', json_encode($structures))." => ";
         $this->write($this->packProtocolArray($structures));
         return $response = $this->read();
     }
