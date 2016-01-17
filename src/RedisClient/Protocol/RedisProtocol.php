@@ -43,12 +43,12 @@ class RedisProtocol implements ProtocolInterface {
      * @throws UnknownTypeException
      */
     protected function pack($data) {
-        if (is_string($data) || is_int($data) || is_bool($data) || is_float($data)) {
+        if (is_string($data) || is_int($data) || is_bool($data) || is_float($data) || is_null($data)) {
             return $this->packProtocolBulkString((string) $data);
         }
-        if (is_null($data)) {
-            return $this->packProtocolNull();
-        }
+//        if (is_null($data)) {
+//            return $this->packProtocolNull();
+//        }
         if (is_array($data)) {
             return $this->packProtocolArray($data);
         }

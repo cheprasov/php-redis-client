@@ -35,17 +35,15 @@ trait SortedSetsCommandsTrait {
      * @return int|string
      */
     public function zadd($key, array $members, $nx = null, $ch = false, $incr = false) {
-        $params = [
-            Parameter::key($key),
-        ];
+        $params = [$key];
         if ($nx) {
-            $params[] = Parameter::nxXx($nx);
+            $params[] = $nx;
         }
         if ($ch) {
-            $params[] = Parameter::string('CH');
+            $params[] = 'CH';
         }
         if ($incr) {
-            $params[] = Parameter::string('INCR');
+            $params[] = 'INCR';
         }
         $params[] = Parameter::assocArrayFlip($members);
         return $this->returnCommand(['ZADD'], $params);

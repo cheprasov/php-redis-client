@@ -10,8 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version2x6;
 
-use RedisClient\Command\Parameter\Parameter;
-
 /**
  * Connection
  * @link http://redis.io/commands#connection
@@ -27,7 +25,7 @@ trait ConnectionCommandsTrait {
      * @return bool True
      */
     public function auth($password) {
-        return $this->returnCommand(['AUTH'], [Parameter::string($password)]);
+        return $this->returnCommand(['AUTH'], [$password]);
     }
 
     /**
@@ -39,7 +37,7 @@ trait ConnectionCommandsTrait {
      * @return string Returns message
      */
     public function echoMessage($message) {
-        return $this->returnCommand(['ECHO'], [Parameter::string($message)]);
+        return $this->returnCommand(['ECHO'], [$message]);
     }
 
     /**
@@ -51,7 +49,7 @@ trait ConnectionCommandsTrait {
      * @return string Returns message
      */
     public function ping($message = null) {
-        return $this->returnCommand(['PING'], isset($message) ? [Parameter::string($message)] : null);
+        return $this->returnCommand(['PING'], isset($message) ? [$message] : null);
     }
 
     /**
@@ -74,7 +72,7 @@ trait ConnectionCommandsTrait {
      * @return bool
      */
     public function select($db) {
-        return $this->returnCommand(['SELECT'], [Parameter::integer($db)]);
+        return $this->returnCommand(['SELECT'], [$db]);
     }
 
 }

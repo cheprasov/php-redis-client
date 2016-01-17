@@ -33,11 +33,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements in the specified score range.
      */
     public function zlexcount($key, $min, $max) {
-        return $this->returnCommand(['ZLEXCOUNT'], [
-            Parameter::key($key),
-            Parameter::specifyInterval($min),
-            Parameter::specifyInterval($max),
-        ]);
+        return $this->returnCommand(['ZLEXCOUNT'], [$key, $min, $max]);
     }
 
     /**
@@ -55,13 +51,9 @@ trait SortedSetsCommandsTrait {
      * @return string[] List of elements in the specified score range.
      */
     public function zrangebylex($key, $min, $max, $limit = null) {
-        $params = [
-            Parameter::key($key),
-            Parameter::specifyInterval($min),
-            Parameter::specifyInterval($max),
-        ];
+        $params = [$key, $min, $max];
         if ($limit) {
-            $params[] = Parameter::string('LIMIT');
+            $params[] = 'LIMIT';
             $params[] = Parameter::limit($limit);
         }
         return $this->returnCommand(['ZRANGEBYLEX'], $params);
@@ -80,11 +72,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements removed.
      */
     public function zremrangebylex($key, $min, $max) {
-        return $this->returnCommand(['ZREMRANGEBYLEX'], [
-            Parameter::key($key),
-            Parameter::specifyInterval($min),
-            Parameter::specifyInterval($max),
-        ]);
+        return $this->returnCommand(['ZREMRANGEBYLEX'], [$key, $min, $max]);
     }
 
     /**
@@ -102,13 +90,9 @@ trait SortedSetsCommandsTrait {
      * @return string[] List of elements in the specified score range.
      */
     public function zrevrangebylex($key, $max, $min, $limit = null) {
-        $params = [
-            Parameter::key($key),
-            Parameter::specifyInterval($max),
-            Parameter::specifyInterval($min),
-        ];
+        $params = [$key, $max, $min];
         if ($limit) {
-            $params[] = Parameter::string('LIMIT');
+            $params[] = 'LIMIT';
             $params[] = Parameter::limit($limit);
         }
         return $this->returnCommand(['ZREVRANGEBYLEX'], $params);
@@ -129,17 +113,14 @@ trait SortedSetsCommandsTrait {
      * @return mixed
      */
     public function zscan($key, $cursor, $pattern = null, $count = null) {
-        $params = [
-            Parameter::key($key),
-            Parameter::integer($cursor),
-        ];
+        $params = [$key, $cursor];
         if ($pattern) {
-            $params[] = Parameter::string('MATCH');
-            $params[] = Parameter::string($pattern);
+            $params[] = 'MATCH';
+            $params[] = $pattern;
         }
         if ($count) {
-            $params[] = Parameter::string('COUNT');
-            $params[] = Parameter::integer($count);
+            $params[] = 'COUNT';
+            $params[] = $count;
         }
         return $this->returnCommand(['ZSCAN'], $params);
     }

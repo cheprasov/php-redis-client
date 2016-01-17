@@ -10,8 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version2x6;
 
-use RedisClient\Command\Parameter\Parameter;
-
 /**
  * PubSub
  * @link http://redis.io/commands#pubsub
@@ -24,7 +22,7 @@ trait PubSubCommandsTrait {
      * Time complexity: O(N) where N is the number of patterns the client is already subscribed to.
      */
     public function psubscribe($patterns) {
-        return $this->returnCommand(['PSUBSCRIBE'], Parameter::strings($patterns));
+        return $this->returnCommand(['PSUBSCRIBE'], (array) $patterns);
     }
 
     /**
@@ -38,10 +36,7 @@ trait PubSubCommandsTrait {
      * @return int The number of clients that received the message.e
      */
     public function publish($channel, $message) {
-        return $this->returnCommand(['PUBLISH'], [
-            Parameter::string($channel),
-            Parameter::string($message)
-        ]);
+        return $this->returnCommand(['PUBLISH'], [$channel, $message]);
     }
 
     /**
@@ -54,7 +49,7 @@ trait PubSubCommandsTrait {
      * @return
      */
     public function punsubscribe($patterns = null) {
-        return $this->returnCommand(['PUNSUBSCRIBE'], isset($patterns) ? Parameter::strings($patterns) : null);
+        return $this->returnCommand(['PUNSUBSCRIBE'], isset($patterns) ? (array) $patterns : null);
     }
 
     /**
@@ -66,7 +61,7 @@ trait PubSubCommandsTrait {
      * @return
      */
     public function subscribe($channels) {
-        return $this->returnCommand(['SUBSCRIBE'], Parameter::strings($channels));
+        return $this->returnCommand(['SUBSCRIBE'], (array) $channels);
     }
 
     /**
@@ -78,7 +73,7 @@ trait PubSubCommandsTrait {
      * @return
      */
     public function unsubscribe($channels) {
-        return $this->returnCommand(['UNSUBSCRIBE'], isset($channels) ? Parameter::strings($channels) : null);
+        return $this->returnCommand(['UNSUBSCRIBE'], isset($channels) ? (array) $channels : null);
     }
 
 }

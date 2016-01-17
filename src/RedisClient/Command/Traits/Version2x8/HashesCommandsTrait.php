@@ -10,7 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version2x8;
 
-use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Traits\Version2x6\HashesCommandsTrait as HashesCommandsTraitVersion26;
 
 /**
@@ -34,14 +33,14 @@ trait HashesCommandsTrait {
      * @return mixed
      */
     public function hscan($key, $cursor, $pattern = null, $count = null) {
-        $params = [Parameter::key($key), Parameter::integer($cursor),];
+        $params = [$key, $cursor,];
         if (isset($pattern)) {
-            $params[] = Parameter::string('MATCH');
-            $params[] = Parameter::string($pattern);
+            $params[] = 'MATCH';
+            $params[] = $pattern;
         }
         if (isset($count)) {
-            $params[] = Parameter::string('COUNT');
-            $params[] = Parameter::integer($count);
+            $params[] = 'COUNT';
+            $params[] = $count;
         }
         return $this->returnCommand(['HSCAN'], $params);
     }

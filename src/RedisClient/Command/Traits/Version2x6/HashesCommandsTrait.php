@@ -31,10 +31,7 @@ trait HashesCommandsTrait {
      * not including specified but non existing fields.
      */
     public function hdel($key, $fields) {
-        return $this->returnCommand(['HDEL'], [
-            Parameter::key($key),
-            Parameter::keys($fields),
-        ]);
+        return $this->returnCommand(['HDEL'], [$key, (array) $fields]);
     }
 
     /**
@@ -48,10 +45,7 @@ trait HashesCommandsTrait {
      * @return int 1 if the hash contains field. 0 if the hash does not contain field, or key does not exist.
      */
     public function hexists($key, $field) {
-        return $this->returnCommand(['HEXISTS'], [
-            Parameter::key($key),
-            Parameter::key($field),
-        ]);
+        return $this->returnCommand(['HEXISTS'], [$key, $field]);
     }
 
     /**
@@ -66,10 +60,7 @@ trait HashesCommandsTrait {
      * or nil when field is not present in the hash or key does not exist.
      */
     public function hget($key, $field) {
-        return $this->returnCommand(['HGET'], [
-            Parameter::key($key),
-            Parameter::key($field),
-        ]);
+        return $this->returnCommand(['HGET'], [$key, $field]);
     }
 
     /**
@@ -83,7 +74,7 @@ trait HashesCommandsTrait {
      * or an empty list when key does not exist.
      */
     public function hgetall($key) {
-        return $this->returnCommand(['HGETALL'], [Parameter::key($key)], ResponseParser::PARSE_ASSOC_ARRAY);
+        return $this->returnCommand(['HGETALL'], [$key], ResponseParser::PARSE_ASSOC_ARRAY);
     }
 
     /**
@@ -98,11 +89,7 @@ trait HashesCommandsTrait {
      * @return int The value at field after the increment operation.
      */
     public function hincrby($key, $field, $increment) {
-        return $this->returnCommand(['HINCRBY'], [
-            Parameter::key($key),
-            Parameter::key($field),
-            Parameter::integer($increment),
-        ]);
+        return $this->returnCommand(['HINCRBY'], [$key, $field, $increment]);
     }
 
     /**
@@ -117,11 +104,7 @@ trait HashesCommandsTrait {
      * @return string The value of field after the increment.
      */
     public function hincrbyfloat($key, $field, $increment) {
-        return $this->returnCommand(['HINCRBYFLOAT'], [
-            Parameter::key($key),
-            Parameter::key($field),
-            Parameter::float($increment),
-        ]);
+        return $this->returnCommand(['HINCRBYFLOAT'], [$key, $field, $increment]);
     }
 
     /**
@@ -134,7 +117,7 @@ trait HashesCommandsTrait {
      * @return string[] List of fields in the hash, or an empty list when key does not exist.
      */
     public function hkeys($key) {
-        return $this->returnCommand(['HKEYS'], [Parameter::key($key)]);
+        return $this->returnCommand(['HKEYS'], [$key]);
     }
 
     /**
@@ -147,7 +130,7 @@ trait HashesCommandsTrait {
      * @return int Number of fields in the hash, or 0 when key does not exist.
      */
     public function hlen($key) {
-        return $this->returnCommand(['HLEN'], [Parameter::key($key)]);
+        return $this->returnCommand(['HLEN'], [$key]);
     }
 
     /**
@@ -161,10 +144,7 @@ trait HashesCommandsTrait {
      * @return array List of values associated with the given fields, in the same order as they are requested.
      */
     public function hmget($key, $fields) {
-        return $this->returnCommand(['HMGET'], [
-            Parameter::key($key),
-            Parameter::keys($fields),
-        ]);
+        return $this->returnCommand(['HMGET'], [$key, (array) $fields]);
     }
 
     /**
@@ -176,10 +156,7 @@ trait HashesCommandsTrait {
      * @return bool True
      */
     public function hmset($key, array $fieldValues) {
-        return $this->returnCommand(['HMSET'], [
-            Parameter::key($key),
-            Parameter::assocArray($fieldValues),
-        ]);
+        return $this->returnCommand(['HMSET'], [$key, Parameter::assocArray($fieldValues)]);
     }
 
     /**
@@ -195,11 +172,7 @@ trait HashesCommandsTrait {
      * 0 if field already exists in the hash and the value was updated.
      */
     public function hset($key, $field, $value) {
-        return $this->returnCommand(['HSET'], [
-            Parameter::key($key),
-            Parameter::key($field),
-            Parameter::string($value),
-        ]);
+        return $this->returnCommand(['HSET'], [$key, $field, $value]);
     }
 
     /**
@@ -214,11 +187,7 @@ trait HashesCommandsTrait {
      * 0 if field already exists in the hash and no operation was performed.
      */
     public function hsetnx($key, $field, $value) {
-        return $this->returnCommand(['HSETNX'], [
-            Parameter::key($key),
-            Parameter::key($field),
-            Parameter::string($value),
-        ]);
+        return $this->returnCommand(['HSETNX'], [$key, $field, $value]);
     }
 
     /**
@@ -231,7 +200,7 @@ trait HashesCommandsTrait {
      * @return string[] List of values in the hash, or an empty list when key does not exist.
      */
     public function hvals($key) {
-        return $this->returnCommand(['HVALS'], [Parameter::key($key)]);
+        return $this->returnCommand(['HVALS'], [$key]);
     }
 
 }

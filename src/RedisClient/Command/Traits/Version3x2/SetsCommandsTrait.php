@@ -10,7 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version3x2;
 
-use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Traits\Version2x8\SetsCommandsTrait as SetsCommandsTraitVersion28;
 
 trait SetsCommandsTrait {
@@ -28,11 +27,9 @@ trait SetsCommandsTrait {
      * @return string|string[]|null The removed element, or null when key does not exist.
      */
     public function spop($key, $count = null) {
-        $params = [
-            Parameter::key($key)
-        ];
+        $params = [$key];
         if ($count) {
-            $params[] = Parameter::integer($count);
+            $params[] = $count;
         }
         return $this->returnCommand(['SPOP'], $params);
     }

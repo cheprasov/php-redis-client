@@ -26,10 +26,7 @@ trait StringsCommandsTrait {
      * @return int The length of the string after the append operation.
      */
     public function append($key, $value) {
-        return $this->returnCommand(['APPEND'], [
-            Parameter::key($key),
-            Parameter::string($value),
-        ]);
+        return $this->returnCommand(['APPEND'], [$key, $value]);
     }
 
     /**
@@ -47,10 +44,10 @@ trait StringsCommandsTrait {
         if (isset($start) xor isset($end)) {
             throw new InvalidArgumentException('Start and End must be used together');
         }
-        $params = [Parameter::key($key)];
-        if (isset($start) && isset($end)) {
-            $params[] = Parameter::integer($start);
-            $params[] = Parameter::integer($end);
+        $params = [$key];
+        if (isset($start, $end)) {
+            $params[] = $start;
+            $params[] = $end;
         }
         return $this->returnCommand(['BITCOUNT'], $params);
     }
@@ -68,11 +65,7 @@ trait StringsCommandsTrait {
      * that is equal to the size of the longest input string.
      */
     public function bitop($operation, $destkey, $keys) {
-        return $this->returnCommand(['BITOP'], [
-            Parameter::bitOperation($operation),
-            Parameter::key($destkey),
-            Parameter::keys($keys),
-        ]);
+        return $this->returnCommand(['BITOP'], [$operation, $destkey, (array) $keys]);
     }
 
     /**
@@ -85,7 +78,7 @@ trait StringsCommandsTrait {
      * @return int The value of key after the decrement
      */
     public function decr($key) {
-        return $this->returnCommand(['DECR'], [Parameter::key($key)]);
+        return $this->returnCommand(['DECR'], [$key]);
     }
 
     /**
@@ -99,10 +92,7 @@ trait StringsCommandsTrait {
      * @return int The value of key after the decrement
      */
     public function decrby($key, $decrement) {
-        return $this->returnCommand(['DECRBY'], [
-            Parameter::key($key),
-            Parameter::integer($decrement),
-        ]);
+        return $this->returnCommand(['DECRBY'], [$key, $decrement]);
     }
 
     /**
@@ -115,7 +105,7 @@ trait StringsCommandsTrait {
      * @return string|null
      */
     public function get($key) {
-        return $this->returnCommand(['GET'], [Parameter::key($key)]);
+        return $this->returnCommand(['GET'], [$key]);
     }
 
     /**
@@ -129,10 +119,7 @@ trait StringsCommandsTrait {
      * @return int The bit value stored at offset.
      */
     public function getbit($key, $offset) {
-        return $this->returnCommand(['GETBIT'], [
-            Parameter::key($key),
-            Parameter::integer($offset),
-        ]);
+        return $this->returnCommand(['GETBIT'], [$key, $offset]);
     }
 
     /**
@@ -147,11 +134,7 @@ trait StringsCommandsTrait {
      * @return string
      */
     public function getrange($key, $start, $end) {
-        return $this->returnCommand(['GETRANGE'], [
-            Parameter::key($key),
-            Parameter::integer($start),
-            Parameter::integer($end),
-        ]);
+        return $this->returnCommand(['GETRANGE'], [$key, $start, $end]);
     }
 
     /**
@@ -165,10 +148,7 @@ trait StringsCommandsTrait {
      * @return string|null The old value stored at key, or nil when key did not exist.
      */
     public function getset($key, $value) {
-        return $this->returnCommand(['GETSET'], [
-            Parameter::key($key),
-            Parameter::string($value),
-        ]);
+        return $this->returnCommand(['GETSET'], [$key, $value]);
     }
 
     /**
@@ -181,7 +161,7 @@ trait StringsCommandsTrait {
      * @return int The value of key after the increment
      */
     public function incr($key) {
-        return $this->returnCommand(['INCR'], [Parameter::key($key)]);
+        return $this->returnCommand(['INCR'], [$key]);
     }
 
     /**
@@ -195,10 +175,7 @@ trait StringsCommandsTrait {
      * @return int The value of key after the increment
      */
     public function incrby($key, $increment) {
-        return $this->returnCommand(['INCRBY'], [
-            Parameter::key($key),
-            Parameter::integer($increment),
-        ]);
+        return $this->returnCommand(['INCRBY'], [$key, $increment]);
     }
 
     /**
@@ -212,10 +189,7 @@ trait StringsCommandsTrait {
      * @return string
      */
     public function incrbyfloat($key, $increment) {
-        return $this->returnCommand(['INCRBYFLOAT'], [
-            Parameter::key($key),
-            Parameter::float($increment),
-        ]);
+        return $this->returnCommand(['INCRBYFLOAT'], [$key, $increment]);
     }
 
     /**
@@ -228,7 +202,7 @@ trait StringsCommandsTrait {
      * @return array
      */
     public function mget($keys) {
-        return $this->returnCommand(['MGET'], Parameter::keys($keys));
+        return $this->returnCommand(['MGET'], (array) $keys);
     }
 
     /**
@@ -269,11 +243,7 @@ trait StringsCommandsTrait {
      * @return bool
      */
     public function psetex($key, $milliseconds, $value) {
-        return $this->returnCommand(['PSETEX'], [
-            Parameter::key($key),
-            Parameter::integer($milliseconds),
-            Parameter::string($value),
-        ]);
+        return $this->returnCommand(['PSETEX'], [$key, $milliseconds, $value]);
     }
 
     /**
@@ -291,23 +261,17 @@ trait StringsCommandsTrait {
      * @throw InvalidArgumentException
      */
     public function set($key, $value, $seconds = null, $milliseconds = null, $exist = null) {
-//        if (!empty($seconds) && !empty($milliseconds)) {
-//            throw new InvalidArgumentException('Seconds and Milliseconds must not be used together');
-//        }
-        $params = [
-            Parameter::key($key),
-            Parameter::string($value),
-        ];
-        if (!empty($seconds)) {
-            $params[] = Parameter::string('EX');
-            $params[] = Parameter::integer($seconds);
+        $params = [$key, $value];
+        if (isset($seconds)) {
+            $params[] = 'EX';
+            $params[] = $seconds;
         }
-        if (!empty($milliseconds)) {
-            $params[] = Parameter::string('PX');
-            $params[] = Parameter::integer($milliseconds);
+        if (isset($milliseconds)) {
+            $params[] = 'PX';
+            $params[] = $milliseconds;
         }
         if (isset($exist)) {
-            $params[] = Parameter::nxXx($exist);
+            $params[] = $exist;
         }
         return $this->returnCommand(['SET'], $params);
     }
@@ -324,11 +288,7 @@ trait StringsCommandsTrait {
      * @return int The original bit value stored at offset.
      */
     public function setbit($key, $offset, $bit) {
-        return $this->returnCommand(['SETBIT'], [
-            Parameter::key($key),
-            Parameter::integer($offset),
-            Parameter::bit($bit),
-        ]);
+        return $this->returnCommand(['SETBIT'], [$key, $offset, $bit]);
     }
 
     /**
@@ -343,11 +303,7 @@ trait StringsCommandsTrait {
      * @return bool
      */
     public function setex($key, $seconds, $value) {
-        return $this->returnCommand(['SETEX'], [
-            Parameter::key($key),
-            Parameter::integer($seconds),
-            Parameter::string($value)
-        ]);
+        return $this->returnCommand(['SETEX'], [$key, $seconds, $value]);
     }
 
     /**
@@ -360,10 +316,7 @@ trait StringsCommandsTrait {
      * @return int 1 if the key was set, 0 if the key was not set
      */
     public function setnx($key, $value) {
-        return $this->returnCommand(['SETNX'], [
-            Parameter::key($key),
-            Parameter::string($value),
-        ]);
+        return $this->returnCommand(['SETNX'], [$key, $value]);
     }
 
     /**
@@ -376,11 +329,7 @@ trait StringsCommandsTrait {
      * @return int The length of the string after it was modified by the command.
      */
     public function setrange($key, $offset, $value) {
-        return $this->returnCommand(['SETRANGE'], [
-            Parameter::key($key),
-            Parameter::integer($offset),
-            Parameter::string($value),
-        ]);
+        return $this->returnCommand(['SETRANGE'], [$key, $offset, $value]);
     }
 
     /**
@@ -393,7 +342,7 @@ trait StringsCommandsTrait {
      * @return int The length of the string at key, or 0 when key does not exist.
      */
     public function strlen($key) {
-        return $this->returnCommand(['STRLEN'], [Parameter::key($key)]);
+        return $this->returnCommand(['STRLEN'], [$key]);
     }
 
 }

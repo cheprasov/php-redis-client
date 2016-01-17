@@ -10,8 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version2x6;
 
-use RedisClient\Command\Parameter\Parameter;
-
 /**
  * trait TransactionsCommandsTrait
  * @link http://redis.io/topics/transactions
@@ -72,7 +70,7 @@ trait TransactionsCommandsTrait {
      * @return bool Always True
      */
     public function watch($keys) {
-        return $this->returnCommand(['WATCH'], Parameter::keys($keys));
+        return $this->returnCommand(['WATCH'], (array) $keys);
     }
 
 }

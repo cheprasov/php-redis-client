@@ -10,7 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version2x8;
 
-use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Traits\Version2x6\KeysCommandsTrait as KeysCommandsTraitVersion26;
 
 /**
@@ -32,14 +31,14 @@ trait KeysCommandsTrait {
      * @return mixed
      */
     public function scan($cursor, $pattern = null, $count = null) {
-        $params = [Parameter::integer($cursor)];
+        $params = [$cursor];
         if ($pattern) {
-            $params[] = Parameter::string('MATCH');
-            $params[] = Parameter::string($pattern);
+            $params[] = 'MATCH';
+            $params[] = $pattern;
         }
         if ($count) {
-            $params[] = Parameter::string('COUNT');
-            $params[] = Parameter::integer($count);
+            $params[] = 'COUNT';
+            $params[] = $count;
         }
         return $this->returnCommand(['SCAN'], $params);
     }

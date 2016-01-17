@@ -19,7 +19,7 @@ trait ServerCommandsTrait {
      * BGREWRITEAOF
      * Available since 1.0.0.
      *
-     * @return bool Always true
+     * @return bool|string Always true
      */
     public function bgrewriteaof() {
         return $this->returnCommand(['BGREWRITEAOF']);
@@ -54,7 +54,7 @@ trait ServerCommandsTrait {
      *
      * @param string|array|null $addr
      * @param int|null $clientId
-     * @param string|null $type
+     * @param string|null $type normal|slave|pubsub
      * @param string|array|null $addr2
      * @param bool|null $skipme
      * @return bool|int
@@ -69,20 +69,20 @@ trait ServerCommandsTrait {
             $params[] = Parameter::address($addr);
         }
         if ($clientId) {
-            $params[] = Parameter::string('ID');
-            $params[] = Parameter::integer($clientId);
+            $params[] = 'ID';
+            $params[] = $clientId;
         }
-        if ($type && preg_match('/^(normal|slave|pubsub)$/i', $type)) {
-            $params[] = Parameter::string('TYPE');
-            $params[] = Parameter::string(strtolower(trim($type)));
+        if ($type) {
+            $params[] = 'TYPE';
+            $params[] = $type;
         }
         if ($addr2) {
-            $params[] = Parameter::string('ADDR');
+            $params[] = 'ADDR';
             $params[] = Parameter::address($addr2);
         }
         if (isset($skipme)) {
-            $params[] = Parameter::string('SKIPME');
-            $params[] = Parameter::address($skipme ? 'yes' : 'no');
+            $params[] = 'SKIPME';
+            $params[] = $skipme ? 'yes' : 'no';
         }
         return $this->returnCommand(['CLIENT', 'KILL'], $params);
     }
@@ -107,7 +107,7 @@ trait ServerCommandsTrait {
      * @param bool True if the connection name was successfully set.
      */
     public function clientSetname($connectionName) {
-        return $this->returnCommand(['CLIENT', 'SETNAME'], [Parameter::string($connectionName)]);
+        return $this->returnCommand(['CLIENT', 'SETNAME'], [$connectionName]);
     }
 
     /**
@@ -118,7 +118,7 @@ trait ServerCommandsTrait {
      * @return array
      */
     public function configGet($parameter) {
-        return $this->returnCommand(['CONFIG', 'GET'], [Parameter::string($parameter)], ResponseParser::PARSE_ASSOC_ARRAY);
+        return $this->returnCommand(['CONFIG', 'GET'], [$parameter], ResponseParser::PARSE_ASSOC_ARRAY);
     }
 
     /**
@@ -136,10 +136,12 @@ trait ServerCommandsTrait {
      * CONFIG SET parameter value
      * Available since 2.0.0.
      *
+     * @param string $parameter
+     * @param string $value
      * @return bool True when the configuration was set properly. Otherwise an error is returned.
      */
     public function configSet($parameter, $value) {
-        return $this->returnCommand(['CONFIG', 'SET']);
+        return $this->returnCommand(['CONFIG', 'SET'], [$parameter, $value]);
     }
 
     /**
@@ -160,7 +162,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function debugObject($key) {
-        return $this->returnCommand(['DEBUG', 'OBJECT'], [Parameter::key($key)]);
+        return $this->returnCommand(['DEBUG', 'OBJECT'], [$key]);
     }
 
     /**
@@ -201,7 +203,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function info($section = null) {
-        return $this->returnCommand(['INFO'], $section ? [Parameter::string($section)] : null, ResponseParser::PARSE_INFO);
+        return $this->returnCommand(['INFO'], $section ? [$section] : null, ResponseParser::PARSE_INFO);
     }
 
     /**
@@ -239,7 +241,7 @@ trait ServerCommandsTrait {
      * @param string|null $save NOSAVE or SAVE
      */
     public function shutdown($save) {
-        return $this->returnCommand(['SHUTDOWN'], $save ? Parameter::enum($save, ['NOSAVE', 'SAVE']) : null);
+        return $this->returnCommand(['SHUTDOWN'], $save ? [$save] : null);
     }
 
     /**
@@ -251,26 +253,21 @@ trait ServerCommandsTrait {
      * @return bool
      */
     public function slaveof($host, $port) {
-        return $this->returnCommand(['SLAVEOF'], [
-            Parameter::string($host),
-            Parameter::port($port)
-        ]);
+        return $this->returnCommand(['SLAVEOF'], [$host, $port]);
     }
 
     /**
      * SLOWLOG subcommand [argument]
      * Available since 2.2.12.
      *
-     * @param string $subcommand
+     * @param string $subcommand GET|LEN|RESET
      * @param string|null $argument
      * @return mixed
      */
     public function slowlog($subcommand, $argument = null) {
-        $params = [
-            Parameter::enum($subcommand, ['GET', 'LEN', 'RESET'])
-        ];
+        $params = [$subcommand];
         if (isset($argument)) {
-            $params[] = Parameter::string($argument);
+            $params[] = $argument;
         }
         return $this->returnCommand(['SLOWLOG'], $params);
     }

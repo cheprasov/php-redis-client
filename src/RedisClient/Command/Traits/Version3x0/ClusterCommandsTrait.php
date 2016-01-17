@@ -10,8 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version3x0;
 
-use RedisClient\Command\Parameter\Parameter;
-
 /**
  * trait ClusterCommandsTrait
  * @link http://redis.io/commands#pubsub
@@ -27,7 +25,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was successful. Otherwise an error is returned.
      */
     public function clusterAddslots($slots) {
-        return $this->returnCommand(['CLUSTER', 'ADDSLOTS'], Parameter::integers($slots));
+        return $this->returnCommand(['CLUSTER', 'ADDSLOTS'], (array) $slots);
     }
 
     /**
@@ -39,7 +37,7 @@ trait ClusterCommandsTrait {
      * @return int The number of active failure reports for the node.
      */
     public function clusterCountFailureReports($nodeId) {
-        return $this->returnCommand(['PUBLISH'], [Parameter::integer($nodeId)]);
+        return $this->returnCommand(['PUBLISH'], [$nodeId]);
     }
 
     /**
@@ -51,7 +49,7 @@ trait ClusterCommandsTrait {
      * @return int
      */
     public function clusterCountkeysinslot($slot) {
-        return $this->returnCommand(['CLUSTER', 'COUNTKEYSINSLOT'], [Parameter::integer($slot)]);
+        return $this->returnCommand(['CLUSTER', 'COUNTKEYSINSLOT'], [$slot]);
     }
 
     /**
@@ -63,7 +61,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was successful. Otherwise an error is returned.
      */
     public function clusterDelslots($slots) {
-        return $this->returnCommand(['CLUSTER', 'DELSLOTS'], Parameter::integers($slots));
+        return $this->returnCommand(['CLUSTER', 'DELSLOTS'], (array) $slots);
     }
 
     /**
@@ -71,13 +69,11 @@ trait ClusterCommandsTrait {
      * Available since 3.0.0.
      * Time complexity: O(1)
      *
-     * @param string|null $option
+     * @param string|null $option FORCE|TAKEOVER
      * @return
      */
     public function clusterFailover($option = null) {
-        return $this->returnCommand(['CLUSTER', 'FAILOVER'],
-            $option ? [Parameter::enum($option, ['FORCE', 'TAKEOVER'])] : null
-        );
+        return $this->returnCommand(['CLUSTER', 'FAILOVER'], $option ? [$option] : null);
     }
 
     /**
@@ -89,7 +85,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was executed successfully, otherwise an error is returned.
      */
     public function clusterForget($nodeId) {
-        return $this->returnCommand(['CLUSTER', 'FORGET'], [Parameter::integer($nodeId)]);
+        return $this->returnCommand(['CLUSTER', 'FORGET'], [$nodeId]);
     }
 
     /**
@@ -102,10 +98,7 @@ trait ClusterCommandsTrait {
      * @return array From 0 to count key names in a Redis array reply.
      */
     public function clusterGetkeysinslot($slot, $count) {
-        return $this->returnCommand(['CLUSTER', 'GETKEYSINSLOT'], [
-            Parameter::integer($slot),
-            Parameter::integer($count)
-        ]);
+        return $this->returnCommand(['CLUSTER', 'GETKEYSINSLOT'], [$slot, $count]);
     }
 
     /**
@@ -117,10 +110,7 @@ trait ClusterCommandsTrait {
      * lines separated by newlines composed by the two bytes CRLF.
      */
     public function clusterInfo($slot, $count) {
-        return $this->returnCommand(['CLUSTER', 'INFO'], [
-            Parameter::integer($slot),
-            Parameter::integer($count)
-        ]);
+        return $this->returnCommand(['CLUSTER', 'INFO'], [$slot, $count]);
     }
 
     /**
@@ -132,7 +122,7 @@ trait ClusterCommandsTrait {
      * @return int The hash slot number.
      */
     public function clusterKeyslot($key) {
-        return $this->returnCommand(['CLUSTER', 'KEYSLOT'], [Parameter::string($key)]);
+        return $this->returnCommand(['CLUSTER', 'KEYSLOT'], [$key]);
     }
 
     /**
@@ -146,10 +136,7 @@ trait ClusterCommandsTrait {
      * If the address or port specified are invalid an error is returned.
      */
     public function clusterMeet($ip, $port) {
-        return $this->returnCommand(['CLUSTER', 'MEET'], [
-            Parameter::string($ip),
-            Parameter::port($port)
-        ]);
+        return $this->returnCommand(['CLUSTER', 'MEET'], [$ip, $port]);
     }
 
     /**
@@ -172,7 +159,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was executed successfully, otherwise an error is returned.
      */
     public function clusterReplicate($nodeId) {
-        return $this->returnCommand(['CLUSTER', 'REPLICATE'], [Parameter::integer($nodeId)]);
+        return $this->returnCommand(['CLUSTER', 'REPLICATE'], [$nodeId]);
     }
 
     /**
@@ -180,11 +167,11 @@ trait ClusterCommandsTrait {
      * Available since 3.0.0.
      * Time complexity: O(N) where N is the number of known nodes. The command may execute a FLUSHALL as a side effect.
      *
-     * @param string $option
+     * @param string $option HARD|SOFT
      * @return bool True if the command was successful. Otherwise an error is returned.
      */
     public function clusterReset($option = null) {
-        return $this->returnCommand(['CLUSTER', 'RESET'], $option ? [Parameter::enum($option, ['HARD', 'SOFT'])] : null);
+        return $this->returnCommand(['CLUSTER', 'RESET'], $option ? [$option] : null);
     }
 
     /**
@@ -207,7 +194,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was executed successfully, otherwise an error is returned.
      */
     public function clusterSetConfigEpoch($config) {
-        return $this->returnCommand(['CLUSTER', 'SET-CONFIG-EPOCH'], [Parameter::string($config)]);
+        return $this->returnCommand(['CLUSTER', 'SET-CONFIG-EPOCH'], [$config]);
     }
 
     /**
@@ -216,17 +203,14 @@ trait ClusterCommandsTrait {
      * Time complexity: O(1)
      *
      * @param string $slot
-     * @param string $subcommand
+     * @param string $subcommand IMPORTING|MIGRATING|STABLE|NODE
      * @param int|null $nodeId
      * @return bool All the subcommands return OK if the command was successful. Otherwise an error is returned.
      */
     public function clusterSetslot($slot, $subcommand, $nodeId = null) {
-        $params = [
-            Parameter::string($slot),
-            Parameter::enum($subcommand, ['IMPORTING', 'MIGRATING', 'STABLE', 'NODE']),
-        ];
+        $params = [$slot, $subcommand];
         if ($nodeId) {
-            $params[] = Parameter::integer($nodeId);
+            $params[] = $nodeId;
         }
         return $this->returnCommand(['CLUSTER', 'SETSLOT'], $params);
     }
@@ -240,7 +224,7 @@ trait ClusterCommandsTrait {
      * @return string The serialized cluster configuration.
      */
     public function clusterSlaves($nodeId) {
-        return $this->returnCommand(['CLUSTER', 'SLAVES'], [Parameter::integer($nodeId)]);
+        return $this->returnCommand(['CLUSTER', 'SLAVES'], [$nodeId]);
     }
 
     /**

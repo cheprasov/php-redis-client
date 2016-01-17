@@ -10,7 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version2x9;
 
-use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Traits\Version2x8\ServerCommandsTrait as ServerCommandsTraitVersion28;
 trait ServerCommandsTrait {
 
@@ -25,7 +24,7 @@ trait ServerCommandsTrait {
      * @return true The command returns True or an error if the timeout is invalid.
      */
     public function clientPause($timeout) {
-        return $this->returnCommand(['CLIENT', 'PAUSE'], [Parameter::integer($timeout)]);
+        return $this->returnCommand(['CLIENT', 'PAUSE'], [$timeout]);
     }
 
 }
