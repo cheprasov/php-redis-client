@@ -10,7 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version3x2;
 
-use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Traits\Version2x8\HashesCommandsTrait as HashesCommandsTraitVersion28;
 
 /**
@@ -33,10 +32,7 @@ trait HashesCommandsTrait {
      * or 0 when field is not present in the hash or key does not exist at all.
      */
     public function hstrlen($key, $field) {
-        return $this->returnCommand(['HSTRLEN'], [
-            Parameter::key($key),
-            Parameter::key($field),
-        ]);
+        return $this->returnCommand(['HSTRLEN'], [$key, $field]);
     }
 
 }

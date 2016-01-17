@@ -10,7 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version2x8;
 
-use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Traits\Version2x6\PubSubCommandsTrait as PubSubCommandsTraitVersion26;
 
 /**
@@ -29,16 +28,14 @@ trait PubSubCommandsTrait {
      * O(N) for the NUMSUB subcommand, where N is the number of requested channels.
      * O(1) for the NUMPAT subcommand.
      *
-     * @param string $subcommand
+     * @param string $subcommand CHANNELS|NUMSUB|NUMPAT
      * @param string|string[] $arguments
      * @return array|int
      */
     public function pubsub($subcommand, $arguments = null) {
-        $params = [
-            Parameter::enum($subcommand, ['CHANNELS', 'NUMSUB', 'NUMPAT'])
-        ];
+        $params = [$subcommand];
         if (isset($arguments)) {
-            $params[] = Parameter::strings($arguments);
+            $params[] = (array) $arguments;
         }
         return $this->returnCommand(['PUBSUB'], $params);
     }

@@ -10,8 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version2x8;
 
-use RedisClient\Command\Parameter\Parameter;
-
 /**
  * Latency Monitoring
  * @link http://redis.io/topics/latency-monitor
@@ -38,7 +36,7 @@ trait LatencyCommandsTrait {
      * @return array
      */
     public function latencyHistory($eventName) {
-        return $this->returnCommand(['LATENCY', 'HISTORY'], [Parameter::string($eventName)]);
+        return $this->returnCommand(['LATENCY', 'HISTORY'], [$eventName]);
     }
 
     /**
@@ -50,7 +48,7 @@ trait LatencyCommandsTrait {
      * @return int
      */
     public function latencyReset($eventNames = null) {
-        return $this->returnCommand(['LATENCY', 'RESET'], Parameter::strings($eventNames));
+        return $this->returnCommand(['LATENCY', 'RESET'], (array) $eventNames);
     }
 
     /**
@@ -62,7 +60,7 @@ trait LatencyCommandsTrait {
      * @return string
      */
     public function latencyGraph($eventName) {
-        return $this->returnCommand(['LATENCY', 'GRAPH'], [Parameter::string($eventName)]);
+        return $this->returnCommand(['LATENCY', 'GRAPH'], [$eventName]);
     }
 
     /**

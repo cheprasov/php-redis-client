@@ -10,8 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version2x6;
 
-use RedisClient\Command\Parameter\Parameter;
-
 /**
  * ScriptingCommandsTrait
  * @link http://redis.io/commands#scripting
@@ -30,17 +28,15 @@ trait ScriptingCommandsTrait {
      * @return mixed
      */
     public function evalScript($script, $keys = null, $args = null) {
-        $params = [
-            Parameter::string($script)
-        ];
+        $params = [$script];
         if (is_array($keys)) {
-            $params[] = Parameter::integer(count($keys));
-            $params[] = Parameter::keys($keys);
+            $params[] = count($keys);
+            $params[] = (array) $keys;
         } else {
-            $params[] = Parameter::integer(0);
+            $params[] = 0;
         }
         if (is_array($args)) {
-            $params[] = Parameter::strings($args);
+            $params[] = (array) $args;
         }
         return $this->returnCommand(['EVAL'], $params);
     }
@@ -57,17 +53,15 @@ trait ScriptingCommandsTrait {
      * @return mixed
      */
     public function evalsha($sha, $keys = null, $args = null) {
-        $params = [
-            Parameter::string($sha)
-        ];
+        $params = [$sha];
         if (is_array($keys)) {
-            $params[] = Parameter::integer(count($keys));
-            $params[] = Parameter::keys($keys);
+            $params[] = count($keys);
+            $params[] = (array) $keys;
         } else {
-            $params[] = Parameter::integer(0);
+            $params[] = 0;
         }
         if (is_array($args)) {
-            $params[] = Parameter::strings($args);
+            $params[] = (array) $args;
         }
         return $this->returnCommand(['EVALSHA'], $params);
     }
@@ -83,7 +77,7 @@ trait ScriptingCommandsTrait {
      * @return int|int[]
      */
     public function scriptExists($scriptsSha) {
-        return $this->returnCommand(['SCRIPT', 'EXISTS'], Parameter::strings($scriptsSha));
+        return $this->returnCommand(['SCRIPT', 'EXISTS'], (array) $scriptsSha);
     }
 
     /**
@@ -120,7 +114,7 @@ trait ScriptingCommandsTrait {
      * @return string
      */
     public function scriptLoad($script) {
-        return $this->returnCommand(['SCRIPT', 'LOAD'], [Parameter::string($script)]);
+        return $this->returnCommand(['SCRIPT', 'LOAD'], [$script]);
     }
 
 }

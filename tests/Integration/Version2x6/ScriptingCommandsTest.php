@@ -73,8 +73,8 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
         try {
             $Redis->evalScript('Script with error');
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('ERR Error compiling script (new function)', explode(':', $Ex->getMessage(), 2)[0]);
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -86,8 +86,8 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
         try {
             $Redis->evalsha(sha1($script));
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('NOSCRIPT No matching script. Please use EVAL.', $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
         $this->assertSame(sha1($script), $Redis->scriptLoad($script));
@@ -143,8 +143,8 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
         try {
             $Redis->scriptKill();
             $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('NOTBUSY No scripts in execution right now.', $Ex->getMessage());
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 

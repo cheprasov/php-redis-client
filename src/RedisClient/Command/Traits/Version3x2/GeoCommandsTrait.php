@@ -10,7 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version3x2;
 
-use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\ResponseParser;
 
 trait GeoCommandsTrait {
@@ -27,13 +26,11 @@ trait GeoCommandsTrait {
      * not including elements already existing for which the score was updated.
      */
     public function geoadd($key, array $members) {
-        $params = [
-            Parameter::key($key)
-        ];
+        $params = [$key];
         foreach ($members as $member => $degrees) {
-            $params[] = Parameter::string($degrees[0]);
-            $params[] = Parameter::string($degrees[1]);
-            $params[] = Parameter::key($member);
+            $params[] = $degrees[0];
+            $params[] = $degrees[1];
+            $params[] = $member;
         }
         return $this->returnCommand(['GEOADD'], $params);
     }
@@ -52,13 +49,9 @@ trait GeoCommandsTrait {
      * in the specified unit, or NULL if one or both the elements are missing.
      */
     public function geodist($key, $member1, $member2, $unit = null) {
-        $params = [
-            Parameter::key($key),
-            Parameter::key($member1),
-            Parameter::key($member2),
-        ];
+        $params = [$key, $member1, $member2];
         if (isset($unit)) {
-            $params[] = Parameter::geoUnit($unit);
+            $params[] = $unit;
         }
         return $this->returnCommand(['GEODIST'], $params);
     }
@@ -75,10 +68,7 @@ trait GeoCommandsTrait {
      * the Geohash corresponding to each member name passed as argument to the command.
      */
     public function geohash($key, $members) {
-        return $this->returnCommand(['GEOHASH'], [
-            Parameter::key($key),
-            Parameter::keys($members),
-        ]);
+        return $this->returnCommand(['GEOHASH'], [$key, (array) $members]);
     }
 
     /**
@@ -94,10 +84,7 @@ trait GeoCommandsTrait {
      * Non existing elements are reported as NULL elements of the array.
      */
     public function geopos($key, $members) {
-        return $this->returnCommand(['GEOPOS'], [
-            Parameter::key($key),
-            Parameter::keys($members),
-        ]);
+        return $this->returnCommand(['GEOPOS'], [$key, (array) $members]);
     }
 
     /**
@@ -120,36 +107,29 @@ trait GeoCommandsTrait {
      * @return array
      */
     public function georadius($key, $longitude, $latitude, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null) {
-        $params = [
-            Parameter::key($key),
-            Parameter::string($longitude),
-            Parameter::string($latitude),
-            Parameter::string($radius),
-            Parameter::geoUnit($unit),
-        ];
+        $params = [$key, $longitude, $latitude, $radius, $unit];
         $parse = false;
         if ($withcoord) {
-            $params[] = Parameter::string('WITHCOORD');
+            $params[] = 'WITHCOORD';
             $parse = true;
         }
         if ($withdist) {
-            $params[] = Parameter::string('WITHDIST');
+            $params[] = 'WITHDIST';
             $parse = true;
         }
         if ($withhash) {
-            $params[] = Parameter::string('WITHHASH');
+            $params[] = 'WITHHASH';
             $parse = true;
         }
         if ($count) {
-            $params[] = Parameter::string('COUNT');
-            $params[] = Parameter::integer($count);
+            $params[] = 'COUNT';
+            $params[] = $count;
         }
         if (isset($asc)) {
-            $params[] = Parameter::string((bool) $asc ? 'ASC' : 'DESC');
+            $params[] = $asc ? 'ASC' : 'DESC';
         }
         return $this->returnCommand(['GEORADIUS'], $params, $parse ? ResponseParser::PARSE_GEO_ARRAY : null);
     }
-
 
     /**
      * GEORADIUSBYMEMBER key member radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count]
@@ -170,32 +150,28 @@ trait GeoCommandsTrait {
      * @return array
      */
     public function georadiusbymember($key, $member, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null) {
-        $params = [
-            Parameter::key($key),
-            Parameter::key($member),
-            Parameter::string($radius),
-            Parameter::geoUnit($unit),
-        ];
+        $params = [$key, $member, $radius, $unit];
         $parse = false;
         if ($withcoord) {
-            $params[] = Parameter::string('WITHCOORD');
+            $params[] = 'WITHCOORD';
             $parse = true;
         }
         if ($withdist) {
-            $params[] = Parameter::string('WITHDIST');
+            $params[] = 'WITHDIST';
             $parse = true;
         }
         if ($withhash) {
-            $params[] = Parameter::string('WITHHASH');
+            $params[] = 'WITHHASH';
             $parse = true;
         }
         if ($count) {
-            $params[] = Parameter::string('COUNT');
-            $params[] = Parameter::integer($count);
+            $params[] = 'COUNT';
+            $params[] = $count;
         }
         if (isset($asc)) {
-            $params[] = Parameter::string((bool) $asc ? 'ASC' : 'DESC');
+            $params[] = $asc ? 'ASC' : 'DESC';
         }
         return $this->returnCommand(['GEORADIUSBYMEMBER'], $params, $parse ? ResponseParser::PARSE_GEO_ARRAY : null);
     }
+
 }

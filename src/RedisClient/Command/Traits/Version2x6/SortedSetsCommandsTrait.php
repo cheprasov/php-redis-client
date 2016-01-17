@@ -30,10 +30,7 @@ trait SortedSetsCommandsTrait {
      * @return int|string
      */
     public function zadd($key, array $members) {
-        return $this->returnCommand(['ZADD'], [
-            Parameter::key($key),
-            Parameter::assocArrayFlip($members)
-        ]);
+        return $this->returnCommand(['ZADD'], [$key, Parameter::assocArrayFlip($members)]);
     }
 
     /**
@@ -46,7 +43,7 @@ trait SortedSetsCommandsTrait {
      * @return int The cardinality (number of elements) of the sorted set, or 0 if key does not exist.
      */
     public function zcard($key) {
-        return $this->returnCommand(['ZCARD'], [Parameter::key($key)]);
+        return $this->returnCommand(['ZCARD'], [$key]);
     }
 
     /**
@@ -61,11 +58,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements in the specified score range.
      */
     public function zcount($key, $min, $max) {
-        return $this->returnCommand(['ZCOUNT'], [
-            Parameter::key($key),
-            Parameter::minMax($min),
-            Parameter::minMax($max),
-        ]);
+        return $this->returnCommand(['ZCOUNT'], [$key, $min, $max]);
     }
 
     /**
@@ -80,11 +73,7 @@ trait SortedSetsCommandsTrait {
      * @return string The new score of member
      */
     public function zincrby($key, $increment, $member) {
-        return $this->returnCommand(['ZINCRBY'], [
-            Parameter::key($key),
-            Parameter::string($increment),
-            Parameter::key($member)
-        ]);
+        return $this->returnCommand(['ZINCRBY'], [$key, $increment, $member]);
     }
 
     /**
@@ -102,18 +91,14 @@ trait SortedSetsCommandsTrait {
      */
     public function zinterstore($destination, $keys, $weights = null, $aggregate = null) {
         $keys = (array) $keys;
-        $params = [
-            Parameter::key($destination),
-            Parameter::integer(count($keys)),
-            Parameter::keys($keys),
-        ];
+        $params = [$destination, count($keys), (array) $keys];
         if ($weights) {
-            $params[] = Parameter::string('WEIGHTS');
-            $params[] = Parameter::integers($weights);
+            $params[] = 'WEIGHTS';
+            $params[] = (array) $weights;
         }
         if ($aggregate) {
-            $params[] = Parameter::string('AGGREGATE');
-            $params[] = Parameter::aggregate($aggregate);
+            $params[] = 'AGGREGATE';
+            $params[] = $aggregate;
         }
         return $this->returnCommand(['ZINTERSTORE'], $params);
     }
@@ -133,13 +118,9 @@ trait SortedSetsCommandsTrait {
      * in case the WITHSCORES option is given).
      */
     public function zrange($key, $start, $stop, $withscores = false) {
-        $params = [
-            Parameter::key($key),
-            Parameter::integer($start),
-            Parameter::integer($stop),
-        ];
+        $params = [$key, $start, $stop];
         if ($withscores) {
-            $params[] = Parameter::string('WITHSCORES');
+            $params[] = 'WITHSCORES';
         }
         return $this->returnCommand(['ZRANGE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
     }
@@ -160,16 +141,12 @@ trait SortedSetsCommandsTrait {
      * @return string[]|array List of elements in the specified score range (optionally with their scores).
      */
     public function zrangebyscore($key, $min, $max, $withscores = false, $limit = null) {
-        $params = [
-            Parameter::key($key),
-            Parameter::minMax($min),
-            Parameter::minMax($max),
-        ];
+        $params = [$key, $min, $max];
         if ($withscores) {
-            $params[] = Parameter::string('WITHSCORES');
+            $params[] = 'WITHSCORES';
         }
         if ($limit) {
-            $params[] = Parameter::string('LIMIT');
+            $params[] = 'LIMIT';
             $params[] = Parameter::limit($limit);
         }
         return $this->returnCommand(['ZRANGEBYSCORE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
@@ -186,10 +163,7 @@ trait SortedSetsCommandsTrait {
      * @return int|null
      */
     public function zrank($key, $member) {
-        return $this->returnCommand(['ZRANK'], [
-            Parameter::key($key),
-            Parameter::key($member)
-        ]);
+        return $this->returnCommand(['ZRANK'], [$key, $member]);
     }
 
     /**
@@ -204,10 +178,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of members removed from the sorted set, not including non existing members.
      */
     public function zrem($key, $members) {
-        return $this->returnCommand(['ZREM'], [
-            Parameter::key($key),
-            Parameter::keys($members)
-        ]);
+        return $this->returnCommand(['ZREM'], [$key, (array) $members]);
     }
 
     /**
@@ -223,11 +194,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements removed.
      */
     public function zremrangebyrank($key, $start, $stop) {
-        return $this->returnCommand(['ZREMRANGEBYRANK'], [
-            Parameter::key($key),
-            Parameter::integer($start),
-            Parameter::integer($stop)
-        ]);
+        return $this->returnCommand(['ZREMRANGEBYRANK'], [$key, $start, $stop]);
     }
 
     /**
@@ -243,11 +210,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements removed.
      */
     public function zremrangebyscore($key, $min, $max) {
-        return $this->returnCommand(['ZREMRANGEBYSCORE'], [
-            Parameter::key($key),
-            Parameter::minMax($min),
-            Parameter::minMax($max),
-        ]);
+        return $this->returnCommand(['ZREMRANGEBYSCORE'], [$key, $min, $max]);
     }
 
     /**
@@ -265,13 +228,9 @@ trait SortedSetsCommandsTrait {
      * in case the WITHSCORES option is given).
      */
     public function zrevrange($key, $start, $stop, $withscores = false) {
-        $params = [
-            Parameter::key($key),
-            Parameter::integer($start),
-            Parameter::integer($stop),
-        ];
+        $params = [$key, $start, $stop];
         if ($withscores) {
-            $params[] = Parameter::string('WITHSCORES');
+            $params[] = 'WITHSCORES';
         }
         return $this->returnCommand(['ZREVRANGE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
     }
@@ -292,16 +251,12 @@ trait SortedSetsCommandsTrait {
      * @return string[]|array list of elements in the specified score range (optionally with their scores).
      */
     public function zrevrangebyscore($key, $max, $min, $withscores = false, $limit = null) {
-        $params = [
-            Parameter::key($key),
-            Parameter::minMax($max),
-            Parameter::minMax($min),
-        ];
+        $params = [$key, $max, $min];
         if ($withscores) {
-            $params [] = Parameter::string('WITHSCORES');
+            $params [] = 'WITHSCORES';
         }
         if ($limit) {
-            $params[] = Parameter::string('LIMIT');
+            $params[] = 'LIMIT';
             $params[] = Parameter::limit($limit);
         }
         return $this->returnCommand(['ZREVRANGEBYSCORE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
@@ -318,10 +273,7 @@ trait SortedSetsCommandsTrait {
      * @return int|null
      */
     public function zrevrank($key, $member) {
-        return $this->returnCommand(['ZREVRANK'], [
-            Parameter::key($key),
-            Parameter::key($member)
-        ]);
+        return $this->returnCommand(['ZREVRANK'], [$key, $member]);
     }
 
     /**
@@ -335,10 +287,7 @@ trait SortedSetsCommandsTrait {
      * @return int The score of member (a double precision floating point number), represented as string.
      */
     public function zscore($key, $member) {
-        return $this->returnCommand(['ZSCORE'], [
-            Parameter::key($key),
-            Parameter::key($member)
-        ]);
+        return $this->returnCommand(['ZSCORE'], [$key, $member]);
     }
 
     /**
@@ -356,18 +305,14 @@ trait SortedSetsCommandsTrait {
      */
     public function zunionstore($destination, $keys, $weights = null, $aggregate = null) {
         $keys = (array) $keys;
-        $params = [
-            Parameter::key($destination),
-            Parameter::integer(count($keys)),
-            Parameter::keys($keys),
-        ];
+        $params = [$destination, count($keys), (array) $keys];
         if ($weights) {
-            $params[] = Parameter::string('WEIGHTS');
-            $params[] = Parameter::integers($weights);
+            $params[] = 'WEIGHTS';
+            $params[] = (array) $weights;
         }
         if ($aggregate) {
-            $params[] = Parameter::string('AGGREGATE');
-            $params[] = Parameter::aggregate($aggregate);
+            $params[] = 'AGGREGATE';
+            $params[] = $aggregate;
         }
         return $this->returnCommand(['ZUNIONSTORE'], $params);
     }

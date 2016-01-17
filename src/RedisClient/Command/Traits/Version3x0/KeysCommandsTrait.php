@@ -10,7 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version3x0;
 
-use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Traits\Version2x8\KeysCommandsTrait as KeysCommandsTraitVersion28;
 
 /**
@@ -31,7 +30,7 @@ trait KeysCommandsTrait {
      * Or the number of keys existing among the ones specified as arguments.
      */
     public function exists($keys) {
-        return $this->returnCommand(['EXISTS'], Parameter::keys($keys));
+        return $this->returnCommand(['EXISTS'], (array) $keys);
     }
 
     /**
@@ -49,18 +48,12 @@ trait KeysCommandsTrait {
      * @return bool The command returns True on success.
      */
     public function migrate($host, $port, $key, $destinationDb, $timeout, $copy = false, $replace = false) {
-        $params = [
-            Parameter::string($host),
-            Parameter::port($port),
-            Parameter::key($key),
-            Parameter::integer($destinationDb),
-            Parameter::integer($timeout)
-        ];
+        $params = [$host, $port, $key, $destinationDb, $timeout];
         if ($copy) {
-            $params[] = Parameter::string('COPY');
+            $params[] = 'COPY';
         }
         if ($replace) {
-            $params[] = Parameter::string('REPLACE');
+            $params[] = 'REPLACE';
         }
         return $this->returnCommand(['MIGRATE'], $params);
     }
@@ -78,9 +71,9 @@ trait KeysCommandsTrait {
      * @return bool The command returns True on success.
      */
     public function restore($key, $ttl, $serializedValue, $replace = false) {
-        $params = [Parameter::key($key), Parameter::integer($ttl), Parameter::string($serializedValue),];
+        $params = [$key, $ttl, $serializedValue];
         if ($replace) {
-            $params[] = Parameter::string('REPLACE');
+            $params[] = 'REPLACE';
         }
         return $this->returnCommand(['RESTORE'], $params);
     }
@@ -97,7 +90,7 @@ trait KeysCommandsTrait {
      * by all the writes performed in the context of the current connection.
      */
     public function wait($numslaves, $timeout) {
-        return $this->returnCommand(['WAIT'], [Parameter::integer($numslaves), Parameter::integer($timeout),]);
+        return $this->returnCommand(['WAIT'], [$numslaves, $timeout]);
     }
 
 }

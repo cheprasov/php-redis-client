@@ -10,7 +10,6 @@
  */
 namespace RedisClient\Command\Traits\Version2x8;
 
-use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Traits\Version2x6\StringsCommandsTrait as StringsCommandsTraitVersion26;
 
 trait StringsCommandsTrait {
@@ -30,14 +29,11 @@ trait StringsCommandsTrait {
      * @return int The command returns the position of the first bit set to 1 or 0 according to the request.
      */
     public function bitpos($key, $bit, $start = null, $end = null) {
-        $params = [
-            Parameter::key($key),
-            Parameter::string($bit),
-        ];
+        $params = [$key, $bit];
         if (isset($start)) {
-            $params[] = Parameter::integer($start);
+            $params[] = $start;
             if (isset($end)) {
-                $params[] = Parameter::integer($end);
+                $params[] = $end;
             }
         }
         return $this->returnCommand(['BITPOS'], $params);

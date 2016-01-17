@@ -27,7 +27,7 @@ trait KeysCommandsTrait {
      * @return int The number of keys that were removed.
      */
     public function del($keys) {
-        return $this->returnCommand(['DEL'], Parameter::keys($keys));
+        return $this->returnCommand(['DEL'], (array) $keys);
     }
 
     /**
@@ -41,7 +41,7 @@ trait KeysCommandsTrait {
      * @return string The serialized value.
      */
     public function dump($key) {
-        return $this->returnCommand(['DUMP'], [Parameter::key($key)]);
+        return $this->returnCommand(['DUMP'], [$key]);
     }
 
     /**
@@ -55,7 +55,7 @@ trait KeysCommandsTrait {
      * Or the number of keys existing among the ones specified as arguments.
      */
     public function exists($key) {
-        return $this->returnCommand(['EXISTS'], [Parameter::key($key)]);
+        return $this->returnCommand(['EXISTS'], [$key]);
     }
 
     /**
@@ -69,7 +69,7 @@ trait KeysCommandsTrait {
      * @return int 1 if the timeout was set. 0 if key does not exist or the timeout could not be set.
      */
     public function expire($key, $seconds) {
-        return $this->returnCommand(['EXPIRE'], [Parameter::key($key), Parameter::integer($seconds),]);
+        return $this->returnCommand(['EXPIRE'], [$key, $seconds,]);
     }
 
     /**
@@ -83,7 +83,7 @@ trait KeysCommandsTrait {
      * @return int 1 if the timeout was set. 0 if key does not exist or the timeout could not be set (see: EXPIRE).
      */
     public function expireAt($key, $timestamp) {
-        return $this->returnCommand(['EXPIREAT'], [Parameter::key($key), Parameter::integer($timestamp),]);
+        return $this->returnCommand(['EXPIREAT'], [$key, $timestamp,]);
     }
 
     /**
@@ -96,7 +96,7 @@ trait KeysCommandsTrait {
      * @return array List of keys matching pattern.
      */
     public function keys($pattern) {
-        return $this->returnCommand(['KEYS'], [Parameter::string($pattern)]);
+        return $this->returnCommand(['KEYS'], [$pattern]);
     }
 
     /**
@@ -112,13 +112,7 @@ trait KeysCommandsTrait {
      * @return bool The command returns True on success.
      */
     public function migrate($host, $port, $key, $destinationDb, $timeout) {
-        return $this->returnCommand(['MIGRATE'], [
-            Parameter::string($host),
-            Parameter::port($port),
-            Parameter::key($key),
-            Parameter::integer($destinationDb),
-            Parameter::integer($timeout)
-        ]);
+        return $this->returnCommand(['MIGRATE'], [$host, $port, $key, $destinationDb, $timeout]);
     }
 
     /**
@@ -132,7 +126,7 @@ trait KeysCommandsTrait {
      * @return int 1 if key was moved. 0 if key was not moved.
      */
     public function move($key, $db) {
-        return $this->returnCommand(['MOVE'], [Parameter::key($key), Parameter::integer($db)]);
+        return $this->returnCommand(['MOVE'], [$key, $db]);
     }
 
     /**
@@ -146,14 +140,9 @@ trait KeysCommandsTrait {
      * @return int|string
      */
     public function object($subcommand, $arguments = null) {
-        $params = [
-            Parameter::enum($subcommand, [
-                'REFCOUNT', 'ENCODING', 'IDLETIME',
-                'refcount', 'encoding', 'idletime'
-            ])
-        ];
+        $params = [$subcommand];
         if ($arguments) {
-            $params[] = Parameter::keys($arguments);
+            $params[] = (array) $arguments;
         }
         return $this->returnCommand(['OBJECT'], $params);
     }
@@ -169,7 +158,7 @@ trait KeysCommandsTrait {
      * 0 if key does not exist or does not have an associated timeout.
      */
     public function persist($key) {
-        return $this->returnCommand(['PERSIST'], [Parameter::key($key)]);
+        return $this->returnCommand(['PERSIST'], [$key]);
     }
 
     /**
@@ -183,7 +172,7 @@ trait KeysCommandsTrait {
      * 0 if key does not exist or the timeout could not be set.
      */
     public function pexpire($key, $milliseconds) {
-        return $this->returnCommand(['PEXPIRE'], [Parameter::key($key), Parameter::integer($milliseconds)]);
+        return $this->returnCommand(['PEXPIRE'], [$key, $milliseconds]);
     }
 
     /**
@@ -197,7 +186,7 @@ trait KeysCommandsTrait {
      * @return int 1 if the timeout was set. 0 if key does not exist or the timeout could not be set (see: EXPIRE).
      */
     public function pexpireat($key, $millisecondsTimestamp) {
-        return $this->returnCommand(['PEXPIREAT'], [Parameter::key($key), Parameter::integer($millisecondsTimestamp)]);
+        return $this->returnCommand(['PEXPIREAT'], [$key, $millisecondsTimestamp]);
     }
 
     /**
@@ -210,7 +199,7 @@ trait KeysCommandsTrait {
      * @return int TTL in milliseconds, or a negative value in order to signal an error.
      */
     public function pttl($key) {
-        return $this->returnCommand(['PTTL'], [Parameter::key($key)]);
+        return $this->returnCommand(['PTTL'], [$key]);
     }
 
     /**
@@ -236,7 +225,7 @@ trait KeysCommandsTrait {
      * @return bool True
      */
     public function rename($key, $newkey) {
-        return $this->returnCommand(['RENAME'], [Parameter::key($key), Parameter::key($newkey),]);
+        return $this->returnCommand(['RENAME'], [$key, $newkey,]);
     }
 
     /**
@@ -250,7 +239,7 @@ trait KeysCommandsTrait {
      * @return int 1 if key was renamed to newkey. 0 if newkey already exists.
      */
     public function renamenx($key, $newkey) {
-        return $this->returnCommand(['RENAMENX'], [Parameter::key($key), Parameter::key($newkey),]);
+        return $this->returnCommand(['RENAMENX'], [$key, $newkey,]);
     }
 
     /**
@@ -265,11 +254,7 @@ trait KeysCommandsTrait {
      * @return bool The command returns True on success.
      */
     public function restore($key, $ttl, $serializedValue) {
-        return $this->returnCommand(['RESTORE'], [
-            Parameter::key($key),
-            Parameter::integer($ttl),
-            Parameter::string($serializedValue)
-        ]);
+        return $this->returnCommand(['RESTORE'], [$key, $ttl, $serializedValue]);
     }
 
     /**
@@ -288,30 +273,30 @@ trait KeysCommandsTrait {
      * @return mixed
      */
     public function sort($key, $pattern = null, $limit = null, $patterns = null, $asc = null, $alpha = false, $destination = null) {
-        $params = [Parameter::key($key)];
+        $params = [$key];
         if ($pattern) {
-            $params[] = Parameter::string('BY');
-            $params[] = Parameter::string($pattern);
+            $params[] = 'BY';
+            $params[] = $pattern;
         }
         if ($limit) {
-            $params[] = Parameter::string('LIMIT');
+            $params[] = 'LIMIT';
             $params[] = Parameter::limit($limit);
         }
         if ($patterns) {
             foreach ((array)$patterns as $p) {
-                $params[] = Parameter::string('GET');
-                $params[] = Parameter::string($p);
+                $params[] = 'GET';
+                $params[] = $p;
             }
         }
         if (isset($asc)) {
-            $params[] = Parameter::string($asc ? 'ASC' : 'DESC');
+            $params[] = $asc ? 'ASC' : 'DESC';
         }
         if ($alpha) {
-            $params[] = Parameter::string('ALPHA');
+            $params[] = 'ALPHA';
         }
         if ($destination) {
-            $params[] = Parameter::string('STORE');
-            $params[] = Parameter::key($destination);
+            $params[] = 'STORE';
+            $params[] = $destination;
         }
         return $this->returnCommand(['SORT'], $params);
     }
@@ -326,7 +311,7 @@ trait KeysCommandsTrait {
      * @return int TTL in seconds, or a negative value in order to signal an error
      */
     public function ttl($key) {
-        return $this->returnCommand(['TTL'], [Parameter::key($key)]);
+        return $this->returnCommand(['TTL'], [$key]);
     }
 
     /**
@@ -339,7 +324,7 @@ trait KeysCommandsTrait {
      * @return string
      */
     public function type($key) {
-        return $this->returnCommand(['TYPE'], [Parameter::key($key)]);
+        return $this->returnCommand(['TYPE'], [$key]);
     }
 
 }

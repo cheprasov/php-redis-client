@@ -62,7 +62,7 @@ trait ServerCommandsTrait {
      * @return array Nested list of command details.
      */
     public function commandInfo($commandNames) {
-        return $this->returnCommand(['COMMAND', 'INFO'], Parameter::strings($commandNames));
+        return $this->returnCommand(['COMMAND', 'INFO'], (array) $commandNames);
     }
 
     /**

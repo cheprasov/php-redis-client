@@ -24,12 +24,12 @@ class Parameter {
             $param = explode(':', trim($param), 2);
         }
         if (is_array($param)) {
-            if (isset($param[0]) && isset($param[1])) {
+            if (isset($param[0], $param[1])) {
                 return [
                     static::string($param[0]),
                     static::port($param[1]),
                 ];
-            } elseif (isset($param['ip']) && isset($param['port'])) {
+            } elseif (isset($param['ip'], $param['port'])) {
                 return [
                     static::string($param['ip']),
                     static::port($param['port']),
@@ -114,7 +114,7 @@ class Parameter {
      * @return string[]
      */
     public static function command($command) {
-        return preg_split('/\s+/', $command);
+        return explode(' ', $command);
     }
 
     /**
