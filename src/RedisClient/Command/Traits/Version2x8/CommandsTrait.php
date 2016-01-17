@@ -24,6 +24,7 @@ trait CommandsTrait {
     use HashesCommandsTrait;
     use HyperLogLogCommandsTrait;
     use KeysCommandsTrait;
+    use LatencyCommandsTrait;
     use ListsCommandsTrait;
     use ScriptingCommandsTrait;
     use ServerCommandsTrait;

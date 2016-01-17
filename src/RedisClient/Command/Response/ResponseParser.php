@@ -16,6 +16,7 @@ class ResponseParser {
     const PARSE_INTEGER     = 2;
     const PARSE_TIME        = 3;
     const PARSE_INFO        = 4;
+    const PARSE_GEO_ARRAY   = 5;
 
     /**
      * @param int $type
@@ -32,6 +33,8 @@ class ResponseParser {
                 return self::parseTime($response);
             case self::PARSE_INFO:
                 return self::parseInfo($response);
+            case self::PARSE_GEO_ARRAY:
+                return self::parseGeoArray($response);
             default:
                 return $response;
         }
@@ -48,6 +51,21 @@ class ResponseParser {
         $array = [];
         for ($i = 0, $count = count($response); $i < $count; $i += 2) {
             $array[$response[$i]] = $response[$i + 1];
+        }
+        return $array;
+    }
+
+    /**
+     * @param string[] $response
+     * @return array
+     */
+    public static function parseGeoArray($response) {
+        if (!is_array($response)) {
+            return $response;
+        }
+        $array = [];
+        for ($i = 0, $count = count($response); $i < $count; $i += 1) {
+            $array[array_shift($response[$i])] = $response[$i];
         }
         return $array;
     }

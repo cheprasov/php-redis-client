@@ -10,15 +10,15 @@
  */
 namespace Test\Integration\Version3x2;
 
-include_once(__DIR__. '/../Version3x0/ScriptingCommandsTest.php');
+include_once(__DIR__. '/../Version3x0/LatencyCommandsTest.php');
 
 use RedisClient\Client\Version\RedisClient3x2;
-use Test\Integration\Version3x0\ScriptingCommandsTest as ScriptingCommandsTestVersion3x0;
+use Test\Integration\Version3x0\LatencyCommandsTest as LatencyCommandsTestVersion3x0;
 
 /**
- * @see ScriptingCommandsTrait
+ * @see LatencyCommandsTrait
  */
-class ScriptingCommandsTest extends ScriptingCommandsTestVersion3x0 {
+class LatencyCommandsTest extends LatencyCommandsTestVersion3x0 {
 
     const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x2_1;
 
@@ -31,4 +31,5 @@ class ScriptingCommandsTest extends ScriptingCommandsTestVersion3x0 {
             'timeout' => 2,
         ]);
     }
+
 }

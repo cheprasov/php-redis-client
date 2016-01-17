@@ -10,7 +10,7 @@
  */
 namespace Test\Integration\Version3x0;
 
-include(__DIR__. '/../Version2x8/SortedSetsCommandsTest.php');
+include_once(__DIR__. '/../Version2x8/SortedSetsCommandsTest.php');
 
 use RedisClient\Client\Version\RedisClient3x0;
 use RedisClient\Exception\ErrorResponseException;

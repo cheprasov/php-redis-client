@@ -15,6 +15,7 @@ use RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait;
 use RedisClient\Command\Traits\Version2x8\HashesCommandsTrait;
 use RedisClient\Command\Traits\Version2x6\ListsCommandsTrait;
 use RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait;
+use RedisClient\Command\Traits\Version2x8\LatencyCommandsTrait;
 use RedisClient\Command\Traits\Version2x9\ServerCommandsTrait;
 use RedisClient\Command\Traits\Version2x8\SetsCommandsTrait;
 use RedisClient\Command\Traits\Version2x8\StringsCommandsTrait;
@@ -30,6 +31,7 @@ trait CommandsTrait {
     use HashesCommandsTrait;
     use HyperLogLogCommandsTrait;
     use KeysCommandsTrait;
+    use LatencyCommandsTrait;
     use ListsCommandsTrait;
     use ScriptingCommandsTrait;
     use ServerCommandsTrait;

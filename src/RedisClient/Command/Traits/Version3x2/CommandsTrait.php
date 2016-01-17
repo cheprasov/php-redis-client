@@ -11,6 +11,7 @@
 namespace RedisClient\Command\Traits\Version3x2;
 
 use RedisClient\Command\Traits\AbstractCommandsTrait;
+use RedisClient\Command\Traits\Version2x8\LatencyCommandsTrait;
 use RedisClient\Command\Traits\Version3x0\ClusterCommandsTrait;
 use RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait;
 use RedisClient\Command\Traits\Version2x8\HyperLogLogCommandsTrait;
@@ -28,9 +29,11 @@ trait CommandsTrait {
 
     use ClusterCommandsTrait;
     use ConnectionCommandsTrait;
+    use GeoCommandsTrait;
     use HashesCommandsTrait;
     use HyperLogLogCommandsTrait;
     use KeysCommandsTrait;
+    use LatencyCommandsTrait;
     use ListsCommandsTrait;
     use ScriptingCommandsTrait;
     use ServerCommandsTrait;
