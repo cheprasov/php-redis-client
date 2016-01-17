@@ -10,7 +10,7 @@
  */
 namespace Test\Integration\Version3x2;
 
-include(__DIR__. '/../Version3x0/ConnectionCommandsTest.php');
+include_once(__DIR__. '/../Version3x0/ConnectionCommandsTest.php');
 
 use RedisClient\Client\Version\RedisClient3x2;
 use Test\Integration\Version3x0\ConnectionCommandsTest as ConnectionCommandsTestVersion3x0;

@@ -353,7 +353,6 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
 
         $Redis->set('key', 'value1');
         $Redis->set('bar', 'value2');
-        $Redis->renamenx('key', 'key');
 
         try {
             $Redis->renamenx('key', 'key');

@@ -10,7 +10,7 @@
  */
 namespace Test\Integration\Version3x0;
 
-include(__DIR__. '/../Version2x8/TransactionsCommandsTest.php');
+include_once(__DIR__. '/../Version2x8/TransactionsCommandsTest.php');
 
 use RedisClient\Client\Version\RedisClient3x0;
 use Test\Integration\Version2x8\TransactionsCommandsTest as TransactionsCommandsTestVersion2x8;

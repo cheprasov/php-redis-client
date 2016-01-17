@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 namespace RedisClient;
-use RedisClient\Client\Version\RedisClient3x2 as RedisClientLastVersion;
+use RedisClient\Client\Version\RedisClient3x0 as RedisClientLastStableVersion;
 use RedisClient\Pipeline\Pipeline;
 use RedisClient\Pipeline\PipelineInterface;
 
@@ -18,7 +18,7 @@ use RedisClient\Pipeline\PipelineInterface;
  * Class RedisClient
  * @package RedisClient
  */
-class RedisClient extends RedisClientLastVersion {
+class RedisClient extends RedisClientLastStableVersion {
 
     /**
      * @param \Closure|null $Pipeline
