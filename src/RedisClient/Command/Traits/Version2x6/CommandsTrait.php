@@ -20,6 +20,7 @@ trait CommandsTrait {
     use HashesCommandsTrait;
     use KeysCommandsTrait;
     use ListsCommandsTrait;
+    use PubSubCommandsTrait;
     use ScriptingCommandsTrait;
     use ServerCommandsTrait;
     use SetsCommandsTrait;

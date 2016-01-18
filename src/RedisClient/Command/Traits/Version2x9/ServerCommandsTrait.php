@@ -10,10 +10,10 @@
  */
 namespace RedisClient\Command\Traits\Version2x9;
 
-use RedisClient\Command\Traits\Version2x8\ServerCommandsTrait as ServerCommandsTraitVersion28;
+use RedisClient\Command\Traits\Version2x8\ServerCommandsTrait as ServerCommandsTraitVersion2x8;
 trait ServerCommandsTrait {
 
-    use ServerCommandsTraitVersion28;
+    use ServerCommandsTraitVersion2x8;
 
     /**
      * CLIENT PAUSE timeout

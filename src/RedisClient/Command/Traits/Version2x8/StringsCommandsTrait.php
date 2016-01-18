@@ -10,11 +10,11 @@
  */
 namespace RedisClient\Command\Traits\Version2x8;
 
-use RedisClient\Command\Traits\Version2x6\StringsCommandsTrait as StringsCommandsTraitVersion26;
+use RedisClient\Command\Traits\Version2x6\StringsCommandsTrait as StringsCommandsTraitVersion2x6;
 
 trait StringsCommandsTrait {
 
-    use StringsCommandsTraitVersion26;
+    use StringsCommandsTraitVersion2x6;
 
     /**
      * BITPOS key bit [start] [end]

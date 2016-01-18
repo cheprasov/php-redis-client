@@ -138,6 +138,20 @@ trait StringsCommandsTrait {
     }
 
     /**
+     * SUBSTR key start end
+     * @deprecated
+     * @see StringsCommandsTrait::getrange
+     *
+     * @param string $key
+     * @param int $start
+     * @param int $end
+     * @return string
+     */
+    public function substr($key, $start, $end) {
+        return $this->returnCommand(['SUBSTR'], [$key, $start, $end]);
+    }
+
+    /**
      * GETSET key value
      * Available since 1.0.0.
      * Time complexity: O(1)

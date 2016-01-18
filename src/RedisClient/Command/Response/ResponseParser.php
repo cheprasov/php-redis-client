@@ -17,6 +17,7 @@ class ResponseParser {
     const PARSE_TIME        = 3;
     const PARSE_INFO        = 4;
     const PARSE_GEO_ARRAY   = 5;
+    const PARSE_CLIENT_LIST = 6;
 
     /**
      * @param int $type
@@ -35,6 +36,8 @@ class ResponseParser {
                 return self::parseInfo($response);
             case self::PARSE_GEO_ARRAY:
                 return self::parseGeoArray($response);
+            case self::PARSE_CLIENT_LIST:
+                return self::parseClientList($response);
             default:
                 return $response;
         }
@@ -51,6 +54,30 @@ class ResponseParser {
         $array = [];
         for ($i = 0, $count = count($response); $i < $count; $i += 2) {
             $array[$response[$i]] = $response[$i + 1];
+        }
+        return $array;
+    }
+
+    /**
+     * @param string[] $response
+     * @return array
+     */
+    public static function parseClientList($response) {
+        if (!is_string($response)) {
+            return $response;
+        }
+        $array = [];
+        foreach (explode("\n", $response) as $client) {
+            $c = [];
+            foreach (explode(' ', $client) as $param) {
+                $args = explode('=', $param, 2);
+                if (isset($args[0], $args[1]) && ($key = trim($args[0]))) {
+                    $c[$key] = trim($args[1]);
+                }
+            }
+            if ($c) {
+                $array[] = $c;
+            }
         }
         return $array;
     }
