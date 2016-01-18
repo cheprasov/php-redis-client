@@ -95,7 +95,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function clientList() {
-        return $this->returnCommand(['CLIENT', 'LIST']);
+        return $this->returnCommand(['CLIENT', 'LIST'], null, ResponseParser::PARSE_CLIENT_LIST);
     }
 
     /**

@@ -11,7 +11,7 @@
 namespace RedisClient\Command\Traits\Version2x8;
 
 use RedisClient\Command\Parameter\Parameter;
-use RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait as SortedSetsCommandsTraitVersion26;
+use RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait as SortedSetsCommandsTraitVersion2x6;
 
 /**
  * trait SortedSetsCommandsTrait
@@ -19,7 +19,7 @@ use RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait as SortedSetsC
  */
 trait SortedSetsCommandsTrait {
 
-    use SortedSetsCommandsTraitVersion26;
+    use SortedSetsCommandsTraitVersion2x6;
 
     /**
      * ZLEXCOUNT key min max

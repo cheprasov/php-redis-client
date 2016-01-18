@@ -10,7 +10,7 @@
  */
 namespace RedisClient\Command\Traits\Version2x8;
 
-use RedisClient\Command\Traits\Version2x6\PubSubCommandsTrait as PubSubCommandsTraitVersion26;
+use RedisClient\Command\Traits\Version2x6\PubSubCommandsTrait as PubSubCommandsTraitVersion2x6;
 
 /**
  * PubSub
@@ -18,7 +18,7 @@ use RedisClient\Command\Traits\Version2x6\PubSubCommandsTrait as PubSubCommandsT
  */
 trait PubSubCommandsTrait {
 
-    use PubSubCommandsTraitVersion26;
+    use PubSubCommandsTraitVersion2x6;
 
     /**
      * PUBSUB subcommand [argument [argument ...]]

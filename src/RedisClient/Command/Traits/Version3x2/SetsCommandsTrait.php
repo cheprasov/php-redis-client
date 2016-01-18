@@ -10,11 +10,11 @@
  */
 namespace RedisClient\Command\Traits\Version3x2;
 
-use RedisClient\Command\Traits\Version2x8\SetsCommandsTrait as SetsCommandsTraitVersion28;
+use RedisClient\Command\Traits\Version2x8\SetsCommandsTrait as SetsCommandsTraitVersion2x8;
 
 trait SetsCommandsTrait {
 
-    use SetsCommandsTraitVersion28;
+    use SetsCommandsTraitVersion2x8;
 
     /**
      * SPOP key [count]

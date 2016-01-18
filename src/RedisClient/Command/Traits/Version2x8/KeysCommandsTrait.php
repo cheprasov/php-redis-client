@@ -10,14 +10,14 @@
  */
 namespace RedisClient\Command\Traits\Version2x8;
 
-use RedisClient\Command\Traits\Version2x6\KeysCommandsTrait as KeysCommandsTraitVersion26;
+use RedisClient\Command\Traits\Version2x6\KeysCommandsTrait as KeysCommandsTraitVersion2x6;
 
 /**
  * trait KeysCommandsTrait
  */
 trait KeysCommandsTrait {
 
-    use KeysCommandsTraitVersion26;
+    use KeysCommandsTraitVersion2x6;
 
     /**
      * SCAN cursor [MATCH pattern] [COUNT count]

@@ -58,4 +58,32 @@ trait HyperLogLogCommandsTrait {
         return $this->returnCommand(['PFMERGE'], [$destkey, (array) $sourcekeys]);
     }
 
+//    /**
+//     * PFDEBUG <subcommand> <key> ... args ...
+//     * Available since 2.8.9.
+//     * @link http://download.redis.io/redis-stable/src/hyperloglog.c
+//     * @debug
+//     * @deprecated only for debug
+//     *
+//     * @param string $subcommand GETREG|DECODE|ENCODING|TODENSE
+//     * @param string $key
+//     * @return mixed
+//     */
+//    public function pfdebug($subcommand, $key) {
+//        return $this->returnCommand(['PFDEBUG'], [$subcommand, $key]);
+//    }
+
+//    /**
+//     * PFSELFTEST
+//     * Available since 2.8.9.
+//     * @link http://download.redis.io/redis-stable/src/hyperloglog.c
+//     * @debug
+//     * @deprecated only for debug
+//     *
+//     * @return mixed
+//     */
+//    public function pfselftest() {
+//        return $this->returnCommand(['PFSELFTEST']);
+//    }
+
 }

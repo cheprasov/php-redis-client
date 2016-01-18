@@ -236,7 +236,27 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
 
         try {
-            $Redis->get('hash');
+            $Redis->getrange('hash', 0, -1);
+            $this->assertTrue(false);
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
+        }
+    }
+
+    public function test_substr() {
+        $Redis = static::$Redis;
+
+        $this->assertSame('', $Redis->substr('new-key', 0, 10));
+
+        foreach (static::$fields as $key => $value) {
+            $value = (string) static::$fields[$key];
+            $this->assertSame(substr($value, 1, 5) ?: '', $Redis->substr($key, 1, 5));
+            $this->assertSame(substr($value, -5) ?: '', $Redis->substr($key, -5, -1));
+            $this->assertSame(substr($value, 0) ?: '', $Redis->substr($key, 0, -1));
+        }
+
+        try {
+            $Redis->substr('hash', 0, -1);
             $this->assertTrue(false);
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);

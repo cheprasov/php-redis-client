@@ -10,7 +10,7 @@
  */
 namespace RedisClient\Command\Traits\Version3x2;
 
-use RedisClient\Command\Traits\Version2x8\HashesCommandsTrait as HashesCommandsTraitVersion28;
+use RedisClient\Command\Traits\Version2x8\HashesCommandsTrait as HashesCommandsTraitVersion2x8;
 
 /**
  * trait HashesCommandsTrait
@@ -18,7 +18,7 @@ use RedisClient\Command\Traits\Version2x8\HashesCommandsTrait as HashesCommandsT
  */
 trait HashesCommandsTrait {
 
-    use HashesCommandsTraitVersion28;
+    use HashesCommandsTraitVersion2x8;
 
     /**
      * HSTRLEN key field

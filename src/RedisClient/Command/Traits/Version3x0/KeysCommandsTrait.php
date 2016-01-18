@@ -10,14 +10,14 @@
  */
 namespace RedisClient\Command\Traits\Version3x0;
 
-use RedisClient\Command\Traits\Version2x8\KeysCommandsTrait as KeysCommandsTraitVersion28;
+use RedisClient\Command\Traits\Version2x8\KeysCommandsTrait as KeysCommandsTraitVersion2x8;
 
 /**
  * trait KeysCommandsTrait
  */
 trait KeysCommandsTrait {
 
-    use KeysCommandsTraitVersion28;
+    use KeysCommandsTraitVersion2x8;
 
     /**
      * EXISTS key [key ...]

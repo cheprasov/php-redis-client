@@ -11,11 +11,11 @@
 namespace RedisClient\Command\Traits\Version2x8;
 
 use RedisClient\Command\Parameter\Parameter;
-use RedisClient\Command\Traits\Version2x6\ServerCommandsTrait as ServerCommandsTraitVersion26;
+use RedisClient\Command\Traits\Version2x6\ServerCommandsTrait as ServerCommandsTraitVersion2x6;
 
 trait ServerCommandsTrait {
 
-    use ServerCommandsTraitVersion26;
+    use ServerCommandsTraitVersion2x6;
 
     /**
      * COMMAND
@@ -50,7 +50,7 @@ trait ServerCommandsTrait {
      * @return string[] List of keys from your command.
      */
     public function commandGetkeys($command) {
-        return $this->returnCommand(['COMMAND', 'GETKEYS'], [Parameter::command($command)]);
+        return $this->returnCommand(['COMMAND', 'GETKEYS'], Parameter::command($command));
     }
 
     /**
@@ -58,7 +58,7 @@ trait ServerCommandsTrait {
      * Available since 2.8.13.
      * Time complexity: O(N) when N is number of commands to look up
      *
-     * @param string[] $commandNames
+     * @param string|string[] $commandNames
      * @return array Nested list of command details.
      */
     public function commandInfo($commandNames) {

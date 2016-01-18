@@ -10,7 +10,7 @@
  */
 namespace RedisClient\Command\Traits\Version2x8;
 
-use RedisClient\Command\Traits\Version2x6\HashesCommandsTrait as HashesCommandsTraitVersion26;
+use RedisClient\Command\Traits\Version2x6\HashesCommandsTrait as HashesCommandsTraitVersion2x6;
 
 /**
  * trait HashesCommandsTrait
@@ -18,7 +18,7 @@ use RedisClient\Command\Traits\Version2x6\HashesCommandsTrait as HashesCommandsT
  */
 trait HashesCommandsTrait {
 
-    use HashesCommandsTraitVersion26;
+    use HashesCommandsTraitVersion2x6;
 
     /**
      * HSCAN key cursor [MATCH pattern] [COUNT count]

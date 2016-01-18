@@ -26,6 +26,7 @@ trait CommandsTrait {
     use KeysCommandsTrait;
     use LatencyCommandsTrait;
     use ListsCommandsTrait;
+    use PubSubCommandsTrait;
     use ScriptingCommandsTrait;
     use ServerCommandsTrait;
     use SetsCommandsTrait;

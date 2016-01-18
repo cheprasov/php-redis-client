@@ -105,12 +105,144 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     /**
      * @see ServerCommandsTrait::clientList
      */
-    public function _test_clientList() {
+    public function test_clientList() {
         $Redis = static::$Redis;
 
-        $this->assertSame(null, $Redis->clientList());
-        $this->assertSame(true, $Redis->clientSetname('test-connection'));
-        $this->assertSame('test-connection', $Redis->clientGetname());
+        $result = $Redis->clientList();
+        $this->assertSame(true, is_array($result));
+        $this->assertSame(true, isset($result[0]['addr']));
+    }
+
+    /**
+     * @see ServerCommandsTrait::configGet
+     */
+    public function test_configGet() {
+        $Redis = static::$Redis;
+
+        $this->assertSame([], $Redis->configGet('not-exists-param'));
+        $this->assertSame(['dbfilename' => 'dump.rdb'], $Redis->configGet('dbfilename'));
+        $this->assertSame(['dbfilename' => 'dump.rdb'], $Redis->configGet('db*name'));
+    }
+
+    /**
+     * @see ServerCommandsTrait::configResetstat
+     */
+    public function test_configResetstat() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(true, $Redis->configResetstat());
+    }
+
+    /**
+     * @see ServerCommandsTrait::dbsize
+     */
+    public function test_dbsize() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(0, $Redis->dbsize());
+        $this->assertSame(true, $Redis->set('foo', 'bar'));
+        $this->assertSame(1, $Redis->dbsize());
+        $this->assertSame(true, $Redis->set('bar', 'foo'));
+        $this->assertSame(2, $Redis->dbsize());
+    }
+
+    /**
+     * @see ServerCommandsTrait::debugObject
+     */
+    public function test_debugObject() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(true, $Redis->set('foo', 'bar'));
+        $this->assertSame(true, is_string($Redis->debugObject('foo')));
+    }
+
+    /**
+     * @see ServerCommandsTrait::flushall
+     */
+    public function test_flushall() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(true, $Redis->flushall());
+    }
+
+    /**
+     * @see ServerCommandsTrait::flushdb
+     */
+    public function test_flushdb() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(true, $Redis->flushdb());
+    }
+
+    /**
+     * @see ServerCommandsTrait::info
+     */
+    public function test_info() {
+        $Redis = static::$Redis;
+
+        $info = $Redis->info();
+        $this->assertSame(true, is_array($info));
+        $this->assertSame(true, is_array($info['Server']));
+        $this->assertSame(true, is_array($info['Clients']));
+        $this->assertSame(true, is_array($info['Memory']));
+        $this->assertSame(true, is_array($info['Persistence']));
+        $this->assertSame(true, is_array($info['Stats']));
+        $this->assertSame(true, is_array($info['Replication']));
+        $this->assertSame(true, is_array($info['CPU']));
+        $this->assertSame(true, is_array($info['Keyspace']));
+
+        $this->assertSame($info['Server'], $Redis->info('Server'));
+        $this->assertSame($info['Clients'], $Redis->info('Clients'));
+        $this->assertSame($info['Persistence'], $Redis->info('Persistence'));
+        $this->assertSame($info['Replication'], $Redis->info('Replication'));
+
+        $this->assertSame(true, isset($info['Server']['redis_version']));
+    }
+
+    /**
+     * @see ServerCommandsTrait::info
+     */
+    public function test_lastsave() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(true, is_int($Redis->lastsave()));
+        $this->assertGreaterThan(0, $Redis->lastsave());
+    }
+
+    /**
+     * @see ServerCommandsTrait::monitor
+     */
+    public function _test_monitor() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(true, $Redis->monitor());
+    }
+
+    /**
+     * @see ServerCommandsTrait::save
+     */
+    public function test_save() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(true, $Redis->save());
+    }
+
+    /**
+     * @see ServerCommandsTrait::slowlog
+     */
+    public function _test_showlog() {
+        $Redis = static::$Redis;
+
+        $this->assertSame([], $Redis->slowlog('GET', 2));
+    }
+
+    /**
+     * @see ServerCommandsTrait::time
+     */
+    public function test_time() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(1, preg_match('/^\d+\.\d+$/', $Redis->time()));
     }
 
 }
