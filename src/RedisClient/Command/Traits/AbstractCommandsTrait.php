@@ -20,6 +20,15 @@ trait AbstractCommandsTrait {
     abstract protected function returnCommand(array $command, array $params = null, $parserId = null);
 
     /**
+     * @param array $subCommand
+     * @param array $unsubCommand
+     * @param array|null $params
+     * @param \Closure|string|array $callback
+     * @return mixed
+     */
+    abstract protected function subscribeCommand(array $subCommand, array $unsubCommand, array $params = null, $callback);
+
+    /**
      * @return string
      */
     abstract public function getVersion();

@@ -219,9 +219,12 @@ trait ServerCommandsTrait {
     /**
      * MONITOR
      * Available since 1.0.0.
+     *
+     * @param \Closure $callback
+     * @return mixed
      */
-    public function monitor() {
-        return $this->returnCommand(['MONITOR']);
+    public function monitor(\Closure $callback) {
+        return $this->subscribeCommand(['MONITOR'], ['QUIT'], null, $callback);
     }
 
     /**

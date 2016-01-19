@@ -35,7 +35,7 @@ abstract class AbstractRedisClient {
      */
     protected static $defaultConfig = [
         self::CONFIG_SERVER => 'tcp://127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
-        self::CONFIG_TIMEOUT => 0.1, // in seconds
+        self::CONFIG_TIMEOUT => 1, // in seconds
     ];
 
     /**
@@ -126,6 +126,14 @@ abstract class AbstractRedisClient {
      */
     public function executeRawString($stringCommand) {
         return $this->executeRaw(explode(' ', $stringCommand));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function subscribeCommand(array $subCommand, array $unsubCommand, array $params = null, $callback) {
+        $this->getProtocol()->subscribe($this->getStructure($subCommand, $params), $callback);
+        return $this->executeCommand($unsubCommand, $params);
     }
 
     /**

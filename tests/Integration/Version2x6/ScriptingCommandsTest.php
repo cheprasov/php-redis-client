@@ -26,16 +26,6 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
     protected static $Redis;
 
     /**
-     * @var RedisClient2x6
-     */
-    protected static $Redis2;
-
-    /**
-     * @var array
-     */
-    protected static $fields;
-
-    /**
      * @inheritdoc
      */
     public static function setUpBeforeClass() {

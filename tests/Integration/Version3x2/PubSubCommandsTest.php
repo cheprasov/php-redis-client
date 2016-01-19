@@ -10,15 +10,15 @@
  */
 namespace Test\Integration\Version3x2;
 
-include_once(__DIR__. '/../Version3x0/ListsCommandsTest.php');
+include_once(__DIR__. '/../Version3x0/PubSubCommandsTest.php');
 
 use RedisClient\Client\Version\RedisClient3x2;
-use Test\Integration\Version3x0\ListsCommandsTest as ListsCommandsTestVersion3x0;
+use Test\Integration\Version3x0\PubSubCommandsTest as PubSubCommandsTestVersion3x0;
 
 /**
- * @see ListsCommandsTrait
+ * @see PubSubCommandsTrait
  */
-class ListsCommandsTest extends ListsCommandsTestVersion3x0 {
+class PubSubCommandsTest extends PubSubCommandsTestVersion3x0 {
 
     const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x2_1;
 
@@ -28,7 +28,11 @@ class ListsCommandsTest extends ListsCommandsTestVersion3x0 {
     public static function setUpBeforeClass() {
         static::$Redis = new RedisClient3x2([
             'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 10,
+            'timeout' => 2,
+        ]);
+        static::$Redis2 = new RedisClient3x2([
+            'server' =>  static::TEST_REDIS_SERVER_1,
+            'timeout' => 2,
         ]);
     }
 }

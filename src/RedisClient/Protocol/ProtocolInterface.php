@@ -24,4 +24,11 @@ interface ProtocolInterface {
      */
     public function sendMulti(array $structures);
 
+    /**
+     * @param string[] $structure
+     * @param \Closure|string|array $callback
+     * @return mixed
+     */
+    public function subscribe(array $structure, $callback);
+
 }

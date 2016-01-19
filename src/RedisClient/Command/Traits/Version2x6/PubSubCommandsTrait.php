@@ -20,9 +20,17 @@ trait PubSubCommandsTrait {
      * PSUBSCRIBE pattern [pattern ...]
      * Available since 2.0.0.
      * Time complexity: O(N) where N is the number of patterns the client is already subscribed to.
+     * @link http://redis.io/commands/psubscribe
+     *
+     * @param string|string[] $patterns
+     * @param \Closure|string|array $callback
+     * @return string[]
      */
-    public function psubscribe($patterns) {
-        return $this->returnCommand(['PSUBSCRIBE'], (array) $patterns);
+    public function psubscribe($patterns, $callback) {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('Function $callback is not callable');
+        }
+        return $this->subscribeCommand(['PSUBSCRIBE'], ['PUNSUBSCRIBE'], (array) $patterns, $callback);
     }
 
     /**
@@ -33,7 +41,7 @@ trait PubSubCommandsTrait {
      *
      * @param string $channel
      * @param string $message
-     * @return int The number of clients that received the message.e
+     * @return int The number of clients that received the message.
      */
     public function publish($channel, $message) {
         return $this->returnCommand(['PUBLISH'], [$channel, $message]);
@@ -57,11 +65,17 @@ trait PubSubCommandsTrait {
      * Available since 2.0.0.
      * Time complexity: O(N) where N is the number of channels to subscribe to.
      *
+     * @link http://redis.io/commands/psubscribe
+     *
      * @param string|string[] $channels
-     * @return
+     * @param \Closure|string|array $callback
+     * @return string[]
      */
-    public function subscribe($channels) {
-        return $this->returnCommand(['SUBSCRIBE'], (array) $channels);
+    public function subscribe($channels, $callback) {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('Function $callback is not callable');
+        }
+        return $this->subscribeCommand(['SUBSCRIBE'], ['UNSUBSCRIBE'], (array) $channels, $callback);
     }
 
     /**

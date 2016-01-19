@@ -31,7 +31,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
     public static function setUpBeforeClass() {
         static::$Redis = new RedisClient2x6([
             'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
+            'timeout' => 10,
         ]);
     }
 

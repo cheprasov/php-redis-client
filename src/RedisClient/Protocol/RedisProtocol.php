@@ -97,10 +97,7 @@ class RedisProtocol implements ProtocolInterface {
      */
     protected function read() {
         if (!$line = $this->Connection->readLine()) {
-            //todo: timeout usleep
-            if (!$line = $this->Connection->readLine()) {
-                throw new EmptyResponseException();
-            }
+            throw new EmptyResponseException('Empty response. Please, check connection timeout.');
         }
 
         $type = $line[0];
@@ -168,6 +165,23 @@ class RedisProtocol implements ProtocolInterface {
             $response[] = $this->read();
         }
         return $response;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function subscribe(array $structures, $callback) {
+        $this->write($this->packProtocolArray($structures));
+        do {
+            try {
+                $response = (array) $this->read();
+                array_push($response, null, null, null, null);
+            } catch (EmptyResponseException $Ex) {
+                $response = [null, null, null, null];
+            }
+            $continue = call_user_func_array($callback, $response);
+        } while ($continue);
+
     }
 
 }

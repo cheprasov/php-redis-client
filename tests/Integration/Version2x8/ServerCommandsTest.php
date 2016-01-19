@@ -68,7 +68,6 @@ class ServerCommandsTest extends ServerCommandsTestVersion2x6 {
     }
 
     public function test_commandInfo() {
-        // todo: send report about issue
         $Redis = static::$Redis;
         $this->assertSame([null], $Redis->commandInfo('foo'));
         $this->assertSame([['get', 2, ['readonly', 'fast'], 1, 1, 1]], $Redis->commandInfo('get'));
@@ -79,5 +78,10 @@ class ServerCommandsTest extends ServerCommandsTestVersion2x6 {
             ['set', -3, ['write', 'denyoom'], 1, 1, 1],
             ['eval', -3, ['noscript', 'movablekeys'], 0, 0, 0]
         ], $Redis->commandInfo(['get', 'set', 'eval']));
+    }
+
+    public function test_role() {
+        $Redis = static::$Redis;
+        $this->assertSame(['master', 0, []], $Redis->role());
     }
 }
