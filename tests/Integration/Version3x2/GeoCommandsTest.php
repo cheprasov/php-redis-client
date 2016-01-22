@@ -266,4 +266,37 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+
+    /**
+     * @see GeoCommandsTrait::geodel
+     */
+    public function test_geodel() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(3, $Redis->geoadd('Sicily', [
+            'Agrigento' => ['13.583333', '37.316667'],
+            'Palermo' => ['13.361389', '38.115556'],
+            'Catania' => ['15.087269', '37.502669']
+        ]));
+
+        $this->assertSame(['Agrigento', 'Palermo', 'Catania'], $Redis->georadiusbymember('Sicily', 'Agrigento', 300, 'km', 0, 0, 0, 0, true));
+
+        $this->assertSame(1, $Redis->geodel('Sicily', 'Palermo'));
+        $this->assertSame(['Agrigento', 'Catania'], $Redis->georadiusbymember('Sicily', 'Agrigento', 300, 'km', 0, 0, 0, 0, true));
+
+        $this->assertSame(0, $Redis->geodel('Sicily', 'Palermo'));
+        $this->assertSame(['Agrigento', 'Catania'], $Redis->georadiusbymember('Sicily', 'Agrigento', 300, 'km', 0, 0, 0, 0, true));
+
+        $this->assertSame(1, $Redis->geodel('Sicily', ['Catania', 'Catania', 'Palermo']));
+        $this->assertSame(['Agrigento'], $Redis->georadiusbymember('Sicily', 'Agrigento', 300, 'km', 0, 0, 0, 0, true));
+
+        $Redis->set('foo', 'bar');
+        try {
+            $Redis->geodel('foo', 'Agrigento');
+            $this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
+        }
+    }
+
 }
