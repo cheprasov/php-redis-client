@@ -11,6 +11,7 @@
 namespace RedisClient\Pipeline;
 
 use RedisClient\Command\Response\ResponseParser;
+use RedisClient\Exception\ErrorException;
 
 abstract class AbstractPipeline implements PipelineInterface {
 
@@ -41,8 +42,7 @@ abstract class AbstractPipeline implements PipelineInterface {
      * @inheritdoc
      */
     protected function subscribeCommand(array $subCommand, array $unsubCommand, array $params = null, $callback) {
-        $this->getProtocol()->subscribe($this->getStructure($subCommand, $params), $callback);
-        return $this->executeCommand($unsubCommand, $params);
+        throw new ErrorException('Do not use subscribe in pipeline');
     }
 
     /**

@@ -90,7 +90,7 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x8 {
 
         try {
             $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100, true));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -117,7 +117,7 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x8 {
 
         try {
             $this->assertSame(true, $Redis->restore('key', 0, "\x00\x01\x00\x06\x00\xcd\x15\x4d\x4c\x99\x42\x7f\xc5"));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

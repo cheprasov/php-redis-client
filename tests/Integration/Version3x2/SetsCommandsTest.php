@@ -70,7 +70,7 @@ class SetsCommandsTest extends SetsCommandsTestVersion3x0 {
         $Redis->set('foo', 'bar');
         try {
             $Redis->spop('foo');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

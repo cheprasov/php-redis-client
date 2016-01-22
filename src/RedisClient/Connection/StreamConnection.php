@@ -29,6 +29,10 @@ class StreamConnection implements ConnectionInterface {
      */
     protected $timeout;
 
+    /**
+     * @param string $server
+     * @param int|float|null $timeout
+     */
     public function __construct($server, $timeout = null) {
         $this->server = $server;
         if (is_numeric($timeout)) {
@@ -36,12 +40,19 @@ class StreamConnection implements ConnectionInterface {
         }
     }
 
+    /**
+     *
+     */
     public function __destruct() {
         if ($this->resource) {
             fclose($this->resource);
         }
     }
 
+    /**
+     * @return resource
+     * @throws ConnectionException
+     */
     protected function getResource() {
         if (!$this->resource) {
             if (!$this->resource = stream_socket_client($this->server)) {
@@ -49,7 +60,7 @@ class StreamConnection implements ConnectionInterface {
                     'Unable to connect to %s', $this->server
                 ));
             }
-            if ($this->timeout) {
+            if (isset($this->timeout)) {
                 stream_set_timeout($this->resource, 0, $this->timeout);
             }
         }

@@ -54,6 +54,10 @@ if (in_array('update', $argv)) {
             $annotations[] = '';
             $annotations[] = $group;
             foreach ($commands as $command => $params) {
+                // skip for Pipeline
+                if (in_array($command, ['subscribe', 'psubscribe', 'monitor'])) {
+                    continue;
+                }
                 $annotations[] = '@method $this ' . $command . '(' . $params . ')';
                 // deactivation old version of commands
                 $text = str_replace('@method $this ' . $command . '(', '-method $this ' . $command . '(', $text);
@@ -74,6 +78,7 @@ if (in_array('update', $argv)) {
             if (in_array('backup', $argv)) {
                 copy($file, $back = __DIR__ . '/back/Pipeline' . $version . '.php.' . date('Ymd.His'));
             }
+            $new = str_replace('method $this ', 'method Pipeline'.$version.' ', $new);
             file_put_contents($file, $new);
         }
     }

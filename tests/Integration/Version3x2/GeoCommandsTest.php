@@ -66,7 +66,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->geoadd('foo', ['Palermo' => ['13.361389', '38.115556']]);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -107,7 +107,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->geodist('foo', 'Catania', 'Palermo');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -141,7 +141,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->geodist('foo', 'bar', 'foo');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -172,7 +172,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->geopos('foo', ['bar', 'foo']);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -228,7 +228,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->georadius('foo', 15, 37, 100, 'km');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -260,7 +260,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->georadiusbymember('foo', 'Agrigento', 100, 'km');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

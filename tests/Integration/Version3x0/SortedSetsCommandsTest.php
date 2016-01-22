@@ -88,7 +88,7 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x8 {
         $Redis->set('string', 'value');
         try {
             $Redis->zadd('string', ['a' => 0, 'b' => 2, 'c' => 3]);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

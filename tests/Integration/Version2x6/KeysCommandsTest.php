@@ -196,7 +196,7 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -316,7 +316,7 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $this->assertSame(true, $Redis->rename('key', 'foo'));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -326,7 +326,7 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->rename('key', 'key');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -346,7 +346,7 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $this->assertSame(0, $Redis->renamenx('key', 'foo'));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -356,7 +356,7 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->renamenx('key', 'key');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

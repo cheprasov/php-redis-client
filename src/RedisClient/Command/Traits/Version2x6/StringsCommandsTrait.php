@@ -101,7 +101,7 @@ trait StringsCommandsTrait {
      * Time complexity: O(1)
      * @link http://redis.io/commands/get
      *
-     * @param $key
+     * @param string $key
      * @return string|null
      */
     public function get($key) {
@@ -326,7 +326,8 @@ trait StringsCommandsTrait {
      * Time complexity: O(1)
      * @link http://redis.io/commands/setnx
      *
-     * @param $key
+     * @param string $key
+     * @param string $value
      * @return int 1 if the key was set, 0 if the key was not set
      */
     public function setnx($key, $value) {
@@ -339,7 +340,9 @@ trait StringsCommandsTrait {
      * Time complexity: O(1)
      * @link http://redis.io/commands/setrange
      *
-     * @param $key
+     * @param string $key
+     * @param int $offset
+     * @param string $value
      * @return int The length of the string after it was modified by the command.
      */
     public function setrange($key, $offset, $value) {

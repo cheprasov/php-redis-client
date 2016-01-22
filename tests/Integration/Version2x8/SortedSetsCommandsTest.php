@@ -54,7 +54,7 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x6 {
         $Redis->set('string', 'value');
         try {
             $Redis->zlexcount('string', '-', '+');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -80,7 +80,7 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x6 {
         $Redis->set('string', 'value');
         try {
             $Redis->zrangebylex('string', '-', '+');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -107,7 +107,7 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x6 {
         $Redis->set('string', 'value');
         try {
             $this->assertSame(0, $Redis->zremrangebylex('string', '[a', '[f'));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -133,7 +133,7 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x6 {
         $Redis->set('string', 'value');
         try {
             $Redis->zrevrangebylex('string', '-', '+');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -151,7 +151,7 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x6 {
         $Redis->set('string', 'value');
         try {
             $Redis->zscan('string', 0);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

@@ -46,9 +46,6 @@ class RedisProtocol implements ProtocolInterface {
         if (is_string($data) || is_int($data) || is_bool($data) || is_float($data) || is_null($data)) {
             return $this->packProtocolBulkString((string) $data);
         }
-//        if (is_null($data)) {
-//            return $this->packProtocolNull();
-//        }
         if (is_array($data)) {
             return $this->packProtocolArray($data);
         }
@@ -83,7 +80,7 @@ class RedisProtocol implements ProtocolInterface {
     }
 
     /**
-     * @param $raw
+     * @param string $raw
      * @return null|string
      */
     protected function write($raw) {
@@ -138,7 +135,7 @@ class RedisProtocol implements ProtocolInterface {
             return new ErrorResponseException($data);
         }
 
-        throw new UnknownTypeException(sprintf('Unknown protocol type %s', $type));
+        throw new UnknownTypeException('Unknown protocol type '. $type);
     }
 
 
@@ -175,7 +172,9 @@ class RedisProtocol implements ProtocolInterface {
         do {
             try {
                 $response = (array) $this->read();
-                array_push($response, null, null, null, null);
+                for ($i = count($response); $i < 4; ++$i) {
+                    $response[] = null;
+                }
             } catch (EmptyResponseException $Ex) {
                 $response = [null, null, null, null];
             }

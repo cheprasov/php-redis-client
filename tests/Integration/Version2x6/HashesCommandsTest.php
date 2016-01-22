@@ -87,7 +87,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hdel('string', 'field');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -113,7 +113,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hexists('string', 'value');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -137,7 +137,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hget('string', 'some-field');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -162,7 +162,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hgetall('string');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -178,14 +178,14 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $this->assertSame(2, $Redis->hincrby('hash', 'string', 2));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
         try {
             $this->assertSame(1, $Redis->hincrby('hash', 'float', 3));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -193,7 +193,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         try {
             // I don't know why it happens, but it is real Redis behavior
             $this->assertSame(3, $Redis->hincrby('hash', 'bin', 3));
-            //$this->assertTrue(false);
+            //$this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -209,7 +209,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hincrby('string', 'value', 2);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -225,7 +225,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $this->assertSame('2.2', $Redis->hincrbyfloat('hash', 'string', 2.2));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -244,7 +244,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hincrbyfloat('string', 'value', 2.2);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -269,7 +269,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hkeys('string');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -284,7 +284,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hlen('string');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -307,7 +307,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hmget('string', 'some-field');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -321,7 +321,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hmset('string', ['field' => 'test']);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -338,7 +338,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hset('string', 'field', 'test');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -355,7 +355,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hsetnx('string', 'field', 'test');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -383,7 +383,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->hvals('string');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

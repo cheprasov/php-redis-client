@@ -47,7 +47,7 @@ class HashesCommandsTest extends HashesCommandsTestVersion3x0 {
 
         try {
             $Redis->hstrlen('string', 'field');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

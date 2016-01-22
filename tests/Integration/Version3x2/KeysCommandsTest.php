@@ -51,7 +51,7 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
 
         try {
             $this->assertSame(true, $Redis->rename('key', 'foo'));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -77,7 +77,7 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
 
         try {
             $this->assertSame(0, $Redis->renamenx('key', 'foo'));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

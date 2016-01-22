@@ -12,7 +12,7 @@ namespace RedisClient\Command\Traits\Version3x0;
 
 /**
  * trait ClusterCommandsTrait
- * @link http://redis.io/commands#pubsub
+ * @link http://redis.io/topics/cluster-tutorial
  */
 trait ClusterCommandsTrait {
 
@@ -20,6 +20,7 @@ trait ClusterCommandsTrait {
      * CLUSTER ADDSLOTS slot [slot ...]
      * Available since 3.0.0.
      * Time complexity: O(N) where N is the total number of hash slot arguments
+     * @link http://redis.io/commands/cluster-addslots
      *
      * @param int|int[] $slots
      * @return bool True if the command was successful. Otherwise an error is returned.
@@ -32,6 +33,7 @@ trait ClusterCommandsTrait {
      * CLUSTER COUNT-FAILURE-REPORTS node-id
      * Available since 3.0.0.
      * Time complexity: O(N) where N is the number of failure reports
+     * @link http://redis.io/commands/cluster-count-failure-reports
      *
      * @param int $nodeId
      * @return int The number of active failure reports for the node.
@@ -44,6 +46,7 @@ trait ClusterCommandsTrait {
      * CLUSTER COUNTKEYSINSLOT slot
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/cluster-countkeysinslot
      *
      * @param int $slot
      * @return int
@@ -56,6 +59,7 @@ trait ClusterCommandsTrait {
      * CLUSTER DELSLOTS slot [slot ...]
      * Available since 3.0.0.
      * Time complexity: O(N) where N is the total number of hash slot arguments
+     * @link http://redis.io/commands/cluster-delslots
      *
      * @param int|int[] $slots
      * @return bool True if the command was successful. Otherwise an error is returned.
@@ -68,6 +72,7 @@ trait ClusterCommandsTrait {
      * CLUSTER FAILOVER [FORCE|TAKEOVER]
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/cluster-failover
      *
      * @param string|null $option FORCE|TAKEOVER
      * @return
@@ -80,6 +85,7 @@ trait ClusterCommandsTrait {
      * CLUSTER FORGET node-id
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/cluster-forget
      *
      * @param int $nodeId
      * @return bool True if the command was executed successfully, otherwise an error is returned.
@@ -92,6 +98,7 @@ trait ClusterCommandsTrait {
      * CLUSTER GETKEYSINSLOT slot count
      * Available since 3.0.0.
      * Time complexity: O(log(N)) where N is the number of requested keys
+     * @link http://redis.io/commands/cluster-getkeysinslot
      *
      * @param int $slot
      * @param int $count
@@ -105,18 +112,20 @@ trait ClusterCommandsTrait {
      * CLUSTER INFO
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/cluster-info
      *
      * @return string A map between named fields and values in the form of <field>:<value>
      * lines separated by newlines composed by the two bytes CRLF.
      */
-    public function clusterInfo($slot, $count) {
-        return $this->returnCommand(['CLUSTER', 'INFO'], [$slot, $count]);
+    public function clusterInfo() {
+        return $this->returnCommand(['CLUSTER', 'INFO']);
     }
 
     /**
      * CLUSTER KEYSLOT key
      * Available since 3.0.0.
      * Time complexity: O(N) where N is the number of bytes in the key
+     * @link http://redis.io/commands/cluster-keyslot
      *
      * @param string $key
      * @return int The hash slot number.
@@ -129,6 +138,7 @@ trait ClusterCommandsTrait {
      * CLUSTER MEET ip port
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/cluster-meet
      *
      * @param string $ip
      * @param int $port
@@ -143,6 +153,7 @@ trait ClusterCommandsTrait {
      * CLUSTER NODES
      * Available since 3.0.0.
      * Time complexity: O(N) where N is the total number of Cluster nodes
+     * @link http://redis.io/commands/cluster-nodes
      *
      * @return string The serialized cluster configuration.
      */
@@ -154,6 +165,7 @@ trait ClusterCommandsTrait {
      * CLUSTER REPLICATE node-id
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/cluster-replicate
      *
      * @param int $nodeId
      * @return bool True if the command was executed successfully, otherwise an error is returned.
@@ -165,7 +177,9 @@ trait ClusterCommandsTrait {
     /**
      * CLUSTER RESET [HARD|SOFT]
      * Available since 3.0.0.
-     * Time complexity: O(N) where N is the number of known nodes. The command may execute a FLUSHALL as a side effect.
+     * Time complexity: O(N) where N is the number of known nodes.
+     * The command may execute a FLUSHALL as a side effect.
+     * @link http://redis.io/commands/cluster-reset
      *
      * @param string $option HARD|SOFT
      * @return bool True if the command was successful. Otherwise an error is returned.
@@ -178,6 +192,7 @@ trait ClusterCommandsTrait {
      * CLUSTER SAVECONFIG
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/cluster-saveconfig
      *
      * @return bool
      */
@@ -189,6 +204,7 @@ trait ClusterCommandsTrait {
      * CLUSTER SET-CONFIG-EPOCH config-epoch
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/cluster-set-config-epoch
      *
      * @param string $config
      * @return bool True if the command was executed successfully, otherwise an error is returned.
@@ -201,6 +217,7 @@ trait ClusterCommandsTrait {
      * CLUSTER SETSLOT slot IMPORTING|MIGRATING|STABLE|NODE [node-id]
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/cluster-setslot
      *
      * @param string $slot
      * @param string $subcommand IMPORTING|MIGRATING|STABLE|NODE
@@ -219,6 +236,7 @@ trait ClusterCommandsTrait {
      * CLUSTER SLAVES node-id
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/cluster-slaves
      *
      * @param int $nodeId
      * @return string The serialized cluster configuration.
@@ -231,6 +249,7 @@ trait ClusterCommandsTrait {
      * CLUSTER SLOTS
      * Available since 3.0.0.
      * Time complexity: O(N) where N is the total number of Cluster nodes
+     * @link http://redis.io/commands/cluster-slots
      *
      * @return array Nested list of slot ranges with IP/Port mappings.
      */
@@ -242,6 +261,7 @@ trait ClusterCommandsTrait {
      * READONLY
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/readonly
      *
      * @return bool
      */
@@ -253,6 +273,7 @@ trait ClusterCommandsTrait {
      * READWRITE
      * Available since 3.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/readwrite
      *
      * @return bool
      */

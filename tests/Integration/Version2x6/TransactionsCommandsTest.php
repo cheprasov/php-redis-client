@@ -72,9 +72,9 @@ class TransactionsCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->discard();
-            $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('ERR DISCARD without MULTI', $Ex->getMessage());
+            $this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -118,9 +118,9 @@ class TransactionsCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->exec();
-            $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('ERR EXEC without MULTI', $Ex->getMessage());
+            $this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
 
@@ -148,9 +148,9 @@ class TransactionsCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(true, $Redis->multi());
         try {
             $Redis->multi();
-            $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('ERR MULTI calls can not be nested', $Ex->getMessage());
+            $this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
         $this->assertSame(true, $Redis->discard());
     }
@@ -190,12 +190,18 @@ class TransactionsCommandsTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertSame(true, $Redis->watch(['foo', 'bar']));
         $this->assertSame(true, $Redis->multi());
+        $this->assertSame('QUEUED', $Redis->set('foo', 'bar'));
+        $this->assertSame('QUEUED', $Redis->set('bar', 'foo'));
+        $this->assertSame([true, true], $Redis->exec());
+
+        $this->assertSame(true, $Redis->watch(['foo', 'bar']));
+        $this->assertSame(true, $Redis->multi());
         $Redis->unwatch();
         try {
             $Redis->watch(['foo', 'bar']);
-            $this->assertTrue(false);
-        } catch (ErrorResponseException $Ex) {
-            $this->assertSame('ERR WATCH inside MULTI is not allowed', $Ex->getMessage());
+            $this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
         $this->assertSame(true, $Redis->discard());
     }
