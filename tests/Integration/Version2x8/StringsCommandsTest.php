@@ -78,7 +78,7 @@ class StringsCommandsTest extends StringsCommandsTestVersion2x6 {
 
         try {
             $Redis->bitpos('hash', 0);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

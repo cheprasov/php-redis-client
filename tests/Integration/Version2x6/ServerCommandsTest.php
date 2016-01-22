@@ -68,7 +68,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('Background append only file rewriting started', $Redis->bgrewriteaof());
         try {
             $this->assertSame(true, (bool) $Redis->bgrewriteaof());
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -83,7 +83,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('Background saving started', $Redis->bgsave());
         try {
             $this->assertSame(true, (bool) $Redis->bgsave());
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

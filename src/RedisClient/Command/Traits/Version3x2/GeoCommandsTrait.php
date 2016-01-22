@@ -20,7 +20,7 @@ trait GeoCommandsTrait {
      * Time complexity: O(log(N)) for each item added, where N is the number of elements in the sorted set.
      * @link http://redis.io/commands/geoadd
      *
-     * @param $key
+     * @param string $key
      * @param array $members [member => [longitude, latitude]]
      * @return int The number of elements added to the sorted set,
      * not including elements already existing for which the score was updated.

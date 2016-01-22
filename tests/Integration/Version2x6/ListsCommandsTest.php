@@ -75,7 +75,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->blpop('foo', 1);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -107,7 +107,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->brpop('foo', 1);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -138,13 +138,13 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->brpoplpush('foo', 'bar', 1);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
         try {
             $Redis->brpoplpush('list2', 'foo', 1);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -170,7 +170,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->lindex('foo', 1);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -194,7 +194,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->linsert('foo', true, 400, 400);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -214,7 +214,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->llen('foo');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -237,7 +237,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->lpop('foo');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -255,7 +255,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->lpush('foo', 'bar');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -274,7 +274,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->lpushx('foo', 'bar');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -298,7 +298,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->lrange('foo', 0, -1);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -339,7 +339,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->lrem('foo', 0, 'bar');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -373,7 +373,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $this->assertSame(true, $Redis->lset('list', 20, 'bar'));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -381,7 +381,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->lrem('foo', 0, 'bar');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -423,7 +423,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->ltrim('foo', 0, 10);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -446,7 +446,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->rpop('foo');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -473,13 +473,13 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->rpoplpush('foo', 'bar');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
         try {
             $Redis->rpoplpush('list2', 'foo');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -497,7 +497,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->rpush('foo', 'bar');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -516,7 +516,7 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('foo', 'bar');
         try {
             $Redis->rpushx('foo', 'bar');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

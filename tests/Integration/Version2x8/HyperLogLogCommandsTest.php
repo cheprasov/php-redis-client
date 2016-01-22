@@ -66,7 +66,7 @@ class HyperLogLogCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(1, $Redis->hset('foo', 'bar', '42'));
         try {
             $this->assertSame(0, $Redis->pfadd('foo', ['a', 'b', 'c']));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -93,7 +93,7 @@ class HyperLogLogCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(1, $Redis->hset('foo', 'bar', '42'));
         try {
             $this->assertSame(0, $Redis->pfcount('foo'));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -128,7 +128,7 @@ class HyperLogLogCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(1, $Redis->hset('poo', 'bar', '42'));
         try {
             $Redis->pfmerge('hll', 'poo');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

@@ -167,7 +167,8 @@ trait KeysCommandsTrait {
      * Time complexity: O(1)
      * @link http://redis.io/commands/pexpire
      *
-     * @param $key
+     * @param string $key
+     * @param int $milliseconds
      * @return int 1 if the timeout was set.
      * 0 if key does not exist or the timeout could not be set.
      */
@@ -195,7 +196,7 @@ trait KeysCommandsTrait {
      * Time complexity: O(1)
      * @link http://redis.io/commands/pttl
      *
-     * @param $key
+     * @param string $key
      * @return int TTL in milliseconds, or a negative value in order to signal an error.
      */
     public function pttl($key) {
@@ -307,7 +308,7 @@ trait KeysCommandsTrait {
      * Time complexity: O(1)
      * @link http://redis.io/commands/ttl
      *
-     * @param $key
+     * @param string $key
      * @return int TTL in seconds, or a negative value in order to signal an error
      */
     public function ttl($key) {

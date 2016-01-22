@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Php client for Redis",
   "homepage": "http://github.com/cheprasov/php-redis-client",
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "license": "proprietary",
   "authors": [
     {
@@ -21,6 +21,6 @@
   },
   "require-dev": {
     "phpunit/phpunit": "5.1.*",
-    "cheprasov/php-simple-profiler": "*"
+    "cheprasov/php-simple-profiler": "master-dev"
   }
 }

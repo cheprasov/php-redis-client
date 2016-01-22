@@ -62,7 +62,7 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->evalScript('Script with error');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -75,7 +75,7 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->evalsha(sha1($script));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -132,7 +132,7 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->scriptKill();
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }

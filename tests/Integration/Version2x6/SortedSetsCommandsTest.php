@@ -73,7 +73,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zadd('string', ['a' => 0, 'b' => 2, 'c' => 3]);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -93,7 +93,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zadd('string', ['a' => 0, 'b' => 2, 'c' => 3]);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -113,7 +113,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zcount('string', 0, 1);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -133,7 +133,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zincrby('string', 0, 'a');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -171,7 +171,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zinterstore('store', ['string' , 'foo']);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -195,7 +195,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zrange('string', 0, -1);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -221,7 +221,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zrangebyscore('string', 10, 30);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -246,7 +246,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zrank('string', 'a');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -280,7 +280,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zrem('string', 'a');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -307,7 +307,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $this->assertSame(0, $Redis->zremrangebyrank('string', 0, -1));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -334,7 +334,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $this->assertSame(0, $Redis->zremrangebyscore('string', 0, 100));
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -358,7 +358,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zrevrange('string', 0, -1);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -384,7 +384,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zrevrangebyscore('string', 30, 10);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -409,7 +409,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zrevrank('string', 'a');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -434,7 +434,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zscore('string', 'a');
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
@@ -472,7 +472,7 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         $Redis->set('string', 'value');
         try {
             $Redis->zunionstore('store', ['string' , 'foo']);
-            $this->assertTrue(false);
+            $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
