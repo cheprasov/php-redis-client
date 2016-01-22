@@ -174,4 +174,17 @@ trait GeoCommandsTrait {
         return $this->returnCommand(['GEORADIUSBYMEMBER'], $params, $parse ? ResponseParser::PARSE_GEO_ARRAY : null);
     }
 
+    /**
+     * GEODEL key member [member ...]
+     * @link https://github.com/antirez/redis-doc/commit/0f0db1548bef3e005e775ead79b5b9c13be4baed
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zrem
+     *
+     * @param string $key
+     * @param string|string[] $members
+     * @return int The number of members removed from the sorted set, not including non existing members.
+     */
+    public function geodel($key, $members) {
+        return $this->zrem($key, $members);
+    }
+
 }
