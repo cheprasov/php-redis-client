@@ -282,6 +282,12 @@ use RedisClient\Pipeline\AbstractPipeline;
  * Hashes
  * @method Pipeline3x2 hstrlen($key, $field)
  *
+ * Scripting
+ * @method Pipeline3x2 scriptDebug($param)
+ *
+ * Server
+ * @method Pipeline3x2 clientReply($param)
+ *
  * Sets
  * @method Pipeline3x2 spop($key, $count = null)
  * 

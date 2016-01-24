@@ -23,6 +23,11 @@ class ScriptingCommandsTest extends ScriptingCommandsTestVersion3x0 {
     const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x2_1;
 
     /**
+     * @var RedisClient3x2;
+     */
+    protected static $Redis;
+
+    /**
      * @inheritdoc
      */
     public static function setUpBeforeClass() {
@@ -30,5 +35,15 @@ class ScriptingCommandsTest extends ScriptingCommandsTestVersion3x0 {
             'server' =>  static::TEST_REDIS_SERVER_1,
             'timeout' => 2,
         ]);
+    }
+
+    /**
+     * @see ScriptingCommandsTrait::scriptDebug
+     */
+    public function test_scriptDebug() {
+        $Redis = static::$Redis;
+        $this->assertSame(true, $Redis->scriptDebug('SYNC'));
+        $this->assertSame(true, $Redis->scriptDebug('YES'));
+        $this->assertSame(true, $Redis->scriptDebug('NO'));
     }
 }
