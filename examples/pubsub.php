@@ -16,6 +16,7 @@
 namespace Examples;
 
 require (dirname(__DIR__).'/src/autoloader.php');
+// or require ('vendor/autoload.php');
 
 use RedisClient\RedisClient;
 

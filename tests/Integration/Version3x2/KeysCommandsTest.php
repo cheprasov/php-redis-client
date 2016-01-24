@@ -39,11 +39,49 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
     }
 
     public function test_dump() {
-        //todo
+        $Redis = static::$Redis;
+
+        $this->assertSame(null, $Redis->dump('key'));
+
+        $Redis->set('key', "\x00");
+        $this->assertSame("\x00\x01\x00\x07\x00\xa4\xca\xf0\x3f\x64\xdd\x96\x4c", $Redis->dump('key'));
+
+        $Redis->set('key', "1");
+        $this->assertSame("\x00\xc0\x01\x07\x00\xd9\x4a\x32\x45\xd9\xcb\xc4\xe6", $Redis->dump('key'));
+
+        $Redis->set('key', "10");
+        $this->assertSame("\x00\xc0\x0a\x07\x00\x91\xad\x82\xb6\x06\x64\xb6\xa1", $Redis->dump('key'));
+
+        $Redis->hset('hash', 'field', 'value');
+        $this->assertSame("\x0d\x19\x19\x00\x00\x00\x11\x00\x00\x00\x02\x00\x00\x05\x66\x69\x65\x6c\x64".
+            "\x07\x05\x76\x61\x6c\x75\x65\xff\x07\x00\x93\xd1\xce\x4d\xd7\x96\x00\xd0", $Redis->dump('hash'));
+
     }
 
     public function test_restore() {
-        //todo
+        $Redis = static::$Redis;
+
+        $this->assertSame(true, $Redis->restore('key', 0, "\x00\x01\x00\x07\x00\xa4\xca\xf0\x3f\x64\xdd\x96\x4c"));
+        $this->assertSame("\x00", $Redis->get('key'));
+
+        $this->assertSame(true, $Redis->restore('key', 0, "\x00\xc0\x01\x07\x00\xd9\x4a\x32\x45\xd9\xcb\xc4\xe6", true));
+        $this->assertSame('1', $Redis->get('key'));
+
+        $this->assertSame(true, $Redis->restore('key', 0, "\x00\xc0\x0a\x07\x00\x91\xad\x82\xb6\x06\x64\xb6\xa1", true));
+        $this->assertSame('10', $Redis->get('key'));
+
+        $this->assertSame(true, $Redis->restore('hash', 0,
+            "\x0d\x19\x19\x00\x00\x00\x11\x00\x00\x00\x02\x00\x00\x05\x66\x69\x65\x6c\x64".
+            "\x07\x05\x76\x61\x6c\x75\x65\xff\x07\x00\x93\xd1\xce\x4d\xd7\x96\x00\xd0"
+        ));
+        $this->assertSame('value', $Redis->hget('hash', 'field'));
+
+        try {
+            $this->assertSame(true, $Redis->restore('key', 0, "\x00\x01\x00\x07\x00\xa4\xca\xf0\x3f\x64\xdd\x96\x4c"));
+            $this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
+        }
     }
 
     public function test_rename() {
