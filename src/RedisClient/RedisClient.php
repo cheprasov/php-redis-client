@@ -13,11 +13,6 @@ use RedisClient\Client\Version\RedisClient3x0 as RedisClientLastStableVersion;
 use RedisClient\Pipeline\Pipeline;
 use RedisClient\Pipeline\PipelineInterface;
 
-
-/**
- * Class RedisClient
- * @package RedisClient
- */
 class RedisClient extends RedisClientLastStableVersion {
 
     /**

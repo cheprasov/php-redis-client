@@ -11,6 +11,7 @@
 namespace Test\Integration\Version2x6;
 
 use RedisClient\Client\Version\RedisClient2x6;
+use RedisClient\ClientFactory;
 use RedisClient\Exception\ErrorResponseException;
 
 /**

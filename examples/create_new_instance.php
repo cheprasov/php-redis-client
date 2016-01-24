@@ -15,35 +15,34 @@
 
 namespace Examples;
 
-require (dirname(__DIR__).'/src/autoloader.php');
-// or require ('vendor/autoload.php');
+require (dirname(__DIR__).'/vendor/autoload.php');
+// or require (dirname(__DIR__).'/src/autoloader.php');
 
 use RedisClient\RedisClient;
 use RedisClient\Client\Version\RedisClient2x6;
+use RedisClient\ClientFactory;
 
 // Example 1. Create new Instance with default config
 
 $Redis = new RedisClient();
-
-echo 'RedisClient: '. $Redis->getVersion() . PHP_EOL;
+// By default, the client works with the latest stable version of Redis.
+echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL;
 echo 'Redis: '. $Redis->info('Server')['redis_version'] . PHP_EOL;
 
-// result:
 // RedisClient: 3.0
 // Redis: 3.0.3
 
 
 // Example 2. Create new Instance with config
+// By default, the client works with the latest stable version of Redis.
 
 $Redis = new RedisClient([
     'server' => 'tcp://127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
     'timeout' => 2
 ]);
 
-echo 'RedisClient: '. $Redis->getVersion() . PHP_EOL;
+echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL;
 echo 'Redis: '. $Redis->info('Server')['redis_version'] . PHP_EOL;
-
-// result:
 // RedisClient: 3.0
 // Redis: 3.0.3
 
@@ -55,9 +54,16 @@ $Redis = new RedisClient2x6([
     'timeout' => 2
 ]);
 
-echo 'RedisClient: '. $Redis->getVersion() . PHP_EOL;
-echo 'Redis: '. $Redis->info('Server')['redis_version'] . PHP_EOL;
-
-// result:
+echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL;
 // RedisClient: 2.6
-// Redis: 3.0.3
+
+// Example 4. Create new Instance for Redis version 2.8.x with config via factory
+
+$Redis = ClientFactory::create([
+    'server' => 'tcp://127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
+    'timeout' => 2,
+    'version' => '2.8.24'
+]);
+
+echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL;
+// RedisClient: 2.8
