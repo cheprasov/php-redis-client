@@ -83,4 +83,17 @@ abstract class AbstractPipeline implements PipelineInterface {
         return $responses;
     }
 
+    /**
+     * @param string $name
+     * @param array $arguments
+     * @return mixed
+     * @throws \Exception
+     */
+    public function __call($name , array $arguments) {
+        if ($method = $this->getMethodNameForReservedWord($name)) {
+            return call_user_func_array([$this, $method], $arguments);
+        }
+        throw new \Exception('Call to undefined method '. static::class. '::'. $name);
+    }
+
 }

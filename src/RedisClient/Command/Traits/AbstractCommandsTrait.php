@@ -10,6 +10,10 @@
  */
 namespace RedisClient\Command\Traits;
 
+/**
+ * @method mixed eval($script, $keys = null, $args = null)
+ * @method string echo($message)
+ */
 trait AbstractCommandsTrait {
 
     /**
@@ -32,4 +36,23 @@ trait AbstractCommandsTrait {
      * @return string
      */
     abstract public function getVersion();
+
+    /**
+     * @var array
+     */
+    protected static $methodForReservedWord = [
+        'eval' => 'evalScript',
+        'echo' => 'echoMessage',
+    ];
+
+    /**
+     * @param string $name
+     * @return string|null
+     */
+    protected function getMethodNameForReservedWord($name) {
+        if (isset(static::$methodForReservedWord[$name])) {
+            return static::$methodForReservedWord[$name];
+        }
+        return null;
+    }
 }

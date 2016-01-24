@@ -59,7 +59,7 @@ class ResponseParser {
     }
 
     /**
-     * @param string[] $response
+     * @param string $response
      * @return array
      */
     public static function parseClientList($response) {
@@ -67,9 +67,9 @@ class ResponseParser {
             return $response;
         }
         $array = [];
-        foreach (explode("\n", $response) as $client) {
+        foreach (explode("\n", trim($response)) as $client) {
             $c = [];
-            foreach (explode(' ', $client) as $param) {
+            foreach (explode(' ', trim($client)) as $param) {
                 $args = explode('=', $param, 2);
                 if (isset($args[0], $args[1]) && ($key = trim($args[0]))) {
                     $c[$key] = trim($args[1]);
@@ -137,10 +137,10 @@ class ResponseParser {
     }
 
     /**
-     * @param array $response
-     * @return string string
+     * @param string[] $response
+     * @return string
      */
-    public static function parseTime($response) {
+    public static function parseTime(array $response) {
         if (is_array($response) && count($response) === 2) {
             if (($len = strlen($response[1])) < 6) {
                 $response[1] = str_repeat('0', 6 - $len) . $response[1];

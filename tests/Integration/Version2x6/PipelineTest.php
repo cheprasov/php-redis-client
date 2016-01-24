@@ -152,10 +152,11 @@ class PipelineTest extends \PHPUnit_Framework_TestCase {
                 ->lpush('bar', 'bar')
                 ->set('bar', 'new')
                 ->get('bar')
+                ->echo('hello word')
                 ->exec();
         });
 
-        $this->assertSame(9, count($result));
+        $this->assertSame(10, count($result));
         $this->assertSame(true, $result[0]);
         $this->assertSame('QUEUED', $result[1]);
         $this->assertSame('QUEUED', $result[2]);
@@ -164,10 +165,11 @@ class PipelineTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('QUEUED', $result[5]);
         $this->assertSame('QUEUED', $result[6]);
         $this->assertSame('QUEUED', $result[7]);
+        $this->assertSame('QUEUED', $result[8]);
 
-        $result = $result[8];
+        $result = $result[9];
 
-        $this->assertSame(7, count($result));
+        $this->assertSame(8, count($result));
         $this->assertSame(true, $result[0]);
         $this->assertSame(true, $result[1]);
         $this->assertSame('bar', $result[2]);
@@ -175,6 +177,7 @@ class PipelineTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf(ErrorResponseException::class, $result[4]);
         $this->assertSame(true, $result[5]);
         $this->assertSame('new', $result[6]);
+        $this->assertSame('hello word', $result[7]);
     }
 
 }

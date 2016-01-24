@@ -60,12 +60,20 @@ class ConnectionCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
-    public function test_echo() {
+    public function test_echoMessage() {
         $Redis = static::$Redis;
 
         $this->assertSame('message', $Redis->echoMessage('message'));
         $this->assertSame('', $Redis->echoMessage(''));
         $this->assertSame('foo bar', $Redis->echoMessage('foo bar'));
+    }
+
+    public function test_echo() {
+        $Redis = static::$Redis;
+
+        $this->assertSame('message', $Redis->echo('message'));
+        $this->assertSame('', $Redis->echo(''));
+        $this->assertSame('foo bar', $Redis->echo('foo bar'));
     }
 
     public function test_ping() {

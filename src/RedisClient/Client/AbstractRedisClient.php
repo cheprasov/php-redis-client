@@ -18,10 +18,7 @@ use RedisClient\Pipeline\PipelineInterface;
 use RedisClient\Protocol\ProtocolInterface;
 use RedisClient\Protocol\RedisProtocol;
 
-/**
- * Class RedisClient
- * @package RedisClient
- */
+
 abstract class AbstractRedisClient {
 
     const VERSION = '1.0.0';
@@ -107,28 +104,6 @@ abstract class AbstractRedisClient {
     }
 
     /**
-     * @param string[] $structure
-     * @return mixed
-     * @throws ErrorResponseException
-     */
-    public function executeRaw($structure) {
-        $response = $this->getProtocol()->send($structure);
-        if ($response instanceof ErrorResponseException) {
-            throw $response;
-        }
-        return $response;
-    }
-
-    /**
-     * @param string $stringCommand
-     * @return mixed
-     * @throws ErrorResponseException
-     */
-    public function executeRawString($stringCommand) {
-        return $this->executeRaw(explode(' ', $stringCommand));
-    }
-
-    /**
      * @inheritdoc
      */
     protected function subscribeCommand(array $subCommand, array $unsubCommand, array $params = null, $callback) {
@@ -194,6 +169,78 @@ abstract class AbstractRedisClient {
             }
         }
         return $Pipeline->parseResponse($responses);
+    }
+
+    /**
+     * @param string[] $structure
+     * @return mixed
+     * @throws ErrorResponseException
+     */
+    public function executeRaw($structure) {
+        $response = $this->getProtocol()->send($structure);
+        if ($response instanceof ErrorResponseException) {
+            throw $response;
+        }
+        return $response;
+    }
+
+    /**
+     * @param string $command
+     * @return mixed
+     */
+    public function executeRawString($command) {
+        return $this->executeRaw($this->parseRawString($command));
+    }
+
+    /**
+     * @param string $command
+     * @return string[]
+     */
+    public function parseRawString($command) {
+        $structure = [];
+        $line = ''; $quotes = false;
+        for ($i = 0, $length = strlen($command); $i <= $length; ++$i) {
+            if ($i === $length) {
+                if (isset($line[0])) {
+                    $structure[] = $line;
+                    $line = '';
+                }
+                break;
+            }
+            if ($command[$i] === '"' && $i && $command[$i - 1] !== '\\') {
+                $quotes = !$quotes;
+                if (!$quotes && !isset($line[0]) && $i + 1 === $length) {
+                    $structure[] = $line;
+                    $line = '';
+                }
+            } else if ($command[$i] === ' ' && !$quotes) {
+                if (isset($command[$i + 1]) && trim($command[$i + 1])) {
+                    if (count($structure) || isset($line[0])) {
+                        $structure[] = $line;
+                        $line = '';
+                    }
+                }
+            } else {
+                $line .= $command[$i];
+            }
+        }
+        array_walk($structure, function(&$line) {
+            $line = str_replace('\\"', '"', $line);
+        });
+        return $structure;
+    }
+
+    /**
+     * @param string $name
+     * @param array $arguments
+     * @return mixed
+     * @throws \Exception
+     */
+    public function __call($name , array $arguments) {
+        if ($method = $this->getMethodNameForReservedWord($name)) {
+            return call_user_func_array([$this, $method], $arguments);
+        }
+        throw new \Exception('Call to undefined method '. static::class. '::'. $name);
     }
 
 }

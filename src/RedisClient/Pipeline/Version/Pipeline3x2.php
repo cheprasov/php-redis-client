@@ -18,7 +18,8 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * Connection
  * @method Pipeline3x2 auth($password)
- * @method Pipeline3x2 echoMessage($message)
+ * @method Pipeline3x2 echo($message)
+ * @method Pipeline3x2 echoMessage($message) - alias method for reversed word <echo>
  * @method Pipeline3x2 ping($message = null)
  * @method Pipeline3x2 quit()
  * @method Pipeline3x2 select($db)
@@ -85,7 +86,8 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 unsubscribe($channels)
  *
  * Scripting
- * @method Pipeline3x2 evalScript($script, $keys = null, $args = null)
+ * @method Pipeline3x2 eval($script, $keys = null, $args = null)
+ * @method Pipeline3x2 evalScript($script, $keys = null, $args = null) - alias method for reversed word <eval>
  * @method Pipeline3x2 evalsha($sha, $keys = null, $args = null)
  * @method Pipeline3x2 scriptExists($scriptsSha)
  * @method Pipeline3x2 scriptFlush()
@@ -275,6 +277,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 geopos($key, $members)
  * @method Pipeline3x2 georadius($key, $longitude, $latitude, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null)
  * @method Pipeline3x2 georadiusbymember($key, $member, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null)
+ * @method Pipeline3x2 geodel($key, $members)
  *
  * Hashes
  * @method Pipeline3x2 hstrlen($key, $field)

@@ -22,6 +22,8 @@ trait ScriptingCommandsTrait {
      * Time complexity: Depends on the script that is executed.
      * @link http://redis.io/commands/eval
      *
+     * method for reversed word <eval> in PHP
+     *
      * @param string $script
      * @param array|null $keys
      * @param array|null $args

@@ -18,7 +18,8 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * Connection
  * @method Pipeline2x8 auth($password)
- * @method Pipeline2x8 echoMessage($message)
+ * @method Pipeline2x8 echo($message)
+ * @method Pipeline2x8 echoMessage($message) - alias method for reversed word <echo>
  * @method Pipeline2x8 ping($message = null)
  * @method Pipeline2x8 quit()
  * @method Pipeline2x8 select($db)
@@ -85,7 +86,8 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline2x8 unsubscribe($channels)
  *
  * Scripting
- * @method Pipeline2x8 evalScript($script, $keys = null, $args = null)
+ * @method Pipeline2x8 eval($script, $keys = null, $args = null)
+ * @method Pipeline2x8 evalScript($script, $keys = null, $args = null) - alias method for reversed word <eval>
  * @method Pipeline2x8 evalsha($sha, $keys = null, $args = null)
  * @method Pipeline2x8 scriptExists($scriptsSha)
  * @method Pipeline2x8 scriptFlush()

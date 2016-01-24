@@ -33,6 +33,8 @@ trait ConnectionCommandsTrait {
      * Available since 1.0.0.
      * @link http://redis.io/commands/echo
      *
+     * method for reversed word <echo> in PHP
+     *
      * @param string $message
      * @return string Returns message
      */

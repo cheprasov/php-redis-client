@@ -16,7 +16,7 @@
     verbose                     = "true"
     beStrictAboutTestsThatDoNotTestAnything = "true"
     checkForUnintentionallyCoveredCode  = "false"
-    beStrictAboutOutputDuringTests      = "true"
+    beStrictAboutOutputDuringTests      = "false"
     beStrictAboutTestSize               = "true"
 >
     <testsuites>

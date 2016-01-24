@@ -189,6 +189,17 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(true, is_array($info['CPU']));
         $this->assertSame(true, is_array($info['Keyspace']));
 
+        $info = $Redis->info('all');
+        $this->assertSame(true, is_array($info));
+        $this->assertSame(true, is_array($info['Server']));
+        $this->assertSame(true, is_array($info['Clients']));
+        $this->assertSame(true, is_array($info['Memory']));
+        $this->assertSame(true, is_array($info['Persistence']));
+        $this->assertSame(true, is_array($info['Stats']));
+        $this->assertSame(true, is_array($info['Replication']));
+        $this->assertSame(true, is_array($info['CPU']));
+        $this->assertSame(true, is_array($info['Keyspace']));
+
         $this->assertSame($info['Server'], $Redis->info('Server'));
         $this->assertSame($info['Clients'], $Redis->info('Clients'));
         $this->assertSame($info['Persistence'], $Redis->info('Persistence'));
