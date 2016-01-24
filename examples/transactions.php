@@ -10,13 +10,13 @@
  */
 
 /**
- * Using transactions
+ * Transactions
  */
 
 namespace Examples;
 
-require (dirname(__DIR__).'/src/autoloader.php');
-// or require ('vendor/autoload.php');
+require (dirname(__DIR__).'/vendor/autoload.php');
+// or require (dirname(__DIR__).'/src/autoloader.php');
 
 use RedisClient\Pipeline\Pipeline;
 use RedisClient\Pipeline\PipelineInterface;

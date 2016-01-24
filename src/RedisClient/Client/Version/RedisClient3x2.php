@@ -15,10 +15,6 @@ use RedisClient\Command\Traits\Version3x2\CommandsTrait;
 use RedisClient\Pipeline\PipelineInterface;
 use RedisClient\Pipeline\Version\Pipeline3x2;
 
-/**
- * Class RedisClient
- * @package RedisClient
- */
 class RedisClient3x2 extends AbstractRedisClient {
     use CommandsTrait;
 

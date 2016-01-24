@@ -35,7 +35,7 @@ trait AbstractCommandsTrait {
     /**
      * @return string
      */
-    abstract public function getVersion();
+    abstract public function getSupportedVersion();
 
     /**
      * @var array

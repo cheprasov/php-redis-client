@@ -37,7 +37,7 @@ trait CommandsTrait {
     /**
      * @return string
      */
-    public function getVersion() {
+    public function getSupportedVersion() {
         return '2.8';
     }
 
