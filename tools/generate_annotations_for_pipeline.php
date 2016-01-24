@@ -44,6 +44,11 @@ foreach ($matches as $m) {
 
 ksort($versions);
 
+$reservedMethods = [
+    'evalScript' => 'eval',
+    'echoMessage' => 'echo',
+];
+
 if (in_array('update', $argv)) {
 
     $text = '';
@@ -58,7 +63,13 @@ if (in_array('update', $argv)) {
                 if (in_array($command, ['subscribe', 'psubscribe', 'monitor'])) {
                     continue;
                 }
-                $annotations[] = '@method $this ' . $command . '(' . $params . ')';
+
+                if (isset($reservedMethods[$command])) {
+                    $annotations[] = '@method $this ' . $reservedMethods[$command] . '(' . $params . ')';
+                    $annotations[] = '@method $this ' . $command . '(' . $params . ') - alias method for reversed word <'. $reservedMethods[$command] .'>';
+                } else {
+                    $annotations[] = '@method $this ' . $command . '(' . $params . ')';
+                }
                 // deactivation old version of commands
                 $text = str_replace('@method $this ' . $command . '(', '-method $this ' . $command . '(', $text);
             }
@@ -74,12 +85,16 @@ if (in_array('update', $argv)) {
         $old = file_get_contents($file);
         $new = preg_replace('/(?<=\/\*\*)\n (.+\n)+(?= \*\/\nclass Pipeline'.$version.')/', ($text).EOL, $old);
         if ($new) {
-            echo 'File '. $file .' - updated'. EOL;
             if (in_array('backup', $argv)) {
                 copy($file, $back = __DIR__ . '/back/Pipeline' . $version . '.php.' . date('Ymd.His'));
             }
             $new = str_replace('method $this ', 'method Pipeline'.$version.' ', $new);
-            file_put_contents($file, $new);
+            if ($new !== $old) {
+                file_put_contents($file, $new);
+                echo 'File '. $file .' - updated'. EOL;
+            } else {
+                echo 'File '. $file .' - has not changes'. EOL;
+            }
         }
     }
 

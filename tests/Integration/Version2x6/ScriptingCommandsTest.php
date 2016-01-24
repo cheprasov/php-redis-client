@@ -51,7 +51,7 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
         static::$Redis->scriptFlush();
     }
 
-    public function test_eval() {
+    public function test_evalScript() {
         $Redis = static::$Redis;
 
         $script = "return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}";
@@ -62,6 +62,23 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
 
         try {
             $Redis->evalScript('Script with error');
+            $this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
+        }
+    }
+
+    public function test_eval() {
+        $Redis = static::$Redis;
+
+        $script = "return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}";
+        $this->assertSame(['a', 'b', 'c', 'd'], $Redis->eval($script, ['a', 'b'], ['c', 'd']));
+        $this->assertSame(['a', 'b', 'd', 'e'], $Redis->eval($script, ['a', 'b', 'c'], ['d', 'e']));
+        $this->assertSame(['a', 'b'], $Redis->eval($script, ['a', 'b', 'c']));
+        $this->assertSame([], $Redis->eval($script));
+
+        try {
+            $Redis->eval('Script with error');
             $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
