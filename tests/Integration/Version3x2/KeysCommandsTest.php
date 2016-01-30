@@ -153,4 +153,44 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
         $this->assertSame('raw', $Redis->object('encoding', 'foo'));
     }
 
+    public function test_migrate() {
+        $Redis = static::$Redis;
+        $Redis2 = static::$Redis2;
+        $this->assertSame(true, $Redis2->flushall());
+
+        list(, $host, $port) = explode(':', str_replace('/', '', static::TEST_REDIS_SERVER_2), 3);
+
+        $this->assertSame(true, $Redis->set('one', 1));
+
+        $this->assertSame(null, $Redis2->get('one'));
+        $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100, true));
+        $this->assertSame('1', $Redis2->get('one'));
+        $this->assertSame('1', $Redis->get('one'));
+
+        $this->assertSame(true, $Redis->set('one', 11));
+
+        try {
+            $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100, true));
+            $this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
+        }
+
+        $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100, false, true));
+        $this->assertSame('11', $Redis2->get('one'));
+        $this->assertSame(null, $Redis->get('one'));
+
+        $this->assertSame(true, $Redis->set('one', 1));
+        $this->assertSame(true, $Redis->set('two', 2));
+        $this->assertSame(true, $Redis->set('three', 3));
+
+        $this->assertSame(true, $Redis->migrate($host, $port, ['one', 'two', 'three'], 0, 100, false, true));
+        $this->assertSame('1', $Redis2->get('one'));
+        $this->assertSame(null, $Redis->get('one'));
+        $this->assertSame('2', $Redis2->get('two'));
+        $this->assertSame(null, $Redis->get('two'));
+        $this->assertSame('3', $Redis2->get('three'));
+        $this->assertSame(null, $Redis->get('three'));
+    }
+
 }

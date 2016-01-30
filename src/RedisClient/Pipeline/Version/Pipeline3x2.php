@@ -261,7 +261,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * Keys
  * @method Pipeline3x2 exists($keys)
- * @method Pipeline3x2 migrate($host, $port, $key, $destinationDb, $timeout, $copy = false, $replace = false)
+ * -method Pipeline3x2 migrate($host, $port, $key, $destinationDb, $timeout, $copy = false, $replace = false)
  * @method Pipeline3x2 restore($key, $ttl, $serializedValue, $replace = false)
  * @method Pipeline3x2 wait($numslaves, $timeout)
  *
@@ -281,6 +281,9 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * Hashes
  * @method Pipeline3x2 hstrlen($key, $field)
+ *
+ * Keys
+ * @method Pipeline3x2 migrate($host, $port, $keys, $destinationDb, $timeout, $copy = false, $replace = false)
  *
  * Scripting
  * @method Pipeline3x2 scriptDebug($param)
