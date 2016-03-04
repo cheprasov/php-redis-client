@@ -39,7 +39,7 @@ trait ClusterCommandsTrait {
      * @return int The number of active failure reports for the node.
      */
     public function clusterCountFailureReports($nodeId) {
-        return $this->returnCommand(['PUBLISH'], [$nodeId]);
+        return $this->returnCommand(['CLUSTER', 'COUNT-FAILURE-REPORTS'], [$nodeId]);
     }
 
     /**
@@ -197,7 +197,7 @@ trait ClusterCommandsTrait {
      * @return bool
      */
     public function clusterSaveconfig() {
-        return $this->returnCommand(['CLUSTER SAVECONFIG']);
+        return $this->returnCommand(['CLUSTER', 'SAVECONFIG']);
     }
 
     /**
@@ -226,7 +226,7 @@ trait ClusterCommandsTrait {
      */
     public function clusterSetslot($slot, $subcommand, $nodeId = null) {
         $params = [$slot, $subcommand];
-        if ($nodeId) {
+        if (isset($nodeId)) {
             $params[] = $nodeId;
         }
         return $this->returnCommand(['CLUSTER', 'SETSLOT'], $params);

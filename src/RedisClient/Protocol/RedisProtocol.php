@@ -138,12 +138,10 @@ class RedisProtocol implements ProtocolInterface {
         throw new UnknownTypeException('Unknown protocol type '. $type);
     }
 
-
     /**
      * @inheritdoc
      */
     public function send(array $structures) {
-        //echo str_replace(['\n','\r'], '-', json_encode($structures))." => ";
         $this->write($this->packProtocolArray($structures));
         return $response = $this->read();
     }
