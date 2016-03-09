@@ -4,7 +4,7 @@
   "description": "Php client for Redis",
   "homepage": "http://github.com/cheprasov/php-redis-client",
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "MIT",
   "authors": [
     {
       "name": "Alexander Cheprasov",
