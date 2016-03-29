@@ -14,7 +14,7 @@ use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see ListsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait
  */
 class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -49,6 +49,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         static::$Redis->flushall();
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::blpop
+     */
     public function test_blpop() {
         $Redis = static::$Redis;
 
@@ -81,6 +84,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::brpop
+     */
     public function test_brpop() {
         $Redis = static::$Redis;
 
@@ -113,6 +119,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::brpoplpush
+     */
     public function test_brpoplpush() {
         $Redis = static::$Redis;
 
@@ -150,6 +159,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::lindex
+     */
     public function test_lindex() {
         $Redis = static::$Redis;
 
@@ -176,6 +188,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::linsert
+     */
     public function test_linsert() {
         $Redis = static::$Redis;
 
@@ -200,6 +215,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::llen
+     */
     public function test_llen() {
         $Redis = static::$Redis;
 
@@ -220,6 +238,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::lpop
+     */
     public function test_lpop() {
         $Redis = static::$Redis;
 
@@ -243,6 +264,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::lpush
+     */
     public function test_lpush() {
         $Redis = static::$Redis;
 
@@ -261,6 +285,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::lpushx
+     */
     public function test_lpushx() {
         $Redis = static::$Redis;
 
@@ -280,6 +307,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::lrange
+     */
     public function test_lrange() {
         $Redis = static::$Redis;
 
@@ -304,6 +334,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::lrem
+     */
     public function test_lrem() {
         $Redis = static::$Redis;
 
@@ -345,6 +378,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::lset
+     */
     public function test_lset() {
         $Redis = static::$Redis;
 
@@ -387,7 +423,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
-
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::ltrim
+     */
     public function test_ltrim() {
         $Redis = static::$Redis;
 
@@ -429,6 +467,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::rpop
+     */
     public function test_rpop() {
         $Redis = static::$Redis;
 
@@ -452,6 +493,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::rpoplpush
+     */
     public function test_rpoplpush() {
         $Redis = static::$Redis;
 
@@ -485,6 +529,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::rpush
+     */
     public function test_rpush() {
         $Redis = static::$Redis;
 
@@ -503,6 +550,9 @@ class ListsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait::rpushx
+     */
     public function test_rpushx() {
         $Redis = static::$Redis;
 

@@ -14,7 +14,7 @@ use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\ResponseParser;
 
 /**
- * trait HashesCommandsTrait
+ * Hashes Commands
  * @link http://redis.io/commands#hash
  */
 trait HashesCommandsTrait {

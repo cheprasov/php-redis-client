@@ -14,7 +14,8 @@ use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\ResponseParser;
 
 /**
- * trait SortedSetsCommandsTrait
+ * SortedSets Commands
+ * @link http://redis.io/commands#set
  * @link http://redis.io/topics/data-types#sorted-sets
  */
 trait SortedSetsCommandsTrait {

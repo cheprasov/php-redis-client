@@ -14,7 +14,7 @@ use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see KeysCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait
  */
 class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -61,7 +61,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         static::$Redis2->flushall();
     }
 
-
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::del
+     */
     public function test_del() {
         $Redis = static::$Redis;
 
@@ -85,6 +87,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(0, $Redis->del(['key', 'key', 'key']));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::dump
+     */
     public function test_dump() {
         $Redis = static::$Redis;
 
@@ -103,6 +108,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame("\x0d\x19\x19\x00\x00\x00\x11\x00\x00\x00\x02\x00\x00\x05field\x07\x05value\xff\x06\x00\xfa\x0es>*\x09\xe9Y", $Redis->dump('hash'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::exists
+     */
     public function test_exists() {
         $Redis = static::$Redis;
 
@@ -115,6 +123,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(0, $Redis->exists('key'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::expire
+     */
     public function test_expire() {
         $Redis = static::$Redis;
 
@@ -133,6 +144,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertLessThanOrEqual(100, $Redis->ttl('key'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::expireat
+     */
     public function test_expireat() {
         $Redis = static::$Redis;
 
@@ -151,6 +165,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertLessThanOrEqual(100, $Redis->ttl('key'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::keys
+     */
     public function test_keys() {
         $Redis = static::$Redis;
 
@@ -177,6 +194,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(['four', 'one'], $keys);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::migrate
+     */
     public function test_migrate() {
         $Redis = static::$Redis;
         $Redis2 = static::$Redis2;
@@ -202,6 +222,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::move
+     */
     public function test_move() {
         $Redis = static::$Redis;
 
@@ -221,6 +244,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(0, $Redis->move('two', 1));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::object
+     */
     public function test_object() {
         $Redis = static::$Redis;
 
@@ -239,6 +265,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('raw', $Redis->object('encoding', 'foo'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::persist
+     */
     public function test_persist() {
         $Redis = static::$Redis;
 
@@ -250,6 +279,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(0, $Redis->persist('bar'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::pexpire
+     */
     public function test_pexpire() {
         $Redis = static::$Redis;
 
@@ -268,6 +300,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertLessThanOrEqual(100, $Redis->ttl('key'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::pexpireat
+     */
     public function test_pexpireat() {
         $Redis = static::$Redis;
 
@@ -286,6 +321,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertLessThanOrEqual(100, $Redis->ttl('key'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::pttl
+     */
     public function test_pttl() {
         $Redis = static::$Redis;
 
@@ -297,6 +335,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertLessThanOrEqual(1000, $Redis->pttl('key'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::randomkey
+     */
     public function test_randomkey() {
         $Redis = static::$Redis;
 
@@ -311,6 +352,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue(in_array($Redis->randomkey(), ['foo', 'bar', 'key']));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::rename
+     */
     public function test_rename() {
         $Redis = static::$Redis;
 
@@ -341,6 +385,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('value1', $Redis->get('bar'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::renamenx
+     */
     public function test_renamenx() {
         $Redis = static::$Redis;
 
@@ -371,6 +418,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('value2', $Redis->get('bar'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::restore
+     */
     public function test_restore() {
         $Redis = static::$Redis;
 
@@ -387,6 +437,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('value', $Redis->hget('hash3', 'field'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::sort
+     */
     public function test_sort() {
         $Redis = static::$Redis;
 
@@ -416,6 +469,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(['2', '4', '1', '3', '5'], $Redis->lrange('list', 0, -1));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::ttl
+     */
     public function test_ttl() {
         $Redis = static::$Redis;
 
@@ -427,6 +483,9 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertLessThanOrEqual(10, $Redis->ttl('key'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::type
+     */
     public function test_type() {
         $Redis = static::$Redis;
 

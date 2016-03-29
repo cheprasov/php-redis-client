@@ -14,7 +14,7 @@ use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see HashesCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait
  */
 class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -69,6 +69,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         static::$Redis->set('string', 'value');
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hdel
+     */
     public function test_hdel() {
         $Redis = static::$Redis;
 
@@ -93,6 +96,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hexists
+     */
     public function test_hexists() {
         $Redis = static::$Redis;
 
@@ -119,6 +125,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hget
+     */
     public function test_hget() {
         $Redis = static::$Redis;
 
@@ -143,6 +152,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hgetall
+     */
     public function test_hgetall() {
         $Redis = static::$Redis;
 
@@ -168,6 +180,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hincrby
+     */
     public function test_hincrby() {
         $Redis = static::$Redis;
 
@@ -215,6 +230,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hincrbyfloat
+     */
     public function test_hincrbyfloat() {
         $Redis = static::$Redis;
 
@@ -250,6 +268,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hkeys
+     */
     public function test_hkeys() {
         $Redis = static::$Redis;
 
@@ -275,6 +296,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hlen
+     */
     public function test_hlen() {
         $Redis = static::$Redis;
 
@@ -290,6 +314,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hmget
+     */
     public function test_hmget() {
         $Redis = static::$Redis;
 
@@ -313,6 +340,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hmset
+     */
     public function test_hmset() {
         $Redis = static::$Redis;
 
@@ -327,6 +357,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hset
+     */
     public function test_hset() {
         $Redis = static::$Redis;
 
@@ -344,6 +377,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hsetnx
+     */
     public function test_hsetnx() {
         $Redis = static::$Redis;
 
@@ -361,6 +397,9 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hvals
+     */
     public function test_hvals() {
         $Redis = static::$Redis;
 

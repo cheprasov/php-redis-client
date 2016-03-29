@@ -13,11 +13,16 @@ namespace RedisClient\Command\Traits\Version2x6;
 use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Response\ResponseParser;
 
+/**
+ * Server Commands
+ * @link http://redis.io/commands#server
+ */
 trait ServerCommandsTrait {
 
     /**
      * BGREWRITEAOF
      * Available since 1.0.0.
+     * @link http://redis.io/commands/bgrewriteaof
      *
      * @return bool|string Always true
      */
@@ -28,6 +33,7 @@ trait ServerCommandsTrait {
     /**
      * BGSAVE
      * Available since 1.0.0.
+     * @link http://redis.io/commands/bgsave
      *
      * @return string
      */
@@ -39,6 +45,7 @@ trait ServerCommandsTrait {
      * CLIENT GETNAME
      * Available since 2.6.9.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/client-getname
      *
      * @return string|null The connection name, or a null bulk reply if no name is set.
      */
@@ -51,6 +58,7 @@ trait ServerCommandsTrait {
      * CLIENT KILL [ip:port] [ID client-id] [TYPE normal|slave|pubsub] [ADDR ip:port] [SKIPME yes/no]
      * Available since 2.4.0.
      * Time complexity: O(N) where N is the number of client connections
+     * @link http://redis.io/commands/client-kill
      *
      * @param string|array|null $addr
      * @param int|null $clientId
@@ -91,6 +99,7 @@ trait ServerCommandsTrait {
      * CLIENT LIST
      * Available since 2.4.0.
      * Time complexity: O(N) where N is the number of client connections
+     * @link http://redis.io/commands/client-list
      *
      * @return string
      */
@@ -102,6 +111,7 @@ trait ServerCommandsTrait {
      * CLIENT SETNAME connection-name
      * Available since 2.6.9.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/client-setname
      *
      * @param string $connectionName
      * @param bool True if the connection name was successfully set.
@@ -113,6 +123,7 @@ trait ServerCommandsTrait {
     /**
      * CONFIG GET parameter
      * Available since 2.0.0.
+     * @link http://redis.io/commands/config-get
      *
      * @param string|string[]
      * @return array
@@ -125,6 +136,7 @@ trait ServerCommandsTrait {
      * CONFIG RESETSTAT
      * Available since 2.0.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/config-resetstat
      *
      * @return bool always True
      */
@@ -135,6 +147,7 @@ trait ServerCommandsTrait {
     /**
      * CONFIG SET parameter value
      * Available since 2.0.0.
+     * @link http://redis.io/commands/config-set
      *
      * @param string $parameter
      * @param string $value
@@ -147,6 +160,7 @@ trait ServerCommandsTrait {
     /**
      * DBSIZE
      * Available since 1.0.0.
+     * @link http://redis.io/commands/dbsize
      *
      * @return int The number of keys in the currently-selected database.
      */
@@ -157,6 +171,7 @@ trait ServerCommandsTrait {
     /**
      * DEBUG OBJECT key
      * Available since 1.0.0.
+     * @link http://redis.io/commands/debug-object
      *
      * @param string $key
      * @return string
@@ -168,6 +183,7 @@ trait ServerCommandsTrait {
     /**
      * DEBUG SEGFAULT
      * Available since 1.0.0.
+     * @link http://redis.io/commands/debug-segfault
      *
      * @return string
      */
@@ -178,6 +194,7 @@ trait ServerCommandsTrait {
     /**
      * FLUSHALL
      * Available since 1.0.0.
+     * @link http://redis.io/commands/flushall
      *
      * @return bool
      */
@@ -188,6 +205,7 @@ trait ServerCommandsTrait {
     /**
      * FLUSHDB
      * Available since 1.0.0.
+     * @link http://redis.io/commands/flushdb
      *
      * @return bool
      */
@@ -198,6 +216,7 @@ trait ServerCommandsTrait {
     /**
      * INFO [section]
      * Available since 1.0.0.
+     * @link http://redis.io/commands/info
      *
      * @param string $section
      * @return string
@@ -209,6 +228,7 @@ trait ServerCommandsTrait {
     /**
      * LASTSAVE
      * Available since 1.0.0.
+     * @link http://redis.io/commands/lastsave
      *
      * @return int an UNIX time stamp.
      */
@@ -219,6 +239,7 @@ trait ServerCommandsTrait {
     /**
      * MONITOR
      * Available since 1.0.0.
+     * @link http://redis.io/commands/monitor
      *
      * @param \Closure $callback
      * @return mixed
@@ -230,6 +251,7 @@ trait ServerCommandsTrait {
     /**
      * SAVE
      * Available since 1.0.0.
+     * @link http://redis.io/commands/save
      *
      * @return bool The commands returns True on success
      */
@@ -238,8 +260,9 @@ trait ServerCommandsTrait {
     }
 
     /**
-     * SHUTDOWN [NOSAVE] [SAVE]
+     * SHUTDOWN [NOSAVE|SAVE]
      * Available since 1.0.0.
+     * @link http://redis.io/commands/shutdown
      *
      * @param string|null $save NOSAVE or SAVE
      */
@@ -250,6 +273,7 @@ trait ServerCommandsTrait {
     /**
      * SLAVEOF host port
      * Available since 1.0.0.
+     * @link http://redis.io/commands/slaveof
      *
      * @param string $host
      * @param string $port
@@ -262,6 +286,7 @@ trait ServerCommandsTrait {
     /**
      * SLOWLOG subcommand [argument]
      * Available since 2.2.12.
+     * @link http://redis.io/commands/slowlog
      *
      * @param string $subcommand GET|LEN|RESET
      * @param string|null $argument
@@ -278,7 +303,7 @@ trait ServerCommandsTrait {
     /**
      * SYNC
      * Available since 1.0.0.
-     *
+     * @link http://redis.io/commands/sync
      */
     public function sync() {
         return $this->returnCommand(['SYNC']);
@@ -288,6 +313,7 @@ trait ServerCommandsTrait {
      * TIME
      * Available since 2.6.0.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/time
      *
      * @return string
      */

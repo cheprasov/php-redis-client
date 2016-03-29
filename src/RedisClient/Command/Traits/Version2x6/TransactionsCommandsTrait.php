@@ -11,7 +11,8 @@
 namespace RedisClient\Command\Traits\Version2x6;
 
 /**
- * trait TransactionsCommandsTrait
+ * Transactions Commands
+ * @link http://redis.io/commands#transactions
  * @link http://redis.io/topics/transactions
  */
 trait TransactionsCommandsTrait {
@@ -65,6 +66,7 @@ trait TransactionsCommandsTrait {
      * WATCH key [key ...]
      * Available since 2.2.0.
      * Time complexity: O(1) for every key.
+     * @link http://redis.io/commands/watch
      *
      * @param string|string[] $keys
      * @return bool Always True

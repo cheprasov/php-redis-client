@@ -12,6 +12,10 @@ namespace RedisClient\Command\Traits\Version2x8;
 
 use RedisClient\Command\Traits\Version2x6\SetsCommandsTrait as SetsCommandsTraitVersion2x6;
 
+/**
+ * Sets Commands
+ * @link http://redis.io/commands#set
+ */
 trait SetsCommandsTrait {
 
     use SetsCommandsTraitVersion2x6;

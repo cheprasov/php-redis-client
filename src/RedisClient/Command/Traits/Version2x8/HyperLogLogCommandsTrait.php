@@ -11,7 +11,7 @@
 namespace RedisClient\Command\Traits\Version2x8;
 
 /**
- * HyperLogLog
+ * HyperLogLog Commands
  * @link http://redis.io/commands#hyperloglog
  */
 trait HyperLogLogCommandsTrait {

@@ -13,8 +13,8 @@ namespace RedisClient\Command\Traits\Version3x2;
 use RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait as ScriptingCommandsTraitVersion2x6;
 
 /**
- * trait ScriptingCommandsTrait
- * @link http://redis.io/commands#hash
+ * Scripting Commands
+ * @link http://redis.io/commands#scripting
  */
 trait ScriptingCommandsTrait {
 
