@@ -11,11 +11,10 @@
 namespace Test\Integration\Version2x6;
 
 use RedisClient\Client\Version\RedisClient2x6;
-use RedisClient\ClientFactory;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see ConnectionCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait
  */
 class ConnectionCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -51,6 +50,9 @@ class ConnectionCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait::auth
+     */
     public function test_auth() {
         $Redis = static::$Redis;
 
@@ -61,6 +63,9 @@ class ConnectionCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait::echoMessage
+     */
     public function test_echoMessage() {
         $Redis = static::$Redis;
 
@@ -69,6 +74,9 @@ class ConnectionCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('foo bar', $Redis->echoMessage('foo bar'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait::echoMessage
+     */
     public function test_echo() {
         $Redis = static::$Redis;
 
@@ -77,11 +85,17 @@ class ConnectionCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('foo bar', $Redis->echo('foo bar'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait::ping
+     */
     public function test_ping() {
         $Redis = static::$Redis;
         $this->assertSame('PONG', $Redis->ping());
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait::quit
+     */
     /*
     public function test_quit() {
         $Redis = static::$Redis;
@@ -89,6 +103,9 @@ class ConnectionCommandsTest extends \PHPUnit_Framework_TestCase {
     }
     */
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait::select
+     */
     public function test_select() {
         $Redis = static::$Redis;
 

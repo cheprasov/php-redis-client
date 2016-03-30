@@ -12,6 +12,10 @@ namespace RedisClient\Command\Traits\Version3x2;
 
 use RedisClient\Command\Response\ResponseParser;
 
+/**
+ * Geo Commands
+ * @link http://redis.io/commands#geo
+ */
 trait GeoCommandsTrait {
 
     /**

@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient3x2;
 use Test\Integration\Version3x0\ServerCommandsTest as ServerCommandsTestVersion3x0;
 
 /**
- * @see ServerCommandsTrait
+ * @see \RedisClient\Command\Traits\Version3x2\ServerCommandsTrait
  */
 class ServerCommandsTest extends ServerCommandsTestVersion3x0 {
 
@@ -32,6 +32,9 @@ class ServerCommandsTest extends ServerCommandsTestVersion3x0 {
         ]);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version3x2\ServerCommandsTrait::commandCount
+     */
     public function test_commandCount() {
         $Redis = static::$Redis;
 

@@ -17,7 +17,7 @@ use RedisClient\Exception\ErrorResponseException;
 use Test\Integration\Version2x6\StringsCommandsTest as StringsCommandsTestVersion2x6;
 
 /**
- * @see StringsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\StringsCommandsTrait
  */
 class StringsCommandsTest extends StringsCommandsTestVersion2x6 {
 
@@ -38,6 +38,9 @@ class StringsCommandsTest extends StringsCommandsTestVersion2x6 {
         ]);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\StringsCommandsTrait::bitpos
+     */
     public function test_bitpos() {
         $Redis = static::$Redis;
 

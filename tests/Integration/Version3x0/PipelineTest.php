@@ -15,6 +15,9 @@ include_once(__DIR__. '/../Version2x8/PipelineTest.php');
 use RedisClient\Client\Version\RedisClient3x0;
 use Test\Integration\Version2x8\PipelineTest as PipelineTestVersion2x8;
 
+/**
+ * @see \RedisClient\Pipeline\Version\Pipeline3x0
+ */
 class PipelineTest extends PipelineTestVersion2x8 {
 
     const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x0_1;

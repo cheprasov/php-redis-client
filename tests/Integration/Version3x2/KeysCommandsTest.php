@@ -17,7 +17,7 @@ use RedisClient\Exception\ErrorResponseException;
 use Test\Integration\Version3x0\KeysCommandsTest as KeysCommandsTestVersion3x0;
 
 /**
- * @see KeysCommandsTrait
+ * @see \RedisClient\Command\Traits\Version3x2\KeysCommandsTrait
  */
 class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
 
@@ -38,6 +38,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
         ]);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::dump
+     */
     public function test_dump() {
         $Redis = static::$Redis;
 
@@ -58,6 +61,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
 
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version3x2\KeysCommandsTrait::restore
+     */
     public function test_restore() {
         $Redis = static::$Redis;
 
@@ -84,6 +90,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::rename
+     */
     public function test_rename() {
         $Redis = static::$Redis;
 
@@ -109,7 +118,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
         $this->assertSame('value1', $Redis->get('bar'));
     }
 
-
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::renamenx
+     */
     public function test_renamenx() {
         $Redis = static::$Redis;
 
@@ -135,6 +146,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
         $this->assertSame('value2', $Redis->get('bar'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::object
+     */
     public function test_object() {
         $Redis = static::$Redis;
 
@@ -153,6 +167,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
         $this->assertSame('raw', $Redis->object('encoding', 'foo'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version3x2\KeysCommandsTrait::migrate
+     */
     public function test_migrate() {
         $Redis = static::$Redis;
         $Redis2 = static::$Redis2;

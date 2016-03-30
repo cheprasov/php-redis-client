@@ -17,7 +17,7 @@ use RedisClient\Exception\ErrorResponseException;
 use Test\Integration\Version2x6\SortedSetsCommandsTest as SortedSetsCommandsTestVersion2x6;
 
 /**
- * @see SortedSetsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\SortedSetsCommandsTrait
  */
 class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x6 {
 
@@ -38,6 +38,9 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x6 {
         ]);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\SortedSetsCommandsTrait::zlexcount
+     */
     public function test_zlexcount() {
         $Redis = static::$Redis;
 
@@ -60,6 +63,9 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x6 {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\SortedSetsCommandsTrait::zrangebylex
+     */
     public function test_zrangebylex() {
         $Redis = static::$Redis;
 
@@ -86,6 +92,9 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x6 {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\SortedSetsCommandsTrait::zremrangebylex
+     */
     public function test_zremrangebylex() {
         $Redis = static::$Redis;
 
@@ -113,6 +122,9 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x6 {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\SortedSetsCommandsTrait::zrevrangebylex
+     */
     public function test_zrevrangebylex() {
         $Redis = static::$Redis;
 
@@ -139,6 +151,9 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x6 {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\SortedSetsCommandsTrait::zscan
+     */
     public function test_zscan() {
         $Redis = static::$Redis;
 

@@ -17,7 +17,7 @@ use RedisClient\Exception\ErrorResponseException;
 use Test\Integration\Version2x6\HashesCommandsTest as HashesCommandsTestVersion2x6;
 
 /**
- * @see HashesCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\HashesCommandsTrait
  */
 class HashesCommandsTest extends HashesCommandsTestVersion2x6 {
 
@@ -38,6 +38,9 @@ class HashesCommandsTest extends HashesCommandsTestVersion2x6 {
         ]);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\HashesCommandsTrait::hscan
+     */
     public function test_hscan() {
         $Redis = static::$Redis;
 

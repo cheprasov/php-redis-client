@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient3x0;
 use Test\Integration\Version2x8\LatencyCommandsTest as LatencyCommandsTestVersion2x8;
 
 /**
- * @see LatencyCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\LatencyCommandsTrait
  */
 class LatencyCommandsTest extends LatencyCommandsTestVersion2x8 {
 

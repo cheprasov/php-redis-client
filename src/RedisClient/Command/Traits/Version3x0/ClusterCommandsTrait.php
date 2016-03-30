@@ -11,7 +11,8 @@
 namespace RedisClient\Command\Traits\Version3x0;
 
 /**
- * trait ClusterCommandsTrait
+ * Cluster Commands
+ * @link http://redis.io/commands#cluster
  * @link http://redis.io/topics/cluster-tutorial
  */
 trait ClusterCommandsTrait {

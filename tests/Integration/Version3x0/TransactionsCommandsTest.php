@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient3x0;
 use Test\Integration\Version2x8\TransactionsCommandsTest as TransactionsCommandsTestVersion2x8;
 
 /**
- * @see TransactionsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\TransactionsCommandsTrait
  */
 class TransactionsCommandsTest extends TransactionsCommandsTestVersion2x8 {
 

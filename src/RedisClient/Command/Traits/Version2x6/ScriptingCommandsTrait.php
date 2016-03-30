@@ -11,8 +11,10 @@
 namespace RedisClient\Command\Traits\Version2x6;
 
 /**
- * ScriptingCommandsTrait
+ * Scripting Commands
  * @link http://redis.io/commands#scripting
+ *
+ * @method mixed eval($script, $keys = null, $args = null)
  */
 trait ScriptingCommandsTrait {
 

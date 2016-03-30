@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient3x0;
 use Test\Integration\Version2x8\HashesCommandsTest as HashesCommandsTestVersion2x8;
 
 /**
- * @see HashesCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\HashesCommandsTrait
  */
 class HashesCommandsTest extends HashesCommandsTestVersion2x8 {
 

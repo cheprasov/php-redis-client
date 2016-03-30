@@ -10,10 +10,6 @@
  */
 namespace RedisClient\Command\Traits;
 
-/**
- * @method mixed eval($script, $keys = null, $args = null)
- * @method string echo($message)
- */
 trait AbstractCommandsTrait {
 
     /**

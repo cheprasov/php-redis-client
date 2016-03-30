@@ -14,7 +14,7 @@ use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see ServerCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait
  */
 class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -60,7 +60,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::bgrewriteaof
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::bgrewriteaof
      */
     public function _test_bgrewriteaof() {
         $Redis = static::$Redis;
@@ -75,7 +75,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::bgsave
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::bgsave
      */
     public function _test_bgsave() {
         $Redis = static::$Redis;
@@ -90,7 +90,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::clientGetname
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::clientGetname
      */
     public function test_clientGetname() {
         $Redis = static::$Redis;
@@ -101,7 +101,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::clientList
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::clientList
      */
     public function test_clientList() {
         $Redis = static::$Redis;
@@ -112,7 +112,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::configGet
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::configGet
      */
     public function test_configGet() {
         $Redis = static::$Redis;
@@ -123,7 +123,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::configResetstat
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::configResetstat
      */
     public function test_configResetstat() {
         $Redis = static::$Redis;
@@ -132,7 +132,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::dbsize
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::dbsize
      */
     public function test_dbsize() {
         $Redis = static::$Redis;
@@ -145,7 +145,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::debugObject
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::debugObject
      */
     public function test_debugObject() {
         $Redis = static::$Redis;
@@ -155,7 +155,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::flushall
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::flushall
      */
     public function test_flushall() {
         $Redis = static::$Redis;
@@ -164,7 +164,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::flushdb
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::flushdb
      */
     public function test_flushdb() {
         $Redis = static::$Redis;
@@ -173,7 +173,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::info
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::info
      */
     public function test_info() {
         $Redis = static::$Redis;
@@ -209,7 +209,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::info
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::info
      */
     public function test_lastsave() {
         $Redis = static::$Redis;
@@ -219,16 +219,15 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::monitor
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::monitor
      */
     public function _test_monitor() {
         $Redis = static::$Redis;
-
         $this->assertSame(true, $Redis->monitor());
     }
 
     /**
-     * @see ServerCommandsTrait::save
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::save
      */
     public function test_save() {
         $Redis = static::$Redis;
@@ -237,7 +236,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::slowlog
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::slowlog
      */
     public function _test_showlog() {
         $Redis = static::$Redis;
@@ -246,7 +245,7 @@ class ServerCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see ServerCommandsTrait::time
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::time
      */
     public function test_time() {
         $Redis = static::$Redis;

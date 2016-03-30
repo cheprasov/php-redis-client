@@ -13,6 +13,10 @@ namespace RedisClient\Command\Traits\Version2x8;
 use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Traits\Version2x6\ServerCommandsTrait as ServerCommandsTraitVersion2x6;
 
+/**
+ * Server Commands
+ * @link http://redis.io/commands#server
+ */
 trait ServerCommandsTrait {
 
     use ServerCommandsTraitVersion2x6;
@@ -33,6 +37,7 @@ trait ServerCommandsTrait {
      * COMMAND COUNT
      * Available since 2.8.13.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/command-count
      *
      * @return int Number of commands returned by COMMAND
      */
@@ -45,6 +50,7 @@ trait ServerCommandsTrait {
      * COMMAND GETKEYS command
      * Available since 2.8.13.
      * Time complexity: O(N) where N is the number of arguments to the command
+     * @link http://redis.io/commands/command-getkeys
      *
      * @param string $command
      * @return string[] List of keys from your command.
@@ -57,6 +63,7 @@ trait ServerCommandsTrait {
      * COMMAND INFO command-name [command-name ...]
      * Available since 2.8.13.
      * Time complexity: O(N) when N is number of commands to look up
+     * @link http://redis.io/commands/command-info
      *
      * @param string|string[] $commandNames
      * @return array Nested list of command details.
@@ -68,6 +75,7 @@ trait ServerCommandsTrait {
     /**
      * CONFIG REWRITE
      * Available since 2.8.0.
+     * @link http://redis.io/commands/config-rewrite
      *
      * @return bool True when the configuration was rewritten properly. Otherwise an error is returned.
      */
@@ -78,6 +86,7 @@ trait ServerCommandsTrait {
     /**
      * ROLE
      * Available since 2.8.12.
+     * @link http://redis.io/commands/role
      *
      * @return array
      */

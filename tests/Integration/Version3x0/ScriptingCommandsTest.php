@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient3x0;
 use Test\Integration\Version2x8\ScriptingCommandsTest as ScriptingCommandsTestVersion2x8;
 
 /**
- * @see ScriptingCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait
  */
 class ScriptingCommandsTest extends ScriptingCommandsTestVersion2x8 {
 

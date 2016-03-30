@@ -13,6 +13,10 @@ namespace RedisClient\Command\Traits\Version2x6;
 use InvalidArgumentException;
 use RedisClient\Command\Parameter\Parameter;
 
+/**
+ * Strings Commands
+ * @link http://redis.io/commands#string
+ */
 trait StringsCommandsTrait {
 
     /**

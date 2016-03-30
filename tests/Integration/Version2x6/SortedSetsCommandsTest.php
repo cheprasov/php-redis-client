@@ -10,13 +10,11 @@
  */
 namespace Test\Integration\Version2x6;
 
-
-
 use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see SortedSetsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait
  */
 class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -51,6 +49,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         static::$Redis->flushall();
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zadd
+     */
     public function test_zadd() {
         $Redis = static::$Redis;
 
@@ -79,6 +80,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zcard
+     */
     public function test_zcard() {
         $Redis = static::$Redis;
 
@@ -99,6 +103,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zcount
+     */
     public function test_zcount() {
         $Redis = static::$Redis;
 
@@ -119,6 +126,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zincrby
+     */
     public function test_zincrby() {
         $Redis = static::$Redis;
 
@@ -139,6 +149,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zinterstore
+     */
     public function test_zinterstore() {
         $Redis = static::$Redis;
 
@@ -177,6 +190,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zrange
+     */
     public function test_zrange() {
         $Redis = static::$Redis;
 
@@ -201,6 +217,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zrangebyscore
+     */
     public function test_zrangebyscore() {
         $Redis = static::$Redis;
 
@@ -227,6 +246,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zrank
+     */
     public function test_zrank() {
         $Redis = static::$Redis;
 
@@ -252,6 +274,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zrem
+     */
     public function test_zrem() {
         $Redis = static::$Redis;
 
@@ -286,6 +311,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zremrangebyrank
+     */
     public function test_zremrangebyrank() {
         $Redis = static::$Redis;
 
@@ -313,6 +341,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zremrangebyscore
+     */
     public function test_zremrangebyscore() {
         $Redis = static::$Redis;
 
@@ -340,6 +371,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zrevrange
+     */
     public function test_zrevrange() {
         $Redis = static::$Redis;
 
@@ -364,6 +398,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zrevrangebyscore
+     */
     public function test_zrevrangebyscore() {
         $Redis = static::$Redis;
 
@@ -390,6 +427,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zrevrank
+     */
     public function test_zrevrank() {
         $Redis = static::$Redis;
 
@@ -415,6 +455,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zscore
+     */
     public function test_zscore() {
         $Redis = static::$Redis;
 
@@ -440,6 +483,9 @@ class SortedSetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait::zunionstore
+     */
     public function test_zunionstore() {
         $Redis = static::$Redis;
 

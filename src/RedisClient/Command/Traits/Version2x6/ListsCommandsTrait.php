@@ -13,7 +13,8 @@ namespace RedisClient\Command\Traits\Version2x6;
 use RedisClient\Command\Response\ResponseParser;
 
 /**
- * trait ListsCommandsTrait
+ * Lists Commands
+ * @link http://redis.io/commands#list
  */
 trait ListsCommandsTrait {
 

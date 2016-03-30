@@ -10,6 +10,10 @@
  */
 namespace RedisClient\Command\Traits\Version2x6;
 
+/**
+ * Sets Commands
+ * @link http://redis.io/commands#set
+ */
 trait SetsCommandsTrait {
 
     /**

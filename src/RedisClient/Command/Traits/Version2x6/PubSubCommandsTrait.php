@@ -11,7 +11,7 @@
 namespace RedisClient\Command\Traits\Version2x6;
 
 /**
- * PubSub
+ * PubSub Commands
  * @link http://redis.io/commands#pubsub
  */
 trait PubSubCommandsTrait {

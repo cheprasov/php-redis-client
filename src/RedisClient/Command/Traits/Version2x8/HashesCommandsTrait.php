@@ -13,7 +13,7 @@ namespace RedisClient\Command\Traits\Version2x8;
 use RedisClient\Command\Traits\Version2x6\HashesCommandsTrait as HashesCommandsTraitVersion2x6;
 
 /**
- * trait HashesCommandsTrait
+ * Hashes Commands
  * @link http://redis.io/commands#hash
  */
 trait HashesCommandsTrait {

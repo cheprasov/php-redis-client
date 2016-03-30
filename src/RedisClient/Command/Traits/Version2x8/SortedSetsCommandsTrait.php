@@ -14,7 +14,8 @@ use RedisClient\Command\Parameter\Parameter;
 use RedisClient\Command\Traits\Version2x6\SortedSetsCommandsTrait as SortedSetsCommandsTraitVersion2x6;
 
 /**
- * trait SortedSetsCommandsTrait
+ * SortedSets Commands
+ * @link http://redis.io/commands#set
  * @link http://redis.io/topics/data-types#sorted-sets
  */
 trait SortedSetsCommandsTrait {

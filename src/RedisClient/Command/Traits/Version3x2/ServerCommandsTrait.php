@@ -11,6 +11,11 @@
 namespace RedisClient\Command\Traits\Version3x2;
 
 use RedisClient\Command\Traits\Version2x9\ServerCommandsTrait as ServerCommandsTraitVersion2x9;
+
+/**
+ * Server Commands
+ * @link http://redis.io/commands#server
+ */
 trait ServerCommandsTrait {
 
     use ServerCommandsTraitVersion2x9;
@@ -19,6 +24,7 @@ trait ServerCommandsTrait {
      * CLIENT REPLY ON|OFF|SKIP
      * Available since 3.2.
      * Time complexity: O(1)
+     * @link http://redis.io/commands/client-reply
      *
      * @param string $param
      * @return bool|null

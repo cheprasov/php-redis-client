@@ -23,6 +23,9 @@ class VersionTest extends \PHPUnit_Framework_TestCase {
 
         $readme = file('./README.md');
         $this->assertSame(true, strpos($readme[3], 'RedisClient v'.$composer['version']) > 0);
+
+        $readme = file('./CHANGELOG.md');
+        $this->assertSame(true, strpos($readme[2], '### v'.$composer['version']) === 0);
     }
 
 }

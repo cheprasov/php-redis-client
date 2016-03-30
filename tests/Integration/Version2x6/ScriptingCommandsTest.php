@@ -14,7 +14,7 @@ use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see ScriptingCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait
  */
 class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -51,6 +51,9 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
         static::$Redis->scriptFlush();
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait::evalScript
+     */
     public function test_evalScript() {
         $Redis = static::$Redis;
 
@@ -68,6 +71,9 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait::eval
+     */
     public function test_eval() {
         $Redis = static::$Redis;
 
@@ -85,6 +91,9 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait::evalsha
+     */
     public function test_evalsha() {
         $Redis = static::$Redis;
 
@@ -105,6 +114,9 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame([], $Redis->evalsha(sha1($script)));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait::scriptexists
+     */
     public function test_scriptexists() {
         $Redis = static::$Redis;
 
@@ -125,6 +137,9 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame([0], $Redis->scriptExists($script3));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait::scriptflush
+     */
     public function test_scriptflush() {
         $Redis = static::$Redis;
 
@@ -141,6 +156,9 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame([0, 0, 0], $Redis->scriptExists([sha1($script1), sha1($script2), sha1($script3)]));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait::scriptkill
+     */
     public function test_scriptkill() {
         $Redis = static::$Redis;
 
@@ -155,6 +173,9 @@ class ScriptingCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait::scriptload
+     */
     public function test_scriptload() {
         $Redis = static::$Redis;
 

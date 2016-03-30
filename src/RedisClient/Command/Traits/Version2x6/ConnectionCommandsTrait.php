@@ -11,8 +11,10 @@
 namespace RedisClient\Command\Traits\Version2x6;
 
 /**
- * Connection
+ * Connection Commands
  * @link http://redis.io/commands#connection
+ *
+ * @method string echo($message)
  */
 trait ConnectionCommandsTrait {
 

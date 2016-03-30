@@ -14,7 +14,7 @@ use RedisClient\Client\Version\RedisClient3x2;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see HyperLogLogCommandsTrait
+ * @see \RedisClient\Command\Traits\Version3x2\HyperLogLogCommandsTrait
  */
 class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -43,7 +43,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see GeoCommandsTrait::geoadd
+     * @see \RedisClient\Command\Traits\Version3x2\GeoCommandsTrait::geoadd
      */
     public function test_geoadd() {
         $Redis = static::$Redis;
@@ -73,7 +73,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see GeoCommandsTrait::geodist
+     * @see \RedisClient\Command\Traits\Version3x2\GeoCommandsTrait::geodist
      */
     public function test_geodist() {
         $Redis = static::$Redis;
@@ -114,7 +114,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see GeoCommandsTrait::geohash
+     * @see \RedisClient\Command\Traits\Version3x2\GeoCommandsTrait::geohash
      */
     public function test_geohash() {
         $Redis = static::$Redis;
@@ -148,7 +148,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see GeoCommandsTrait::geopos
+     * @see \RedisClient\Command\Traits\Version3x2\GeoCommandsTrait::geopos
      */
     public function test_geopos() {
         $Redis = static::$Redis;
@@ -180,7 +180,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
 
 
     /**
-     * @see GeoCommandsTrait::georadius
+     * @see \RedisClient\Command\Traits\Version3x2\GeoCommandsTrait::georadius
      */
     public function test_georadius() {
         $Redis = static::$Redis;
@@ -235,7 +235,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see GeoCommandsTrait::georadiusbymember
+     * @see \RedisClient\Command\Traits\Version3x2\GeoCommandsTrait::georadiusbymember
      */
     public function test_georadiusbymember() {
         $Redis = static::$Redis;
@@ -266,9 +266,8 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
-
     /**
-     * @see GeoCommandsTrait::geodel
+     * @see \RedisClient\Command\Traits\Version3x2\GeoCommandsTrait::geodel
      */
     public function test_geodel() {
         $Redis = static::$Redis;

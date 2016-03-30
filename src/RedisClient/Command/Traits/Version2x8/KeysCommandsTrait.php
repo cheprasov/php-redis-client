@@ -13,7 +13,8 @@ namespace RedisClient\Command\Traits\Version2x8;
 use RedisClient\Command\Traits\Version2x6\KeysCommandsTrait as KeysCommandsTraitVersion2x6;
 
 /**
- * trait KeysCommandsTrait
+ * Keys Commands
+ * @link http://redis.io/commands#generic
  */
 trait KeysCommandsTrait {
 

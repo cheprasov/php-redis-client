@@ -14,7 +14,7 @@ use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see StringsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait
  */
 class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -70,6 +70,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::append
+     */
     public function test_append() {
         $Redis = static::$Redis;
 
@@ -90,6 +93,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::bitcount
+     */
     public function test_bitcount() {
         $Redis = static::$Redis;
 
@@ -113,6 +119,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::bitop
+     */
     public function test_bitop() {
         $Redis = static::$Redis;
 
@@ -137,6 +146,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::decr
+     */
     public function test_decr() {
         $Redis = static::$Redis;
 
@@ -171,6 +183,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::decrby
+     */
     public function test_decrby() {
         $Redis = static::$Redis;
 
@@ -205,6 +220,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::get
+     */
     public function test_get() {
         $Redis = static::$Redis;
 
@@ -223,6 +241,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::getrange
+     */
     public function test_getrange() {
         $Redis = static::$Redis;
 
@@ -243,6 +264,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::substr
+     */
     public function test_substr() {
         $Redis = static::$Redis;
 
@@ -263,6 +287,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::getset
+     */
     public function test_getset() {
         $Redis = static::$Redis;
 
@@ -281,6 +308,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::incr
+     */
     public function test_incr() {
         $Redis = static::$Redis;
 
@@ -315,6 +345,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::incrby
+     */
     public function test_incrby() {
         $Redis = static::$Redis;
 
@@ -349,6 +382,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::incrbyfloat
+     */
     public function test_incrbyfloat() {
         $Redis = static::$Redis;
 
@@ -379,6 +415,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::mget
+     */
     public function test_mget() {
         $Redis = static::$Redis;
 
@@ -392,6 +431,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame([null], $Redis->mget('hash'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::msetnx
+     */
     public function test_msetnx() {
         $Redis = static::$Redis;
 
@@ -403,6 +445,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame([null, null], $Redis->mget(['hash', 'test']));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::psetex
+     */
     public function test_psetex() {
         $Redis = static::$Redis;
 
@@ -415,6 +460,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(null, $Redis->get('key'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::set
+     */
     public function test_set() {
         $Redis = static::$Redis;
 
@@ -451,6 +499,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::setbit
+     */
     public function test_setbit() {
         $Redis = static::$Redis;
 
@@ -491,6 +542,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::setex
+     */
     public function test_setex() {
         $Redis = static::$Redis;
 
@@ -518,6 +572,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::setnx
+     */
     public function test_setnx() {
         $Redis = static::$Redis;
 
@@ -532,6 +589,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(0, $Redis->setnx('hash', 'value1'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::setrange
+     */
     public function test_setrange() {
         $Redis = static::$Redis;
 
@@ -550,6 +610,9 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait::strlen
+     */
     public function test_strlen() {
         $Redis = static::$Redis;
 

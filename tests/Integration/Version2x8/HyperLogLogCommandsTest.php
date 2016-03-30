@@ -14,7 +14,7 @@ use RedisClient\Client\Version\RedisClient2x8;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see HyperLogLogCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\HyperLogLogCommandsTrait
  */
 class HyperLogLogCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -43,7 +43,7 @@ class HyperLogLogCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see HyperLogLogCommandsTrait::pfadd
+     * @see \RedisClient\Command\Traits\Version2x8\HyperLogLogCommandsTrait::pfadd
      */
     public function test_pfadd() {
         $Redis = static::$Redis;
@@ -73,7 +73,7 @@ class HyperLogLogCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see HyperLogLogCommandsTrait::pfcount
+     * @see \RedisClient\Command\Traits\Version2x8\HyperLogLogCommandsTrait::pfcount
      */
     public function test_pfcount() {
         $Redis = static::$Redis;
@@ -100,7 +100,7 @@ class HyperLogLogCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see HyperLogLogCommandsTrait::pfmerge
+     * @see \RedisClient\Command\Traits\Version2x8\HyperLogLogCommandsTrait::pfmerge
      */
     public function test_pfmerge() {
         $Redis = static::$Redis;

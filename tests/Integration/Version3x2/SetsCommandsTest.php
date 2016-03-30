@@ -17,7 +17,7 @@ use RedisClient\Exception\ErrorResponseException;
 use Test\Integration\Version3x0\SetsCommandsTest as SetsCommandsTestVersion3x0;
 
 /**
- * @see SetsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version3x2\SetsCommandsTrait
  */
 class SetsCommandsTest extends SetsCommandsTestVersion3x0 {
 
@@ -38,7 +38,9 @@ class SetsCommandsTest extends SetsCommandsTestVersion3x0 {
         ]);
     }
 
-
+    /**
+     * @see \RedisClient\Command\Traits\Version3x2\SetsCommandsTrait::spop
+     */
     public function test_spop() {
         $Redis = static::$Redis;
 
@@ -75,6 +77,5 @@ class SetsCommandsTest extends SetsCommandsTestVersion3x0 {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
-
 
 }

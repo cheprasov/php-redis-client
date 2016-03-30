@@ -17,7 +17,7 @@ use RedisClient\Exception\ErrorResponseException;
 use Test\Integration\Version2x6\SetsCommandsTest as SetsCommandsTestVersion2x6;
 
 /**
- * @see SetsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\SetsCommandsTrait
  */
 class SetsCommandsTest extends SetsCommandsTestVersion2x6 {
 
@@ -38,6 +38,9 @@ class SetsCommandsTest extends SetsCommandsTestVersion2x6 {
         ]);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\SetsCommandsTrait::sscan
+     */
     public function test_sscan() {
         $Redis = static::$Redis;
 
