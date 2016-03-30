@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient3x2;
 use Test\Integration\Version3x0\ListsCommandsTest as ListsCommandsTestVersion3x0;
 
 /**
- * @see ListsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait
  */
 class ListsCommandsTest extends ListsCommandsTestVersion3x0 {
 

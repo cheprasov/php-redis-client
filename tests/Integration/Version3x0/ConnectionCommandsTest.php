@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient3x0;
 use Test\Integration\Version2x8\ConnectionCommandsTest as ConnectionCommandsTestVersion2x8;
 
 /**
- * @see ConnectionCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait
  */
 class ConnectionCommandsTest extends ConnectionCommandsTestVersion2x8 {
 

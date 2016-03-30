@@ -15,6 +15,10 @@ use RedisClient\Exception\ErrorResponseException;
 use RedisClient\Pipeline\Pipeline;
 use RedisClient\Pipeline\PipelineInterface;
 
+
+/**
+ * @see \RedisClient\Pipeline\Version\Pipeline2x6
+ */
 class PipelineTest extends \PHPUnit_Framework_TestCase {
 
     const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;

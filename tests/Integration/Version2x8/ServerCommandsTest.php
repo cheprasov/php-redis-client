@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient2x8;
 use Test\Integration\Version2x6\ServerCommandsTest as ServerCommandsTestVersion2x6;
 
 /**
- * @see ServerCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\ServerCommandsTrait
  */
 class ServerCommandsTest extends ServerCommandsTestVersion2x6 {
 
@@ -37,6 +37,9 @@ class ServerCommandsTest extends ServerCommandsTestVersion2x6 {
         ]);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\ServerCommandsTrait::command
+     */
     public function test_command() {
         $Redis = static::$Redis;
 
@@ -55,18 +58,27 @@ class ServerCommandsTest extends ServerCommandsTestVersion2x6 {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\ServerCommandsTrait::commandCount
+     */
     public function test_commandCount() {
         $Redis = static::$Redis;
 
         $this->assertSame(157, $Redis->commandCount());
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\ServerCommandsTrait::commandGetkeys
+     */
     public function _test_commandGetkeys() {
         // todo: send report about issue
         $Redis = static::$Redis;
         $this->assertSame(['a', 'c', 'e'], $Redis->commandGetkeys('MSET a b c d e f'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\ServerCommandsTrait::commandInfo
+     */
     public function test_commandInfo() {
         $Redis = static::$Redis;
         $this->assertSame([null], $Redis->commandInfo('foo'));
@@ -80,6 +92,9 @@ class ServerCommandsTest extends ServerCommandsTestVersion2x6 {
         ], $Redis->commandInfo(['get', 'set', 'eval']));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\ServerCommandsTrait::role
+     */
     public function test_role() {
         $Redis = static::$Redis;
         $this->assertSame(['master', 0, []], $Redis->role());

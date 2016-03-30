@@ -17,7 +17,7 @@ use RedisClient\Exception\ErrorResponseException;
 use Test\Integration\Version2x8\SortedSetsCommandsTest as SortedSetsCommandsTestVersion2x8;
 
 /**
- * @see SortedSetsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version3x0\SortedSetsCommandsTrait
  */
 class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x8 {
 
@@ -38,6 +38,9 @@ class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion2x8 {
         ]);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version3x0\SortedSetsCommandsTrait::zadd
+     */
     public function test_zadd() {
         $Redis = static::$Redis;
 

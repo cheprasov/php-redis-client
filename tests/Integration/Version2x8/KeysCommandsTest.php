@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient2x8;
 use Test\Integration\Version2x6\KeysCommandsTest as KeysCommandsTestVersion2x6;
 
 /**
- * @see KeysCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\KeysCommandsTrait
  */
 class KeysCommandsTest extends KeysCommandsTestVersion2x6 {
 
@@ -52,6 +52,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x6 {
         ]);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::ttl
+     */
     public function test_ttl() {
         $Redis = static::$Redis;
 
@@ -63,6 +66,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x6 {
         $this->assertLessThanOrEqual(10, $Redis->ttl('key'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::pttl
+     */
     public function test_pttl() {
         $Redis = static::$Redis;
 
@@ -74,6 +80,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x6 {
         $this->assertLessThanOrEqual(1000, $Redis->pttl('key'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\KeysCommandsTrait::scan
+     */
     public function test_scan() {
         $Redis = static::$Redis;
 

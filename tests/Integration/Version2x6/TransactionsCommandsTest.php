@@ -14,7 +14,7 @@ use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see TransactionsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\TransactionsCommandsTrait
  */
 class TransactionsCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -49,6 +49,9 @@ class TransactionsCommandsTest extends \PHPUnit_Framework_TestCase {
         static::$Redis->flushall();
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\TransactionsCommandsTrait::discard
+     */
     public function test_discard() {
         $Redis = static::$Redis;
 
@@ -78,6 +81,9 @@ class TransactionsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\TransactionsCommandsTrait::exec
+     */
     public function test_exec() {
         $Redis = static::$Redis;
 
@@ -124,6 +130,9 @@ class TransactionsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\TransactionsCommandsTrait::multi
+     */
     public function test_multi() {
         $Redis = static::$Redis;
 
@@ -155,6 +164,9 @@ class TransactionsCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(true, $Redis->discard());
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\TransactionsCommandsTrait::unwatch
+     */
     public function test_unwatch() {
         $Redis = static::$Redis;
 
@@ -176,6 +188,9 @@ class TransactionsCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(true, $Redis->discard());
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\TransactionsCommandsTrait::watch
+     */
     public function test_watch() {
         $Redis = static::$Redis;
 

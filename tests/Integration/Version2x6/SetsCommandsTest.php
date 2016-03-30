@@ -14,7 +14,7 @@ use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see SetsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait
  */
 class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -49,6 +49,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         static::$Redis->flushall();
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::sadd
+     */
     public function test_sadd() {
         $Redis = static::$Redis;
 
@@ -67,6 +70,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::scard
+     */
     public function test_scard() {
         $Redis = static::$Redis;
 
@@ -87,6 +93,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::sdiff
+     */
     public function test_sdiff() {
         $Redis = static::$Redis;
 
@@ -119,6 +128,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::sdiffstore
+     */
     public function test_sdiffstore() {
         $Redis = static::$Redis;
 
@@ -156,6 +168,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::sinter
+     */
     public function test_sinter() {
         $Redis = static::$Redis;
 
@@ -191,6 +206,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::sinterstore
+     */
     public function test_sinterstore() {
         $Redis = static::$Redis;
 
@@ -231,6 +249,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::sismember
+     */
     public function test_sismember() {
         $Redis = static::$Redis;
 
@@ -249,6 +270,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::smembers
+     */
     public function test_smembers() {
         $Redis = static::$Redis;
 
@@ -268,6 +292,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::smove
+     */
     public function test_smove() {
         $Redis = static::$Redis;
 
@@ -299,6 +326,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::spop
+     */
     public function test_spop() {
         $Redis = static::$Redis;
 
@@ -323,6 +353,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::srandmember
+     */
     public function test_srandmember() {
         $Redis = static::$Redis;
 
@@ -342,6 +375,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::srem
+     */
     public function test_srem() {
         $Redis = static::$Redis;
 
@@ -366,6 +402,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::sunion
+     */
     public function test_sunion() {
         $Redis = static::$Redis;
 
@@ -396,6 +435,9 @@ class SetsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait::sunionstore
+     */
     public function test_sunionstore() {
         $Redis = static::$Redis;
 

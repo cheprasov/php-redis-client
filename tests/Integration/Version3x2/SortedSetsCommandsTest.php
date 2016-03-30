@@ -13,11 +13,10 @@ namespace Test\Integration\Version3x2;
 include_once(__DIR__. '/../Version3x0/SortedSetsCommandsTest.php');
 
 use RedisClient\Client\Version\RedisClient3x2;
-use RedisClient\Exception\ErrorResponseException;
 use Test\Integration\Version3x0\SortedSetsCommandsTest as SortedSetsCommandsTestVersion3x0;
 
 /**
- * @see SortedSetsCommandsTrait
+ * @see \RedisClient\Command\Traits\Version3x2\SortedSetsCommandsTrait
  */
 class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion3x0 {
 

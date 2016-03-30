@@ -17,7 +17,7 @@ use RedisClient\Exception\ErrorResponseException;
 use Test\Integration\Version3x0\HashesCommandsTest as HashesCommandsTestVersion3x0;
 
 /**
- * @see HashesCommandsTrait
+ * @see \RedisClient\Command\Traits\Version3x2\HashesCommandsTrait
  */
 class HashesCommandsTest extends HashesCommandsTestVersion3x0 {
 
@@ -38,6 +38,9 @@ class HashesCommandsTest extends HashesCommandsTestVersion3x0 {
         ]);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version3x2\HashesCommandsTrait::hstrlen
+     */
     public function test_hstrlen() {
         $Redis = static::$Redis;
 

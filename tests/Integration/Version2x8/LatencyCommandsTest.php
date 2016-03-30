@@ -13,7 +13,7 @@ namespace Test\Integration\Version2x8;
 use RedisClient\Client\Version\RedisClient2x8;
 
 /**
- * @see LatencyCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\LatencyCommandsTrait
  */
 class LatencyCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -42,7 +42,7 @@ class LatencyCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see LatencyCommandsTrait::latencyLatest
+     * @see \RedisClient\Command\Traits\Version2x8\LatencyCommandsTrait::latencyLatest
      */
     public function test_latencyLatest() {
         $Redis = static::$Redis;
@@ -51,7 +51,7 @@ class LatencyCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see LatencyCommandsTrait::latencyReset
+     * @see \RedisClient\Command\Traits\Version2x8\LatencyCommandsTrait::latencyReset
      */
     public function test_latencyReset() {
         $Redis = static::$Redis;
@@ -60,7 +60,7 @@ class LatencyCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see LatencyCommandsTrait::latencyDoctor
+     * @see \RedisClient\Command\Traits\Version2x8\LatencyCommandsTrait::latencyDoctor
      */
     public function test_latencyDoctor() {
         $Redis = static::$Redis;

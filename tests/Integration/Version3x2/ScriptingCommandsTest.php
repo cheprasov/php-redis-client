@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient3x2;
 use Test\Integration\Version3x0\ScriptingCommandsTest as ScriptingCommandsTestVersion3x0;
 
 /**
- * @see ScriptingCommandsTrait
+ * @see \RedisClient\Command\Traits\Version3x2\ScriptingCommandsTrait
  */
 class ScriptingCommandsTest extends ScriptingCommandsTestVersion3x0 {
 
@@ -38,7 +38,7 @@ class ScriptingCommandsTest extends ScriptingCommandsTestVersion3x0 {
     }
 
     /**
-     * @see ScriptingCommandsTrait::scriptDebug
+     * @see \RedisClient\Command\Traits\Version3x2\ScriptingCommandsTrait::scriptDebug
      */
     public function test_scriptDebug() {
         $Redis = static::$Redis;

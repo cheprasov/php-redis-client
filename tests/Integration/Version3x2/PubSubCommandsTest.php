@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient3x2;
 use Test\Integration\Version3x0\PubSubCommandsTest as PubSubCommandsTestVersion3x0;
 
 /**
- * @see PubSubCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\PubSubCommandsTrait
  */
 class PubSubCommandsTest extends PubSubCommandsTestVersion3x0 {
 

@@ -17,7 +17,7 @@ use RedisClient\Exception\ErrorResponseException;
 use Test\Integration\Version2x8\KeysCommandsTest as KeysCommandsTestVersion2x8;
 
 /**
- * @see KeysCommandsTrait
+ * @see \RedisClient\Command\Traits\Version3x0\KeysCommandsTrait
  */
 class KeysCommandsTest extends KeysCommandsTestVersion2x8 {
 
@@ -53,6 +53,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x8 {
         ]);
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version3x0\KeysCommandsTrait::exists
+     */
     public function test_exists() {
         $Redis = static::$Redis;
 
@@ -72,6 +75,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x8 {
         $this->assertSame(4, $Redis->exists(['key', 'key', 'key', 'key1', 'key2']));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version3x0\KeysCommandsTrait::migrate
+     */
     public function test_migrate() {
         $Redis = static::$Redis;
         $Redis2 = static::$Redis2;
@@ -100,6 +106,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x8 {
         $this->assertSame(null, $Redis->get('one'));
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version3x0\KeysCommandsTrait::restore
+     */
     public function test_restore() {
         $Redis = static::$Redis;
 
@@ -123,6 +132,9 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x8 {
         }
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version3x0\KeysCommandsTrait::wait
+     */
     public function test_wait() {
         $Redis = static::$Redis;
 

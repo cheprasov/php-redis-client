@@ -16,7 +16,7 @@ use RedisClient\Client\Version\RedisClient3x2;
 use Test\Integration\Version3x0\HyperLogLogCommandsTest as HyperLogLogCommandsTestVersion3x0;
 
 /**
- * @see HyperLogLogCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\HyperLogLogCommandsTrait
  */
 class HyperLogLogCommandsTest extends HyperLogLogCommandsTestVersion3x0 {
 

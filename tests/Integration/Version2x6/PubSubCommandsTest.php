@@ -11,10 +11,9 @@
 namespace Test\Integration\Version2x6;
 
 use RedisClient\Client\Version\RedisClient2x6;
-use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see PubSubCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x6\PubSubCommandsTrait
  */
 class PubSubCommandsTest extends \PHPUnit_Framework_TestCase {
 
@@ -59,8 +58,8 @@ class PubSubCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see PubSubCommandsTrait::subscribe
-     * @see PubSubCommandsTrait::unsubscribe
+     * @see \RedisClient\Command\Traits\Version2x6\PubSubCommandsTrait::subscribe
+     * @see \RedisClient\Command\Traits\Version2x6\PubSubCommandsTrait::unsubscribe
      */
     public function test_subscribe_and_unsubscribe() {
         $Redis = static::$Redis;
@@ -99,8 +98,8 @@ class PubSubCommandsTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see PubSubCommandsTrait::psubscribe
-     * @see PubSubCommandsTrait::punsubscribe
+     * @see \RedisClient\Command\Traits\Version2x6\PubSubCommandsTrait::psubscribe
+     * @see \RedisClient\Command\Traits\Version2x6\PubSubCommandsTrait::punsubscribe
      */
     public function test_psubscribe_and_punsubscribe() {
         $Redis = static::$Redis;
