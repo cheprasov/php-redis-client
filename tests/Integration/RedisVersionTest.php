@@ -15,7 +15,7 @@ use RedisClient\ClientFactory;
 /**
  * Check Redis Versions
  */
-class RedisVersionsTest extends \PHPUnit_Framework_TestCase {
+class RedisVersionTest extends \PHPUnit_Framework_TestCase {
 
     // <server>, <client version>, <expected server version>
     protected $versions = [
