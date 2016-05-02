@@ -11,7 +11,6 @@
 namespace RedisClient\Command\Traits\Version2x8;
 
 use RedisClient\Command\Traits\AbstractCommandsTrait;
-use RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait;
 use RedisClient\Command\Traits\Version2x6\ListsCommandsTrait;
 use RedisClient\Command\Traits\Version2x6\ScriptingCommandsTrait;
 use RedisClient\Command\Traits\Version2x6\TransactionsCommandsTrait;

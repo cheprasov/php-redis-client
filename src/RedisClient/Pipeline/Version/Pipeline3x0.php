@@ -20,7 +20,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x0 auth($password)
  * @method Pipeline3x0 echo($message)
  * @method Pipeline3x0 echoMessage($message) - alias method for reversed word <echo>
- * @method Pipeline3x0 ping($message = null)
+ * -method Pipeline3x0 ping()
  * @method Pipeline3x0 quit()
  * @method Pipeline3x0 select($db)
  *
@@ -185,6 +185,9 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x0 watch($keys)
  *
  * Redis version 2.8
+ *
+ * Connection
+ * @method Pipeline3x0 ping($message = null)
  *
  * Hashes
  * @method Pipeline3x0 hscan($key, $cursor, $pattern = null, $count = null)

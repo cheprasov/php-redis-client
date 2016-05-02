@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### v1.2.3 (2016-05-02)
+- Fixed command **PING** for Redis <= 2.6.
+- Added common tests.
+
 ### v1.2.2 (2016-03-30)
 - Fixed annotations and phpDocs.
 - Fixed some tests.

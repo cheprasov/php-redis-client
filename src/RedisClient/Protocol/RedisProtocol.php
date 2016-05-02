@@ -141,9 +141,16 @@ class RedisProtocol implements ProtocolInterface {
     /**
      * @inheritdoc
      */
-    public function send(array $structures) {
-        $this->write($this->packProtocolArray($structures));
+    public function sendRaw($command) {
+        $this->write($command);
         return $response = $this->read();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function send(array $structures) {
+        return $this->sendRaw($this->packProtocolArray($structures));
     }
 
     /**

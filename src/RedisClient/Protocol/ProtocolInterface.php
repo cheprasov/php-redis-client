@@ -13,6 +13,12 @@ namespace RedisClient\Protocol;
 interface ProtocolInterface {
 
     /**
+     * @param string $command
+     * @return mixed
+     */
+    public function sendRaw($command);
+
+    /**
      * @param string[] $structure
      * @return mixed
      */
