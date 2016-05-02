@@ -20,7 +20,7 @@ use RedisClient\Protocol\RedisProtocol;
 
 abstract class AbstractRedisClient {
 
-    const VERSION = '1.2.2';
+    const VERSION = '1.2.3';
 
     const CONFIG_SERVER = 'server';
     const CONFIG_TIMEOUT = 'timeout';
@@ -184,6 +184,7 @@ abstract class AbstractRedisClient {
     }
 
     /**
+     * Command will parsed by the client, before sent to server
      * @param string $command
      * @return mixed
      */

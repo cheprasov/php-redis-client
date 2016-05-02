@@ -20,7 +20,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline2x6 auth($password)
  * @method Pipeline2x6 echo($message)
  * @method Pipeline2x6 echoMessage($message) - alias method for reversed word <echo>
- * @method Pipeline2x6 ping($message = null)
+ * @method Pipeline2x6 ping()
  * @method Pipeline2x6 quit()
  * @method Pipeline2x6 select($db)
  *

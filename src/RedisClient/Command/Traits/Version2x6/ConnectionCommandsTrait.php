@@ -45,15 +45,14 @@ trait ConnectionCommandsTrait {
     }
 
     /**
-     * PING [message]
+     * PING
      * Available since 1.0.0.
      * @link http://redis.io/commands/ping
      *
-     * @param string $message
      * @return string Returns message
      */
-    public function ping($message = null) {
-        return $this->returnCommand(['PING'], isset($message) ? [$message] : null);
+    public function ping() {
+        return $this->returnCommand(['PING']);
     }
 
     /**

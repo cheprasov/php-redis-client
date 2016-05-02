@@ -16,11 +16,16 @@ use RedisClient\Client\Version\RedisClient2x8;
 use Test\Integration\Version2x6\ConnectionCommandsTest as ConnectionCommandsTestVersion2x6;
 
 /**
- * @see \RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait
+ * @see \RedisClient\Command\Traits\Version2x8\ConnectionCommandsTrait
  */
 class ConnectionCommandsTest extends ConnectionCommandsTestVersion2x6 {
 
     const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x8_1;
+
+    /**
+     * @var RedisClient2x8
+     */
+    protected static $Redis;
 
     /**
      * @inheritdoc
@@ -30,6 +35,18 @@ class ConnectionCommandsTest extends ConnectionCommandsTestVersion2x6 {
             'server' =>  static::TEST_REDIS_SERVER_1,
             'timeout' => 2,
         ]);
+    }
+
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\ConnectionCommandsTrait::ping
+     */
+    public function test_ping() {
+        $Redis = static::$Redis;
+
+        $this->assertSame('PONG', $Redis->ping());
+        $this->assertSame('foo', $Redis->ping('foo'));
+        $this->assertSame("foo\r\nbar", $Redis->ping("foo\r\nbar"));
+        $this->assertSame("", $Redis->ping(""));
     }
 
 }
