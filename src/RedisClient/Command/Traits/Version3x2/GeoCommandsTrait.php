@@ -20,9 +20,10 @@ trait GeoCommandsTrait {
 
     /**
      * GEOADD key longitude latitude member [longitude latitude member ...]
-     * Beta Not yet available in a stable version of Redis. Download unstable if you want to test this command.
+     * Available since 3.2.0.
      * Time complexity: O(log(N)) for each item added, where N is the number of elements in the sorted set.
      * @link http://redis.io/commands/geoadd
+     *
      *
      * @param string $key
      * @param array $members [member => [longitude, latitude]]
@@ -41,7 +42,7 @@ trait GeoCommandsTrait {
 
     /**
      * GEODIST key member1 member2 [unit]
-     * Beta Not yet available in a stable version of Redis. Download unstable if you want to test this command.
+     * Available since 3.2.0.
      * Time complexity: O(log(N))
      * @link http://redis.io/commands/geodist
      *
@@ -62,7 +63,7 @@ trait GeoCommandsTrait {
 
     /**
      * GEOHASH key member [member ...]
-     * Beta Not yet available in a stable version of Redis. Download unstable if you want to test this command.
+     * Available since 3.2.0.
      * Time complexity: O(log(N)) for each member requested, where N is the number of elements in the sorted set.
      * @link http://redis.io/commands/geohash
      *
@@ -77,7 +78,7 @@ trait GeoCommandsTrait {
 
     /**
      * GEOPOS key member [member ...]
-     * Beta Not yet available in a stable version of Redis. Download unstable if you want to test this command.
+     * Available since 3.2.0.
      * Time complexity: O(log(N)) for each member requested, where N is the number of elements in the sorted set.
      * @link http://redis.io/commands/geopos
      *
@@ -92,8 +93,8 @@ trait GeoCommandsTrait {
     }
 
     /**
-     * GEORADIUS key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count]
-     * Beta Not yet available in a stable version of Redis. Download unstable if you want to test this command.
+     * GEORADIUS key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count] [ASC|DESC] [STORE|STOREDIST key]
+     * Available since 3.2.0.
      * Time complexity: O(N+log(M)) where N is the number of elements inside the bounding box of
      * the circular area delimited by center and radius and M is the number of items inside the index.
      * @link http://redis.io/commands/georadius
@@ -108,9 +109,14 @@ trait GeoCommandsTrait {
      * @param bool|false $withhash
      * @param int|null $count
      * @param bool|null $asc (true => ASC, false => DESC)
-     * @return array
+     * @param string|null $storeKey
+     * @param bool $storeDist
+     * @return array|int
      */
-    public function georadius($key, $longitude, $latitude, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null) {
+    public function georadius(
+        $key, $longitude, $latitude, $radius, $unit, $withcoord = false, $withdist = false,
+        $withhash = false, $count = null, $asc = null, $storeKey = null, $storeDist = false
+    ) {
         $params = [$key, $longitude, $latitude, $radius, $unit];
         $parse = false;
         if ($withcoord) {
@@ -132,12 +138,17 @@ trait GeoCommandsTrait {
         if (isset($asc)) {
             $params[] = $asc ? 'ASC' : 'DESC';
         }
+        if (isset($storeKey)) {
+            $params[] = $storeDist ? 'STOREDIST' : 'STORE';
+            $params[] = $storeKey;
+            $parse = false;
+        }
         return $this->returnCommand(['GEORADIUS'], $params, $parse ? ResponseParser::PARSE_GEO_ARRAY : null);
     }
 
     /**
-     * GEORADIUSBYMEMBER key member radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count]
-     * Beta Not yet available in a stable version of Redis. Download unstable if you want to test this command.
+     * GEORADIUSBYMEMBER key member radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count] [ASC|DESC] [STORE|STOREDIST key]
+     * Available since 3.2.0.
      * Time complexity: O(N+log(M)) where N is the number of elements inside the bounding box of
      * the circular area delimited by center and radius and M is the number of items inside the index.
      * @link http://redis.io/commands/georadiusbymember
@@ -151,9 +162,14 @@ trait GeoCommandsTrait {
      * @param bool|false $withhash
      * @param int|null $count
      * @param bool|null $asc (true => ASC, false => DESC)
-     * @return array
+     * @param string|null $storeKey
+     * @param bool $storeDist
+     * @return array|int
      */
-    public function georadiusbymember($key, $member, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null) {
+    public function georadiusbymember(
+        $key, $member, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false,
+        $count = null, $asc = null, $storeKey = null, $storeDist = false
+    ) {
         $params = [$key, $member, $radius, $unit];
         $parse = false;
         if ($withcoord) {
@@ -174,6 +190,11 @@ trait GeoCommandsTrait {
         }
         if (isset($asc)) {
             $params[] = $asc ? 'ASC' : 'DESC';
+        }
+        if (isset($storeKey)) {
+            $params[] = $storeDist ? 'STOREDIST' : 'STORE';
+            $params[] = $storeKey;
+            $parse = false;
         }
         return $this->returnCommand(['GEORADIUSBYMEMBER'], $params, $parse ? ResponseParser::PARSE_GEO_ARRAY : null);
     }

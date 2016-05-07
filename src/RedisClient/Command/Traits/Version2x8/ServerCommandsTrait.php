@@ -42,7 +42,6 @@ trait ServerCommandsTrait {
      * @return int Number of commands returned by COMMAND
      */
     public function commandCount() {
-        // todo: check
         return $this->returnCommand(['COMMAND', 'COUNT'], []);
     }
 

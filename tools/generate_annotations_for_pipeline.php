@@ -20,11 +20,48 @@ if ($argc === 2 && $argv[1] === '--help') {
 }
 
 $lines = `grep -r 'public function' ./src/RedisClient/Command/Traits/`;
+$lines = explode("\n", $lines);
+$files = [];
+
+foreach ($lines as $line) {
+    $l = explode(':', $line, 2);
+    if (!$l[0]) {
+        continue;
+    }
+    if (!preg_match('/Version(\d+x\d+)\/(\w+)CommandsTrait\.php/i', $l[0])) {
+        continue;
+    }
+    $files[] = $l[0];
+}
+$files = array_unique($files);
+$matches = [];
+
+foreach ($files as $file) {
+    if (!preg_match('/Version(\d+x\d+)\/(\w+)CommandsTrait\.php/i', $file, $mfile)) {
+        continue;
+    }
+
+    $f = file_get_contents($file);
+
+    if (!preg_match_all('/public function (.+)\s*\(([^)]*)\)/im', $f, $mfunc, PREG_SET_ORDER)) {
+        continue;
+    }
+
+    foreach ($mfunc as $mf) {
+        $matches[] = [
+            $mfile[0],
+            $mfile[1],
+            $mfile[2],
+            $mf[1],
+            preg_replace("/\\s*\n\\s*/", ' ', trim($mf[2]))
+        ];
+    }
+}
 
 //Version3x0/SortedSetsCommandsTrait.php:    public function zrange($key, $start, $stop, $withscores = false)
-if (!preg_match_all('/Version(\d+x\d+)\/(\w+)CommandsTrait\.php.+public function (.+)\((.*)\)/im', $lines, $matches, PREG_SET_ORDER)) {
-    echo 'Not found'. EOL;
-}
+//if (!preg_match_all('/Version(\d+x\d+)\/(\w+)CommandsTrait\.php.+public function (.+)\((.*)\)/im', $lines, $matches, PREG_SET_ORDER)) {
+//    echo 'Not found'. EOL;
+//}
 
 $versions = [];
 

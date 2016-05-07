@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+### v1.3.0 (2016-05-07)
+- Client was tested with Redis 3.2.0 (stable)
+- Added command **BITFIELD** for Redis >= 3.2.
+- Added **STORE** and **STOREDIST** params for **GEORADIUS** and **GEORADIUSBYMEMBER** for Redis >= 3.2.
+- Added command **DEBUG HELP** for Redis >= 3.2.
+- Changed some test for GEO.
+
 ### v1.2.3 (2016-05-02)
 - Fixed command **PING** for Redis <= 2.6.
 - Added common tests.
