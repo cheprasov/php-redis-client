@@ -53,7 +53,7 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
             'Catania' => ['15.087269', '37.502669']
         ]));
 
-        $this->assertSame('166274.15156960033', $Redis->geodist('Sicily', 'Palermo', 'Catania'));
+        $this->assertSame('166274.1516', $Redis->geodist('Sicily', 'Palermo', 'Catania'));
         $this->assertSame(['Catania'], $Redis->georadius('Sicily', 15, 37, 100, 'km'));
         $this->assertSame(['Palermo', 'Catania'], $Redis->georadius('Sicily', 15, 37, 200, 'km'));
 
@@ -83,23 +83,23 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
             'Catania' => ['15.087269', '37.502669']
         ]));
 
-        $this->assertSame('166274.15156960033', $Redis->geodist('Sicily', 'Palermo', 'Catania'));
-        $this->assertSame('166274.15156960033', $Redis->geodist('Sicily', 'Palermo', 'Catania', 'm'));
-        $this->assertSame('166.27415156960032', $Redis->geodist('Sicily', 'Palermo', 'Catania', 'km'));
-        $this->assertSame('103.31822459492733', $Redis->geodist('Sicily', 'Palermo', 'Catania', 'mi'));
-        $this->assertSame('545518.86997900368', $Redis->geodist('Sicily', 'Palermo', 'Catania', 'ft'));
+        $this->assertSame('166274.1516', $Redis->geodist('Sicily', 'Palermo', 'Catania'));
+        $this->assertSame('166274.1516', $Redis->geodist('Sicily', 'Palermo', 'Catania', 'm'));
+        $this->assertSame('166.2742', $Redis->geodist('Sicily', 'Palermo', 'Catania', 'km'));
+        $this->assertSame('103.3182', $Redis->geodist('Sicily', 'Palermo', 'Catania', 'mi'));
+        $this->assertSame('545518.8700', $Redis->geodist('Sicily', 'Palermo', 'Catania', 'ft'));
 
-        $this->assertSame('166274.15156960033', $Redis->geodist('Sicily', 'Catania', 'Palermo'));
-        $this->assertSame('166274.15156960033', $Redis->geodist('Sicily', 'Catania', 'Palermo', 'm'));
-        $this->assertSame('166.27415156960032', $Redis->geodist('Sicily', 'Catania', 'Palermo', 'km'));
-        $this->assertSame('103.31822459492733', $Redis->geodist('Sicily', 'Catania', 'Palermo', 'mi'));
-        $this->assertSame('545518.86997900368', $Redis->geodist('Sicily', 'Catania', 'Palermo', 'ft'));
+        $this->assertSame('166274.1516', $Redis->geodist('Sicily', 'Catania', 'Palermo'));
+        $this->assertSame('166274.1516', $Redis->geodist('Sicily', 'Catania', 'Palermo', 'm'));
+        $this->assertSame('166.2742', $Redis->geodist('Sicily', 'Catania', 'Palermo', 'km'));
+        $this->assertSame('103.3182', $Redis->geodist('Sicily', 'Catania', 'Palermo', 'mi'));
+        $this->assertSame('545518.8700', $Redis->geodist('Sicily', 'Catania', 'Palermo', 'ft'));
 
-        $this->assertSame('0', $Redis->geodist('Sicily', 'Catania', 'Catania'));
-        $this->assertSame('0', $Redis->geodist('Sicily', 'Catania', 'Catania', 'm'));
-        $this->assertSame('0', $Redis->geodist('Sicily', 'Catania', 'Catania', 'km'));
-        $this->assertSame('0', $Redis->geodist('Sicily', 'Catania', 'Catania', 'mi'));
-        $this->assertSame('0', $Redis->geodist('Sicily', 'Catania', 'Catania', 'ft'));
+        $this->assertSame('0.0000', $Redis->geodist('Sicily', 'Catania', 'Catania'));
+        $this->assertSame('0.0000', $Redis->geodist('Sicily', 'Catania', 'Catania', 'm'));
+        $this->assertSame('0.0000', $Redis->geodist('Sicily', 'Catania', 'Catania', 'km'));
+        $this->assertSame('0.0000', $Redis->geodist('Sicily', 'Catania', 'Catania', 'mi'));
+        $this->assertSame('0.0000', $Redis->geodist('Sicily', 'Catania', 'Catania', 'ft'));
 
         $this->assertSame(null, $Redis->geodist('Sicily', 'Catania', 'foo', 'ft'));
         $this->assertSame(null, $Redis->geodist('Sicily', 'bar', 'foo'));
@@ -159,14 +159,14 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
         ]));
 
         $this->assertSame([
-            ['13.361389338970184', '38.115556395496299'],
-            ['15.087267458438873', '37.50266842333162'],
+            ['13.36138933897018433', '38.11555639549629859'],
+            ['15.08726745843887329', '37.50266842333162032'],
             null
         ], $Redis->geopos('Sicily', ['Palermo', 'Catania', 'NonExisting']));
 
         $this->assertSame([
-            ['13.361389338970184', '38.115556395496299'],
-            ['13.361389338970184', '38.115556395496299'],
+            ['13.36138933897018433', '38.11555639549629859'],
+            ['13.36138933897018433', '38.11555639549629859'],
         ], $Redis->geopos('Sicily', ['Palermo', 'Palermo']));
 
         $Redis->set('foo', 'bar');
@@ -197,31 +197,40 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(['Palermo'], $Redis->georadius('Sicily', 15, 37, 200, 'km', false, false, false, 1, false));
         $this->assertSame(['Catania'], $Redis->georadius('Sicily', 15, 37, 200, 'km', false, false, false, 1, true));
 
+        $this->assertSame(1, $Redis->georadius('Sicily', 15, 37, 100, 'km', false, false, false, null, null, 'my-list'));
+        $this->assertSame(['Catania'], $Redis->zrange('my-list', 0, -1));
+        $this->assertSame(['Catania' => '3479447370796909'], $Redis->zrange('my-list', 0, -1, true));
+        $this->assertSame(1, $Redis->georadius('Sicily', 15, 37, 100, 'km', false, false, false, null, null, 'my-list', true));
+        $this->assertSame(['Catania' => '56.441257870158204'], $Redis->zrange('my-list', 0, -1, true));
+
+        $this->assertSame(2, $Redis->georadius('Sicily', 15, 37, 200, 'km', false, false, false, null, null, 'my-list'));
+        $this->assertSame(['Palermo', 'Catania'], $Redis->zrange('my-list', 0, -1));
+
         $this->assertSame([
                 'Palermo' => ['190.4424'],
                 'Catania' => ['56.4413']
             ], $Redis->georadius('Sicily', 15, 37, 200, 'km', false, true)
         );
         $this->assertSame([
-            'Catania' => ['56.4413', 3479447370796909, ['15.087267458438873', '37.50266842333162']]
+            'Catania' => ['56.4413', 3479447370796909, ['15.08726745843887329', '37.50266842333162032']]
             ], $Redis->georadius('Sicily', 15, 37, 100, 'km', true, true, true)
         );
         $this->assertSame([
-            'Catania' => ['56.4413', 3479447370796909, ['15.087267458438873', '37.50266842333162']]
+            'Catania' => ['56.4413', 3479447370796909, ['15.08726745843887329', '37.50266842333162032']]
             ], $Redis->georadius('Sicily', 15, 37, 100, 'km', true, true, true)
         );
         $this->assertSame([
-            'Palermo' => ['190.4424', 3479099956230698, ['13.361389338970184', '38.115556395496299']],
-            'Catania' => ['56.4413', 3479447370796909, ['15.087267458438873', '37.50266842333162']]
+            'Palermo' => ['190.4424', 3479099956230698, ['13.36138933897018433', '38.11555639549629859']],
+            'Catania' => ['56.4413', 3479447370796909, ['15.08726745843887329', '37.50266842333162032']]
             ], $Redis->georadius('Sicily', 15, 37, 200, 'km', true, true, true)
         );
         $this->assertSame([
-            'Palermo' => ['190.4424', 3479099956230698, ['13.361389338970184', '38.115556395496299']],
-            'Catania' => ['56.4413', 3479447370796909, ['15.087267458438873', '37.50266842333162']]
+            'Palermo' => ['190.4424', 3479099956230698, ['13.36138933897018433', '38.11555639549629859']],
+            'Catania' => ['56.4413', 3479447370796909, ['15.08726745843887329', '37.50266842333162032']]
             ], $Redis->georadius('Sicily', 15, 37, 200, 'km', true, true, true, null, false)
         );
         $this->assertSame([
-            'Catania' => [['15.087267458438873', '37.50266842333162']]
+            'Catania' => [['15.08726745843887329', '37.50266842333162032']]
             ], $Redis->georadius('Sicily', 15, 37, 100, 'km', true)
         );
 
@@ -246,14 +255,28 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
             'Catania' => ['15.087269', '37.502669']
         ]));
 
+        $this->assertSame(2, $Redis->georadiusbymember('Sicily', 'Agrigento', 100, 'km', false, false, false, null, null, 'my-list'));
+        $this->assertSame(['Agrigento', 'Palermo'], $Redis->zrange('my-list', 0, -1));
+        $this->assertSame([
+            'Agrigento' => '3479030013248308',
+            'Palermo' => '3479099956230698',
+        ], $Redis->zrange('my-list', 0, -1, true));
+
+        $this->assertSame(2, $Redis->georadiusbymember('Sicily', 'Agrigento', 100, 'km', false, false, false, null, null, 'my-list', true));
+        $this->assertSame(['Agrigento', 'Palermo'], $Redis->zrange('my-list', 0, -1));
+        $this->assertSame([
+            'Agrigento' => '0',
+            'Palermo' => '90.977753537996037',
+        ], $Redis->zrange('my-list', 0, -1, true));
+
         $this->assertSame(['Agrigento', 'Palermo'], $Redis->georadiusbymember('Sicily', 'Agrigento', 100, 'km'));
         $this->assertSame(['Agrigento'], $Redis->georadiusbymember('Sicily', 'Agrigento', 0, 'km'));
         $this->assertSame(['Agrigento', 'Palermo'], $Redis->georadiusbymember('Sicily', 'Agrigento', 100, 'km', null, null, null, null, true));
         $this->assertSame(['Palermo', 'Agrigento'], $Redis->georadiusbymember('Sicily', 'Agrigento', 100, 'km', null, null, null, null, false));
 
         $this->assertSame([
-            'Palermo' => ['90.9778', 3479099956230698, ['13.361389338970184', '38.115556395496299']],
-            'Agrigento' => ['0.0000', 3479030013248308, ['13.583331406116486', '37.316668049938166']],
+            'Palermo' => ['90.9778', 3479099956230698, ['13.36138933897018433', '38.11555639549629859']],
+            'Agrigento' => ['0.0000', 3479030013248308, ['13.5833314061164856', '37.31666804993816555']],
             ], $Redis->georadiusbymember('Sicily', 'Agrigento', 100, 'km', true, true, true, null, false)
         );
 

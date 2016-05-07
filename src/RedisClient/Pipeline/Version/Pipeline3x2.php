@@ -278,8 +278,6 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 geodist($key, $member1, $member2, $unit = null)
  * @method Pipeline3x2 geohash($key, $members)
  * @method Pipeline3x2 geopos($key, $members)
- * @method Pipeline3x2 georadius($key, $longitude, $latitude, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null)
- * @method Pipeline3x2 georadiusbymember($key, $member, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null)
  * @method Pipeline3x2 geodel($key, $members)
  *
  * Hashes
@@ -293,9 +291,13 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * Server
  * @method Pipeline3x2 clientReply($param)
+ * @method Pipeline3x2 debugHelp()
  *
  * Sets
  * @method Pipeline3x2 spop($key, $count = null)
+ *
+ * Strings
+ * @method Pipeline3x2 bitfield($key, array $subcommands)
  * 
  */
 class Pipeline3x2 extends AbstractPipeline {

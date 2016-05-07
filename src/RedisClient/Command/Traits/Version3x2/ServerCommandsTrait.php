@@ -33,4 +33,14 @@ trait ServerCommandsTrait {
         return $this->returnCommand(['CLIENT', 'REPLY'], [$param]);
     }
 
+    /**
+     * DEBUG HELP
+     * Available since 3.2.
+     *
+     * @return string[]
+     */
+    public function debugHelp() {
+        return $this->returnCommand(['DEBUG', 'HELP']);
+    }
+
 }

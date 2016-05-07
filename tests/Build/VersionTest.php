@@ -19,13 +19,25 @@ class VersionTest extends \PHPUnit_Framework_TestCase {
         $composer = json_decode(file_get_contents('./composer.json'), true);
 
         $this->assertSame(true, isset($composer['version']));
-        $this->assertSame(AbstractRedisClient::VERSION, $composer['version']);
+        $this->assertSame(
+            AbstractRedisClient::VERSION,
+            $composer['version'],
+            'Please, change version in composer.json'
+        );
 
         $readme = file('./README.md');
-        $this->assertSame(true, strpos($readme[3], 'RedisClient v'.$composer['version']) > 0);
+        $this->assertSame(
+            true,
+            strpos($readme[3], 'RedisClient v'.$composer['version']) > 0,
+            'Please, change version in README.md'
+        );
 
         $readme = file('./CHANGELOG.md');
-        $this->assertSame(true, strpos($readme[2], '### v'.$composer['version']) === 0);
+        $this->assertSame(
+            true,
+            strpos($readme[2], '### v'.$composer['version']) === 0,
+            'Please, add new version to CHANGELOG.md'
+        );
     }
 
 }

@@ -22,6 +22,9 @@ class ServerCommandsTest extends ServerCommandsTestVersion3x0 {
 
     const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x2_1;
 
+    /** @var  RedisClient3x2 */
+    protected static $Redis;
+
     /**
      * @inheritdoc
      */
@@ -38,6 +41,50 @@ class ServerCommandsTest extends ServerCommandsTestVersion3x0 {
     public function test_commandCount() {
         $Redis = static::$Redis;
 
-        $this->assertSame(170, $Redis->commandCount());
+        $this->assertSame(171, $Redis->commandCount());
+    }
+
+    /**
+     * @see \RedisClient\Command\Traits\Version3x2\ServerCommandsTrait::commandCount
+     */
+    public function test_command() {
+        $Redis = static::$Redis;
+
+        $commands = $Redis->command();
+        $missedCommands = [];
+        foreach ($commands as $command) {
+            if (method_exists($Redis, $command[0])) {
+                continue;
+            }
+            $missedCommands[] = $command[0];
+        }
+        sort($missedCommands);
+
+        $this->assertSame([
+            'asking',
+            'client',
+            'cluster',
+            'config',
+            'debug',
+            'echo',
+            'eval',
+            'latency',
+            'pfdebug',
+            'pfselftest',
+            'psync',
+            'replconf',
+            'restore-asking',
+            'script',
+        ], $missedCommands);
+    }
+
+    /**
+     * @see \RedisClient\Command\Traits\Version3x2\ServerCommandsTrait::commandCount
+     */
+    public function test_debugHelp() {
+        $Redis = static::$Redis;
+
+        $help = $Redis->debugHelp();
+        $this->assertSame('DEBUG <subcommand> arg arg ... arg. Subcommands:', $help[0]);
     }
 }

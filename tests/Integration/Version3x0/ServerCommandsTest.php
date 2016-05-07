@@ -38,6 +38,14 @@ class ServerCommandsTest extends ServerCommandsTestVersion2x8 {
         $this->assertSame(163, $Redis->commandCount());
     }
 
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\ServerCommandsTrait::commandGetkeys
+     */
+    public function _test_commandGetkeys() {
+        $Redis = static::$Redis;
+        $this->assertSame(['a', 'c', 'e'], $Redis->commandGetkeys('MSET a b c d e f'));
+    }
+
     public function test_command() {
         $Redis = static::$Redis;
 
