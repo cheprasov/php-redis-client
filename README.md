@@ -4,7 +4,7 @@
 # RedisClient v1.3.0 for PHP >= 5.5
 
 ## About
-RedisClient is a fast, fully-functional and user-friendly client for Redis, optimized for performance. RedisClient supports the latest versions of Redis starting from __2.6__ to __3.2.0-RC3__
+RedisClient is a fast, fully-functional and user-friendly client for Redis, optimized for performance. RedisClient supports the latest versions of Redis starting from __2.6__ to __3.2__
 
 ## Main features
 - Support Redis versions from __2.6__ to __3.2.0__.
