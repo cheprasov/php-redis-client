@@ -29,7 +29,7 @@ $Redis = new RedisClient();
 echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL;
 echo 'Redis: '. $Redis->info('Server')['redis_version'] . PHP_EOL;
 
-// RedisClient: 3.0
+// RedisClient: 3.2
 // Redis: 3.0.3
 
 
@@ -37,14 +37,14 @@ echo 'Redis: '. $Redis->info('Server')['redis_version'] . PHP_EOL;
 // By default, the client works with the latest stable version of Redis.
 
 $Redis = new RedisClient([
-    'server' => 'tcp://127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
+    'server' => 'tcp://127.0.0.1:6387', // or 'unix:///tmp/redis.sock'
     'timeout' => 2
 ]);
 
 echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL;
 echo 'Redis: '. $Redis->info('Server')['redis_version'] . PHP_EOL;
-// RedisClient: 3.0
-// Redis: 3.0.3
+// RedisClient: 3.2
+// Redis: 3.2.0
 
 
 // Example 3. Create new Instance for Redis version 2.6.x with config

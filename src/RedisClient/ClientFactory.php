@@ -10,7 +10,6 @@
  */
 namespace RedisClient;
 
-use RedisClient\Client\AbstractRedisClient;
 use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Client\Version\RedisClient2x8;
 use RedisClient\Client\Version\RedisClient3x0;
@@ -54,7 +53,7 @@ class ClientFactory {
         }
         if (empty($class)) {
             throw new \InvalidArgumentException(
-                'RedisClient does not support Redis version '.$version.'. Please, use version ' .end($versions)
+                'RedisClient does not support Redis version '.$version.'. Please, use version '. end($versions)
             );
         }
         return new $class($config);

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 namespace RedisClient;
-use RedisClient\Client\Version\RedisClient3x0 as RedisClientLastStableVersion;
+use RedisClient\Client\Version\RedisClient3x2 as RedisClientLastStableVersion;
 use RedisClient\Pipeline\Pipeline;
 use RedisClient\Pipeline\PipelineInterface;
 
