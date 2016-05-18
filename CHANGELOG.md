@@ -1,5 +1,8 @@
 ## CHANGELOG
 
+### v1.3.1 (2016-05-18)
+- By default, the client works with the latest stable version of Redis (3.2.0).
+
 ### v1.3.0 (2016-05-07)
 - Client was tested with Redis 3.2.0 (stable)
 - Added command **BITFIELD** for Redis >= 3.2.
