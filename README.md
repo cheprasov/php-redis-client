@@ -62,7 +62,7 @@ echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL;
 echo 'Redis: '. $Redis->info('Server')['redis_version'] . PHP_EOL;
 
 // By default, the client works with the latest stable version of Redis.
-// RedisClient: 3.0
+// RedisClient: 3.2
 // Redis: 3.0.3
 
 
