@@ -18,6 +18,7 @@ services:
 
 before_install:
    - |
+      docker pull cheprasov/redis-for-tests:latest;
       docker run -i -t --rm \
         -p 127.0.0.1:6381:6381 \
         -p 127.0.0.1:6382:6382 \
