@@ -27,7 +27,7 @@ before_install:
         -p 127.0.0.1:6386:6386 \
         -p 127.0.0.1:6387:6387 \
         -p 127.0.0.1:6388:6388 \
-        cheprasov/redis-for-tests
+        cheprasov/redis-for-tests &
 
 install:
    - composer install
