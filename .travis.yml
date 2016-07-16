@@ -1,0 +1,36 @@
+sudo: required
+
+language: php
+php:
+  - '5.5'
+  - '5.6'
+  - '7.0'
+  - '7.1'
+  - hhvm
+
+matrix:
+  allow_failures:
+    - php: hhvm
+    - php: '7.1'
+
+services:
+  - docker
+
+before_install:
+   - |
+      docker run -i -t --rm \
+        -p 127.0.0.1:6381:6381 \
+        -p 127.0.0.1:6382:6382 \
+        -p 127.0.0.1:6383:6383 \
+        -p 127.0.0.1:6384:6384 \
+        -p 127.0.0.1:6385:6385 \
+        -p 127.0.0.1:6386:6386 \
+        -p 127.0.0.1:6387:6387 \
+        -p 127.0.0.1:6388:6388 \
+        cheprasov/redis-for-tests
+
+install:
+   - composer install
+
+before_script:
+   - phpenv config-rm xdebug.ini
