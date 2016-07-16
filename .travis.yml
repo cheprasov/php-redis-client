@@ -11,7 +11,6 @@ php:
 matrix:
   allow_failures:
     - php: hhvm
-    - php: '7.1'
 
 services:
   - docker
@@ -34,6 +33,3 @@ before_install:
 
 install:
    - composer install
-
-before_script:
-   - phpenv config-rm xdebug.ini
