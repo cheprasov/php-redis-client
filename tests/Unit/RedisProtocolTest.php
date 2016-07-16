@@ -131,25 +131,35 @@ class RedisProtocolTest extends \PHPUnit_Framework_TestCase {
 
         $Protocol = new RedisProtocol($ConnectionMock = $this->getConnectionMock());
 
-        $ConnectionMock->method('readLine')->willReturn(
-            "*3\r\n", "$1\r\n", ":2\r\n", "$1\r\n",
-            "+OK\r\n",
-            "+PING-PONG\r\n",
-            ":100\r\n",
-            ":-42\r\n",
-            ":-1\r\n",
-            "*3\r\n", "$3\r\n", "$3\r\n", "$3\r\n",
-            "*3\r\n", "$3\r\n", "$0\r\n", "$-1\r\n",
-            "$6\r\n",
-            '-ERR SomeError'
-        );
+        $ConnectionMock->method('readLine')->will($this->returnCallback(
+            function() {
+                static $return = [
+                    "*3\r\n", "$1\r\n", ":2\r\n", "$1\r\n",
+                    "+OK\r\n",
+                    "+PING-PONG\r\n",
+                    ":100\r\n",
+                    ":-42\r\n",
+                    ":-1\r\n",
+                    "*3\r\n", "$3\r\n", "$3\r\n", "$3\r\n",
+                    "*3\r\n", "$3\r\n", "$0\r\n", "$-1\r\n",
+                    "$6\r\n",
+                    '-ERR SomeError'
+                ];
+                return array_shift($return);
+            }
+        ));
 
-        $ConnectionMock->method('read')->willReturn(
-            "1\r\n", "3\r\n",
-            "SET\r\n", "foo\r\n", "bar\r\n",
-            "SET\r\n", "\r\n",
-            "\r\n\xff\x0\r\n\r\n"
-        );
+        $ConnectionMock->method('read')->will($this->returnCallback(
+            function() {
+                static $return = [
+                   "1\r\n", "3\r\n",
+                    "SET\r\n", "foo\r\n", "bar\r\n",
+                    "SET\r\n", "\r\n",
+                    "\r\n\xff\x0\r\n\r\n"
+                ];
+                return array_shift($return);
+            }
+        ));
 
         $this->assertSame(['1', 2, '3'], $Method->invoke($Protocol));
         $this->assertSame(true, $Method->invoke($Protocol));
