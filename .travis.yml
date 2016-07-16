@@ -28,6 +28,7 @@ before_install:
         -p 127.0.0.1:6387:6387 \
         -p 127.0.0.1:6388:6388 \
         cheprasov/redis-for-tests &
+   - sleep 5;
 
 install:
    - composer install
