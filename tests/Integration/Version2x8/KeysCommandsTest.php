@@ -49,6 +49,7 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x6 {
         static::$Redis2 = new RedisClient2x8([
             'server' =>  static::TEST_REDIS_SERVER_2,
             'timeout' => 2,
+            'password' => TEST_REDIS_SERVER_PASSWORD,
         ]);
     }
 

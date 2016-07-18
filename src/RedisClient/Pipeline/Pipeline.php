@@ -10,10 +10,24 @@
  */
 namespace RedisClient\Pipeline;
 
-use RedisClient\Pipeline\Version\Pipeline3x2 as PipelineLastStableVersion;
+use RedisClient\ClientFactory;
+use RedisClient\Pipeline\Version\Pipeline2x6;
+use RedisClient\Pipeline\Version\Pipeline2x8;
+use RedisClient\Pipeline\Version\Pipeline3x0;
+use RedisClient\Pipeline\Version\Pipeline3x2;
 
-/**
- * @inheritdoc
- */
-class Pipeline extends PipelineLastStableVersion {
+switch (ClientFactory::getDefaultRedisVersion()) {
+    case '2.6':
+        class Pipeline extends Pipeline2x6 {};
+        break;
+    case '2.8':
+        class Pipeline extends Pipeline2x8 {};
+        break;
+    case '3.0':
+        class Pipeline extends Pipeline3x0 {};
+        break;
+    case '3.2':
+    default:
+        class Pipeline extends Pipeline3x2 {};
+        break;
 }

@@ -50,6 +50,7 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x8 {
         static::$Redis2 = new RedisClient3x0([
             'server' =>  static::TEST_REDIS_SERVER_2,
             'timeout' => 2,
+            'password' => TEST_REDIS_SERVER_PASSWORD,
         ]);
     }
 
@@ -81,29 +82,31 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x8 {
     public function test_migrate() {
         $Redis = static::$Redis;
         $Redis2 = static::$Redis2;
+
+        $this->assertSame(true, $Redis->flushall());
         $this->assertSame(true, $Redis2->flushall());
 
-        list(, $host, $port) = explode(':', str_replace('/', '', static::TEST_REDIS_SERVER_2), 3);
+        list(, $host, $port) = explode(':', str_replace('/', '', static::TEST_REDIS_SERVER_1), 3);
 
-        $this->assertSame(true, $Redis->set('one', 1));
+        $this->assertSame(true, $Redis2->set('one', 1));
 
-        $this->assertSame(null, $Redis2->get('one'));
-        $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100, true));
-        $this->assertSame('1', $Redis2->get('one'));
+        $this->assertSame(null, $Redis->get('one'));
+        $this->assertSame(true, $Redis2->migrate($host, $port, 'one', 0, 100, true));
         $this->assertSame('1', $Redis->get('one'));
+        $this->assertSame('1', $Redis2->get('one'));
 
-        $this->assertSame(true, $Redis->set('one', 11));
+        $this->assertSame(true, $Redis2->set('one', 11));
 
         try {
-            $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100, true));
+            $this->assertSame(true, $Redis2->migrate($host, $port, 'one', 0, 100, true));
             $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
 
-        $this->assertSame(true, $Redis->migrate($host, $port, 'one', 0, 100, false, true));
-        $this->assertSame('11', $Redis2->get('one'));
-        $this->assertSame(null, $Redis->get('one'));
+        $this->assertSame(true, $Redis2->migrate($host, $port, 'one', 0, 100, false, true));
+        $this->assertSame('11', $Redis->get('one'));
+        $this->assertSame(null, $Redis2->get('one'));
     }
 
     /**

@@ -9,18 +9,24 @@
  * file that was distributed with this source code.
  */
 namespace RedisClient;
-use RedisClient\Client\Version\RedisClient3x2 as RedisClientLastStableVersion;
-use RedisClient\Pipeline\Pipeline;
-use RedisClient\Pipeline\PipelineInterface;
 
-class RedisClient extends RedisClientLastStableVersion {
+use RedisClient\Client\Version\RedisClient2x6;
+use RedisClient\Client\Version\RedisClient2x8;
+use RedisClient\Client\Version\RedisClient3x0;
+use RedisClient\Client\Version\RedisClient3x2;
 
-    /**
-     * @param \Closure|null $Pipeline
-     * @return PipelineInterface
-     */
-    protected function createPipeline(\Closure $Pipeline = null) {
-        return new Pipeline($Pipeline);
-    }
-
+switch (ClientFactory::getDefaultRedisVersion()) {
+    case '2.6':
+        class RedisClient extends RedisClient2x6 {};
+        break;
+    case '2.8':
+        class RedisClient extends RedisClient2x8 {};
+        break;
+    case '3.0':
+        class RedisClient extends RedisClient3x0 {};
+        break;
+    case '3.2':
+    default:
+        class RedisClient extends RedisClient3x2 {};
+        break;
 }
