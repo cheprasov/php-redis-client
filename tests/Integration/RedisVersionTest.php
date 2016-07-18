@@ -33,13 +33,14 @@ class RedisVersionTest extends \PHPUnit_Framework_TestCase {
      *
      */
     public function test_RedisVersions() {
-        foreach ($this->versions as $arr) {
+        foreach ($this->versions as $n => $arr) {
             list($server, $clientVersion, $serverVersion) = $arr;
 
             $Redis = ClientFactory::create([
                 'server' => $server,
                 'timeout' => 2,
                 'version' => $clientVersion,
+                'password' => $n % 2 ? TEST_REDIS_SERVER_PASSWORD : null,
             ]);
 
             $this->assertSame($clientVersion, $Redis->getSupportedVersion());

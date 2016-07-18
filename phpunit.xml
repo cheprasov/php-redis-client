@@ -34,6 +34,7 @@
         <const name="TEST_REDIS_SERVER_3x0_2" value="tcp://127.0.0.1:6386" />
         <const name="TEST_REDIS_SERVER_3x2_1" value="tcp://127.0.0.1:6387" />
         <const name="TEST_REDIS_SERVER_3x2_2" value="tcp://127.0.0.1:6388" />
+        <const name="TEST_REDIS_SERVER_PASSWORD" value="test-password-123" />
     </php>
 
 </phpunit>

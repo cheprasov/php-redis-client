@@ -1,5 +1,10 @@
 ## CHANGELOG
 
+### v1.4.0 (2016-07-18)
+- You can choose default version of Redis Client (**ClientFactory::setDefaultRedisVersion**).
+- Added parameter 'password' for config.
+- Added parameter 'database' for config.
+
 ### v1.3.1 (2016-05-18)
 - By default, the client works with the latest stable version of Redis (3.2.0).
 

@@ -14,15 +14,57 @@ use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Client\Version\RedisClient2x8;
 use RedisClient\Client\Version\RedisClient3x0;
 use RedisClient\Client\Version\RedisClient3x2;
+use RedisClient\Exception\ErrorException;
+use RedisClient\Exception\InvalidArgumentException;
 
 class ClientFactory {
 
+    const REDIS_VERSION_2x6 = '2.6';
+    const REDIS_VERSION_2x8 = '2.8';
+    const REDIS_VERSION_3x0 = '3.0';
+    const REDIS_VERSION_3x2 = '3.2';
+
+    /**
+     * @var string|null
+     */
+    protected static $defaultRedisVersion;
+
+    /**
+     * @var array
+     */
     protected static $versions = [
-        '2.6' => RedisClient2x6::class,
-        '2.8' => RedisClient2x8::class,
-        '3.0' => RedisClient3x0::class,
-        '3.2' => RedisClient3x2::class,
+        self::REDIS_VERSION_2x6 => RedisClient2x6::class,
+        self::REDIS_VERSION_2x8 => RedisClient2x8::class,
+        self::REDIS_VERSION_3x0 => RedisClient3x0::class,
+        self::REDIS_VERSION_3x2 => RedisClient3x2::class,
     ];
+
+    /**
+     * @return string
+     */
+    public static function getDefaultRedisVersion() {
+        return self::$defaultRedisVersion ?: self::REDIS_VERSION_3x2;
+    }
+
+    /**
+     * @param string $version
+     * @throws InvalidArgumentException
+     * @throws ErrorException
+     */
+    public static function setDefaultRedisVersion($version) {
+        if (class_exists('\RedisClient\RedisClient', false)) {
+            throw new ErrorException('You can setup default version only if class "\RedisClient\RedisClient" is not loaded.');
+        }
+        if (self::$defaultRedisVersion) {
+            throw new ErrorException('Default Version is defined already.');
+        }
+        if (!array_key_exists($version, self::$versions)) {
+            throw new InvalidArgumentException(
+                'Invalid version. Supported versions are '. implode(',', array_keys(self::$versions))
+            );
+        }
+        self::$defaultRedisVersion = $version;
+    }
 
     /**
      * @param null|array $config
@@ -48,6 +90,9 @@ class ClientFactory {
         foreach ($versions as $v) {
             if ($v >= $ver) {
                 $class = self::$versions[$v];
+                if (!self::$defaultRedisVersion) {
+                    self::setDefaultRedisVersion($v);
+                }
                 break;
             }
         }

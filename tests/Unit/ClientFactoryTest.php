@@ -24,13 +24,17 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase {
      * @see RedisProtocol::createClientByVersion
      */
     public function test_createClientByVersion() {
-        $this->assertInstanceOf(RedisClient3x2::class, ClientFactory::createClientByVersion('3.2'));
+        $this->assertInstanceOf(RedisClient2x6::class, ClientFactory::create(['version' => '2.6']));
+        $this->assertInstanceOf(RedisClient2x6::class, ClientFactory::create());
+
         $this->assertInstanceOf(RedisClient3x2::class, ClientFactory::createClientByVersion(3.2));
         $this->assertInstanceOf(RedisClient3x2::class, ClientFactory::createClientByVersion('3.2.2'));
         $this->assertInstanceOf(RedisClient3x2::class, ClientFactory::createClientByVersion('3.2.0'));
         $this->assertInstanceOf(RedisClient3x2::class, ClientFactory::createClientByVersion('3.2.x'));
         $this->assertInstanceOf(RedisClient3x2::class, ClientFactory::createClientByVersion('3.1'));
         $this->assertInstanceOf(RedisClient3x2::class, ClientFactory::createClientByVersion('3.1.5'));
+
+        $this->assertInstanceOf(RedisClient2x6::class, ClientFactory::create());
 
         $this->assertInstanceOf(RedisClient3x0::class, ClientFactory::createClientByVersion('3.0'));
         $this->assertInstanceOf(RedisClient3x0::class, ClientFactory::createClientByVersion(3.0));
@@ -58,5 +62,7 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf(RedisClient2x6::class, ClientFactory::createClientByVersion(2.5));
         $this->assertInstanceOf(RedisClient2x6::class, ClientFactory::createClientByVersion('2'));
         $this->assertInstanceOf(RedisClient2x6::class, ClientFactory::createClientByVersion(2));
+
+        $this->assertInstanceOf(RedisClient2x6::class, ClientFactory::create());
     }
 }

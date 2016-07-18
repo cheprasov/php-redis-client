@@ -17,13 +17,16 @@ use RedisClient\Pipeline\Pipeline;
 use RedisClient\Pipeline\PipelineInterface;
 use RedisClient\Protocol\ProtocolInterface;
 use RedisClient\Protocol\RedisProtocol;
+use RedisClient\RedisClient;
 
 abstract class AbstractRedisClient {
 
-    const VERSION = '1.3.1';
+    const VERSION = '1.4.0';
 
     const CONFIG_SERVER = 'server';
     const CONFIG_TIMEOUT = 'timeout';
+    const CONFIG_DATABASE = 'database';
+    const CONFIG_PASSWORD = 'password';
 
     /**
      * Default configuration
@@ -59,7 +62,7 @@ abstract class AbstractRedisClient {
         if (!$param) {
             return $this->config;
         }
-        return empty($this->config[$param]) ? null : $this->config[$param];
+        return isset($this->config[$param]) ? $this->config[$param] : null;
     }
 
     /**
@@ -73,8 +76,19 @@ abstract class AbstractRedisClient {
                     $this->getConfig(self::CONFIG_TIMEOUT)
                 )
             );
+            $this->onProtocolInit();
         }
         return $this->Protocol;
+    }
+
+    protected function onProtocolInit() {
+        /** @var RedisClient $this */
+        if ($password = $this->getConfig(self::CONFIG_PASSWORD)) {
+            $this->auth($password);
+        }
+        if ($db = (int) $this->getConfig(self::CONFIG_DATABASE)) {
+            $this->select($db);
+        }
     }
 
     /**
