@@ -77,7 +77,7 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x6 {
         $Redis->set('key', 'value');
         $this->assertSame(-1, $Redis->pttl('key'));
         $Redis->pexpire('key', 1000);
-        $this->assertGreaterThanOrEqual(999, $Redis->pttl('key'));
+        $this->assertGreaterThanOrEqual(995, $Redis->pttl('key'));
         $this->assertLessThanOrEqual(1000, $Redis->pttl('key'));
     }
 
