@@ -49,4 +49,17 @@ trait KeysCommandsTrait {
         return $this->returnCommand(['MIGRATE'], $params);
     }
 
+    /**
+     * TOUCH key [key ...]
+     * Alters the last access time of a key
+     * Available since 3.2.1
+     * @link http://redis.io/commands/touch
+     * @link https://github.com/antirez/redis/commit/f1c237cb6a647ad5400b0ebce124fd9802ea7f89
+     *
+     * @return int Returns the number of existing keys specified.
+     */
+    public function touch($keys) {
+        return $this->returnCommand(['TOUCH'], (array) $keys);
+    }
+
 }

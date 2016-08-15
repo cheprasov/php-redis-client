@@ -39,6 +39,58 @@ class HashesCommandsTest extends HashesCommandsTestVersion3x0 {
     }
 
     /**
+     * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait::hincrby
+     */
+    public function test_hincrby() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(11, $Redis->hincrby('key-does-not-exist', 'field', 11));
+        $this->assertSame(11, $Redis->hincrby('hash', 'field-does-not-exist', 11));
+        $this->assertSame(-11, $Redis->hincrby('key-does-not-exist-2', 'field', -11));
+        $this->assertSame(-11, $Redis->hincrby('hash', 'field-does-not-exist-2', -11));
+
+        try {
+            $this->assertSame(2, $Redis->hincrby('hash', 'string', 2));
+            $this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
+        }
+
+        try {
+            $this->assertSame(1, $Redis->hincrby('hash', 'float', 3));
+            $this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
+        }
+
+        try {
+            // I don't know why it happens, but it is real Redis behavior
+            $this->assertSame(3, $Redis->hincrby('hash', 'bin', 3));
+            //$this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
+        }
+
+        $this->assertSame(0, $Redis->hset('hash', 'null', 4));
+        $this->assertSame(3, $Redis->hincrby('hash', 'null', -1));
+        $this->assertSame(0, $Redis->hset('hash', 'empty', 0));
+        $this->assertSame(5, $Redis->hincrby('hash', 'empty', 5));
+        $this->assertSame(-10, $Redis->hincrby('hash', 'empty', -15));
+        $this->assertSame(48, $Redis->hincrby('hash', 'integer', 6));
+        $this->assertSame(0, $Redis->hincrby('hash', 'integer', -48));
+
+        $this->setExpectedException(ErrorResponseException::class);
+        $Redis->hincrby('', 'null', 2);
+
+        try {
+            $Redis->hincrby('string', 'value', 2);
+            $this->assertFalse('Expect Exception');
+        } catch (\Exception $Ex) {
+            $this->assertInstanceOf(ErrorResponseException::class, $Ex);
+        }
+    }
+
+    /**
      * @see \RedisClient\Command\Traits\Version3x2\HashesCommandsTrait::hstrlen
      */
     public function test_hstrlen() {

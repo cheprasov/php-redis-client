@@ -41,7 +41,7 @@ class ServerCommandsTest extends ServerCommandsTestVersion3x0 {
     public function test_commandCount() {
         $Redis = static::$Redis;
 
-        $this->assertSame(171, $Redis->commandCount());
+        $this->assertSame(172, $Redis->commandCount());
     }
 
     /**

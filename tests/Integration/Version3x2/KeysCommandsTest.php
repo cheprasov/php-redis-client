@@ -25,6 +25,11 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
     const TEST_REDIS_SERVER_2 = TEST_REDIS_SERVER_3x2_2;
 
     /**
+     * @var RedisClient3x2
+     */
+    protected static $Redis;
+
+    /**
      * @inheritdoc
      */
     public static function setUpBeforeClass() {
@@ -211,6 +216,19 @@ class KeysCommandsTest extends KeysCommandsTestVersion3x0 {
         $this->assertSame(null, $Redis2->get('two'));
         $this->assertSame('3', $Redis->get('three'));
         $this->assertSame(null, $Redis2->get('three'));
+    }
+
+    /**
+     * @see \RedisClient\Command\Traits\Version3x2\KeysCommandsTrait::touch
+     */
+    public function test_touch() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(0, $Redis->touch('foo'));
+        $this->assertSame(true, $Redis->mset(['foo' => 1, 'bar' => 2]));
+        $this->assertSame(1, $Redis->touch('foo'));
+        $this->assertSame(2, $Redis->touch(['foo', 'bar']));
+        $this->assertSame(4, $Redis->touch(['foo', 'bar', 'foo', 'bar', 'no-exist']));
     }
 
 }
