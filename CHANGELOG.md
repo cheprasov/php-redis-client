@@ -1,5 +1,8 @@
 ## CHANGELOG
 
+### v1.5.0 (2016-08-15)
+- Added command **TOUCH** for Redis >= 3.2.1
+
 ### v1.4.0 (2016-07-18)
 - You can choose default version of Redis Client (**ClientFactory::setDefaultRedisVersion**).
 - Added parameter 'password' for config.

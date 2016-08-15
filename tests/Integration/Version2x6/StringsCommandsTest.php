@@ -166,7 +166,7 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
 
         // I don't know why it happens, but it is real Redis behavior
-        $this->assertSame(-1, $Redis->decr('bin'));
+        // $this->assertSame(-1, $Redis->decr('bin'));
 
         try {
             $this->assertSame(-1, $Redis->decr('string'));
@@ -203,7 +203,7 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
 
         // I don't know why it happens, but it is real Redis behavior
-        $this->assertSame(-17, $Redis->decrby('bin', 17));
+        // $this->assertSame(-17, $Redis->decrby('bin', 17));
 
         try {
             $this->assertSame(-8, $Redis->decrby('string', 8));
@@ -328,7 +328,7 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
 
         // I don't know why it happens, but it is real Redis behavior
-        $this->assertSame(1, $Redis->incr('bin'));
+        // $this->assertSame(1, $Redis->incr('bin'));
 
         try {
             $this->assertSame(1, $Redis->incr('string'));
@@ -365,7 +365,7 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
 
         // I don't know why it happens, but it is real Redis behavior
-        $this->assertSame(17, $Redis->incrby('bin', 17));
+        // $this->assertSame(17, $Redis->incrby('bin', 17));
 
         try {
             $this->assertSame(8, $Redis->incrby('string', 8));
@@ -408,7 +408,7 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
         }
 
         try {
-            $Redis->decr('hash');
+            $Redis->incrbyfloat('hash', 2.2);
             $this->assertFalse('Expect Exception');
         } catch (\Exception $Ex) {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);

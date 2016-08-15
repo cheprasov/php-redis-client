@@ -287,6 +287,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * Keys
  * @method Pipeline3x2 migrate($host, $port, $keys, $destinationDb, $timeout, $copy = false, $replace = false)
+ * @method Pipeline3x2 touch($keys)
  *
  * Scripting
  * @method Pipeline3x2 scriptDebug($param)
