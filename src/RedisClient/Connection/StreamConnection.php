@@ -87,7 +87,13 @@ class StreamConnection implements ConnectionInterface {
      * @return string
      */
     public function read($length) {
-        return fread($this->getResource(), $length);
+        $read = 0;
+        $data = '';
+        while ($read != $length) {
+            $data .= fread($this->getResource(), ($length - $read));
+            $read = strlen($data);
+        }
+        return $data;
     }
 
 }
