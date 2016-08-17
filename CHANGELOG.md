@@ -1,5 +1,8 @@
 ## CHANGELOG
 
+### v1.5.1 (2016-08-17)
+- Fixed critical bug: https://github.com/cheprasov/php-redis-client/pull/45 Thanks to @BrianFranklin for help.
+
 ### v1.5.0 (2016-08-15)
 - Added command **TOUCH** for Redis >= 3.2.1
 
