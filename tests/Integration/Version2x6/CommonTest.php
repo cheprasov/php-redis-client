@@ -84,4 +84,15 @@ class CommonTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame("String\r\nwith\r\nnewlines", $Redis->executeRaw(['GET', '']));
     }
 
+    public function test_bigData() {
+        $Redis = static::$Redis;
+
+        $string = str_repeat(microtime(true), 1024 * 1024);
+        $md5 = md5($string);
+
+        $this->assertSame(true, $Redis->set('foo', $string));
+        $this->assertSame($string, $Redis->get('foo'));
+        $this->assertSame($md5, md5($Redis->get('foo')));
+    }
+
 }
