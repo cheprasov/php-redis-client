@@ -71,17 +71,17 @@ trait ScriptingCommandsTrait {
     }
 
     /**
-     * SCRIPT EXISTS script [script ...]
+     * SCRIPT EXISTS sha1 [sha1 ...]
      * Available since 2.6.0.
      * Time complexity: O(N) with N being the number of scripts to check
      * (so checking a single script is an O(1) operation).
      * @link http://redis.io/commands/script-exists
      *
-     * @param string|string[] $scriptsSha
+     * @param string|string[] $sha1
      * @return int|int[]
      */
-    public function scriptExists($scriptsSha) {
-        return $this->returnCommand(['SCRIPT', 'EXISTS'], (array) $scriptsSha);
+    public function scriptExists($sha1) {
+        return $this->returnCommand(['SCRIPT', 'EXISTS'], (array) $sha1);
     }
 
     /**
