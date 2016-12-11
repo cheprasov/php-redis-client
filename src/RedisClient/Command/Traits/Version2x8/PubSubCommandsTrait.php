@@ -37,7 +37,7 @@ trait PubSubCommandsTrait {
         if (isset($arguments)) {
             $params[] = (array) $arguments;
         }
-        return $this->returnCommand(['PUBSUB'], $params);
+        return $this->returnCommand(['PUBSUB'], null, $params);
     }
 
 }

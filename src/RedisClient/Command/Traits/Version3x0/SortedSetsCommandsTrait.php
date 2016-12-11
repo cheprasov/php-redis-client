@@ -47,7 +47,7 @@ trait SortedSetsCommandsTrait {
             $params[] = 'INCR';
         }
         $params[] = Parameter::assocArrayFlip($members);
-        return $this->returnCommand(['ZADD'], $params);
+        return $this->returnCommand(['ZADD'], $key, $params);
     }
 
 }

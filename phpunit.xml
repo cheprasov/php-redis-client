@@ -14,7 +14,6 @@
     bootstrap                   = "vendor/autoload.php"
     syntaxCheck                 = "true"
     verbose                     = "true"
-    beStrictAboutTestsThatDoNotTestAnything = "true"
     checkForUnintentionallyCoveredCode  = "false"
     beStrictAboutOutputDuringTests      = "false"
     beStrictAboutTestSize               = "true"
@@ -34,6 +33,16 @@
         <const name="TEST_REDIS_SERVER_3x0_2" value="tcp://127.0.0.1:6386" />
         <const name="TEST_REDIS_SERVER_3x2_1" value="tcp://127.0.0.1:6387" />
         <const name="TEST_REDIS_SERVER_3x2_2" value="tcp://127.0.0.1:6388" />
+        <const name="TEST_REDIS_SERVER_4x0_1" value="tcp://127.0.0.1:6389" />
+        <const name="TEST_REDIS_SERVER_4x0_2" value="tcp://127.0.0.1:6390" />
+
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_A"  value="tcp://127.0.0.1:7001" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_A1" value="tcp://127.0.0.1:7002" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_B"  value="tcp://127.0.0.1:7003" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_B1" value="tcp://127.0.0.1:7004" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_C"  value="tcp://127.0.0.1:7005" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_C1" value="tcp://127.0.0.1:7006" />
+
         <const name="TEST_REDIS_SERVER_PASSWORD" value="test-password-123" />
     </php>
 

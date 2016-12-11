@@ -36,7 +36,7 @@ trait LatencyCommandsTrait {
      * @return array
      */
     public function latencyHistory($eventName) {
-        return $this->returnCommand(['LATENCY', 'HISTORY'], [$eventName]);
+        return $this->returnCommand(['LATENCY', 'HISTORY'], null, [$eventName]);
     }
 
     /**
@@ -48,7 +48,7 @@ trait LatencyCommandsTrait {
      * @return int
      */
     public function latencyReset($eventNames = null) {
-        return $this->returnCommand(['LATENCY', 'RESET'], (array) $eventNames);
+        return $this->returnCommand(['LATENCY', 'RESET'], null, (array)$eventNames);
     }
 
     /**
@@ -60,7 +60,7 @@ trait LatencyCommandsTrait {
      * @return string
      */
     public function latencyGraph($eventName) {
-        return $this->returnCommand(['LATENCY', 'GRAPH'], [$eventName]);
+        return $this->returnCommand(['LATENCY', 'GRAPH'], null, [$eventName]);
     }
 
     /**

@@ -34,10 +34,26 @@ class StreamConnection implements ConnectionInterface {
      * @param int|float|null $timeout
      */
     public function __construct($server, $timeout = null) {
-        $this->server = $server;
-        if (is_numeric($timeout)) {
-            $this->timeout = ceil($timeout * 1000000);
+        $this->setServer($server);
+        $this->setTimeout($timeout);
+    }
+
+    /**
+     * @param string $server
+     */
+    protected function setServer($server) {
+        if (0 !== strpos($server, 'tcp://') && 0 !== strpos($server, 'unix://')) {
+            $this->server = 'tcp://' . $server;
+        } else {
+            $this->server = $server;
         }
+    }
+
+    /**
+     * @param null|int $timeout
+     */
+    protected function setTimeout($timeout = null) {
+        $this->timeout = $timeout ? ceil($timeout * 1000000) : null;
     }
 
     /**
@@ -50,15 +66,20 @@ class StreamConnection implements ConnectionInterface {
     }
 
     /**
+     * @return string
+     */
+    public function getServer() {
+        return $this->server;
+    }
+
+    /**
      * @return resource
      * @throws ConnectionException
      */
     protected function getResource() {
         if (!$this->resource) {
             if (!$this->resource = stream_socket_client($this->server)) {
-                throw new ConnectionException(sprintf(
-                    'Unable to connect to %s', $this->server
-                ));
+                throw new ConnectionException('Unable to connect to '. $this->server);
             }
             if (isset($this->timeout)) {
                 stream_set_timeout($this->resource, 0, $this->timeout);

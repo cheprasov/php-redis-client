@@ -63,7 +63,7 @@ class StringsCommandsTest extends StringsCommandsTestVersion3x0 {
             ['SET', 'i8', '#3', ord('d')],
         ]));
         $this->assertSame('word', $Redis->get('word'));
-        $this->assertSame([114], $Redis->bitfield('word', [['SET', 'i8', 16, ord('o')],]));
+        $this->assertSame([114], $Redis->bitfield('word', [['SET', 'i8', 16, ord('o')]]));
         $this->assertSame('wood', $Redis->get('word'));
         $this->assertSame([87, 79, 79, 68], $Redis->bitfield('word', [
             ['INCRBY', 'i8', 0, -32],

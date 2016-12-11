@@ -30,7 +30,7 @@ trait ServerCommandsTrait {
      * @return bool The command returns True or an error if the timeout is invalid.
      */
     public function clientPause($timeout) {
-        return $this->returnCommand(['CLIENT', 'PAUSE'], [$timeout]);
+        return $this->returnCommand(['CLIENT', 'PAUSE'], null, [$timeout]);
     }
 
 }

@@ -18,7 +18,7 @@ use Test\Integration\Version2x6\CommonTest as CommonTestVersion3x0;
 
 class CommonTest extends CommonTestVersion3x0 {
 
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x0_1;
+    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x2_1;
 
     /**
      * @inheritdoc

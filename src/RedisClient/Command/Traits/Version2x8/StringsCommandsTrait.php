@@ -40,7 +40,7 @@ trait StringsCommandsTrait {
                 $params[] = $end;
             }
         }
-        return $this->returnCommand(['BITPOS'], $params);
+        return $this->returnCommand(['BITPOS'], $key, $params);
     }
 
 }

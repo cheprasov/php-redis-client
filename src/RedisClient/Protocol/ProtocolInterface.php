@@ -10,7 +10,14 @@
  */
 namespace RedisClient\Protocol;
 
+use RedisClient\Connection\ConnectionInterface;
+
 interface ProtocolInterface {
+
+    /**
+     * @param ConnectionInterface $Connection
+     */
+    public function setConnection(ConnectionInterface $Connection);
 
     /**
      * @param string $command

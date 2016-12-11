@@ -34,15 +34,16 @@ trait ScriptingCommandsTrait {
     public function evalScript($script, $keys = null, $args = null) {
         $params = [$script];
         if (is_array($keys)) {
+            $keys = (array)$keys;
             $params[] = count($keys);
-            $params[] = (array) $keys;
+            $params[] = $keys;
         } else {
             $params[] = 0;
         }
         if (is_array($args)) {
             $params[] = (array) $args;
         }
-        return $this->returnCommand(['EVAL'], $params);
+        return $this->returnCommand(['EVAL'], $keys, $params);
     }
 
     /**
@@ -59,15 +60,16 @@ trait ScriptingCommandsTrait {
     public function evalsha($sha, $keys = null, $args = null) {
         $params = [$sha];
         if (is_array($keys)) {
+            $keys = (array)$keys;
             $params[] = count($keys);
-            $params[] = (array) $keys;
+            $params[] = $keys;
         } else {
             $params[] = 0;
         }
         if (is_array($args)) {
             $params[] = (array) $args;
         }
-        return $this->returnCommand(['EVALSHA'], $params);
+        return $this->returnCommand(['EVALSHA'], $keys, $params);
     }
 
     /**
@@ -81,7 +83,7 @@ trait ScriptingCommandsTrait {
      * @return int|int[]
      */
     public function scriptExists($sha1) {
-        return $this->returnCommand(['SCRIPT', 'EXISTS'], (array) $sha1);
+        return $this->returnCommand(['SCRIPT', 'EXISTS'], null, (array)$sha1);
     }
 
     /**
@@ -118,7 +120,7 @@ trait ScriptingCommandsTrait {
      * @return string
      */
     public function scriptLoad($script) {
-        return $this->returnCommand(['SCRIPT', 'LOAD'], [$script]);
+        return $this->returnCommand(['SCRIPT', 'LOAD'], null, [$script]);
     }
 
 }

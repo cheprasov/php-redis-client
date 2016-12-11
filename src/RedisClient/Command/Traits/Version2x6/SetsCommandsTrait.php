@@ -28,7 +28,7 @@ trait SetsCommandsTrait {
      * not including all the elements already present into the set.
      */
     public function sadd($key, $members) {
-        return $this->returnCommand(['SADD'], [$key, (array) $members]);
+        return $this->returnCommand(['SADD'], $key, [$key, (array) $members]);
     }
 
     /**
@@ -41,7 +41,7 @@ trait SetsCommandsTrait {
      * @return int The cardinality (number of elements) of the set, or 0 if key does not exist.
      */
     public function scard($key) {
-        return $this->returnCommand(['SCARD'], [$key]);
+        return $this->returnCommand(['SCARD'], $key, [$key]);
     }
 
     /**
@@ -54,7 +54,8 @@ trait SetsCommandsTrait {
      * @return array List with members of the resulting set.
      */
     public function sdiff($keys) {
-        return $this->returnCommand(['SDIFF'], (array) $keys);
+        $keys = (array)$keys;
+        return $this->returnCommand(['SDIFF'], $keys, $keys);
     }
 
     /**
@@ -68,7 +69,9 @@ trait SetsCommandsTrait {
      * @return int The number of elements in the resulting set.
      */
     public function sdiffstore($destination, $keys) {
-        return $this->returnCommand(['SDIFFSTORE'], [$destination, (array) $keys]);
+        $allKeys = (array)$keys;
+        array_unshift($allKeys, $destination);
+        return $this->returnCommand(['SDIFFSTORE'], $allKeys, $allKeys);
     }
 
     /**
@@ -81,7 +84,8 @@ trait SetsCommandsTrait {
      * @return array List with members of the resulting set.
      */
     public function sinter($keys) {
-        return $this->returnCommand(['SINTER'], (array) $keys);
+        $keys = (array)$keys;
+        return $this->returnCommand(['SINTER'], $keys, $keys);
     }
 
     /**
@@ -95,7 +99,9 @@ trait SetsCommandsTrait {
      * @return int The number of elements in the resulting set.
      */
     public function sinterstore($destination, $keys) {
-        return $this->returnCommand(['SINTERSTORE'], [$destination, (array) $keys]);
+        $allKeys = (array)$keys;
+        array_unshift($allKeys, $destination);
+        return $this->returnCommand(['SINTERSTORE'], $allKeys, $allKeys);
     }
 
     /**
@@ -110,7 +116,7 @@ trait SetsCommandsTrait {
      * 0 if the element is not a member of the set, or if key does not exist.
      */
     public function sismember($key, $member) {
-        return $this->returnCommand(['SISMEMBER'], [$key, $member]);
+        return $this->returnCommand(['SISMEMBER'], $key, [$key, $member]);
     }
 
     /**
@@ -123,7 +129,7 @@ trait SetsCommandsTrait {
      * @return string[] All elements of the set.
      */
     public function smembers($key) {
-        return $this->returnCommand(['SMEMBERS'], [$key]);
+        return $this->returnCommand(['SMEMBERS'], $key, [$key]);
     }
 
     /**
@@ -139,7 +145,7 @@ trait SetsCommandsTrait {
      * 0 if the element is not a member of source and no operation was performed.
      */
     public function smove($source, $destination, $member) {
-        return $this->returnCommand(['SMOVE'], [$source, $destination, $member]);
+        return $this->returnCommand(['SMOVE'], [$source, $destination], [$source, $destination, $member]);
     }
 
     /**
@@ -152,7 +158,7 @@ trait SetsCommandsTrait {
      * @return string|null The removed element, or null when key does not exist.
      */
     public function spop($key) {
-        return $this->returnCommand(['SPOP'], [$key]);
+        return $this->returnCommand(['SPOP'], $key, [$key]);
     }
 
     /**
@@ -171,7 +177,7 @@ trait SetsCommandsTrait {
         if ($count) {
             $params[] = $count;
         }
-        return $this->returnCommand(['SRANDMEMBER'], $params);
+        return $this->returnCommand(['SRANDMEMBER'], $key, $params);
     }
 
     /**
@@ -185,7 +191,7 @@ trait SetsCommandsTrait {
      * @return int The number of members that were removed from the set, not including non existing members.
      */
     public function srem($key, $members) {
-        return $this->returnCommand(['SREM'], [$key, (array) $members]);
+        return $this->returnCommand(['SREM'], $key, [$key, (array)$members]);
     }
 
     /**
@@ -198,7 +204,8 @@ trait SetsCommandsTrait {
      * @return string[] List with members of the resulting set.
      */
     public function sunion($keys) {
-        return $this->returnCommand(['SUNION'], (array) $keys);
+        $keys = (array)$keys;
+        return $this->returnCommand(['SUNION'], $keys, $keys);
     }
 
     /**
@@ -212,7 +219,9 @@ trait SetsCommandsTrait {
      * @return int The number of elements in the resulting set.
      */
     public function sunionstore($destination, $keys) {
-        return $this->returnCommand(['SUNIONSTORE'], [$destination, (array) $keys]);
+        $allKeys = (array)$keys;
+        array_unshift($allKeys, $destination);
+        return $this->returnCommand(['SUNIONSTORE'], $allKeys, $allKeys);
     }
 
 }

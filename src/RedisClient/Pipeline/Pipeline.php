@@ -15,18 +15,24 @@ use RedisClient\Pipeline\Version\Pipeline2x6;
 use RedisClient\Pipeline\Version\Pipeline2x8;
 use RedisClient\Pipeline\Version\Pipeline3x0;
 use RedisClient\Pipeline\Version\Pipeline3x2;
+use RedisClient\Pipeline\Version\Pipeline4x0;
 
 switch (ClientFactory::getDefaultRedisVersion()) {
-    case '2.6':
+    case ClientFactory::REDIS_VERSION_2x6:
         class Pipeline extends Pipeline2x6 {};
         break;
-    case '2.8':
+    case ClientFactory::REDIS_VERSION_2x8:
         class Pipeline extends Pipeline2x8 {};
         break;
-    case '3.0':
+    case ClientFactory::REDIS_VERSION_3x0:
         class Pipeline extends Pipeline3x0 {};
         break;
-    case '3.2':
+    case ClientFactory::REDIS_VERSION_3x2:
+        class Pipeline extends Pipeline3x2 {};
+        break;
+    case ClientFactory::REDIS_VERSION_4x0:
+        class Pipeline extends Pipeline4x0 {};
+        break;
     default:
         class Pipeline extends Pipeline3x2 {};
         break;

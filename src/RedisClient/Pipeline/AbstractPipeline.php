@@ -33,7 +33,7 @@ abstract class AbstractPipeline implements PipelineInterface {
      * @inheritdoc
      * @return $this
      */
-    protected function returnCommand(array $command, array $params = null, $parserId = null) {
+    protected function returnCommand(array $command, $keys = null, array $params = null, $parserId = null) {
         $this->commandLines[] = [$command, $params, $parserId];
         return $this;
     }

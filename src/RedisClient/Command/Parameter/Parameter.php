@@ -281,7 +281,7 @@ class Parameter {
      * @return string
      */
     public static function string($string) {
-        return (string) $string;
+        return (string)$string;
     }
 
     /**

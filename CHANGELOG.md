@@ -1,5 +1,8 @@
 ## CHANGELOG
 
+### v1.6.0 (2016-12-03)
+- Client was tested with Redis 4.0 RC1
+
 ### v1.5.1 (2016-08-17)
 - Fixed critical bug: https://github.com/cheprasov/php-redis-client/pull/45 Thanks to @BrianFranklin for help.
 

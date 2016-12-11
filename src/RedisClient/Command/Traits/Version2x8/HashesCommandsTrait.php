@@ -33,7 +33,7 @@ trait HashesCommandsTrait {
      * @return mixed
      */
     public function hscan($key, $cursor, $pattern = null, $count = null) {
-        $params = [$key, $cursor,];
+        $params = [$key, $cursor];
         if (isset($pattern)) {
             $params[] = 'MATCH';
             $params[] = $pattern;
@@ -42,7 +42,7 @@ trait HashesCommandsTrait {
             $params[] = 'COUNT';
             $params[] = $count;
         }
-        return $this->returnCommand(['HSCAN'], $params);
+        return $this->returnCommand(['HSCAN'], $key, $params);
     }
 
 

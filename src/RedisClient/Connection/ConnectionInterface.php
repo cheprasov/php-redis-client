@@ -13,6 +13,11 @@ namespace RedisClient\Connection;
 interface ConnectionInterface {
 
     /**
+     * @return string
+     */
+    public function getServer();
+
+    /**
      * @param string $string
      * @return int|null
      */

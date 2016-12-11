@@ -14,6 +14,7 @@ use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Client\Version\RedisClient2x8;
 use RedisClient\Client\Version\RedisClient3x0;
 use RedisClient\Client\Version\RedisClient3x2;
+use RedisClient\Client\Version\RedisClient4x0;
 use RedisClient\Exception\ErrorException;
 use RedisClient\Exception\InvalidArgumentException;
 
@@ -23,6 +24,7 @@ class ClientFactory {
     const REDIS_VERSION_2x8 = '2.8';
     const REDIS_VERSION_3x0 = '3.0';
     const REDIS_VERSION_3x2 = '3.2';
+    const REDIS_VERSION_4x0 = '4.0';
 
     /**
      * @var string|null
@@ -37,6 +39,7 @@ class ClientFactory {
         self::REDIS_VERSION_2x8 => RedisClient2x8::class,
         self::REDIS_VERSION_3x0 => RedisClient3x0::class,
         self::REDIS_VERSION_3x2 => RedisClient3x2::class,
+        self::REDIS_VERSION_4x0 => RedisClient4x0::class,
     ];
 
     /**
@@ -68,7 +71,7 @@ class ClientFactory {
 
     /**
      * @param null|array $config
-     * @return RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient
+     * @return RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0|RedisClient
      */
     public static function create($config = null) {
         if (isset($config['version'])) {
@@ -80,11 +83,11 @@ class ClientFactory {
     /**
      * @param string $version
      * @param null|array $config
-     * @return RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2
+     * @return RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0
      */
     public static function createClientByVersion($version, $config = null) {
-        list($major, $minor, $patch) = explode('.', $version.'.0.0');
-        $ver = (int) $major .'.'. (int) $minor;
+        list($major, $minor, $patch) = explode('.', $version .'.0.0');
+        $ver = (int)$major .'.'. (int)$minor;
 
         $versions = array_keys(self::$versions);
         foreach ($versions as $v) {
@@ -98,7 +101,7 @@ class ClientFactory {
         }
         if (empty($class)) {
             throw new \InvalidArgumentException(
-                'RedisClient does not support Redis version '.$version.'. Please, use version '. end($versions)
+                'RedisClient does not support Redis version '. $version .'. Please, use version '. end($versions)
             );
         }
         return new $class($config);

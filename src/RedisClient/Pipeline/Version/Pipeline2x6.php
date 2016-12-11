@@ -89,7 +89,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline2x6 eval($script, $keys = null, $args = null)
  * @method Pipeline2x6 evalScript($script, $keys = null, $args = null) - alias method for reversed word <eval>
  * @method Pipeline2x6 evalsha($sha, $keys = null, $args = null)
- * @method Pipeline2x6 scriptExists($scriptsSha)
+ * @method Pipeline2x6 scriptExists($sha1)
  * @method Pipeline2x6 scriptFlush()
  * @method Pipeline2x6 scriptKill()
  * @method Pipeline2x6 scriptLoad($script)

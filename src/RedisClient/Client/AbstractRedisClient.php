@@ -10,31 +10,46 @@
  */
 namespace RedisClient\Client;
 
+use RedisClient\Cluster\ClusterMap;
 use RedisClient\Command\Response\ResponseParser;
-use RedisClient\Connection\StreamConnection;
+use RedisClient\Exception\AskResponseException;
 use RedisClient\Exception\ErrorResponseException;
+use RedisClient\Exception\MovedResponseException;
 use RedisClient\Pipeline\Pipeline;
 use RedisClient\Pipeline\PipelineInterface;
+use RedisClient\Protocol\ProtocolFactory;
 use RedisClient\Protocol\ProtocolInterface;
-use RedisClient\Protocol\RedisProtocol;
 use RedisClient\RedisClient;
 
 abstract class AbstractRedisClient {
 
-    const VERSION = '1.5.1';
+    const VERSION = '1.6.0';
 
-    const CONFIG_SERVER = 'server';
-    const CONFIG_TIMEOUT = 'timeout';
+    const CONFIG_SERVER   = 'server';
+    const CONFIG_TIMEOUT  = 'timeout';
     const CONFIG_DATABASE = 'database';
     const CONFIG_PASSWORD = 'password';
+    const CONFIG_CLUSTER  = 'cluster';
+    const CONFIG_VERSION  = 'version';
+
+    const CONFIG_CLUSTER_INIT_OFF       = 0;
+    const CONFIG_CLUSTER_INIT_ON_START  = 1;
+    const CONFIG_CLUSTER_INIT_ON_MOVED  = 2;
+    const CONFIG_CLUSTER_INIT_ON        = 3;
 
     /**
      * Default configuration
      * @var array
      */
     protected static $defaultConfig = [
-        self::CONFIG_SERVER => 'tcp://127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
+        self::CONFIG_SERVER => '127.0.0.1:6379', // or tcp://127.0.0.1:6379 or 'unix:///tmp/redis.sock'
         self::CONFIG_TIMEOUT => 1, // in seconds
+        self::CONFIG_DATABASE => 0, // default db
+        self::CONFIG_CLUSTER => [
+            'enabled' => false,
+            'clusters' => [],
+            'init' => self::CONFIG_CLUSTER_INIT_ON,
+        ],
     ];
 
     /**
@@ -48,10 +63,29 @@ abstract class AbstractRedisClient {
     protected $config;
 
     /**
+     * @var ClusterMap
+     */
+    protected $ClusterMap;
+
+    /**
      * @param array|null $config
      */
     public function __construct(array $config = null) {
+        $this->setConfig($config);
+    }
+
+    /**
+     * @param array|null $config
+     */
+    protected function setConfig(array $config = null) {
         $this->config = $config ? array_merge(static::$defaultConfig, $config) : static::$defaultConfig;
+        if (!empty($this->config[self::CONFIG_CLUSTER]['enabled'])) {
+            $ClusterMap = new ClusterMap(null, $this->config[self::CONFIG_TIMEOUT]);
+            if (!empty($this->config[self::CONFIG_CLUSTER]['clusters'])) {
+                $ClusterMap->setClusters($this->config[self::CONFIG_CLUSTER]['clusters']);
+            }
+            $this->ClusterMap = $ClusterMap;
+        }
     }
 
     /**
@@ -70,43 +104,69 @@ abstract class AbstractRedisClient {
      */
     protected function getProtocol() {
         if (!$this->Protocol) {
-            $this->Protocol = new RedisProtocol(
-                new StreamConnection(
-                    $this->getConfig(self::CONFIG_SERVER),
-                    $this->getConfig(self::CONFIG_TIMEOUT)
-                )
+            $this->Protocol = ProtocolFactory::createRedisProtocol(
+                $this->getConfig(self::CONFIG_SERVER),
+                $this->getConfig(self::CONFIG_TIMEOUT)
             );
             $this->onProtocolInit();
         }
         return $this->Protocol;
     }
 
+    /**
+     *
+     */
     protected function onProtocolInit() {
         /** @var RedisClient $this */
         if ($password = $this->getConfig(self::CONFIG_PASSWORD)) {
             $this->auth($password);
         }
-        if ($db = (int) $this->getConfig(self::CONFIG_DATABASE)) {
+        if ($db = (int)$this->getConfig(self::CONFIG_DATABASE)) {
             $this->select($db);
         }
+        if ($this->ClusterMap) {
+            $conf = $this->getConfig(self::CONFIG_CLUSTER);
+            if (isset($conf['init']) && ($conf['init'] & self::CONFIG_CLUSTER_INIT_ON_START)) {
+                $this->updateClusterSlots();
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    protected function updateClusterSlots() {
+        /** @var RedisClient $this */
+        $response = $this->clusterSlots();
+        $clusters = ResponseParser::parseClusterSlots($response);
+        $this->ClusterMap->setClusters($clusters);
     }
 
     /**
      * @inheritdoc
      */
-    protected function returnCommand(array $command, array $params = null, $parserId = null) {
-        return $this->executeCommand($command, $params, $parserId);
+    protected function returnCommand(array $command, $keys = null, array $params = null, $parserId = null) {
+        return $this->executeCommand($command, $keys, $params, $parserId);
     }
 
     /**
      * @param array $command
+     * @param null|string|string[] $command
      * @param array|null $params
      * @param int|null $parserId
      * @return mixed
      * @throws ErrorResponseException
      */
-    protected function executeCommand(array $command, array $params = null, $parserId = null) {
-        $response = $this->getProtocol()->send($this->getStructure($command, $params));
+    protected function executeCommand(array $command, $keys, array $params = null, $parserId = null) {
+        $Protocol = $this->getProtocol();
+        if (isset($keys) && $this->ClusterMap) {
+            $key = is_array($keys) ? $keys[0] : $keys;
+            if ($Connection = $this->ClusterMap->getConnectionByKey($key)) {
+                $Protocol->setConnection($Connection);
+            }
+        }
+        $response = $this->executeProtocolCommand($Protocol, $command, $params);
+
         if ($response instanceof ErrorResponseException) {
             throw $response;
         }
@@ -117,11 +177,47 @@ abstract class AbstractRedisClient {
     }
 
     /**
+     * @param ProtocolInterface $Protocol
+     * @param array $command
+     * @param array|null $params
+     * @return mixed
+     * @throws ErrorResponseException
+     */
+    protected function executeProtocolCommand(ProtocolInterface $Protocol, array $command, array $params = null) {
+        $response = $Protocol->send($this->getStructure($command, $params));
+
+        if ($response instanceof ErrorResponseException && $this->ClusterMap) {
+            if ($response instanceof MovedResponseException) {
+                $conf = $this->getConfig(self::CONFIG_CLUSTER);
+                if (isset($conf['init']) && ($conf['init'] & self::CONFIG_CLUSTER_INIT_ON_MOVED)) {
+                    $this->updateClusterSlots();
+                } else {
+                    $this->ClusterMap->addCluster($response->getSlot(), $response->getServer());
+                }
+                $Connection = $this->ClusterMap->getConnectionByServer($response->getServer());
+                $Protocol->setConnection($Connection);
+                return $this->executeProtocolCommand($Protocol, $command, $params);
+            }
+            if ($response instanceof AskResponseException) {
+                $TempRedisProtocol = ProtocolFactory::createRedisProtocol(
+                    $response->getServer(),
+                    $this->getConfig(self::CONFIG_TIMEOUT)
+                );
+                $TempRedisProtocol->send(['ASKING']);
+                return $this->executeProtocolCommand($TempRedisProtocol, $command, $params);
+            }
+        }
+
+        return $response;
+    }
+
+    /**
      * @inheritdoc
      */
     protected function subscribeCommand(array $subCommand, array $unsubCommand, array $params = null, $callback) {
-        $this->getProtocol()->subscribe($this->getStructure($subCommand, $params), $callback);
-        return $this->executeCommand($unsubCommand, $params);
+        $Protocol = $this->getProtocol();
+        $Protocol->subscribe($this->getStructure($subCommand, $params), $callback);
+        return $this->executeProtocolCommand($Protocol, $unsubCommand, $params);
     }
 
     /**

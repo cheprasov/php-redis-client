@@ -14,10 +14,11 @@ trait AbstractCommandsTrait {
 
     /**
      * @param array $command
+     * @param null|string|string[] $keys
      * @param array|null $params
      * @param int|null $parserId
      */
-    abstract protected function returnCommand(array $command, array $params = null, $parserId = null);
+    abstract protected function returnCommand(array $command, $keys = null, array $params = null, $parserId = null);
 
     /**
      * @param array $subCommand

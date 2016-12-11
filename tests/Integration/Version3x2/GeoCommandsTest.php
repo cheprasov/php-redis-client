@@ -14,7 +14,7 @@ use RedisClient\Client\Version\RedisClient3x2;
 use RedisClient\Exception\ErrorResponseException;
 
 /**
- * @see \RedisClient\Command\Traits\Version3x2\HyperLogLogCommandsTrait
+ * @see \RedisClient\Command\Traits\Version3x2\GeoCommandsTrait
  */
 class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
 

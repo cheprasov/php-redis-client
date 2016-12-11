@@ -439,7 +439,7 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertSame(1, $Redis->msetnx(['key'=>'value']));
         $this->assertSame(1, $Redis->msetnx(['key1'=>'value1', 'key2'=>'value2']));
-        $this->assertSame(['value', 'value1', 'value2',], $Redis->mget(['key', 'key1', 'key2']));
+        $this->assertSame(['value', 'value1', 'value2'], $Redis->mget(['key', 'key1', 'key2']));
 
         $this->assertSame(0, $Redis->msetnx(['hash'=>'value1', 'test'=>'value2']));
         $this->assertSame([null, null], $Redis->mget(['hash', 'test']));

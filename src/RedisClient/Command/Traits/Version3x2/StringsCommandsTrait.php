@@ -43,7 +43,7 @@ trait StringsCommandsTrait {
                 $params[] = $p;
             }
         }
-        return $this->returnCommand(['BITFIELD'], $params);
+        return $this->returnCommand(['BITFIELD'], $key, $params);
     }
 
 }

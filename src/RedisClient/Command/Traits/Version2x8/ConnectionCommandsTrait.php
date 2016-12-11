@@ -31,7 +31,7 @@ trait ConnectionCommandsTrait {
      * @return string Returns message
      */
     public function ping($message = null) {
-        return $this->returnCommand(['PING'], isset($message) ? [$message] : null);
+        return $this->returnCommand(['PING'], null, isset($message) ? [$message] : null);
     }
 
 }

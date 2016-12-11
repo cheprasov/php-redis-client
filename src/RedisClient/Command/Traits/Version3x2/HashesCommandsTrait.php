@@ -32,7 +32,7 @@ trait HashesCommandsTrait {
      * or 0 when field is not present in the hash or key does not exist at all.
      */
     public function hstrlen($key, $field) {
-        return $this->returnCommand(['HSTRLEN'], [$key, $field]);
+        return $this->returnCommand(['HSTRLEN'], $key, [$key, $field]);
     }
 
 }

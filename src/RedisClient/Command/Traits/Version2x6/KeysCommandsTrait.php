@@ -28,7 +28,8 @@ trait KeysCommandsTrait {
      * @return int The number of keys that were removed.
      */
     public function del($keys) {
-        return $this->returnCommand(['DEL'], (array) $keys);
+        $keys = (array)$keys;
+        return $this->returnCommand(['DEL'], $keys, $keys);
     }
 
     /**
@@ -42,7 +43,7 @@ trait KeysCommandsTrait {
      * @return string The serialized value.
      */
     public function dump($key) {
-        return $this->returnCommand(['DUMP'], [$key]);
+        return $this->returnCommand(['DUMP'], $key, [$key]);
     }
 
     /**
@@ -56,7 +57,7 @@ trait KeysCommandsTrait {
      * Or the number of keys existing among the ones specified as arguments.
      */
     public function exists($key) {
-        return $this->returnCommand(['EXISTS'], [$key]);
+        return $this->returnCommand(['EXISTS'], $key, [$key]);
     }
 
     /**
@@ -70,7 +71,7 @@ trait KeysCommandsTrait {
      * @return int 1 if the timeout was set. 0 if key does not exist or the timeout could not be set.
      */
     public function expire($key, $seconds) {
-        return $this->returnCommand(['EXPIRE'], [$key, $seconds,]);
+        return $this->returnCommand(['EXPIRE'], $key, [$key, $seconds]);
     }
 
     /**
@@ -84,7 +85,7 @@ trait KeysCommandsTrait {
      * @return int 1 if the timeout was set. 0 if key does not exist or the timeout could not be set (see: EXPIRE).
      */
     public function expireAt($key, $timestamp) {
-        return $this->returnCommand(['EXPIREAT'], [$key, $timestamp,]);
+        return $this->returnCommand(['EXPIREAT'], $key, [$key, $timestamp]);
     }
 
     /**
@@ -97,7 +98,7 @@ trait KeysCommandsTrait {
      * @return array List of keys matching pattern.
      */
     public function keys($pattern) {
-        return $this->returnCommand(['KEYS'], [$pattern]);
+        return $this->returnCommand(['KEYS'], null, [$pattern]);
     }
 
     /**
@@ -113,7 +114,7 @@ trait KeysCommandsTrait {
      * @return bool The command returns True on success.
      */
     public function migrate($host, $port, $key, $destinationDb, $timeout) {
-        return $this->returnCommand(['MIGRATE'], [$host, $port, $key, $destinationDb, $timeout]);
+        return $this->returnCommand(['MIGRATE'], $key, [$host, $port, $key, $destinationDb, $timeout]);
     }
 
     /**
@@ -127,7 +128,7 @@ trait KeysCommandsTrait {
      * @return int 1 if key was moved. 0 if key was not moved.
      */
     public function move($key, $db) {
-        return $this->returnCommand(['MOVE'], [$key, $db]);
+        return $this->returnCommand(['MOVE'], $key, [$key, $db]);
     }
 
     /**
@@ -145,7 +146,7 @@ trait KeysCommandsTrait {
         if ($arguments) {
             $params[] = (array) $arguments;
         }
-        return $this->returnCommand(['OBJECT'], $params);
+        return $this->returnCommand(['OBJECT'], null, $params);
     }
 
     /**
@@ -159,7 +160,7 @@ trait KeysCommandsTrait {
      * 0 if key does not exist or does not have an associated timeout.
      */
     public function persist($key) {
-        return $this->returnCommand(['PERSIST'], [$key]);
+        return $this->returnCommand(['PERSIST'], $key, [$key]);
     }
 
     /**
@@ -174,7 +175,7 @@ trait KeysCommandsTrait {
      * 0 if key does not exist or the timeout could not be set.
      */
     public function pexpire($key, $milliseconds) {
-        return $this->returnCommand(['PEXPIRE'], [$key, $milliseconds]);
+        return $this->returnCommand(['PEXPIRE'], $key, [$key, $milliseconds]);
     }
 
     /**
@@ -188,7 +189,7 @@ trait KeysCommandsTrait {
      * @return int 1 if the timeout was set. 0 if key does not exist or the timeout could not be set (see: EXPIRE).
      */
     public function pexpireat($key, $millisecondsTimestamp) {
-        return $this->returnCommand(['PEXPIREAT'], [$key, $millisecondsTimestamp]);
+        return $this->returnCommand(['PEXPIREAT'], $key, [$key, $millisecondsTimestamp]);
     }
 
     /**
@@ -201,7 +202,7 @@ trait KeysCommandsTrait {
      * @return int TTL in milliseconds, or a negative value in order to signal an error.
      */
     public function pttl($key) {
-        return $this->returnCommand(['PTTL'], [$key]);
+        return $this->returnCommand(['PTTL'], $key, [$key]);
     }
 
     /**
@@ -227,7 +228,8 @@ trait KeysCommandsTrait {
      * @return bool True
      */
     public function rename($key, $newkey) {
-        return $this->returnCommand(['RENAME'], [$key, $newkey,]);
+        $keys = [$key, $newkey];
+        return $this->returnCommand(['RENAME'], $keys, $keys);
     }
 
     /**
@@ -241,7 +243,8 @@ trait KeysCommandsTrait {
      * @return int 1 if key was renamed to newkey. 0 if newkey already exists.
      */
     public function renamenx($key, $newkey) {
-        return $this->returnCommand(['RENAMENX'], [$key, $newkey,]);
+        $keys = [$key, $newkey];
+        return $this->returnCommand(['RENAMENX'], $keys, $keys);
     }
 
     /**
@@ -256,7 +259,7 @@ trait KeysCommandsTrait {
      * @return bool The command returns True on success.
      */
     public function restore($key, $ttl, $serializedValue) {
-        return $this->returnCommand(['RESTORE'], [$key, $ttl, $serializedValue]);
+        return $this->returnCommand(['RESTORE'], $key, [$key, $ttl, $serializedValue]);
     }
 
     /**
@@ -300,7 +303,7 @@ trait KeysCommandsTrait {
             $params[] = 'STORE';
             $params[] = $destination;
         }
-        return $this->returnCommand(['SORT'], $params);
+        return $this->returnCommand(['SORT'], $key, $params);
     }
 
     /**
@@ -313,7 +316,7 @@ trait KeysCommandsTrait {
      * @return int TTL in seconds, or a negative value in order to signal an error
      */
     public function ttl($key) {
-        return $this->returnCommand(['TTL'], [$key]);
+        return $this->returnCommand(['TTL'], $key, [$key]);
     }
 
     /**
@@ -326,7 +329,7 @@ trait KeysCommandsTrait {
      * @return string
      */
     public function type($key) {
-        return $this->returnCommand(['TYPE'], [$key]);
+        return $this->returnCommand(['TYPE'], $key, [$key]);
     }
 
 }

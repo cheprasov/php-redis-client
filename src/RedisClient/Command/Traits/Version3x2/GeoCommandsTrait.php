@@ -37,7 +37,7 @@ trait GeoCommandsTrait {
             $params[] = $degrees[1];
             $params[] = $member;
         }
-        return $this->returnCommand(['GEOADD'], $params);
+        return $this->returnCommand(['GEOADD'], $key, $params);
     }
 
     /**
@@ -58,7 +58,7 @@ trait GeoCommandsTrait {
         if (isset($unit)) {
             $params[] = $unit;
         }
-        return $this->returnCommand(['GEODIST'], $params);
+        return $this->returnCommand(['GEODIST'], $key, $params);
     }
 
     /**
@@ -73,7 +73,7 @@ trait GeoCommandsTrait {
      * the Geohash corresponding to each member name passed as argument to the command.
      */
     public function geohash($key, $members) {
-        return $this->returnCommand(['GEOHASH'], [$key, (array) $members]);
+        return $this->returnCommand(['GEOHASH'], $key, [$key, (array)$members]);
     }
 
     /**
@@ -89,7 +89,7 @@ trait GeoCommandsTrait {
      * Non existing elements are reported as NULL elements of the array.
      */
     public function geopos($key, $members) {
-        return $this->returnCommand(['GEOPOS'], [$key, (array) $members]);
+        return $this->returnCommand(['GEOPOS'], $key, [$key, (array)$members]);
     }
 
     /**
@@ -143,7 +143,7 @@ trait GeoCommandsTrait {
             $params[] = $storeKey;
             $parse = false;
         }
-        return $this->returnCommand(['GEORADIUS'], $params, $parse ? ResponseParser::PARSE_GEO_ARRAY : null);
+        return $this->returnCommand(['GEORADIUS'], $key, $params, $parse ? ResponseParser::PARSE_GEO_ARRAY : null);
     }
 
     /**
@@ -196,7 +196,7 @@ trait GeoCommandsTrait {
             $params[] = $storeKey;
             $parse = false;
         }
-        return $this->returnCommand(['GEORADIUSBYMEMBER'], $params, $parse ? ResponseParser::PARSE_GEO_ARRAY : null);
+        return $this->returnCommand(['GEORADIUSBYMEMBER'], $key, $params, $parse ? ResponseParser::PARSE_GEO_ARRAY : null);
     }
 
     /**

@@ -46,7 +46,7 @@ trait KeysCommandsTrait {
             $params[] = 'KEYS';
             $params[] = $keys;
         }
-        return $this->returnCommand(['MIGRATE'], $params);
+        return $this->returnCommand(['MIGRATE'], (array)$keys, $params);
     }
 
     /**
@@ -59,7 +59,8 @@ trait KeysCommandsTrait {
      * @return int Returns the number of existing keys specified.
      */
     public function touch($keys) {
-        return $this->returnCommand(['TOUCH'], (array) $keys);
+        $keys = (array)$keys;
+        return $this->returnCommand(['TOUCH'], $keys, $keys);
     }
 
 }

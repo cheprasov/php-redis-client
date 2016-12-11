@@ -327,7 +327,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(['42'], $Redis->hmget('hash', ['integer']));
         $this->assertSame(['1', ''], $Redis->hmget('hash', ['true', 'false']));
         $this->assertSame(
-            ['3.14159265', '5.0e3', '', '', 'empty',],
+            ['3.14159265', '5.0e3', '', '', 'empty'],
             $Redis->hmget('hash', ['float', 'e', 'null', 'empty', ''])
         );
         $this->assertEquals(array_values(static::$fields), $Redis->hmget('hash', array_keys(static::$fields)));

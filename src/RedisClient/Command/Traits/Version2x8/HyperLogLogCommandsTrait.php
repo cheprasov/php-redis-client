@@ -27,7 +27,7 @@ trait HyperLogLogCommandsTrait {
      * @return int
      */
     public function pfadd($key, $elements) {
-        return $this->returnCommand(['PFADD'], [$key, (array) $elements]);
+        return $this->returnCommand(['PFADD'], $key, [$key, (array)$elements]);
     }
 
     /**
@@ -41,7 +41,8 @@ trait HyperLogLogCommandsTrait {
      * @return int
      */
     public function pfcount($keys) {
-        return $this->returnCommand(['PFCOUNT'], (array) $keys);
+        $keys = (array)$keys;
+        return $this->returnCommand(['PFCOUNT'], $keys, $keys);
     }
 
     /**
@@ -55,7 +56,9 @@ trait HyperLogLogCommandsTrait {
      * @return bool The command just returns True.
      */
     public function pfmerge($destkey, $sourcekeys) {
-        return $this->returnCommand(['PFMERGE'], [$destkey, (array) $sourcekeys]);
+        $keys = (array)$sourcekeys;
+        array_unshift($keys, $destkey);
+        return $this->returnCommand(['PFMERGE'], $keys, $keys);
     }
 
 //    /**
@@ -70,7 +73,7 @@ trait HyperLogLogCommandsTrait {
 //     * @return mixed
 //     */
 //    public function pfdebug($subcommand, $key) {
-//        return $this->returnCommand(['PFDEBUG'], [$subcommand, $key]);
+//        return $this->returnCommand(['PFDEBUG'], $key, [$subcommand, $key]);
 //    }
 
 //    /**

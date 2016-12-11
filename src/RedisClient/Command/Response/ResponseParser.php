@@ -142,12 +142,26 @@ class ResponseParser {
      */
     public static function parseTime(array $response) {
         if (is_array($response) && count($response) === 2) {
-            if (($len = strlen($response[1])) < 6) {
-                $response[1] = str_repeat('0', 6 - $len) . $response[1];
-            }
+            $response[1] = str_pad($response[1], 6, '0', STR_PAD_LEFT);
             return implode('.', $response);
         }
         return $response;
+    }
+
+    /**
+     * @param string[] $response
+     * @return string[]|null
+     */
+    public static function parseClusterSlots(array $response) {
+        $clusters = [];
+        foreach ($response as $slot) {
+            if (!isset($slot[1], $slot[2][0], $slot[2][1])) {
+                return null;
+            }
+            $clusters[$slot[1]] = $slot[2][0] . ':' . $slot[2][1];
+        }
+        ksort($clusters, SORT_NUMERIC);
+        return $clusters;
     }
 
 }

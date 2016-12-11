@@ -30,7 +30,7 @@ trait ServerCommandsTrait {
      * @return bool|null
      */
     public function clientReply($param) {
-        return $this->returnCommand(['CLIENT', 'REPLY'], [$param]);
+        return $this->returnCommand(['CLIENT', 'REPLY'], null, [$param]);
     }
 
     /**
