@@ -90,11 +90,12 @@ class ClusterMapTest extends \PHPUnit_Framework_TestCase {
      * @param string $key
      * @param int $slot
      */
-    public function _test_getSlotByKey($key, $slot) {
+    public function test_getSlotByKey($key, $slot) {
         $this->assertSame($slot, ClusterMap::getSlotByKey($key));
     }
 
     public function test_get() {
+        $this->markTestSkipped();
         $Redis = new RedisClient([
             'server' => '127.0.0.1:7001',
             'timeout' => 5,
