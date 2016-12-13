@@ -11,7 +11,6 @@
 namespace Test\Unit\Cluster;
 
 use RedisClient\Cluster\ClusterMap;
-use RedisClient\Command\Response\ResponseParser;
 use RedisClient\RedisClient;
 
 /**
@@ -92,27 +91,6 @@ class ClusterMapTest extends \PHPUnit_Framework_TestCase {
      */
     public function test_getSlotByKey($key, $slot) {
         $this->assertSame($slot, ClusterMap::getSlotByKey($key));
-    }
-
-    public function test_get() {
-        $this->markTestSkipped();
-        $Redis = new RedisClient([
-            'server' => '127.0.0.1:7001',
-            'timeout' => 5,
-            'cluster' => [
-                'enabled' => true,
-            ]
-        ]);
-
-        for ($i = 0; $i < 100; ++$i) {
-            $key = 'foo' . $i;
-            $this->assertSame(true, $Redis->set($key, $i));
-        }
-
-        for ($i = 0; $i < 100; ++$i) {
-            $key = 'foo' . $i;
-            $this->assertSame($i, (int)$Redis->get($key));
-        }
     }
 
 }

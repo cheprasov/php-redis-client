@@ -21,6 +21,11 @@ abstract class AbstractPipeline implements PipelineInterface {
     protected $commandLines = [];
 
     /**
+     * @var string
+     */
+    protected $keys = [];
+
+    /**
      * @param \Closure|null $Closure
      */
     public function __construct(\Closure $Closure = null) {
@@ -30,11 +35,34 @@ abstract class AbstractPipeline implements PipelineInterface {
     }
 
     /**
+     * @param string|string[] $keys
+     */
+    protected function addKeys($keys) {
+        if (is_array($keys)) {
+            foreach ($keys as $key) {
+                $this->keys[$key] = $key;
+            }
+        } else {
+            $this->keys[$keys] = $keys;
+        }
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getKeys() {
+        return array_values($this->keys);
+    }
+
+    /**
      * @inheritdoc
      * @return $this
      */
     protected function returnCommand(array $command, $keys = null, array $params = null, $parserId = null) {
         $this->commandLines[] = [$command, $params, $parserId];
+        if ($keys) {
+            $this->addKeys($keys);
+        }
         return $this;
     }
 

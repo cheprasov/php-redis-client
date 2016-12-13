@@ -159,12 +159,7 @@ abstract class AbstractRedisClient {
      */
     protected function executeCommand(array $command, $keys, array $params = null, $parserId = null) {
         $Protocol = $this->getProtocol();
-        if (isset($keys) && $this->ClusterMap) {
-            $key = is_array($keys) ? $keys[0] : $keys;
-            if ($Connection = $this->ClusterMap->getConnectionByKey($key)) {
-                $Protocol->setConnection($Connection);
-            }
-        }
+        $this->changeProtocolConnectionByKey($Protocol, $keys);
         $response = $this->executeProtocolCommand($Protocol, $command, $params);
 
         if ($response instanceof ErrorResponseException) {
@@ -209,6 +204,36 @@ abstract class AbstractRedisClient {
         }
 
         return $response;
+    }
+
+    /**
+     * @param ProtocolInterface $Protocol
+     * @param string|string[] $keys
+     */
+    protected function changeProtocolConnectionByKey(ProtocolInterface $Protocol, $keys) {
+        if (isset($keys) && $this->ClusterMap) {
+            $key = is_array($keys) ? $keys[0] : $keys;
+            if ($Connection = $this->ClusterMap->getConnectionByKey($key)) {
+                $Protocol->setConnection($Connection);
+            }
+        }
+    }
+
+    /**
+     * @param PipelineInterface $Pipeline
+     * @return mixed
+     * @throws ErrorResponseException
+     */
+    protected function executePipeline(PipelineInterface $Pipeline) {
+        $Protocol = $this->getProtocol();
+        $this->changeProtocolConnectionByKey($Protocol, $Pipeline->getKeys());
+        $responses = $this->getProtocol()->sendMulti($Pipeline->getStructure());
+        if (is_object($responses)) {
+            if ($responses instanceof ErrorResponseException) {
+                throw $responses;
+            }
+        }
+        return $Pipeline->parseResponse($responses);
     }
 
     /**
@@ -264,21 +289,6 @@ abstract class AbstractRedisClient {
      * @return PipelineInterface
      */
     abstract protected function createPipeline(\Closure $Pipeline = null);
-
-    /**
-     * @param PipelineInterface $Pipeline
-     * @return mixed
-     * @throws ErrorResponseException
-     */
-    protected function executePipeline(PipelineInterface $Pipeline) {
-        $responses = $this->getProtocol()->sendMulti($Pipeline->getStructure());
-        if (is_object($responses)) {
-            if ($responses instanceof ErrorResponseException) {
-                throw $responses;
-            }
-        }
-        return $Pipeline->parseResponse($responses);
-    }
 
     /**
      * @param string[] $structure
