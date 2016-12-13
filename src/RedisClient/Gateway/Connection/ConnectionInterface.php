@@ -18,6 +18,11 @@ interface ConnectionInterface {
     public function getServer();
 
     /**
+     * @param callable $callback
+     */
+    public function onConnect($callback);
+
+    /**
      * @param string $string
      * @return int|null
      */

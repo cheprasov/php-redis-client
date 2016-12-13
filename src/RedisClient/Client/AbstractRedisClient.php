@@ -32,11 +32,6 @@ abstract class AbstractRedisClient {
     const CONFIG_CLUSTER  = 'cluster';
     const CONFIG_VERSION  = 'version';
 
-    const CONFIG_CLUSTER_INIT_OFF       = 0;
-    const CONFIG_CLUSTER_INIT_ON_START  = 1;
-    const CONFIG_CLUSTER_INIT_ON_MOVED  = 2;
-    const CONFIG_CLUSTER_INIT_ON        = 3;
-
     /**
      * Default configuration
      * @var array
@@ -48,7 +43,8 @@ abstract class AbstractRedisClient {
         self::CONFIG_CLUSTER => [
             'enabled' => false,
             'clusters' => [],
-            'init' => self::CONFIG_CLUSTER_INIT_ON,
+            'init_on_start' => false,
+            'init_on_error' => false,
         ],
     ];
 
@@ -126,7 +122,7 @@ abstract class AbstractRedisClient {
         }
         if ($this->ClusterMap) {
             $conf = $this->getConfig(self::CONFIG_CLUSTER);
-            if (isset($conf['init']) && ($conf['init'] & self::CONFIG_CLUSTER_INIT_ON_START)) {
+            if (!empty($conf['init_on_start'])) {
                 $this->updateClusterSlots();
             }
         }
@@ -184,7 +180,7 @@ abstract class AbstractRedisClient {
         if ($response instanceof ErrorResponseException && $this->ClusterMap) {
             if ($response instanceof MovedResponseException) {
                 $conf = $this->getConfig(self::CONFIG_CLUSTER);
-                if (isset($conf['init']) && ($conf['init'] & self::CONFIG_CLUSTER_INIT_ON_MOVED)) {
+                if (!empty($conf['init_on_error'])) {
                     $this->updateClusterSlots();
                 } else {
                     $this->ClusterMap->addCluster($response->getSlot(), $response->getServer());

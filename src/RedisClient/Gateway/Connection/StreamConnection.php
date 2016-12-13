@@ -30,6 +30,11 @@ class StreamConnection implements ConnectionInterface {
     protected $timeout;
 
     /**
+     * @var callable
+     */
+    protected $onConnectCallback;
+
+    /**
      * @param string $server
      * @param int|float|null $timeout
      */
@@ -73,6 +78,13 @@ class StreamConnection implements ConnectionInterface {
     }
 
     /**
+     * @param callable $callback
+     */
+    public function onConnect($callback) {
+        $this->onConnectCallback = $callback;
+    }
+
+    /**
      * @return resource
      * @throws ConnectionException
      */
@@ -83,6 +95,9 @@ class StreamConnection implements ConnectionInterface {
             }
             if (isset($this->timeout)) {
                 stream_set_timeout($this->resource, 0, $this->timeout);
+            }
+            if ($this->onConnectCallback && is_callable($this->onConnectCallback)) {
+                call_user_func($this->onConnectCallback);
             }
         }
         return $this->resource;
