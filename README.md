@@ -44,7 +44,7 @@ $Redis = ClientFactory::create([
     'cluster' => [
         'enabled' => false,
 
-        // Oprional. Default = []. Map of cluster slots and servers
+        // Optional. Default = []. Map of cluster slots and servers
         // array(max_slot => server [, ...])
         // Examples for Cluster with 3 Nodes:
         'clusters' => [
@@ -61,7 +61,10 @@ $Redis = ClientFactory::create([
         // Optional. Default = false.
         // If Redis returns error -MOVED then RedisClient will execute
         // command CLUSTER SLOTS to update cluster slot map
-        'init_on_error' => true,
+        'init_on_error_moved' => true,
+
+        // Optional. Defatult = 0.25 sec. It is timeout before next attempt on TRYAGAIN error.
+        'timeout_on_error_tryagain' => 0.25, // sec
     ]
 ]);
 ```

@@ -23,6 +23,8 @@ class ExceptionFactory {
                 return new MovedResponseException($message);
             case 'ASK':
                 return new AskResponseException($message);
+            case 'TRYAGAIN':
+                return new TryAgainResponseException($message);
         }
         return new ErrorResponseException($message);
     }

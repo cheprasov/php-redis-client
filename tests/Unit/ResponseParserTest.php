@@ -180,4 +180,103 @@ config_file:/etc/redis/redis.conf
         $this->assertSame([], ResponseParser::parseAssocArray([]));
     }
 
+    public function provider_parseClusterSlots() {
+        return [
+            [
+                array (
+                    0 => array (
+                        0 => 0,
+                        1 => 5460,
+                        2 => array (
+                            0 => '127.0.0.1',
+                            1 => 7001,
+                            2 => '8bdd2e92cfc4ed897a4845f98302138e26b6bff7',
+                        ),
+                        3 => array (
+                            0 => '127.0.0.1',
+                            1 => 7004,
+                            2 => '841860b9f02092598b73e39f70be9fb5d4c26157',
+                        ),
+                    ),
+                    1 => array (
+                        0 => 5461,
+                        1 => 10922,
+                        2 => array (
+                            0 => '127.0.0.1',
+                            1 => 7002,
+                            2 => 'cb9cd68e912b5dc9d824ecb79dcb8a5ae3ef6418',
+                        ),
+                        3 => array (
+                            0 => '127.0.0.1',
+                            1 => 7005,
+                            2 => 'ecd0f111c58b58fed56b55e4889a152920ea6632',
+                        ),
+                    ),
+                    2 => array (
+                        0 => 10923,
+                        1 => 16383,
+                        2 => array (
+                            0 => '127.0.0.1',
+                            1 => 7003,
+                            2 => '79074cf03cfb38c5846451531ce5e6fb369eefbf',
+                        ),
+                        3 => array (
+                            0 => '127.0.0.1',
+                            1 => 7006,
+                            2 => 'c5ce625184dff5e1f6f44e172ce444a9ca691f19',
+                        ),
+                    ),
+                ),
+                [
+                    5460 => '127.0.0.1:7001',
+                    10922 => '127.0.0.1:7002',
+                    16383 => '127.0.0.1:7003',
+                ]
+            ],
+            [
+                array (
+                    0 => array (
+                        0 => 0,
+                        1 => 10,
+                        2 => array (
+                            0 => '127.0.0.1',
+                            1 => 11,
+                        ),
+                    ),
+                    1 => array (
+                        0 => 21,
+                        1 => 30,
+                        2 => array (
+                            0 => '127.0.0.3',
+                            1 => 33,
+                        ),
+                    ),
+                    2 => array (
+                        0 => 11,
+                        1 => 20,
+                        2 => array (
+                            0 => '127.0.0.2',
+                            1 => 22,
+                        ),
+                    ),
+                ),
+                [
+                    10 => '127.0.0.1:11',
+                    20 => '127.0.0.2:22',
+                    30 => '127.0.0.3:33',
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @see ResponseParser::parseClusterSlots
+     * @dataProvider provider_parseClusterSlots
+     * @param array $data
+     * @param array $expect
+     */
+    public function test_parseClusterSlots($data, $expect) {
+        $this->assertSame($expect, ResponseParser::parseClusterSlots($data));
+    }
+
 }

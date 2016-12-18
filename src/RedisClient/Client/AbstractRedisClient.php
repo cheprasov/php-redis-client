@@ -15,6 +15,7 @@ use RedisClient\Command\Response\ResponseParser;
 use RedisClient\Exception\AskResponseException;
 use RedisClient\Exception\ErrorResponseException;
 use RedisClient\Exception\MovedResponseException;
+use RedisClient\Exception\TryAgainResponseException;
 use RedisClient\Pipeline\Pipeline;
 use RedisClient\Pipeline\PipelineInterface;
 use RedisClient\Protocol\ProtocolFactory;
@@ -44,7 +45,8 @@ abstract class AbstractRedisClient {
             'enabled' => false,
             'clusters' => [],
             'init_on_start' => false,
-            'init_on_error' => false,
+            'init_on_error_moved' => false,
+            'timeout_on_error_tryagain' => 0.25,
         ],
     ];
 
@@ -76,11 +78,14 @@ abstract class AbstractRedisClient {
     protected function setConfig(array $config = null) {
         $this->config = $config ? array_merge(static::$defaultConfig, $config) : static::$defaultConfig;
         if (!empty($this->config[self::CONFIG_CLUSTER]['enabled'])) {
-            $ClusterMap = new ClusterMap(null, $this->config[self::CONFIG_TIMEOUT]);
+            $ClusterMap = new ClusterMap($this, $this->getConfig());
             if (!empty($this->config[self::CONFIG_CLUSTER]['clusters'])) {
                 $ClusterMap->setClusters($this->config[self::CONFIG_CLUSTER]['clusters']);
             }
             $this->ClusterMap = $ClusterMap;
+            if (!empty($this->config[self::CONFIG_CLUSTER]['init_on_start'])) {
+                $this->updateClusterSlots();
+            }
         }
     }
 
@@ -100,32 +105,9 @@ abstract class AbstractRedisClient {
      */
     protected function getProtocol() {
         if (!$this->Protocol) {
-            $this->Protocol = ProtocolFactory::createRedisProtocol(
-                $this->getConfig(self::CONFIG_SERVER),
-                $this->getConfig(self::CONFIG_TIMEOUT)
-            );
-            $this->onProtocolInit();
+            $this->Protocol = ProtocolFactory::createRedisProtocol($this, $this->getConfig());
         }
         return $this->Protocol;
-    }
-
-    /**
-     *
-     */
-    protected function onProtocolInit() {
-        /** @var RedisClient $this */
-        if ($password = $this->getConfig(self::CONFIG_PASSWORD)) {
-            $this->auth($password);
-        }
-        if ($db = (int)$this->getConfig(self::CONFIG_DATABASE)) {
-            $this->select($db);
-        }
-        if ($this->ClusterMap) {
-            $conf = $this->getConfig(self::CONFIG_CLUSTER);
-            if (!empty($conf['init_on_start'])) {
-                $this->updateClusterSlots();
-            }
-        }
     }
 
     /**
@@ -154,8 +136,7 @@ abstract class AbstractRedisClient {
      * @throws ErrorResponseException
      */
     protected function executeCommand(array $command, $keys, array $params = null, $parserId = null) {
-        $Protocol = $this->getProtocol();
-        $this->changeProtocolConnectionByKey($Protocol, $keys);
+        $Protocol = $this->getProtocolByKey($keys);
         $response = $this->executeProtocolCommand($Protocol, $command, $params);
 
         if ($response instanceof ErrorResponseException) {
@@ -180,22 +161,25 @@ abstract class AbstractRedisClient {
         if ($response instanceof ErrorResponseException && $this->ClusterMap) {
             if ($response instanceof MovedResponseException) {
                 $conf = $this->getConfig(self::CONFIG_CLUSTER);
-                if (!empty($conf['init_on_error'])) {
+                if (!empty($conf['init_on_error_moved'])) {
                     $this->updateClusterSlots();
                 } else {
                     $this->ClusterMap->addCluster($response->getSlot(), $response->getServer());
                 }
-                $Connection = $this->ClusterMap->getConnectionByServer($response->getServer());
-                $Protocol->setConnection($Connection);
+                $Protocol = $this->ClusterMap->getProtocolByServer($response->getServer());
                 return $this->executeProtocolCommand($Protocol, $command, $params);
             }
             if ($response instanceof AskResponseException) {
-                $TempRedisProtocol = ProtocolFactory::createRedisProtocol(
-                    $response->getServer(),
-                    $this->getConfig(self::CONFIG_TIMEOUT)
-                );
+                $TempRedisProtocol = ProtocolFactory::createRedisProtocol($this, $this->getConfig());
                 $TempRedisProtocol->send(['ASKING']);
                 return $this->executeProtocolCommand($TempRedisProtocol, $command, $params);
+            }
+            if ($response instanceof TryAgainResponseException) {
+                $config = $this->getConfig(self::CONFIG_CLUSTER);
+                if (isset($config['timeout_on_error_tryagain'])) {
+                    usleep($config['timeout_on_error_tryagain'] * 1000000);
+                }
+                return $this->executeProtocolCommand($Protocol, $command, $params);
             }
         }
 
@@ -203,16 +187,17 @@ abstract class AbstractRedisClient {
     }
 
     /**
-     * @param ProtocolInterface $Protocol
      * @param string|string[] $keys
+     * @return ProtocolInterface
      */
-    protected function changeProtocolConnectionByKey(ProtocolInterface $Protocol, $keys) {
+    protected function getProtocolByKey($keys) {
         if (isset($keys) && $this->ClusterMap) {
             $key = is_array($keys) ? $keys[0] : $keys;
-            if ($Connection = $this->ClusterMap->getConnectionByKey($key)) {
-                $Protocol->setConnection($Connection);
+            if ($Protocol = $this->ClusterMap->getProtocolByKey($key)) {
+                $this->Protocol = $Protocol;
             }
         }
+       return $this->getProtocol();
     }
 
     /**
@@ -221,9 +206,8 @@ abstract class AbstractRedisClient {
      * @throws ErrorResponseException
      */
     protected function executePipeline(PipelineInterface $Pipeline) {
-        $Protocol = $this->getProtocol();
-        $this->changeProtocolConnectionByKey($Protocol, $Pipeline->getKeys());
-        $responses = $this->getProtocol()->sendMulti($Pipeline->getStructure());
+        $Protocol = $this->getProtocolByKey($Pipeline->getKeys());
+        $responses = $Protocol->sendMulti($Pipeline->getStructure());
         if (is_object($responses)) {
             if ($responses instanceof ErrorResponseException) {
                 throw $responses;

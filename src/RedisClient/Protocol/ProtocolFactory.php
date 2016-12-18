@@ -10,16 +10,32 @@
  */
 namespace RedisClient\Protocol;
 
+use RedisClient\Client\AbstractRedisClient;
 use RedisClient\Connection\ConnectionFactory;
 
 class ProtocolFactory {
 
     /**
-     * @param string $server
-     * @param int $timeout
+     * @param AbstractRedisClient $RedisClient
+     * @param array $config
      * @return RedisProtocol
      */
-    public static function createRedisProtocol($server, $timeout) {
-        return new RedisProtocol(ConnectionFactory::createStreamConnection($server, $timeout));
+    public static function createRedisProtocol(AbstractRedisClient $RedisClient, $config) {
+        $onConnect = function() use ($RedisClient, $config) {
+            /** @var \RedisClient\RedisClient $RedisClient */
+            if (isset($config[AbstractRedisClient::CONFIG_PASSWORD])) {
+                $RedisClient->auth($config[AbstractRedisClient::CONFIG_PASSWORD]);
+            }
+            if (!empty($config[AbstractRedisClient::CONFIG_DATABASE])) {
+                $RedisClient->select($config[AbstractRedisClient::CONFIG_DATABASE]);
+            }
+        };
+        return new RedisProtocol(
+            ConnectionFactory::createStreamConnection(
+                $config[AbstractRedisClient::CONFIG_SERVER],
+                $config[AbstractRedisClient::CONFIG_TIMEOUT],
+                $onConnect
+            )
+        );
     }
 }

@@ -15,10 +15,15 @@ class ConnectionFactory {
     /**
      * @param string $server
      * @param int $timeout
+     * @param callable $onConnect
      * @return StreamConnection
      */
-    public static function createStreamConnection($server, $timeout) {
-        return new StreamConnection($server, $timeout);
+    public static function createStreamConnection($server, $timeout, $onConnect = null) {
+        $Connection = new StreamConnection($server, $timeout);
+        if ($onConnect) {
+            $Connection->onConnect($onConnect);
+        }
+        return $Connection;
     }
 
 }

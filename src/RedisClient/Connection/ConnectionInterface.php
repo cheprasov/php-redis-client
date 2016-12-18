@@ -29,14 +29,14 @@ interface ConnectionInterface {
     public function write($string);
 
     /**
-     * @return string|null
-     */
-    public function readLine();
-
-    /**
      * @param int $length
      * @return string|null
      */
     public function read($length);
+
+    /**
+     * @return string|null
+     */
+    public function readLine();
 
 }

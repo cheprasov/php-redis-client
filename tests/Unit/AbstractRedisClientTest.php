@@ -25,58 +25,74 @@ class AbstractRedisClientTest extends \PHPUnit_Framework_TestCase {
         return $Mock;
     }
 
+    public function provider_parseRawString() {
+        return [
+            [['SET', 'foo', 'bar'],  'SET foo bar'],
+            [['SET', 'foo', 'bar'],  '  SET    foo    bar   '],
+            [['SET', 'foo', 'hello world'],  'SET foo "hello world"'],
+            [['SET', '', 'hello world'],  'SET "" "hello world"'],
+            [['SET', 'some key', 'hello world'],  'SET "some key" "hello world"'],
+        
+            [
+                ['SET', 'some "key"', 'hello my "little" world'],
+                'SET "some \"key\"" "hello my \"little\" world"'
+            ],
+            [['SET', "\x0\xFF", ''],  "SET \"\x0\xFF\" \"\""],
+            [['SET', "\x0", "\x0"],  "SET \"\x0\" \"\x0\""],
+
+            [['PING'],  'PING'],
+            [['PING'],  ' PING '],
+
+            [['DEL', 'foo', 'bar'],  'DEL foo bar'],
+            [['DEL', 'foo bar', 'some key'],  'DEL "foo bar" "some key"'],
+            [['SET', 'foo bar', "some\r\nkey"],  "SET \"foo bar\" \"some\r\nkey\""],
+            [['DEL', 'a', 'b', 'c', 'd', 'e', 'f'],  'DEL a  b   c    d e  f  '],
+            [['DEL', '""', '"'],  'DEL "\"\"" "\""'],
+            [['DEL', '\"\"', '\"'],  'DEL "\\\"\\\"" "\\\""'],
+
+            [['SET', 'foo-bar', 'some-value'],  'SET foo-bar some-value'],
+            [['SET', "foo\x0", 'some-value'],  "SET foo\x0 some-value"],
+            [['SET', "\x0", 'some-value'],  "SET \"\x0\" some-value"],
+            [['SET', "\x0\x1\x2", "\x0\x1\x2"],  "SET \"\x0\x1\x2\" \"\x0\x1\x2\""],
+            [['SET', "\x0 \x1 \x2", "\x0 \x1 \x2"],  "SET \"\x0 \x1 \x2\" \"\x0 \x1 \x2\""],
+        ];
+    }
+
     /**
      * @see AbstractRedisClient::parseRawString
+     * @dataProvider provider_parseRawString
+     * @param string[] $expect
+     * @param string $params
      */
-    public function test_parseRawString() {
+    public function test_parseRawString($expect, $params) {
         $Method = new \ReflectionMethod(AbstractRedisClient::class, 'parseRawString');
         $Method->setAccessible(true);
-
         $Client = $this->getAbstractRedisClientMock();
+        $this->assertSame($expect, $Method->invoke($Client, $params));
+    }
 
-        $this->assertSame(['SET', 'foo', 'bar'], $Method->invoke($Client, 'SET foo bar'));
-        $this->assertSame(['SET', 'foo', 'bar'], $Method->invoke($Client, '  SET    foo    bar   '));
-        $this->assertSame(['SET', 'foo', 'hello world'], $Method->invoke($Client, 'SET foo "hello world"'));
-        $this->assertSame(['SET', '', 'hello world'], $Method->invoke($Client, 'SET "" "hello world"'));
-        $this->assertSame(['SET', 'some key', 'hello world'], $Method->invoke($Client, 'SET "some key" "hello world"'));
-        $this->assertSame(
-            ['SET', 'some "key"', 'hello my "little" world'],
-            $Method->invoke($Client, 'SET "some \"key\"" "hello my \"little\" world"')
-        );
-        $this->assertSame(['SET', "\x0\xFF", ''], $Method->invoke($Client, "SET \"\x0\xFF\" \"\""));
-        $this->assertSame(['SET', "\x0", "\x0"], $Method->invoke($Client, "SET \"\x0\" \"\x0\""));
-
-        $this->assertSame(['PING'], $Method->invoke($Client, 'PING'));
-        $this->assertSame(['PING'], $Method->invoke($Client, ' PING '));
-
-        $this->assertSame(['DEL', 'foo', 'bar'], $Method->invoke($Client, 'DEL foo bar'));
-        $this->assertSame(['DEL', 'foo bar', 'some key'], $Method->invoke($Client, 'DEL "foo bar" "some key"'));
-        $this->assertSame(['SET', 'foo bar', "some\r\nkey"], $Method->invoke($Client, "SET \"foo bar\" \"some\r\nkey\""));
-        $this->assertSame(['DEL', 'a', 'b', 'c', 'd', 'e', 'f'], $Method->invoke($Client, 'DEL a  b   c    d e  f  '));
-        $this->assertSame(['DEL', '""', '"'], $Method->invoke($Client, 'DEL "\"\"" "\""'));
-        $this->assertSame(['DEL', '\"\"', '\"'], $Method->invoke($Client, 'DEL "\\\"\\\"" "\\\""'));
-
-        $this->assertSame(['SET', 'foo-bar', 'some-value'], $Method->invoke($Client, 'SET foo-bar some-value'));
-        $this->assertSame(['SET', "foo\x0", 'some-value'], $Method->invoke($Client, "SET foo\x0 some-value"));
-        $this->assertSame(['SET', "\x0", 'some-value'], $Method->invoke($Client, "SET \"\x0\" some-value"));
-        $this->assertSame(['SET', "\x0\x1\x2", "\x0\x1\x2"], $Method->invoke($Client, "SET \"\x0\x1\x2\" \"\x0\x1\x2\""));
-        $this->assertSame(['SET', "\x0 \x1 \x2", "\x0 \x1 \x2"], $Method->invoke($Client, "SET \"\x0 \x1 \x2\" \"\x0 \x1 \x2\""));
+    public function provider_getStructure() {
+        return [
+            [['PING'], ['PING'], null],
+            [['PING'], ['PING'], []],
+            [['SET', 'foo', 'bar'], ['SET'], ['foo', 'bar']],
+            [['SET', 'foo', 'bar'], ['SET'], [['foo', 'bar']]],
+            [['SET', 'a', 'b', 'c', 'd', 'e'], ['SET'], ['a', ['b', 'c'], 'd', ['e']]],
+        ];
     }
 
     /**
      * @see AbstractRedisClient::getStructure
+     * @dataProvider provider_getStructure
+     * @param string[] $expect
+     * @param string[] $command
+     * @param string[]|null $params
      */
-    public function test_getStructure() {
+    public function test_getStructure($expect, $command, $params) {
         $Method = new \ReflectionMethod(AbstractRedisClient::class, 'getStructure');
         $Method->setAccessible(true);
-
         $Client = $this->getAbstractRedisClientMock();
-
-        $this->assertSame(['PING'], $Method->invoke($Client, ['PING']));
-        $this->assertSame(['PING'], $Method->invoke($Client, ['PING'], []));
-        $this->assertSame(['SET', 'foo', 'bar'], $Method->invoke($Client, ['SET'], ['foo', 'bar']));
-        $this->assertSame(['SET', 'foo', 'bar'], $Method->invoke($Client, ['SET'], [['foo', 'bar']]));
-        $this->assertSame(['SET', 'a', 'b', 'c', 'd', 'e'], $Method->invoke($Client, ['SET'], ['a', ['b', 'c'], 'd', ['e']]));
+        $this->assertSame($expect, $Method->invoke($Client, $command, $params));
     }
 
 }

@@ -10,11 +10,14 @@
  */
 namespace RedisClient\Cluster;
 
+use RedisClient\Client\AbstractRedisClient;
 use RedisClient\Cluster\Hash\Crc16;
-use RedisClient\Connection\ConnectionFactory;
-use RedisClient\Connection\ConnectionInterface;
+use RedisClient\Protocol\ProtocolFactory;
+use RedisClient\Protocol\ProtocolInterface;
 
 class ClusterMap {
+
+    const MAX_SLOT = 16384;
 
     /**
      * @var array
@@ -22,29 +25,27 @@ class ClusterMap {
     protected $clusters = [];
 
     /**
-     * @var ConnectionInterface[]
+     * @var ProtocolInterface[]
      */
-    protected $connections = [];
+    protected $protocols = [];
 
     /**
-     * @var int
+     * @var AbstractRedisClient;
      */
-    protected $currentNum = 0;
+    protected $RedisClient;
 
     /**
-     * @var int
+     * @var array
      */
-    protected $timeout = 0;
+    protected $config;
 
     /**
-     * @param array|null $clusters
-     * @param int $timeout
+     * @param AbstractRedisClient $RedisClient
+     * @param int $config
      */
-    public function __construct(array $clusters = null, $timeout = 0) {
-        if ($clusters) {
-            $this->setClusters($clusters);
-        }
-        $this->timeout = $timeout;
+    public function __construct(AbstractRedisClient $RedisClient, $config) {
+        $this->RedisClient = $RedisClient;
+        $this->config = $config;
     }
 
     /**
@@ -82,7 +83,7 @@ class ClusterMap {
                 $key = substr($key, $s, $e - $s);
             }
         }
-        return Crc16::hash($key) & 16383;
+        return Crc16::hash($key) % self::MAX_SLOT;
     }
 
     /**
@@ -100,23 +101,25 @@ class ClusterMap {
 
     /**
      * @param string $server
-     * @return ConnectionInterface
+     * @return ProtocolInterface
      */
-    public function getConnectionByServer($server) {
-        if (!isset($this->connections[$server])) {
-            $this->connections[$server] = ConnectionFactory::createStreamConnection($server, $this->timeout);
+    public function getProtocolByServer($server) {
+        if (!isset($this->protocols[$server])) {
+            $config = $this->config;
+            $config[AbstractRedisClient::CONFIG_SERVER] = $server;
+            $this->protocols[$server] = ProtocolFactory::createRedisProtocol($this->RedisClient, $config);
         }
-        return $this->connections[$server];
+        return $this->protocols[$server];
     }
 
     /**
      * @param $key
-     * @return ConnectionInterface|null
+     * @return ProtocolInterface|null
      */
-    public function getConnectionByKey($key) {
+    public function getProtocolByKey($key) {
         if (!$server = $this->getServerBySlot(self::getSlotByKey($key))) {
             return null;
         }
-        return $this->getConnectionByServer($server);
+        return $this->getProtocolByServer($server);
     }
 }
