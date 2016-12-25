@@ -10,57 +10,14 @@
  */
 namespace Test\Integration\Version2x6;
 
-use RedisClient\Client\Version\RedisClient2x6;
+include_once(__DIR__ . '/../BaseVersionTest.php');
+
 use RedisClient\Exception\ErrorResponseException;
 
 /**
  * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait
  */
-class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;
-    const TEST_REDIS_SERVER_2 = TEST_REDIS_SERVER_2x6_2;
-
-    /**
-     * @var RedisClient2x6
-     */
-    protected static $Redis;
-
-    /**
-     * @var RedisClient2x6
-     */
-    protected static $Redis2;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient2x6([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-        static::$Redis2 = new RedisClient2x6([
-            'server' =>  static::TEST_REDIS_SERVER_2,
-            'timeout' => 2,
-            'password' => TEST_REDIS_SERVER_PASSWORD,
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function tearDownAfterClass() {
-        static::$Redis->flushall();
-        static::$Redis2->flushall();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp() {
-        static::$Redis->flushall();
-        static::$Redis2->flushall();
-    }
+class KeysCommandsTest extends \Test\Integration\BaseVersionTest {
 
     /**
      * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::del
@@ -205,7 +162,8 @@ class KeysCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(true, $Redis->flushall());
         $this->assertSame(true, $Redis2->flushall());
 
-        list(, $host, $port) = explode(':', str_replace('/', '', static::TEST_REDIS_SERVER_1), 3);
+        $classInfo = static::getTestConfig();
+        list($host, $port) = explode(':', $classInfo['servers'][self::SERVER_1]);
 
         $this->assertSame(true, $Redis2->set('one', 1));
 

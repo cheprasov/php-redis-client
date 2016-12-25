@@ -12,46 +12,10 @@ namespace Test\Integration\Version2x8;
 
 include_once(__DIR__. '/../Version2x6/KeysCommandsTest.php');
 
-use RedisClient\Client\Version\RedisClient2x8;
-use Test\Integration\Version2x6\KeysCommandsTest as KeysCommandsTestVersion2x6;
-
 /**
  * @see \RedisClient\Command\Traits\Version2x8\KeysCommandsTrait
  */
-class KeysCommandsTest extends KeysCommandsTestVersion2x6 {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x8_1;
-    const TEST_REDIS_SERVER_2 = TEST_REDIS_SERVER_2x8_2;
-
-    /**
-     * @var RedisClient2x8
-     */
-    protected static $Redis;
-
-    /**
-     * @var RedisClient2x8
-     */
-    protected static $Redis2;
-
-    /**
-     * @var array
-     */
-    protected static $fields;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient2x8([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-        static::$Redis2 = new RedisClient2x8([
-            'server' =>  static::TEST_REDIS_SERVER_2,
-            'timeout' => 2,
-            'password' => TEST_REDIS_SERVER_PASSWORD,
-        ]);
-    }
+class KeysCommandsTest extends \Test\Integration\Version2x6\KeysCommandsTest {
 
     /**
      * @see \RedisClient\Command\Traits\Version2x6\KeysCommandsTrait::ttl

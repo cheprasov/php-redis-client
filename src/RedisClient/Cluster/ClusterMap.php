@@ -41,9 +41,9 @@ class ClusterMap {
 
     /**
      * @param AbstractRedisClient $RedisClient
-     * @param int $config
+     * @param array $config
      */
-    public function __construct(AbstractRedisClient $RedisClient, $config) {
+    public function __construct(AbstractRedisClient $RedisClient, array $config) {
         $this->RedisClient = $RedisClient;
         $this->config = $config;
     }
@@ -58,7 +58,7 @@ class ClusterMap {
 
     /**
      * @param int $slot
-     * @param int $server
+     * @param string $server
      */
     public function addCluster($slot, $server) {
         if (false !== ($oldSlot = array_search($server, $this->clusters))) {

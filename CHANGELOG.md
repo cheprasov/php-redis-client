@@ -1,6 +1,7 @@
 ## CHANGELOG
 
-### v1.6.0 (2016-12-03)
+### v1.6.0 (2016-12-24)
+- Added support for Redis Cluster.
 - Client was tested with Redis 4.0 RC1
 
 ### v1.5.1 (2016-08-17)

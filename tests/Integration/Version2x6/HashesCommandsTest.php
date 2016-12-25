@@ -10,42 +10,19 @@
  */
 namespace Test\Integration\Version2x6;
 
-use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
+
+include_once(__DIR__ . '/../BaseVersionTest.php');
 
 /**
  * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait
  */
-class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;
-
-    /**
-     * @var RedisClient2x6
-     */
-    protected static $Redis;
+class HashesCommandsTest extends \Test\Integration\BaseVersionTest {
 
     /**
      * @var array
      */
     protected static $fields;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient2x6([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function tearDownAfterClass() {
-        static::$Redis->flushall();
-    }
 
     /**
      * @inheritdoc

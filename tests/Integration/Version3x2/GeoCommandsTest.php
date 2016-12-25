@@ -10,37 +10,14 @@
  */
 namespace Test\Integration\Version3x2;
 
-use RedisClient\Client\Version\RedisClient3x2;
+include_once(__DIR__ . '/../BaseVersionTest.php');
+
 use RedisClient\Exception\ErrorResponseException;
 
 /**
  * @see \RedisClient\Command\Traits\Version3x2\GeoCommandsTrait
  */
-class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x2_1;
-
-    /**
-     * @var RedisClient3x2
-     */
-    protected static $Redis;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient3x2([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setUp() {
-        static::$Redis->flushall();
-    }
+class GeoCommandsTest extends \Test\Integration\BaseVersionTest {
 
     /**
      * @see \RedisClient\Command\Traits\Version3x2\GeoCommandsTrait::geoadd
@@ -177,7 +154,6 @@ class GeoCommandsTest extends \PHPUnit_Framework_TestCase {
             $this->assertInstanceOf(ErrorResponseException::class, $Ex);
         }
     }
-
 
     /**
      * @see \RedisClient\Command\Traits\Version3x2\GeoCommandsTrait::georadius

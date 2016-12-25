@@ -10,26 +10,9 @@
  */
 namespace Test\Integration\Version3x0;
 
-use RedisClient\Client\Version\RedisClient3x0;
+include_once(__DIR__ . '/../BaseVersionTest.php');
 
-class ClusterCommandsTest extends \PHPUnit_Framework_TestCase {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x0_1;
-
-    /**
-     * @var RedisClient3x0
-     */
-    protected static $Redis;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient3x0([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
+class ClusterCommandsTest extends \Test\Integration\BaseVersionTest {
 
     public function testOne() {
         $this->markTestSkipped();

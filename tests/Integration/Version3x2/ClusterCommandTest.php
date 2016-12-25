@@ -12,30 +12,6 @@ namespace Test\Integration\Version3x2;
 
 include_once(__DIR__. '/../Version3x0/ClusterCommandsTest.php');
 
-use RedisClient\Client\Version\RedisClient3x2;
-use Test\Integration\Version3x0\ClusterCommandsTest as ClusterCommandsTest3x0;
+class ClusterCommandsTest extends \Test\Integration\Version3x0\ClusterCommandsTest {
 
-class ClusterCommandsTest extends ClusterCommandsTest3x0 {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x2_1;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient3x2([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
-
-    public function testOne() {
-        $Redis = new RedisClient3x2([
-            'server' =>  TEST_REDIS_SERVER_3x2_CLUSTER_A,
-            'timeout' => 2,
-        ]);
-
-        $this->markTestSkipped();
-        $this->assertSame(true, $Redis->set('foo', 'bar'));
-    }
 }

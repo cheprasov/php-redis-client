@@ -12,23 +12,6 @@ namespace Test\Integration\Version4x0;
 
 include_once(__DIR__. '/../Version3x2/ListsCommandsTest.php');
 
-use RedisClient\Client\Version\RedisClient4x0;
-use Test\Integration\Version3x2\ListsCommandsTest as ListsCommandsTestVersion3x2;
+class ListsCommandsTest extends \Test\Integration\Version3x2\ListsCommandsTest {
 
-/**
- * @see \RedisClient\Command\Traits\Version2x6\ListsCommandsTrait
- */
-class ListsCommandsTest extends ListsCommandsTestVersion3x2 {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_4x0_1;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient4x0([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 10,
-        ]);
-    }
 }

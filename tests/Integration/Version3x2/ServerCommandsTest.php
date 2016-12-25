@@ -12,35 +12,16 @@ namespace Test\Integration\Version3x2;
 
 include_once(__DIR__. '/../Version3x0/ServerCommandsTest.php');
 
-use RedisClient\Client\Version\RedisClient3x2;
-use Test\Integration\Version3x0\ServerCommandsTest as ServerCommandsTestVersion3x0;
-
 /**
  * @see \RedisClient\Command\Traits\Version3x2\ServerCommandsTrait
  */
-class ServerCommandsTest extends ServerCommandsTestVersion3x0 {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x2_1;
-
-    /** @var  RedisClient3x2 */
-    protected static $Redis;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient3x2([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
+class ServerCommandsTest extends \Test\Integration\Version3x0\ServerCommandsTest {
 
     /**
      * @see \RedisClient\Command\Traits\Version3x2\ServerCommandsTrait::commandCount
      */
     public function test_commandCount() {
         $Redis = static::$Redis;
-
         $this->assertSame(172, $Redis->commandCount());
     }
 

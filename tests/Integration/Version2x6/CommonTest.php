@@ -10,43 +10,12 @@
  */
 namespace Test\Integration\Version2x6;
 
-use RedisClient\Client\Version\RedisClient2x6;
+include_once(__DIR__ . '/../BaseVersionTest.php');
 
 /**
  * @see \RedisClient\Command\Traits\Version2x6\SetsCommandsTrait
  */
-class CommonTest extends \PHPUnit_Framework_TestCase {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;
-
-    /**
-     * @var RedisClient2x6
-     */
-    protected static $Redis;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient2x6([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function tearDownAfterClass() {
-        static::$Redis->flushall();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp() {
-        static::$Redis->flushall();
-    }
+class CommonTest extends \Test\Integration\BaseVersionTest {
 
     /**
      * @see \RedisClient\Client\AbstractRedisClient::executeRawString

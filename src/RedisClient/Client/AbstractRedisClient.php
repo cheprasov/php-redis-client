@@ -84,7 +84,7 @@ abstract class AbstractRedisClient {
             }
             $this->ClusterMap = $ClusterMap;
             if (!empty($this->config[self::CONFIG_CLUSTER]['init_on_start'])) {
-                $this->updateClusterSlots();
+                $this->_syncClusterSlotsFromRedisServer();
             }
         }
     }
@@ -113,7 +113,7 @@ abstract class AbstractRedisClient {
     /**
      *
      */
-    protected function updateClusterSlots() {
+    public function _syncClusterSlotsFromRedisServer() {
         /** @var RedisClient $this */
         $response = $this->clusterSlots();
         $clusters = ResponseParser::parseClusterSlots($response);
@@ -162,7 +162,7 @@ abstract class AbstractRedisClient {
             if ($response instanceof MovedResponseException) {
                 $conf = $this->getConfig(self::CONFIG_CLUSTER);
                 if (!empty($conf['init_on_error_moved'])) {
-                    $this->updateClusterSlots();
+                    $this->_syncClusterSlotsFromRedisServer();
                 } else {
                     $this->ClusterMap->addCluster($response->getSlot(), $response->getServer());
                 }
@@ -197,7 +197,7 @@ abstract class AbstractRedisClient {
                 $this->Protocol = $Protocol;
             }
         }
-       return $this->getProtocol();
+        return $this->getProtocol();
     }
 
     /**

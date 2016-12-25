@@ -18,6 +18,16 @@ use RedisClient\RedisClient;
  */
 class ClusterMapTest extends \PHPUnit_Framework_TestCase {
 
+    protected function getClusterMap($RedisClient = null, $config = []) {
+        if (!$RedisClient) {
+            /** @var RedisClient|\PHPUnit_Framework_MockObject_MockObject $RedisClient */
+            $RedisClient = $this->getMockBuilder(RedisClient::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+        return new ClusterMap($RedisClient, $config);
+    }
+
     public function provider_getSlotByKey() {
         return [
             ['FOO{BAR}', 14215],
@@ -91,6 +101,215 @@ class ClusterMapTest extends \PHPUnit_Framework_TestCase {
      */
     public function test_getSlotByKey($key, $slot) {
         $this->assertSame($slot, ClusterMap::getSlotByKey($key));
+    }
+
+    public function provider_getServerBySlot() {
+        return [
+            [  0, 'server-1'],
+            [ 10, 'server-1'],
+            [ 50, 'server-1'],
+            [ 99, 'server-1'],
+            [100, 'server-1'],
+
+            [101, 'server-2'],
+            [110, 'server-2'],
+            [150, 'server-2'],
+            [199, 'server-2'],
+            [200, 'server-2'],
+
+            [201, 'server-3'],
+            [275, 'server-3'],
+            [299, 'server-3'],
+            [300, 'server-3'],
+
+            [301, 'server-4'],
+            [399, 'server-4'],
+            [400, 'server-4'],
+
+            [401, 'server-5'],
+            [488, 'server-5'],
+            [490, 'server-5'],
+            [500, 'server-5'],
+
+            [501, null],
+            [600, null],
+        ];
+    }
+
+    /**
+     * @see RedisClient\Cluster\ClusterMap::getServerBySlot
+     * @dataProvider provider_getServerBySlot
+     * @param int $slot
+     * @param string $expect
+     */
+    public function test_getServerBySlot($slot, $expect) {
+        $ClusterMap = $this->getClusterMap();
+        $ClusterMap->setClusters([
+            100 => 'server-1',
+            200 => 'server-2',
+            300 => 'server-3',
+            400 => 'server-4',
+            500 => 'server-5',
+        ]);
+        $this->assertSame($expect, $ClusterMap->getServerBySlot($slot));
+    }
+
+    /**
+     * @see RedisClient\Cluster\ClusterMap::setClusters
+     */
+    public function test_setClusters() {
+        $ClusterMap = $this->getClusterMap();
+        $Property = new \ReflectionProperty(ClusterMap::class, 'clusters');
+        $Property->setAccessible(true);
+        $this->assertSame([], $Property->getValue($ClusterMap));
+
+        $ClusterMap->setClusters([
+            100 => 'server-1',
+            300 => 'server-3',
+            200 => 'server-2',
+            500 => 'server-5',
+            400 => 'server-4',
+        ]);
+
+        $this->assertSame(
+            [
+                100 => 'server-1',
+                200 => 'server-2',
+                300 => 'server-3',
+                400 => 'server-4',
+                500 => 'server-5',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+
+        $ClusterMap->setClusters([
+            300 => 'server-3',
+            100 => 'server-1',
+            200 => 'server-2',
+        ]);
+        $this->assertSame(
+            [
+                100 => 'server-1',
+                200 => 'server-2',
+                300 => 'server-3',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+    }
+
+    /**
+     * @see RedisClient\Cluster\ClusterMap::addCluster
+     */
+    public function test_addCluster() {
+        $ClusterMap = $this->getClusterMap();
+        $Property = new \ReflectionProperty(ClusterMap::class, 'clusters');
+        $Property->setAccessible(true);
+        $this->assertSame([], $Property->getValue($ClusterMap));
+
+        $ClusterMap->addCluster(300, 'server-3');
+        $this->assertSame(
+            [
+                300 => 'server-3',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+
+        $ClusterMap->addCluster(100, 'server-1');
+        $this->assertSame(
+            [
+                100 => 'server-1',
+                300 => 'server-3',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+
+        $ClusterMap->addCluster(200, 'server-2');
+        $this->assertSame(
+            [
+                100 => 'server-1',
+                200 => 'server-2',
+                300 => 'server-3',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+
+        $ClusterMap->addCluster(500, 'server-5');
+        $this->assertSame(
+            [
+                100 => 'server-1',
+                200 => 'server-2',
+                300 => 'server-3',
+                500 => 'server-5',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+
+        $ClusterMap->addCluster(400, 'server-5');
+        $this->assertSame(
+            [
+                100 => 'server-1',
+                200 => 'server-2',
+                300 => 'server-3',
+                500 => 'server-5',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+
+        $ClusterMap->addCluster(350, 'server-3');
+        $this->assertSame(
+            [
+                100 => 'server-1',
+                200 => 'server-2',
+                350 => 'server-3',
+                500 => 'server-5',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+
+        $ClusterMap->addCluster(150, 'server-1');
+        $this->assertSame(
+            [
+                150 => 'server-1',
+                200 => 'server-2',
+                350 => 'server-3',
+                500 => 'server-5',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+
+        $ClusterMap->addCluster(170, 'server-2');
+        $this->assertSame(
+            [
+                150 => 'server-1',
+                200 => 'server-2',
+                350 => 'server-3',
+                500 => 'server-5',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+
+        $ClusterMap->addCluster(10, 'server-0');
+        $this->assertSame(
+            [
+                10  => 'server-0',
+                150 => 'server-1',
+                200 => 'server-2',
+                350 => 'server-3',
+                500 => 'server-5',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+
+        $ClusterMap->addCluster(500, 'server-3');
+        $this->assertSame(
+            [
+                10  => 'server-0',
+                150 => 'server-1',
+                200 => 'server-2',
+                500 => 'server-3',
+            ],
+            $Property->getValue($ClusterMap)
+        );
     }
 
 }

@@ -12,20 +12,6 @@ namespace Test\Integration\Version4x0;
 
 include_once(__DIR__. '/../Version3x2/CommonTest.php');
 
-use RedisClient\Client\Version\RedisClient4x0;
-use Test\Integration\Version2x6\CommonTest as CommonTestVersion3x2;
+class CommonTest extends \Test\Integration\Version3x2\CommonTest {
 
-class CommonTest extends CommonTestVersion3x2 {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_4x0_1;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient4x0([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
 }
