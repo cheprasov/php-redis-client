@@ -120,7 +120,9 @@ class ServerCommandsTest extends \Test\Integration\BaseVersionTest {
     public function test_flushall() {
         $Redis = static::$Redis;
 
+        $this->assertSame(true, $Redis->set('foo', 'bar'));
         $this->assertSame(true, $Redis->flushall());
+        $this->assertSame(null, $Redis->get('foo'));
     }
 
     /**
@@ -129,7 +131,9 @@ class ServerCommandsTest extends \Test\Integration\BaseVersionTest {
     public function test_flushdb() {
         $Redis = static::$Redis;
 
+        $this->assertSame(true, $Redis->set('foo', 'bar'));
         $this->assertSame(true, $Redis->flushdb());
+        $this->assertSame(null, $Redis->get('foo'));
     }
 
     /**

@@ -12,6 +12,17 @@ namespace Test\Integration\Version4x0;
 
 include_once(__DIR__. '/../Version3x2/ConnectionCommandsTest.php');
 
+/**
+ * @see \RedisClient\Command\Traits\Version2x8\ConnectionCommandsTrait
+ */
 class ConnectionCommandsTest extends \Test\Integration\Version3x2\ConnectionCommandsTest {
+
+    /**
+     * @see \RedisClient\Command\Traits\Version2x8\ConnectionCommandsTrait::swapdb
+     */
+    public function test_swapdb() {
+        $Redis = static::$Redis;
+        $this->assertSame(true, $Redis->swapdb(0, 1));
+    }
 
 }

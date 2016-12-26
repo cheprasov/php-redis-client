@@ -4,7 +4,7 @@
 # RedisClient v1.6.0 for PHP >= 5.5
 
 ## About
-RedisClient is a fast, fully-functional and user-friendly client for Redis, optimized for performance. RedisClient supports the latest versions of Redis starting from __2.6__ to __3.2__
+RedisClient is a fast, fully-functional and user-friendly client for Redis, optimized for performance. RedisClient supports the latest versions of Redis starting from __2.6__ to __4.0__
 
 ## Main features
 - Support Redis versions from __2.6.x__ to __4.0.x__.
@@ -14,7 +14,7 @@ RedisClient is a fast, fully-functional and user-friendly client for Redis, opti
 - Support __RAW__ commands as strings `"SET foo bar"` or as arrays `['SET', 'foo', 'bar']`.
 - Connections to Redis are established lazily by the client upon the first command.
 - Easy to use with IDE, client has PHPDocs for all supported versions.
-- By default, the client works with the latest stable version of Redis (3.2.x).
+- By default, the client works with the latest stable version of Redis (3.2).
 - About **6.5-8.5% faster** than predis (based on this test: https://github.com/cheprasov/php-redis-client-vs-predis-test)
 - Client was tested on the next versions of Redis: 2.6.17, 2.8.24, 3.0.7, 3.2.6, 4.0 RC2 (and older).
 - Also, Client was tested on PHP 5.5, 5.6, 7.0, 7.1, HHVM.

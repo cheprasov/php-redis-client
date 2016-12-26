@@ -20,4 +20,28 @@ trait ServerCommandsTrait {
 
     use ServerCommandsTraitVersion3x2;
 
+    /**
+     * FLUSHALL [ASYNC]
+     * Available since 1.0.0.
+     * @link http://redis.io/commands/flushall
+     *
+     * @param bool $async
+     * @return bool
+     */
+    public function flushall($async = false) {
+        return $this->returnCommand(['FLUSHALL'], null, $async ? ['ASYNC'] : null);
+    }
+
+    /**
+     * FLUSHDB [ASYNC]
+     * Available since 1.0.0.
+     * @link http://redis.io/commands/flushdb
+     *
+     * @param bool $async
+     * @return bool
+     */
+    public function flushdb($async = false) {
+        return $this->returnCommand(['FLUSHDB'], null, $async ? ['ASYNC'] : null);
+    }
+
 }

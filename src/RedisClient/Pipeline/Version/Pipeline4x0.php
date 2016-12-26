@@ -107,8 +107,8 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline4x0 dbsize()
  * @method Pipeline4x0 debugObject($key)
  * @method Pipeline4x0 debugSegfault()
- * @method Pipeline4x0 flushall()
- * @method Pipeline4x0 flushdb()
+ * -method Pipeline4x0 flushall()
+ * -method Pipeline4x0 flushdb()
  * @method Pipeline4x0 info($section = null)
  * @method Pipeline4x0 lastsave()
  * @method Pipeline4x0 save()
@@ -304,8 +304,23 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * Redis version 4.0
  *
+ * Connection
+ * @method Pipeline4x0 swapdb($db1, $db2)
+ *
  * Keys
  * @method Pipeline4x0 unlink($keys)
+ *
+ * Memory
+ * @method Pipeline4x0 memoryDoctor()
+ * @method Pipeline4x0 memoryHelp()
+ * @method Pipeline4x0 memoryUsage($key, $count = null)
+ * @method Pipeline4x0 memoryStats()
+ * @method Pipeline4x0 memoryPurge()
+ * @method Pipeline4x0 memoryMallocStats()
+ *
+ * Server
+ * @method Pipeline4x0 flushall($async = false)
+ * @method Pipeline4x0 flushdb($async = false)
  * 
  */
 class Pipeline4x0 extends AbstractPipeline {

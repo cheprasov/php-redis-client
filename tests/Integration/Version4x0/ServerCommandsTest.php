@@ -18,6 +18,24 @@ include_once(__DIR__. '/../Version3x2/ServerCommandsTest.php');
 class ServerCommandsTest extends \Test\Integration\Version3x2\ServerCommandsTest {
 
     /**
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::flushall
+     */
+    public function test_flushall() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(true, $Redis->flushall(true));
+    }
+
+    /**
+     * @see \RedisClient\Command\Traits\Version2x6\ServerCommandsTrait::flushdb
+     */
+    public function test_flushdb() {
+        $Redis = static::$Redis;
+
+        $this->assertSame(true, $Redis->flushdb(true));
+    }
+
+    /**
      * @see \RedisClient\Command\Traits\Version4x0\ServerCommandsTrait::commandCount
      */
     public function test_commandCount() {
@@ -61,17 +79,7 @@ class ServerCommandsTest extends \Test\Integration\Version3x2\ServerCommandsTest
             'replconf',
             'restore-asking',
             'script',
-            'swapdb',
         ], $missedCommands);
     }
 
-    /**
-     * @see \RedisClient\Command\Traits\Version4x0\ServerCommandsTrait::commandCount
-     */
-    public function test_debugHelp() {
-        $Redis = static::$Redis;
-
-        $help = $Redis->debugHelp();
-        $this->assertSame('DEBUG <subcommand> arg arg ... arg. Subcommands:', $help[0]);
-    }
 }

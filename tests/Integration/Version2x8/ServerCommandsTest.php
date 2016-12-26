@@ -77,6 +77,9 @@ class ServerCommandsTest extends \Test\Integration\Version2x6\ServerCommandsTest
      */
     public function test_role() {
         $Redis = static::$Redis;
-        $this->assertSame(['master', 0, []], $Redis->role());
+        $role = $Redis->role();
+        $this->assertSame('master', $role[0]);
+        $this->assertSame(true, is_integer($role[1]));
+        $this->assertSame([], $role[2]);
     }
 }
