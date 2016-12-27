@@ -20,16 +20,6 @@ before_install:
    - docker pull cheprasov/redis-cluster-for-tests:latest;
 
    - |
-      docker run -i -t --rm \
-        -p 127.0.0.1:7001:7001 \
-        -p 127.0.0.1:7002:7002 \
-        -p 127.0.0.1:7003:7003 \
-        -p 127.0.0.1:7004:7004 \
-        -p 127.0.0.1:7005:7005 \
-        -p 127.0.0.1:7006:7006 \
-        cheprasov/redis-cluster-for-tests
-
-   - |
       docker run -i -t -d \
         -p 127.0.0.1:6381:6381 \
         -p 127.0.0.1:6382:6382 \
@@ -43,8 +33,18 @@ before_install:
         -p 127.0.0.1:6390:6390 \
         cheprasov/redis-for-tests
 
+   - |
+      docker run -i -t -d \
+        -p 127.0.0.1:7001:7001 \
+        -p 127.0.0.1:7002:7002 \
+        -p 127.0.0.1:7003:7003 \
+        -p 127.0.0.1:7004:7004 \
+        -p 127.0.0.1:7005:7005 \
+        -p 127.0.0.1:7006:7006 \
+        cheprasov/redis-cluster-for-tests
+
    - docker ps;
-   - sleep 2;
+   - sleep 15;
 
 install:
    - composer install
