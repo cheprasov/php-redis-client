@@ -22,7 +22,18 @@ class ConnectionCommandsTest extends \Test\Integration\Version3x2\ConnectionComm
      */
     public function test_swapdb() {
         $Redis = static::$Redis;
+        $this->assertSame(true, $Redis->select(0));
+        $this->assertSame(true, $Redis->set('foo', 'db0'));
+        $this->assertSame(true, $Redis->select(1));
+        $this->assertSame(true, $Redis->set('foo', 'db1'));
+
+        $this->assertSame(true, $Redis->select(0));
+
         $this->assertSame(true, $Redis->swapdb(0, 1));
+        $this->assertSame('db1', $Redis->get('foo'));
+
+        $this->assertSame(true, $Redis->swapdb(0, 1));
+        $this->assertSame('db0', $Redis->get('foo'));
     }
 
 }

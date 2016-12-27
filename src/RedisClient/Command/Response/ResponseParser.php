@@ -164,4 +164,17 @@ class ResponseParser {
         return $clusters;
     }
 
+    /**
+     * @param $bits
+     * @return string
+     */
+    public static function exportBitsAsHex($bits) {
+        $bits = str_split($bits);
+        $result = '';
+        foreach ($bits as $bit) {
+            $result .= '\x'. strtoupper(dechex(ord($bit)));
+        }
+        return $result;
+    }
+
 }

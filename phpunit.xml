@@ -37,10 +37,10 @@
         <const name="TEST_REDIS_SERVER_4x0_2" value="127.0.0.1:6390" />
 
         <const name="TEST_REDIS_SERVER_3x2_CLUSTER_A"  value="127.0.0.1:7001" />
-        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_A1" value="127.0.0.1:7002" />
-        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_B"  value="127.0.0.1:7003" />
-        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_B1" value="127.0.0.1:7004" />
-        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_C"  value="127.0.0.1:7005" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_A1" value="127.0.0.1:7004" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_B"  value="127.0.0.1:7002" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_B1" value="127.0.0.1:7005" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_C"  value="127.0.0.1:7003" />
         <const name="TEST_REDIS_SERVER_3x2_CLUSTER_C1" value="127.0.0.1:7006" />
 
         <const name="TEST_REDIS_SERVER_PASSWORD" value="test-password-123" />

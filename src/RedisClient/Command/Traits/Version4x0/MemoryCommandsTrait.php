@@ -10,6 +10,9 @@
  */
 namespace RedisClient\Command\Traits\Version4x0;
 
+/**
+ * @link http://antirez.com/news/110
+ */
 trait MemoryCommandsTrait {
 
     /**

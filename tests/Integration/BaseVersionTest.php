@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * This file is part of RedisClient.
+ * git: https://github.com/cheprasov/php-redis-client
+ *
+ * (C) Alexander Cheprasov <cheprasov.84@ya.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Test\Integration;
 
 use RedisClient\Client\AbstractRedisClient;
@@ -60,17 +68,18 @@ class BaseVersionTest extends \PHPUnit_Framework_TestCase {
         if (false === strpos(static::class, '\Version')) {
             return null;
         }
-        $test = array_reverse(explode('\\', static::class));
-        $version = str_ireplace(['version'], [''], $test[1]);
+        list($testClass, $testVersion) = array_reverse(explode('\\', static::class));
+        $version = str_ireplace(['version'], [''], $testVersion);
         $class = str_replace('RedisClient2x6', 'RedisClient' . $version, RedisClient2x6::class);
         $servers = self::$servers_map[$class];
 
-        $configs = isset(static::$test_config_map[$test[0]])
-            ? static::$test_config_map[$test[0]]
+        $configs = isset(static::$test_config_map[$testClass])
+            ? static::$test_config_map[$testClass]
             : static::$test_config_map['default'];
 
-        $configs[0]['server'] = $servers[0];
-        $configs[1]['server'] = $servers[1];
+        foreach ($servers as $key => $server) {
+            $configs[$key]['server'] = $server;
+        }
 
         return [
             'class'   => $class,
@@ -83,7 +92,6 @@ class BaseVersionTest extends \PHPUnit_Framework_TestCase {
     /**
      * @return null|AbstractRedisClient|RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0
      */
-
     protected static function getRedisClient($serverId) {
         $testConfig = static::getTestConfig();
         if (!$testConfig) {
@@ -101,24 +109,19 @@ class BaseVersionTest extends \PHPUnit_Framework_TestCase {
 
     public static function tearDownAfterClass() {
         if (static::$Redis) {
+            static::$Redis->select(0);
             static::$Redis->flushall();
             static::$Redis->scriptFlush();
         }
         if (static::$Redis2) {
+            static::$Redis2->select(0);
             static::$Redis2->flushall();
             static::$Redis2->scriptFlush();
         }
     }
 
     protected function setUp() {
-        if (static::$Redis) {
-            static::$Redis->flushall();
-            static::$Redis->scriptFlush();
-        }
-        if (static::$Redis2) {
-            static::$Redis2->flushall();
-            static::$Redis2->scriptFlush();
-        }
+        static::tearDownAfterClass();
     }
 
     public function testSetup() {

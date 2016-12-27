@@ -57,6 +57,13 @@ class ClusterMap {
     }
 
     /**
+     * @return array
+     */
+    public function getClusters() {
+        return $this->clusters;
+    }
+
+    /**
      * @param int $slot
      * @param string $server
      */
