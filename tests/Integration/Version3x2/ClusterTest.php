@@ -8,13 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Integration\Version3x0;
+namespace Test\Integration\Version3x2;
 
-include_once(__DIR__ . '/../BaseVersionTest.php');
+include_once(__DIR__. '/../Version3x0/ClusterTest.php');
 
-class ClusterCommandsTest extends \Test\Integration\BaseVersionTest {
+class ClusterTest extends \Test\Integration\Version3x0\ClusterTest {
 
-    public function testOne() {
-        $this->markTestSkipped();
-    }
 }
