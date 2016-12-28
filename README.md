@@ -23,6 +23,8 @@ RedisClient is a fast, fully-functional and user-friendly client for Redis, opti
 ### Config
 
 ```
+use RedisClient\ClientFactory;
+
 $Redis = ClientFactory::create([
     // Optional. Default = 'tcp://127.0.0.1:6379'. You can use 'unix:///tmp/redis.sock'
     'server' => 'tcp://127.0.0.1:6379',
@@ -49,6 +51,7 @@ require (dirname(__DIR__).'/vendor/autoload.php');
 
 use RedisClient\RedisClient;
 use RedisClient\Client\Version\RedisClient2x6;
+use RedisClient\ClientFactory;
 
 // Example 1. Create new Instance for Redis version 2.8.x with config via factory
 
