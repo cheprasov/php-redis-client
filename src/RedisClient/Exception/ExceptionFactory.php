@@ -25,6 +25,8 @@ class ExceptionFactory {
                 return new AskResponseException($message);
             case 'TRYAGAIN':
                 return new TryAgainResponseException($message);
+            case 'CROSSSLOT':
+                return new CrossSlotResponseException($message);
         }
         return new ErrorResponseException($message);
     }

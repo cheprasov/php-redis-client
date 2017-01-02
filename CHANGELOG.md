@@ -1,8 +1,9 @@
 ## CHANGELOG
 
-### v1.6.0 (2016-12-24)
+### v1.6.0 (2017-01-02)
 - Added support for Redis 4.0 (the Client was tested with Redis 4.0 RC2).
 - Added support for Redis Cluster.
+- Added method **_syncClusterSlotsFromRedisServer**.
 - Added command **SWAPDB**, **UNLINK**, **MEMORY** for Redis >= 4.0
 - Updated command **FLUSHALL**, **FLUSHDB** for Redis >= 4.0
 

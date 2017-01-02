@@ -10,12 +10,16 @@
  */
 namespace RedisClient;
 
-spl_autoload_register(function($class) {
-    if (__NAMESPACE__.'\\' !== substr($class, 0, strlen(__NAMESPACE__.'\\'))) {
-        return;
-    }
-    $classPath = __DIR__ .'/'. str_replace('\\', '/', $class) .'.php';
-    if (is_file($classPath)) {
-        return include $classPath;
-    }
-}, false, true);
+spl_autoload_register(
+    function($class) {
+        if (0 !== strpos($class, __NAMESPACE__ . '\\')) {
+            return;
+        }
+        $classPath = __DIR__ . '/' . str_replace('\\', '/', $class) . '.php';
+        if (is_file($classPath)) {
+            include $classPath;
+        }
+    },
+    false,
+    true
+);

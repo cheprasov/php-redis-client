@@ -11,6 +11,7 @@ RedisClient is a fast, fully-functional and user-friendly client for Redis, opti
 - Support __TCP/IP__ and __UNIX__ sockets.
 - Support __PubSub__ and __Monitor__ functionallity.
 - Support __Pipeline__ and __Transactions__.
+- Support __Redis Cluster__.
 - Support __RAW__ commands as strings `"SET foo bar"` or as arrays `['SET', 'foo', 'bar']`.
 - Connections to Redis are established lazily by the client upon the first command.
 - Easy to use with IDE, client has PHPDocs for all supported versions.
@@ -72,49 +73,50 @@ $Redis = ClientFactory::create([
 ### Create a new instance of RedisClient
 ```php
 <?php
+namespace Examples;
+
 require (dirname(__DIR__).'/vendor/autoload.php');
 // or require (dirname(__DIR__).'/src/autoloader.php');
 
 use RedisClient\RedisClient;
 use RedisClient\Client\Version\RedisClient2x6;
+use RedisClient\ClientFactory;
 
 // Example 1. Create new Instance for Redis version 2.8.x with config via factory
-
 $Redis = ClientFactory::create([
-    'server' => 'tcp://127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
+    'server' => '127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
     'timeout' => 2,
     'version' => '2.8.24'
 ]);
 
-echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL;
-// RedisClient: 2.8
+echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL; // RedisClient: 2.8
 
 
-// Example 2. Create new Instance for Redis version 2.6.x with config
+// Example 2. Create new Instance without config. Client will use default config.
+$Redis = new RedisClient();
+// By default, the client works with the latest stable version of Redis.
+echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL; // RedisClient: 3.2
+echo 'Redis: '. $Redis->info('Server')['redis_version'] . PHP_EOL; // Redis: 3.0.3
 
+
+// Example 3. Create new Instance with config
+// By default, the client works with the latest stable version of Redis.
+$Redis = new RedisClient([
+    'server' => '127.0.0.1:6387', // or 'unix:///tmp/redis.sock'
+    'timeout' => 2
+]);
+
+echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL; // RedisClient: 3.2
+echo 'Redis: '. $Redis->info('Server')['redis_version'] . PHP_EOL; // Redis: 3.2.0
+
+
+// Example 4. Create new Instance for Redis version 2.6.x with config
 $Redis = new RedisClient2x6([
     'server' => 'tcp://127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
     'timeout' => 2
 ]);
 
-echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL;
-// RedisClient: 2.6
-
-
-// Example 3. Create new instance of client without factory
-
-$Redis = new RedisClient([
-    'server' => 'tcp://127.0.0.1:6379', // or 'unix:///tmp/redis.sock'
-    'timeout' => 2
-]);
-
-echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL;
-echo 'Redis: '. $Redis->info('Server')['redis_version'] . PHP_EOL;
-
-// By default, the client works with the latest stable version of Redis.
-// RedisClient: 3.2
-// Redis: 3.2.4
-
+echo 'RedisClient: '. $Redis->getSupportedVersion() . PHP_EOL; // RedisClient: 2.6
 
 ```
 ### Example
@@ -125,7 +127,7 @@ Please, see examples here: https://github.com/cheprasov/php-redis-client/tree/ma
 - [Publish and Subscribe](https://github.com/cheprasov/php-redis-client/tree/master/examples/pubsub.php)
 - [Transactions](https://github.com/cheprasov/php-redis-client/tree/master/examples/transactions.php)
 - [Pipeline](https://github.com/cheprasov/php-redis-client/tree/master/examples/pipeline.php)
-- [Cluster support](https://github.com/cheprasov/php-redis-client/tree/master/examples/cluster.php)
+- [Cluster support](https://github.com/cheprasov/php-redis-client/tree/master/examples/clusters.php)
 - [RAW Commands](https://github.com/cheprasov/php-redis-client/tree/master/examples/raw_commands.php)
 
 ## Installation
@@ -142,12 +144,11 @@ and add dependency to your project:
 
 ## Running tests
 
-1. Use Docker container with Redis for tests https://hub.docker.com/r/cheprasov/redis-for-tests/
-2. To run tests type in console (do not forget run Docker):
-    
+1. Run Docker container with Redis for tests https://hub.docker.com/r/cheprasov/redis-for-tests/
+2. Run Docker container with Redis Cluster for tests https://hub.docker.com/r/cheprasov/redis-cluster-for-tests/
+3. To run tests type in console:
 
     ./vendor/bin/phpunit
-
 
 ## Something doesn't work
 

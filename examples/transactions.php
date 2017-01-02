@@ -11,6 +11,7 @@
 
 /**
  * Transactions
+ * Note. Be careful in use pipeline with Clusters.
  */
 
 namespace Examples;
