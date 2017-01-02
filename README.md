@@ -25,7 +25,7 @@ RedisClient is a fast, fully-functional and user-friendly client for Redis, opti
 ### Config
 
 ```php
-$Redis = ClientFactory::create([
+$config = [
     // Optional. Default = '127.0.0.1:6379'. You can use 'unix:///tmp/redis.sock'
     'server' => '127.0.0.1:6379',
 
@@ -67,7 +67,7 @@ $Redis = ClientFactory::create([
         // Optional. Defatult = 0.25 sec. It is timeout before next attempt on TRYAGAIN error.
         'timeout_on_error_tryagain' => 0.25, // sec
     ]
-]);
+];
 ```
 
 ### Create a new instance of RedisClient
