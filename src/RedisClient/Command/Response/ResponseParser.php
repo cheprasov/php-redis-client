@@ -133,7 +133,7 @@ class ResponseParser {
      * @return int
      */
     public static function parseInteger($response) {
-        return (int) $response;
+        return (int)$response;
     }
 
     /**

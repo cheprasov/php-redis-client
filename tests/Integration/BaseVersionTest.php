@@ -125,9 +125,6 @@ class BaseVersionTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSetup() {
-        if (!static::$Redis) {
-            $this->markTestSkipped();
-        }
         $this->assertTrue(static::$Redis instanceof AbstractRedisClient, 'Can not create RedisClient for test');
     }
 

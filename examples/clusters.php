@@ -95,7 +95,42 @@ $RedisClient = ClientFactory::create([
         ],
     ]
 ]);
-$RedisClient->set('foo', $time = time());
+$RedisClient->set('foo', 'foo-42');
 echo ClusterMap::getSlotByKey('foo') . PHP_EOL; // 12182
-echo $RedisClient->get('foo') . PHP_EOL; // 1483317104
+
+$RedisClient->set('bar', 'bar-42');
+echo ClusterMap::getSlotByKey('bar') . PHP_EOL; // 5061
+
+echo $RedisClient->get('foo') . PHP_EOL; // foo-42
+echo $RedisClient->get('bar') . PHP_EOL; // bar-42
+
+// But, be careful with multi operation for pseudo Clusters,
+print_r($RedisClient->mget(['foo', 'bar'])); // ['foo-42', null]
+print_r($RedisClient->mget(['bar', 'foo'])); // ['bar-42', null]
+
+
+// Example 6. Each connection to Redis Server uses the same config.
+// For example, use can use password for all servers
+$RedisClient = ClientFactory::create([
+    'server' => '127.0.0.1:6382', // Default server for connection
+    'timeout' => 2,
+    'password' => 'test-password-123',
+    'cluster' => [
+        'enabled' => true,
+        'clusters' => [
+            5460  => '127.0.0.1:6382', // slots from 0 to 5460
+            10922 => '127.0.0.1:6384', // slots from 5461 to 10922
+            16383 => '127.0.0.1:6386', // slots from 10923 to 16383
+        ],
+    ]
+]);
+$RedisClient->set('foo', 'foo-43');
+echo ClusterMap::getSlotByKey('foo') . PHP_EOL; // 12182
+
+$RedisClient->set('bar', 'bar-43');
+echo ClusterMap::getSlotByKey('bar') . PHP_EOL; // 5061
+
+echo $RedisClient->get('foo') . PHP_EOL; // foo-42
+echo $RedisClient->get('bar') . PHP_EOL; // bar-42
+
 

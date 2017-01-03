@@ -61,8 +61,4 @@ class ClusterVersionTest extends \PHPUnit_Framework_TestCase {
         return new $class($config);
     }
 
-    public function test_empty() {
-        $this->assertTrue(true);
-    }
-
 }

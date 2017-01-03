@@ -50,7 +50,7 @@ class Parameter {
      * @throws InvalidArgumentException
      */
     public static function aggregate($param) {
-        $param = strtoupper((string) $param);
+        $param = strtoupper((string)$param);
         if (in_array($param, static::$aggregateParams)) {
             return $param;
         }
@@ -94,7 +94,7 @@ class Parameter {
      * @return InvalidArgumentException
      */
     public static function bitOperation($operation) {
-        $operation = strtoupper((string) $operation);
+        $operation = strtoupper((string)$operation);
         if (in_array($operation, static::$bitOperationParams)) {
             return $operation;
         }
@@ -106,7 +106,7 @@ class Parameter {
      * @return int
      */
     public static function bit($bit) {
-        return (int) (bool) $bit;
+        return (int)(bool)$bit;
     }
 
     /**
@@ -120,13 +120,13 @@ class Parameter {
     /**
      * @param int|float|string $param
      * @param int[]|string[] $enum
-     * @return string
+     * @return string|bool
      */
     public static function enum($param, array $enum) {
         if (!in_array($param, $enum)) {
-            //throw new InvalidArgumentException('Incorrect param "'. $param .'" for enum('. implode(', ', $enum) .') ');
+            return false;
         }
-        return (string) $param;
+        return (string)$param;
     }
 
     /**
@@ -161,7 +161,7 @@ class Parameter {
      * @return int
      */
     public static function integer($int) {
-        return (int) $int;
+        return (int)$int;
     }
 
     /**
@@ -169,7 +169,7 @@ class Parameter {
      * @return int[]
      */
     public static function integers($integers) {
-        $integers = (array) $integers;
+        $integers = (array)$integers;
         return array_map('static::integer', $integers);
     }
 
@@ -178,7 +178,7 @@ class Parameter {
      * @return mixed
      */
     public static function key($key) {
-        return (string) $key;
+        return (string)$key;
     }
 
     /**
@@ -186,7 +186,7 @@ class Parameter {
      * @return array
      */
     public static function keys($keys) {
-        $keys = (array) $keys;
+        $keys = (array)$keys;
         return array_map('static::key', $keys);
     }
 
@@ -196,12 +196,12 @@ class Parameter {
      */
     public static function limit($limit) {
         if (is_numeric($limit)) {
-            return [0, (int) $limit];
+            return [0, (int)$limit];
         }
         if (is_array($limit) && isset($limit['count'])) {
             return [
                 empty($limit['offset']) ? 0: (int) $limit['offset'],
-                (int) $limit['count'],
+                (int)$limit['count'],
             ];
         }
         if ($limit && is_string($limit) && preg_match('/^-?\d+\s+-?\d+$/', $limit)) {
@@ -209,10 +209,10 @@ class Parameter {
         }
         if (is_array($limit)) {
             if (isset($limit[0]) && isset($limit[1])) {
-                return [(int) $limit[0], (int) $limit[1]];
+                return [(int)$limit[0], (int)$limit[1]];
             }
             if (isset($limit[0]) && !isset($limit[1])) {
-                return [0, (int) $limit[0]];
+                return [0, (int)$limit[0]];
             }
         }
         throw new InvalidArgumentException('Invalid limit '. $limit);
@@ -255,7 +255,7 @@ class Parameter {
      * @return int
      */
     public static function port($int) {
-        $int = (int) $int;
+        $int = (int)$int;
         if ($int > 0 && $int <= 65535) {
             return $int;
         }
@@ -289,7 +289,7 @@ class Parameter {
      * @return array
      */
     public static function strings($strings) {
-        $strings = (array) $strings;
+        $strings = (array)$strings;
         return array_map('static::string', $strings);
     }
 

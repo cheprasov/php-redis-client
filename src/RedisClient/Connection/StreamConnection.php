@@ -90,8 +90,10 @@ class StreamConnection implements ConnectionInterface {
      */
     protected function getResource() {
         if (!$this->resource) {
-            if (!$this->resource = stream_socket_client($this->server)) {
-                throw new ConnectionException('Unable to connect to '. $this->server);
+            $errno = null;
+            $errstr = null;
+            if (!$this->resource = stream_socket_client($this->server, $errno, $errstr)) {
+                throw new ConnectionException('Unable to connect to '. $this->server . ' ('. $errstr .')');
             }
             if (isset($this->timeout)) {
                 stream_set_timeout($this->resource, 0, $this->timeout);
