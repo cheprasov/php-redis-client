@@ -44,7 +44,7 @@ before_install:
         cheprasov/redis-cluster-for-tests
 
    - docker ps;
-   - sleep 15;
+   - sleep 5;
 
 install:
    - composer install

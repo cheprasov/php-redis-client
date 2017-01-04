@@ -11,14 +11,10 @@
 namespace Test\Unit\Client;
 
 use RedisClient\Client\AbstractRedisClient;
-use RedisClient\Exception\EmptyResponseException;
-use RedisClient\Exception\MovedResponseException;
 use RedisClient\RedisClient;
-use Test\Unit\GlobalFunctionMock;
 
 /**
  * @see AbstractRedisClient
- * @runTestsInSeparateProcesses
  */
 class AbstractRedisClientTest extends \PHPUnit_Framework_TestCase {
 
@@ -100,65 +96,4 @@ class AbstractRedisClientTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame($expect, $Method->invoke($Client, $command, $params));
     }
 
-    protected function mockStream() {
-        include_once(__DIR__ . '/../GlobalFunctionMock.php');
-        GlobalFunctionMock::mockFunction('RedisClient\Connection', 'stream_socket_client', function() {return true;});
-        GlobalFunctionMock::mockFunction('RedisClient\Connection', 'stream_set_timeout', function() {return true;});
-        GlobalFunctionMock::mockFunction('RedisClient\Connection', 'fwrite', function($h, $m, $c) {return $c;});
-        GlobalFunctionMock::mockFunction('RedisClient\Connection', 'fgets', function() {return '';});
-        GlobalFunctionMock::mockFunction('RedisClient\Connection', 'fread', function() {return '';});
-        GlobalFunctionMock::mockFunction('RedisClient\Connection', 'fclose', function() {return true;});
-    }
-
-    public function test_mockStream() {
-        $this->mockStream();
-        GlobalFunctionMock::mockFunction('RedisClient\Connection', 'fgets', function() {
-            return "+TEST\r\n";
-        });
-
-        $Redis = new RedisClient();
-        $this->assertSame('TEST', $Redis->ping());
-        unset($Redis);
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('stream_socket_client'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('stream_set_timeout'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('fwrite'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('fgets'));
-        $this->assertSame(0, GlobalFunctionMock::getCountCalls('fread'));
-        $this->assertSame(0, GlobalFunctionMock::getCountCalls('fclose'));
-    }
-
-    public function test_stream() {
-        $Redis = new RedisClient();
-        $this->assertSame('PONG', $Redis->ping());
-    }
-
-    public function test_MovedErrorResponse() {
-        $this->mockStream();
-        GlobalFunctionMock::mockFunction('RedisClient\Connection', 'fwrite', function($h, $m, $c) {
-            $this->assertSame(true, $h);
-            $this->assertSame("*2\r\n$3\r\nGET\r\n$3\r\nkey\r\n", $m);
-            $this->assertSame(22, $c);
-            return $c;
-        });
-        GlobalFunctionMock::mockFunction('RedisClient\Connection', 'fgets', function() {
-            return "-MOVED 42 server\r\n";
-        });
-
-        $Redis = new RedisClient();
-        try {
-            $Redis->get('key');
-            $this->assertTrue(false, 'Expect MovedResponseException');
-        } catch (\Exception $Ex) {
-            /** @var MovedResponseException $Ex*/
-            $this->assertSame(true, $Ex instanceof MovedResponseException);
-            $this->assertSame(42, $Ex->getSlot());
-            $this->assertSame('server', $Ex->getServer());
-        }
-
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('stream_socket_client'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('stream_set_timeout'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('fwrite'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('fgets'));
-        $this->assertSame(0, GlobalFunctionMock::getCountCalls('fread'));
-    }
 }

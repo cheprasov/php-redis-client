@@ -14,24 +14,40 @@ class GlobalFunctionMock {
 
     protected static $mockedFunctions = [];
 
+    public static function resetMockFunctions() {
+        static::$mockedFunctions = [];
+    }
+
     /**
-     * @param string $namespace
-     * @param string $name
+     * @param string $fullname
      * @param callable $function
      */
-    public static function mockFunction($namespace, $name, $function) {
-        if (empty(static::$mockedFunctions[$name])) {
+    public static function mockFunction($fullname, $function) {
+        if (false !== strpos($fullname, '::')) {
+            list($namespace, $name) = explode('::', $fullname, 2);
+        } else {
+            $namespace = '';
+            $name = $fullname;
+        }
+        if (empty(static::$mockedFunctions[$fullname])) {
             $eval = [];
             if ($namespace) {
                 $eval[] = "namespace {$namespace};";
             }
             $eval[] = "function {$name}(){
-                return call_user_func_array('\\Test\\Unit\\GlobalFunctionMock::{$name}', func_get_args());
+                return \\Test\\Unit\\GlobalFunctionMock::invokeMockedFunction(
+                    '{$fullname}',
+                    '{$name}',
+                    '{$namespace}',
+                    func_get_args()
+                );
             };";
             eval(implode("\n", $eval));
         }
-        static::$mockedFunctions[$name] = [
+        static::$mockedFunctions[$fullname] = [
+            'fullname' => $fullname,
             'name' => $name,
+            'namespace' => $namespace,
             'called' => 0,
             'function' => $function,
         ];
@@ -49,21 +65,25 @@ class GlobalFunctionMock {
     }
 
     /**
-     * @param string $name
-     * @param array $args
+     * @param $fullname
+     * @param $name
+     * @param $namespace
+     * @param $args
      * @return mixed
      * @throws \Exception
      */
-    public static function __callStatic($name, $args) {
-        if (empty(static::$mockedFunctions[$name])) {
-            if (is_callable($name)) {
-                return call_user_func_array($name, $args);
+    public static function invokeMockedFunction($fullname, $name, $namespace, $args) {
+        if (empty(static::$mockedFunctions[$fullname])) {
+            if (is_callable('\\' . $name)) {
+                $e = call_user_func_array('\\' . $name, $args);
+                var_dump($e);exit;
+                return $e;
             }
             throw new \Exception("Can not to call function '{$name}'");
         }
-        $function = static::$mockedFunctions[$name]['function'];
+        $function = static::$mockedFunctions[$fullname]['function'];
         $result = call_user_func_array($function, $args);
-        static::$mockedFunctions[$name]['called'] += 1;
+        static::$mockedFunctions[$fullname]['called'] += 1;
         return $result;
     }
 
