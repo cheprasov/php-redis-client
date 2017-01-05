@@ -14,10 +14,6 @@ class GlobalFunctionMock {
 
     protected static $mockedFunctions = [];
 
-    public static function resetMockFunctions() {
-        static::$mockedFunctions = [];
-    }
-
     /**
      * @param string $fullname
      * @param callable $function

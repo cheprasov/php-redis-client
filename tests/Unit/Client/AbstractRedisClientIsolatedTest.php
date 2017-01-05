@@ -158,4 +158,70 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fgets'));
         $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fread'));
     }
+
+    public function test_ClusterFullAskErrorResponse() {
+        GlobalFunctionMock::mockFunction('RedisClient\Connection::fwrite', function($h, $m, $c) {
+            static $data = [
+                [
+                    'tcp://127.0.0.1:7003',
+                    "*2\r\n$3\r\nGET\r\n$3\r\nfoo\r\n",
+                ],
+                [
+                    'tcp://127.0.0.1:7002',
+                    "*1\r\n$6\r\nASKING\r\n",
+                ],
+                [
+                    'tcp://127.0.0.1:7002',
+                    "*2\r\n$3\r\nGET\r\n$3\r\nfoo\r\n",
+                ],
+                [
+                    'tcp://127.0.0.1:7003',
+                    "*2\r\n$3\r\nGET\r\n$3\r\nfoo\r\n",
+                ],
+            ];
+            $datum = array_shift($data);
+            $this->assertSame($datum[0], $h);
+            $this->assertSame($datum[1], $m);
+            return $c;
+        });
+
+        GlobalFunctionMock::mockFunction('RedisClient\Connection::fgets', function() {
+            static $data = [
+                "-ASK 12182 127.0.0.1:7002\r\n",
+                "+OK\r\n",
+                "\$3\r\n",
+                "\$7\r\n",
+            ];
+            return array_shift($data);
+        });
+
+        GlobalFunctionMock::mockFunction('RedisClient\Connection::fread', function() {
+            static $data = [
+                "bar\r\n",
+                "bar-bar\r\n"
+            ];
+            return array_shift($data);
+        });
+
+        $Redis = new RedisClient([
+            'server' => '127.0.0.1:7001',
+            'cluster' => [
+                'enabled' => true,
+                'clusters' => [
+                    5460  => '127.0.0.1:7001',
+                    10922 => '127.0.0.1:7002',
+                    16383 => '127.0.0.1:7003',
+                ]
+            ]
+        ]);
+
+        $this->assertSame('bar', $Redis->get('foo'));
+        $this->assertSame('bar-bar', $Redis->get('foo'));
+
+        $this->assertSame(2, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_socket_client'));
+        $this->assertSame(2, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_set_timeout'));
+        $this->assertSame(4, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fwrite'));
+        $this->assertSame(4, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fgets'));
+        $this->assertSame(2, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fread'));
+    }
 }

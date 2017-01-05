@@ -170,7 +170,9 @@ abstract class AbstractRedisClient {
                 return $this->executeProtocolCommand($Protocol, $command, $params);
             }
             if ($response instanceof AskResponseException) {
-                $TempRedisProtocol = ProtocolFactory::createRedisProtocol($this, $this->getConfig());
+                $config = $this->getConfig();
+                $config['server'] = $response->getServer();
+                $TempRedisProtocol = ProtocolFactory::createRedisProtocol($this, $config);
                 $TempRedisProtocol->send(['ASKING']);
                 return $this->executeProtocolCommand($TempRedisProtocol, $command, $params);
             }
