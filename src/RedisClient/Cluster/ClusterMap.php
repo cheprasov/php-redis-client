@@ -120,6 +120,17 @@ class ClusterMap {
     }
 
     /**
+     * @param ProtocolInterface $Protocol
+     */
+    public function addProtocol(ProtocolInterface $Protocol) {
+        $server = $Protocol->getConnection()->getServer();
+        if (0 === strpos($server, 'tcp://')) {
+            $server = substr($server, 6);
+        }
+        $this->protocols[$server] = $Protocol;
+    }
+
+    /**
      * @param $key
      * @return ProtocolInterface|null
      */

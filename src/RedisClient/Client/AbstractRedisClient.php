@@ -108,6 +108,9 @@ abstract class AbstractRedisClient {
     protected function getProtocol() {
         if (!$this->Protocol) {
             $this->Protocol = ProtocolFactory::createRedisProtocol($this, $this->getConfig());
+            if ($this->ClusterMap) {
+                $this->ClusterMap->addProtocol($this->Protocol);
+            }
         }
         return $this->Protocol;
     }
@@ -198,7 +201,7 @@ abstract class AbstractRedisClient {
         if (isset($keys) && $this->ClusterMap) {
             $key = is_array($keys) ? $keys[0] : $keys;
             if ($Protocol = $this->ClusterMap->getProtocolByKey($key)) {
-                $this->Protocol = $Protocol;
+                return $this->Protocol = $Protocol;
             }
         }
         return $this->getProtocol();
