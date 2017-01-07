@@ -53,7 +53,7 @@ class Crc16 {
      */
     public static function hash($value) {
         $value = (string)$value;
-        $crc = 0x0000;
+        $crc = 0;
         for ($i = 0, $len = strlen($value); $i < $len; ++$i) {
             $crc = 0xFFFF & (self::$crc16tab[($crc >> 8) ^ ord($value[$i])] ^ ($crc << 8));
         }
