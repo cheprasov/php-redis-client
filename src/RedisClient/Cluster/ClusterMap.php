@@ -103,7 +103,7 @@ class ClusterMap {
                 return $server;
             }
         }
-        return null;
+        return isset($server) ? $server : null;
     }
 
     /**

@@ -10,6 +10,8 @@
  */
 namespace RedisClient\Command\Traits\Version2x6;
 
+use RedisClient\Exception\InvalidArgumentException;
+
 /**
  * PubSub Commands
  * @link http://redis.io/commands#pubsub
@@ -25,10 +27,11 @@ trait PubSubCommandsTrait {
      * @param string|string[] $patterns
      * @param \Closure|string|array $callback
      * @return string[]
+     * @throws InvalidArgumentException
      */
     public function psubscribe($patterns, $callback) {
         if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Function $callback is not callable');
+            throw new InvalidArgumentException('Function $callback is not callable');
         }
         return $this->subscribeCommand(['PSUBSCRIBE'], ['PUNSUBSCRIBE'], (array)$patterns, $callback);
     }
@@ -70,10 +73,11 @@ trait PubSubCommandsTrait {
      * @param string|string[] $channels
      * @param \Closure|string|array $callback
      * @return string[]
+     * @throws InvalidArgumentException
      */
     public function subscribe($channels, $callback) {
         if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Function $callback is not callable');
+            throw new InvalidArgumentException('Function $callback is not callable');
         }
         return $this->subscribeCommand(['SUBSCRIBE'], ['UNSUBSCRIBE'], (array)$channels, $callback);
     }

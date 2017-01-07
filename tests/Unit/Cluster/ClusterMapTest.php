@@ -131,8 +131,8 @@ class ClusterMapTest extends \PHPUnit_Framework_TestCase {
             [490, 'server-5'],
             [500, 'server-5'],
 
-            [501, null],
-            [600, null],
+            [501, 'server-5'],
+            [600, 'server-5'],
         ];
     }
 
@@ -307,6 +307,17 @@ class ClusterMapTest extends \PHPUnit_Framework_TestCase {
                 150 => 'server-1',
                 200 => 'server-2',
                 500 => 'server-3',
+            ],
+            $Property->getValue($ClusterMap)
+        );
+
+        $ClusterMap->addCluster(600, 'server-3');
+        $this->assertSame(
+            [
+                10  => 'server-0',
+                150 => 'server-1',
+                200 => 'server-2',
+                600 => 'server-3',
             ],
             $Property->getValue($ClusterMap)
         );

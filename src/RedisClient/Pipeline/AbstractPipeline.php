@@ -11,6 +11,7 @@
 namespace RedisClient\Pipeline;
 
 use RedisClient\Command\Response\ResponseParser;
+use RedisClient\Exception\CommandNotFoundException;
 use RedisClient\Exception\ErrorException;
 
 abstract class AbstractPipeline implements PipelineInterface {
@@ -121,7 +122,7 @@ abstract class AbstractPipeline implements PipelineInterface {
         if ($method = $this->getMethodNameForReservedWord($name)) {
             return call_user_func_array([$this, $method], $arguments);
         }
-        throw new \Exception('Call to undefined method '. static::class. '::'. $name);
+        throw new CommandNotFoundException('Call to undefined method '. static::class. '::'. $name);
     }
 
 }

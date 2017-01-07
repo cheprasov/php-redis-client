@@ -84,6 +84,7 @@ class ClientFactory {
      * @param string $version
      * @param null|array $config
      * @return RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0
+     * @throws InvalidArgumentException
      */
     public static function createClientByVersion($version, $config = null) {
         list($major, $minor, $patch) = explode('.', $version .'.0.0');
@@ -100,7 +101,7 @@ class ClientFactory {
             }
         }
         if (empty($class)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'RedisClient does not support Redis version '. $version .'. Please, use version '. end($versions)
             );
         }

@@ -10,7 +10,7 @@
  */
 namespace RedisClient\Command\Parameter;
 
-use InvalidArgumentException;
+use RedisClient\Exception\InvalidArgumentException;
 
 class Parameter {
 

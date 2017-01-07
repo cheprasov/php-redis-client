@@ -20,6 +20,11 @@ interface ProtocolInterface {
     public function setConnection(ConnectionInterface $Connection);
 
     /**
+     * @return ConnectionInterface $Connection
+     */
+    public function getConnection();
+
+    /**
      * @param string $command
      * @return mixed
      */

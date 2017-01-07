@@ -10,8 +10,8 @@
  */
 namespace RedisClient\Command\Traits\Version2x6;
 
-use InvalidArgumentException;
 use RedisClient\Command\Parameter\Parameter;
+use RedisClient\Exception\InvalidArgumentException;
 
 /**
  * Strings Commands

@@ -13,7 +13,9 @@ namespace RedisClient\Client;
 use RedisClient\Cluster\ClusterMap;
 use RedisClient\Command\Response\ResponseParser;
 use RedisClient\Exception\AskResponseException;
+use RedisClient\Exception\CommandNotFoundException;
 use RedisClient\Exception\ErrorResponseException;
+use RedisClient\Exception\InvalidArgumentException;
 use RedisClient\Exception\MovedResponseException;
 use RedisClient\Exception\TryAgainResponseException;
 use RedisClient\Pipeline\Pipeline;
@@ -166,8 +168,8 @@ abstract class AbstractRedisClient {
                 } else {
                     $this->ClusterMap->addCluster($response->getSlot(), $response->getServer());
                 }
-                $Protocol = $this->ClusterMap->getProtocolByServer($response->getServer());
-                return $this->executeProtocolCommand($Protocol, $command, $params);
+                $this->Protocol = $this->ClusterMap->getProtocolByServer($response->getServer());
+                return $this->executeProtocolCommand($this->Protocol, $command, $params);
             }
             if ($response instanceof AskResponseException) {
                 $config = $this->getConfig();
@@ -251,7 +253,7 @@ abstract class AbstractRedisClient {
     /**
      * @param null|Pipeline|\Closure $Pipeline
      * @return mixed|Pipeline
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function pipeline($Pipeline = null) {
         if (!$Pipeline) {
@@ -263,7 +265,7 @@ abstract class AbstractRedisClient {
         if ($Pipeline instanceof PipelineInterface) {
             return $this->executePipeline($Pipeline);
         }
-        throw new \InvalidArgumentException();
+        throw new InvalidArgumentException();
     }
 
     /**
@@ -342,7 +344,7 @@ abstract class AbstractRedisClient {
         if ($method = $this->getMethodNameForReservedWord($name)) {
             return call_user_func_array([$this, $method], $arguments);
         }
-        throw new \Exception('Call to undefined method '. static::class. '::'. $name);
+        throw new CommandNotFoundException('Call to undefined method '. static::class. '::'. $name);
     }
 
 }

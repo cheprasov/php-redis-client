@@ -141,12 +141,12 @@ class ClusterTest extends \Test\Integration\ClusterVersionTest {
         $Redis->set('foo', 'bar');
         $this->assertSame([12182 => '127.0.0.1:7003'], $ClusterMap->getClusters());
         $Redis->set('foo1', 'bar');
-        $this->assertSame([13431 => '127.0.0.1:7003'], $ClusterMap->getClusters());
+        $this->assertSame([12182 => '127.0.0.1:7003'], $ClusterMap->getClusters());
         $Redis->set('foo2', 'bar');
         $this->assertSame(
             [
                 1044  => '127.0.0.1:7001',
-                13431 => '127.0.0.1:7003'
+                12182 => '127.0.0.1:7003'
             ],
             $ClusterMap->getClusters()
         );
