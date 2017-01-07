@@ -1,7 +1,7 @@
 {
   "name": "cheprasov/php-redis-client",
   "version": "1.6.0",
-  "description": "Php client for Redis. It is a fast, fully-functional and user-friendly client for Redis, optimized for performance. RedisClient supports the latest versions of Redis starting from 2.6 to 3.2",
+  "description": "Php client for Redis. It is a fast, fully-functional and user-friendly client for Redis, optimized for performance. RedisClient supports the latest versions of Redis starting from 2.6 to 4.0",
   "homepage": "http://github.com/cheprasov/php-redis-client",
   "minimum-stability": "stable",
   "license": "MIT",
