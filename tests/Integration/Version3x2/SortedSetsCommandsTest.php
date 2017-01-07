@@ -12,24 +12,6 @@ namespace Test\Integration\Version3x2;
 
 include_once(__DIR__. '/../Version3x0/SortedSetsCommandsTest.php');
 
-use RedisClient\Client\Version\RedisClient3x2;
-use Test\Integration\Version3x0\SortedSetsCommandsTest as SortedSetsCommandsTestVersion3x0;
-
-/**
- * @see \RedisClient\Command\Traits\Version3x2\SortedSetsCommandsTrait
- */
-class SortedSetsCommandsTest extends SortedSetsCommandsTestVersion3x0 {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x2_1;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient3x2([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
+class SortedSetsCommandsTest extends \Test\Integration\Version3x0\SortedSetsCommandsTest {
 
 }

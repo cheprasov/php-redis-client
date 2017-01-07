@@ -18,6 +18,11 @@ interface PipelineInterface {
     public function __construct(\Closure $Closure = null);
 
     /**
+     * @return string[]
+     */
+    public function getKeys();
+
+    /**
      * @return array[]
      */
     public function getStructure();

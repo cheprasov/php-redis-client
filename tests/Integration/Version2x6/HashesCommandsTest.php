@@ -10,42 +10,19 @@
  */
 namespace Test\Integration\Version2x6;
 
-use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Exception\ErrorResponseException;
+
+include_once(__DIR__ . '/../BaseVersionTest.php');
 
 /**
  * @see \RedisClient\Command\Traits\Version2x6\HashesCommandsTrait
  */
-class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;
-
-    /**
-     * @var RedisClient2x6
-     */
-    protected static $Redis;
+class HashesCommandsTest extends \Test\Integration\BaseVersionTest {
 
     /**
      * @var array
      */
     protected static $fields;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient2x6([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function tearDownAfterClass() {
-        static::$Redis->flushall();
-    }
 
     /**
      * @inheritdoc
@@ -327,7 +304,7 @@ class HashesCommandsTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(['42'], $Redis->hmget('hash', ['integer']));
         $this->assertSame(['1', ''], $Redis->hmget('hash', ['true', 'false']));
         $this->assertSame(
-            ['3.14159265', '5.0e3', '', '', 'empty',],
+            ['3.14159265', '5.0e3', '', '', 'empty'],
             $Redis->hmget('hash', ['float', 'e', 'null', 'empty', ''])
         );
         $this->assertEquals(array_values(static::$fields), $Redis->hmget('hash', array_keys(static::$fields)));

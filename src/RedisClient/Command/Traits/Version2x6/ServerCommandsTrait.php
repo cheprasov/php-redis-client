@@ -50,8 +50,7 @@ trait ServerCommandsTrait {
      * @return string|null The connection name, or a null bulk reply if no name is set.
      */
     public function clientGetname() {
-        // todo: check
-        return $this->returnCommand(['CLIENT', 'GETNAME'], []);
+        return $this->returnCommand(['CLIENT', 'GETNAME']);
     }
 
     /**
@@ -92,7 +91,7 @@ trait ServerCommandsTrait {
             $params[] = 'SKIPME';
             $params[] = $skipme ? 'yes' : 'no';
         }
-        return $this->returnCommand(['CLIENT', 'KILL'], $params);
+        return $this->returnCommand(['CLIENT', 'KILL'], null, $params);
     }
 
     /**
@@ -104,7 +103,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function clientList() {
-        return $this->returnCommand(['CLIENT', 'LIST'], null, ResponseParser::PARSE_CLIENT_LIST);
+        return $this->returnCommand(['CLIENT', 'LIST'], null, null, ResponseParser::PARSE_CLIENT_LIST);
     }
 
     /**
@@ -117,7 +116,7 @@ trait ServerCommandsTrait {
      * @param bool True if the connection name was successfully set.
      */
     public function clientSetname($connectionName) {
-        return $this->returnCommand(['CLIENT', 'SETNAME'], [$connectionName]);
+        return $this->returnCommand(['CLIENT', 'SETNAME'], null, [$connectionName]);
     }
 
     /**
@@ -129,7 +128,7 @@ trait ServerCommandsTrait {
      * @return array
      */
     public function configGet($parameter) {
-        return $this->returnCommand(['CONFIG', 'GET'], [$parameter], ResponseParser::PARSE_ASSOC_ARRAY);
+        return $this->returnCommand(['CONFIG', 'GET'], null, [$parameter], ResponseParser::PARSE_ASSOC_ARRAY);
     }
 
     /**
@@ -154,7 +153,7 @@ trait ServerCommandsTrait {
      * @return bool True when the configuration was set properly. Otherwise an error is returned.
      */
     public function configSet($parameter, $value) {
-        return $this->returnCommand(['CONFIG', 'SET'], [$parameter, $value]);
+        return $this->returnCommand(['CONFIG', 'SET'], null, [$parameter, $value]);
     }
 
     /**
@@ -177,7 +176,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function debugObject($key) {
-        return $this->returnCommand(['DEBUG', 'OBJECT'], [$key]);
+        return $this->returnCommand(['DEBUG', 'OBJECT'], $key, [$key]);
     }
 
     /**
@@ -222,7 +221,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function info($section = null) {
-        return $this->returnCommand(['INFO'], $section ? [$section] : null, ResponseParser::PARSE_INFO);
+        return $this->returnCommand(['INFO'], null, $section ? [$section] : null, ResponseParser::PARSE_INFO);
     }
 
     /**
@@ -267,7 +266,7 @@ trait ServerCommandsTrait {
      * @param string|null $save NOSAVE or SAVE
      */
     public function shutdown($save) {
-        return $this->returnCommand(['SHUTDOWN'], $save ? [$save] : null);
+        return $this->returnCommand(['SHUTDOWN'], null, $save ? [$save] : null);
     }
 
     /**
@@ -280,7 +279,7 @@ trait ServerCommandsTrait {
      * @return bool
      */
     public function slaveof($host, $port) {
-        return $this->returnCommand(['SLAVEOF'], [$host, $port]);
+        return $this->returnCommand(['SLAVEOF'], null, [$host, $port]);
     }
 
     /**
@@ -297,7 +296,7 @@ trait ServerCommandsTrait {
         if (isset($argument)) {
             $params[] = $argument;
         }
-        return $this->returnCommand(['SLOWLOG'], $params);
+        return $this->returnCommand(['SLOWLOG'], null, $params);
     }
 
     /**
@@ -318,7 +317,7 @@ trait ServerCommandsTrait {
      * @return string
      */
     public function time() {
-        return $this->returnCommand(['TIME'], null, ResponseParser::PARSE_TIME);
+        return $this->returnCommand(['TIME'], null, null, ResponseParser::PARSE_TIME);
     }
 
 }

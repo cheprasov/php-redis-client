@@ -11,6 +11,7 @@
 namespace RedisClient\Pipeline;
 
 use RedisClient\Command\Response\ResponseParser;
+use RedisClient\Exception\CommandNotFoundException;
 use RedisClient\Exception\ErrorException;
 
 abstract class AbstractPipeline implements PipelineInterface {
@@ -19,6 +20,11 @@ abstract class AbstractPipeline implements PipelineInterface {
      * @var array[]
      */
     protected $commandLines = [];
+
+    /**
+     * @var string
+     */
+    protected $keys = [];
 
     /**
      * @param \Closure|null $Closure
@@ -30,11 +36,34 @@ abstract class AbstractPipeline implements PipelineInterface {
     }
 
     /**
+     * @param string|string[] $keys
+     */
+    protected function addKeys($keys) {
+        if (is_array($keys)) {
+            foreach ($keys as $key) {
+                $this->keys[$key] = $key;
+            }
+        } else {
+            $this->keys[$keys] = $keys;
+        }
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getKeys() {
+        return array_values($this->keys);
+    }
+
+    /**
      * @inheritdoc
      * @return $this
      */
-    protected function returnCommand(array $command, array $params = null, $parserId = null) {
+    protected function returnCommand(array $command, $keys = null, array $params = null, $parserId = null) {
         $this->commandLines[] = [$command, $params, $parserId];
+        if ($keys) {
+            $this->addKeys($keys);
+        }
         return $this;
     }
 
@@ -93,7 +122,7 @@ abstract class AbstractPipeline implements PipelineInterface {
         if ($method = $this->getMethodNameForReservedWord($name)) {
             return call_user_func_array([$this, $method], $arguments);
         }
-        throw new \Exception('Call to undefined method '. static::class. '::'. $name);
+        throw new CommandNotFoundException('Call to undefined method '. static::class. '::'. $name);
     }
 
 }

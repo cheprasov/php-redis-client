@@ -10,36 +10,12 @@
  */
 namespace Test\Integration\Version2x8;
 
-use RedisClient\Client\Version\RedisClient2x8;
+include_once(__DIR__ . '/../BaseVersionTest.php');
 
 /**
  * @see \RedisClient\Command\Traits\Version2x8\LatencyCommandsTrait
  */
-class LatencyCommandsTest extends \PHPUnit_Framework_TestCase {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x8_1;
-
-    /**
-     * @var RedisClient2x8
-     */
-    protected static $Redis;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient2x8([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setUp() {
-        static::$Redis->flushall();
-    }
+class LatencyCommandsTest extends \Test\Integration\BaseVersionTest {
 
     /**
      * @see \RedisClient\Command\Traits\Version2x8\LatencyCommandsTrait::latencyLatest

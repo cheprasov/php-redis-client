@@ -27,7 +27,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was successful. Otherwise an error is returned.
      */
     public function clusterAddslots($slots) {
-        return $this->returnCommand(['CLUSTER', 'ADDSLOTS'], (array) $slots);
+        return $this->returnCommand(['CLUSTER', 'ADDSLOTS'], null, (array)$slots);
     }
 
     /**
@@ -40,7 +40,7 @@ trait ClusterCommandsTrait {
      * @return int The number of active failure reports for the node.
      */
     public function clusterCountFailureReports($nodeId) {
-        return $this->returnCommand(['CLUSTER', 'COUNT-FAILURE-REPORTS'], [$nodeId]);
+        return $this->returnCommand(['CLUSTER', 'COUNT-FAILURE-REPORTS'], null, [$nodeId]);
     }
 
     /**
@@ -53,7 +53,7 @@ trait ClusterCommandsTrait {
      * @return int
      */
     public function clusterCountkeysinslot($slot) {
-        return $this->returnCommand(['CLUSTER', 'COUNTKEYSINSLOT'], [$slot]);
+        return $this->returnCommand(['CLUSTER', 'COUNTKEYSINSLOT'], null, [$slot]);
     }
 
     /**
@@ -66,7 +66,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was successful. Otherwise an error is returned.
      */
     public function clusterDelslots($slots) {
-        return $this->returnCommand(['CLUSTER', 'DELSLOTS'], (array) $slots);
+        return $this->returnCommand(['CLUSTER', 'DELSLOTS'], null, (array)$slots);
     }
 
     /**
@@ -79,7 +79,7 @@ trait ClusterCommandsTrait {
      * @return
      */
     public function clusterFailover($option = null) {
-        return $this->returnCommand(['CLUSTER', 'FAILOVER'], $option ? [$option] : null);
+        return $this->returnCommand(['CLUSTER', 'FAILOVER'], null, $option ? [$option] : null);
     }
 
     /**
@@ -92,7 +92,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was executed successfully, otherwise an error is returned.
      */
     public function clusterForget($nodeId) {
-        return $this->returnCommand(['CLUSTER', 'FORGET'], [$nodeId]);
+        return $this->returnCommand(['CLUSTER', 'FORGET'], null, [$nodeId]);
     }
 
     /**
@@ -106,7 +106,7 @@ trait ClusterCommandsTrait {
      * @return array From 0 to count key names in a Redis array reply.
      */
     public function clusterGetkeysinslot($slot, $count) {
-        return $this->returnCommand(['CLUSTER', 'GETKEYSINSLOT'], [$slot, $count]);
+        return $this->returnCommand(['CLUSTER', 'GETKEYSINSLOT'], null, [$slot, $count]);
     }
 
     /**
@@ -132,7 +132,7 @@ trait ClusterCommandsTrait {
      * @return int The hash slot number.
      */
     public function clusterKeyslot($key) {
-        return $this->returnCommand(['CLUSTER', 'KEYSLOT'], [$key]);
+        return $this->returnCommand(['CLUSTER', 'KEYSLOT'], $key, [$key]);
     }
 
     /**
@@ -147,7 +147,7 @@ trait ClusterCommandsTrait {
      * If the address or port specified are invalid an error is returned.
      */
     public function clusterMeet($ip, $port) {
-        return $this->returnCommand(['CLUSTER', 'MEET'], [$ip, $port]);
+        return $this->returnCommand(['CLUSTER', 'MEET'], null, [$ip, $port]);
     }
 
     /**
@@ -172,7 +172,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was executed successfully, otherwise an error is returned.
      */
     public function clusterReplicate($nodeId) {
-        return $this->returnCommand(['CLUSTER', 'REPLICATE'], [$nodeId]);
+        return $this->returnCommand(['CLUSTER', 'REPLICATE'], null, [$nodeId]);
     }
 
     /**
@@ -186,7 +186,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was successful. Otherwise an error is returned.
      */
     public function clusterReset($option = null) {
-        return $this->returnCommand(['CLUSTER', 'RESET'], $option ? [$option] : null);
+        return $this->returnCommand(['CLUSTER', 'RESET'], null, $option ? [$option] : null);
     }
 
     /**
@@ -211,7 +211,7 @@ trait ClusterCommandsTrait {
      * @return bool True if the command was executed successfully, otherwise an error is returned.
      */
     public function clusterSetConfigEpoch($config) {
-        return $this->returnCommand(['CLUSTER', 'SET-CONFIG-EPOCH'], [$config]);
+        return $this->returnCommand(['CLUSTER', 'SET-CONFIG-EPOCH'], null, [$config]);
     }
 
     /**
@@ -230,7 +230,7 @@ trait ClusterCommandsTrait {
         if (isset($nodeId)) {
             $params[] = $nodeId;
         }
-        return $this->returnCommand(['CLUSTER', 'SETSLOT'], $params);
+        return $this->returnCommand(['CLUSTER', 'SETSLOT'], null, $params);
     }
 
     /**
@@ -243,7 +243,7 @@ trait ClusterCommandsTrait {
      * @return string The serialized cluster configuration.
      */
     public function clusterSlaves($nodeId) {
-        return $this->returnCommand(['CLUSTER', 'SLAVES'], [$nodeId]);
+        return $this->returnCommand(['CLUSTER', 'SLAVES'], null, [$nodeId]);
     }
 
     /**

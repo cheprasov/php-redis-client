@@ -27,15 +27,13 @@ $Redis = new RedisClient();
 // <executeRaw> is better way to use raw commands than <executeRawString>
 
 $Redis->executeRaw(['SET', 'foo', 'bar']);
-echo 'result: '. $Redis->executeRaw(['GET', 'foo']) .PHP_EOL;
-// bar
+echo 'result: '. $Redis->executeRaw(['GET', 'foo']) .PHP_EOL; // bar
 
-// Example s. As string by <executeRawString>
+// Example 2. As string by <executeRawString>
+// It is better to use executeRaw from example 1.
 $Redis->executeRawString('SET foo bar');
-echo 'result: '. $Redis->executeRawString('GET foo') .PHP_EOL;
-// bar
+echo 'result: '. $Redis->executeRawString('GET foo') .PHP_EOL; // bar
 
 // You can use quotes for keys and arguments
 $Redis->executeRawString('SET "key with spaces" "or value with spaces"');
-echo 'result: '. $Redis->executeRawString('GET "key with spaces"') .PHP_EOL;
-// or value with spaces
+echo 'result: '. $Redis->executeRawString('GET "key with spaces"') .PHP_EOL; // or value with spaces

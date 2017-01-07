@@ -11,6 +11,7 @@
 
 /**
  * Transactions
+ * Note. Be careful in use transactions with Clusters. Try to use pipeline for it.
  */
 
 namespace Examples;

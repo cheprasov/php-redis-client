@@ -12,24 +12,6 @@ namespace Test\Integration\Version3x2;
 
 include_once(__DIR__. '/../Version3x0/ConnectionCommandsTest.php');
 
-use RedisClient\Client\Version\RedisClient3x2;
-use Test\Integration\Version3x0\ConnectionCommandsTest as ConnectionCommandsTestVersion3x0;
-
-/**
- * @see \RedisClient\Command\Traits\Version2x6\ConnectionCommandsTrait
- */
-class ConnectionCommandsTest extends ConnectionCommandsTestVersion3x0 {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x2_1;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient3x2([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
+class ConnectionCommandsTest extends \Test\Integration\Version3x0\ConnectionCommandsTest {
 
 }

@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+### v1.6.0 (2017-01-07)
+- Added support for Redis 4.0 (the Client was tested with Redis 4.0 RC2).
+- Added support for Redis Cluster.
+- Added method **_syncClusterSlotsFromRedisServer** for RedisClient.
+- Added command **SWAPDB**, **UNLINK**, **MEMORY** for Redis >= 4.0
+- Updated command **FLUSHALL**, **FLUSHDB** for Redis >= 4.0
+
 ### v1.5.1 (2016-08-17)
 - Fixed critical bug: https://github.com/cheprasov/php-redis-client/pull/45 Thanks to @BrianFranklin for help.
 

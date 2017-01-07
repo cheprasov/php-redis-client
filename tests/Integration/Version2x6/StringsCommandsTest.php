@@ -10,20 +10,14 @@
  */
 namespace Test\Integration\Version2x6;
 
-use RedisClient\Client\Version\RedisClient2x6;
+include_once(__DIR__ . '/../BaseVersionTest.php');
+
 use RedisClient\Exception\ErrorResponseException;
 
 /**
  * @see \RedisClient\Command\Traits\Version2x6\StringsCommandsTrait
  */
-class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_2x6_1;
-
-    /**
-     * @var RedisClient2x6
-     */
-    protected static $Redis;
+class StringsCommandsTest extends \Test\Integration\BaseVersionTest {
 
     /**
      * @var array
@@ -33,25 +27,8 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient2x6([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function tearDownAfterClass() {
-        static::$Redis->flushall();
-    }
-
-    /**
-     * @inheritdoc
-     */
     protected function setUp() {
-        static::$Redis->flushdb();
+        parent::setUp();
         static::$fields = [
             'string'  => 'value',
             'integer' => 42,
@@ -439,7 +416,7 @@ class StringsCommandsTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertSame(1, $Redis->msetnx(['key'=>'value']));
         $this->assertSame(1, $Redis->msetnx(['key1'=>'value1', 'key2'=>'value2']));
-        $this->assertSame(['value', 'value1', 'value2',], $Redis->mget(['key', 'key1', 'key2']));
+        $this->assertSame(['value', 'value1', 'value2'], $Redis->mget(['key', 'key1', 'key2']));
 
         $this->assertSame(0, $Redis->msetnx(['hash'=>'value1', 'test'=>'value2']));
         $this->assertSame([null, null], $Redis->mget(['hash', 'test']));

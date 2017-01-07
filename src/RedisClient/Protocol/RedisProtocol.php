@@ -12,7 +12,7 @@ namespace RedisClient\Protocol;
 
 use RedisClient\Connection\ConnectionInterface;
 use RedisClient\Exception\EmptyResponseException;
-use RedisClient\Exception\ErrorResponseException;
+use RedisClient\Exception\ExceptionFactory;
 use RedisClient\Exception\UnknownTypeException;
 
 class RedisProtocol implements ProtocolInterface {
@@ -34,7 +34,21 @@ class RedisProtocol implements ProtocolInterface {
      * @param ConnectionInterface $Connection
      */
     public function __construct(ConnectionInterface $Connection) {
+        $this->setConnection($Connection);
+    }
+
+    /**
+     * @param ConnectionInterface $Connection
+     */
+    public function setConnection(ConnectionInterface $Connection) {
         $this->Connection = $Connection;
+    }
+
+    /**
+     * @return ConnectionInterface $Connection
+     */
+    public function getConnection() {
+        return $this->Connection;
     }
 
     /**
@@ -81,7 +95,7 @@ class RedisProtocol implements ProtocolInterface {
 
     /**
      * @param string $raw
-     * @return null|string
+     * @return null|int
      */
     protected function write($raw) {
         return $this->Connection->write($raw);
@@ -101,7 +115,7 @@ class RedisProtocol implements ProtocolInterface {
         $data = substr($line, 1, -2);
 
         if ($type === self::TYPE_BULK_STRINGS) {
-            $length = (int) $data;
+            $length = (int)$data;
             if ($length === -1) {
                 return null;
             }
@@ -120,7 +134,7 @@ class RedisProtocol implements ProtocolInterface {
         }
 
         if ($type === self::TYPE_ARRAYS) {
-            $count = (int) $data;
+            $count = (int)$data;
             if ($count === -1) {
                 return null;
             }
@@ -132,7 +146,7 @@ class RedisProtocol implements ProtocolInterface {
         }
 
         if ($type === self::TYPE_ERRORS) {
-            return new ErrorResponseException($data);
+            return ExceptionFactory::createResponseExceptionByMessage($data);
         }
 
         throw new UnknownTypeException('Unknown protocol type '. $type);
@@ -176,7 +190,7 @@ class RedisProtocol implements ProtocolInterface {
         $this->write($this->packProtocolArray($structures));
         do {
             try {
-                $response = (array) $this->read();
+                $response = (array)$this->read();
                 for ($i = count($response); $i < 4; ++$i) {
                     $response[] = null;
                 }
@@ -185,7 +199,6 @@ class RedisProtocol implements ProtocolInterface {
             }
             $continue = call_user_func_array($callback, $response);
         } while ($continue);
-
     }
 
 }

@@ -44,7 +44,7 @@ trait SetsCommandsTrait {
             $params[] = 'COUNT';
             $params[] = $count;
         }
-        return $this->returnCommand(['SSCAN'], $params);
+        return $this->returnCommand(['SSCAN'], $key, $params);
     }
 
 }

@@ -34,7 +34,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements in the specified score range.
      */
     public function zlexcount($key, $min, $max) {
-        return $this->returnCommand(['ZLEXCOUNT'], [$key, $min, $max]);
+        return $this->returnCommand(['ZLEXCOUNT'], $key, [$key, $min, $max]);
     }
 
     /**
@@ -57,7 +57,7 @@ trait SortedSetsCommandsTrait {
             $params[] = 'LIMIT';
             $params[] = Parameter::limit($limit);
         }
-        return $this->returnCommand(['ZRANGEBYLEX'], $params);
+        return $this->returnCommand(['ZRANGEBYLEX'], $key, $params);
     }
 
     /**
@@ -73,7 +73,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements removed.
      */
     public function zremrangebylex($key, $min, $max) {
-        return $this->returnCommand(['ZREMRANGEBYLEX'], [$key, $min, $max]);
+        return $this->returnCommand(['ZREMRANGEBYLEX'], $key, [$key, $min, $max]);
     }
 
     /**
@@ -96,7 +96,7 @@ trait SortedSetsCommandsTrait {
             $params[] = 'LIMIT';
             $params[] = Parameter::limit($limit);
         }
-        return $this->returnCommand(['ZREVRANGEBYLEX'], $params);
+        return $this->returnCommand(['ZREVRANGEBYLEX'], $key, $params);
     }
 
     /**
@@ -123,7 +123,7 @@ trait SortedSetsCommandsTrait {
             $params[] = 'COUNT';
             $params[] = $count;
         }
-        return $this->returnCommand(['ZSCAN'], $params);
+        return $this->returnCommand(['ZSCAN'], $key, $params);
     }
 
 }

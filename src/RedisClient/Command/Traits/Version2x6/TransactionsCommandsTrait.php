@@ -72,7 +72,8 @@ trait TransactionsCommandsTrait {
      * @return bool Always True
      */
     public function watch($keys) {
-        return $this->returnCommand(['WATCH'], (array) $keys);
+        $keys = (array)$keys;
+        return $this->returnCommand(['WATCH'], $keys, $keys);
     }
 
 }

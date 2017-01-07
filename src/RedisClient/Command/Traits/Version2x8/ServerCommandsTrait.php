@@ -42,7 +42,7 @@ trait ServerCommandsTrait {
      * @return int Number of commands returned by COMMAND
      */
     public function commandCount() {
-        return $this->returnCommand(['COMMAND', 'COUNT'], []);
+        return $this->returnCommand(['COMMAND', 'COUNT']);
     }
 
     /**
@@ -55,7 +55,7 @@ trait ServerCommandsTrait {
      * @return string[] List of keys from your command.
      */
     public function commandGetkeys($command) {
-        return $this->returnCommand(['COMMAND', 'GETKEYS'], Parameter::command($command));
+        return $this->returnCommand(['COMMAND', 'GETKEYS'], null, Parameter::command($command));
     }
 
     /**
@@ -68,7 +68,7 @@ trait ServerCommandsTrait {
      * @return array Nested list of command details.
      */
     public function commandInfo($commandNames) {
-        return $this->returnCommand(['COMMAND', 'INFO'], (array) $commandNames);
+        return $this->returnCommand(['COMMAND', 'INFO'], null, (array)$commandNames);
     }
 
     /**

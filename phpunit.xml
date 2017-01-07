@@ -14,26 +14,43 @@
     bootstrap                   = "vendor/autoload.php"
     syntaxCheck                 = "true"
     verbose                     = "true"
-    beStrictAboutTestsThatDoNotTestAnything = "true"
     checkForUnintentionallyCoveredCode  = "false"
     beStrictAboutOutputDuringTests      = "false"
     beStrictAboutTestSize               = "true"
 >
     <testsuites>
-        <testsuite name="All tests">
-            <directory suffix="Test.php" >./tests/</directory>
+        <testsuite name="Build Tests">
+            <directory suffix="Test.php" >./tests/Build/</directory>
+        </testsuite>
+        <testsuite name="Unit tests">
+            <directory suffix="Test.php" >./tests/Unit/</directory>
+        </testsuite>
+        <testsuite name="Integration tests">
+            <exclude>./tests/Integration/BaseVersionTest.php</exclude>
+            <exclude>./tests/Integration/ClusterVersionTest.php</exclude>
+            <directory suffix="Test.php" >./tests/Integration/</directory>
         </testsuite>
     </testsuites>
 
     <php>
-        <const name="TEST_REDIS_SERVER_2x6_1" value="tcp://127.0.0.1:6381" />
-        <const name="TEST_REDIS_SERVER_2x6_2" value="tcp://127.0.0.1:6382" />
-        <const name="TEST_REDIS_SERVER_2x8_1" value="tcp://127.0.0.1:6383" />
-        <const name="TEST_REDIS_SERVER_2x8_2" value="tcp://127.0.0.1:6384" />
-        <const name="TEST_REDIS_SERVER_3x0_1" value="tcp://127.0.0.1:6385" />
-        <const name="TEST_REDIS_SERVER_3x0_2" value="tcp://127.0.0.1:6386" />
-        <const name="TEST_REDIS_SERVER_3x2_1" value="tcp://127.0.0.1:6387" />
-        <const name="TEST_REDIS_SERVER_3x2_2" value="tcp://127.0.0.1:6388" />
+        <const name="TEST_REDIS_SERVER_2x6_1" value="127.0.0.1:6381" />
+        <const name="TEST_REDIS_SERVER_2x6_2" value="localhost:6382" />
+        <const name="TEST_REDIS_SERVER_2x8_1" value="127.0.0.1:6383" />
+        <const name="TEST_REDIS_SERVER_2x8_2" value="localhost:6384" />
+        <const name="TEST_REDIS_SERVER_3x0_1" value="127.0.0.1:6385" />
+        <const name="TEST_REDIS_SERVER_3x0_2" value="localhost:6386" />
+        <const name="TEST_REDIS_SERVER_3x2_1" value="127.0.0.1:6387" />
+        <const name="TEST_REDIS_SERVER_3x2_2" value="localhost:6388" />
+        <const name="TEST_REDIS_SERVER_4x0_1" value="127.0.0.1:6389" />
+        <const name="TEST_REDIS_SERVER_4x0_2" value="localhost:6390" />
+
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_A"  value="127.0.0.1:7001" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_A1" value="127.0.0.1:7004" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_B"  value="127.0.0.1:7002" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_B1" value="127.0.0.1:7005" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_C"  value="127.0.0.1:7003" />
+        <const name="TEST_REDIS_SERVER_3x2_CLUSTER_C1" value="127.0.0.1:7006" />
+
         <const name="TEST_REDIS_SERVER_PASSWORD" value="test-password-123" />
     </php>
 

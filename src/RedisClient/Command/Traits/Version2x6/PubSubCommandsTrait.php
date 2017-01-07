@@ -10,6 +10,8 @@
  */
 namespace RedisClient\Command\Traits\Version2x6;
 
+use RedisClient\Exception\InvalidArgumentException;
+
 /**
  * PubSub Commands
  * @link http://redis.io/commands#pubsub
@@ -25,12 +27,13 @@ trait PubSubCommandsTrait {
      * @param string|string[] $patterns
      * @param \Closure|string|array $callback
      * @return string[]
+     * @throws InvalidArgumentException
      */
     public function psubscribe($patterns, $callback) {
         if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Function $callback is not callable');
+            throw new InvalidArgumentException('Function $callback is not callable');
         }
-        return $this->subscribeCommand(['PSUBSCRIBE'], ['PUNSUBSCRIBE'], (array) $patterns, $callback);
+        return $this->subscribeCommand(['PSUBSCRIBE'], ['PUNSUBSCRIBE'], (array)$patterns, $callback);
     }
 
     /**
@@ -44,7 +47,7 @@ trait PubSubCommandsTrait {
      * @return int The number of clients that received the message.
      */
     public function publish($channel, $message) {
-        return $this->returnCommand(['PUBLISH'], [$channel, $message]);
+        return $this->returnCommand(['PUBLISH'], null, [$channel, $message]);
     }
 
     /**
@@ -57,7 +60,7 @@ trait PubSubCommandsTrait {
      * @return
      */
     public function punsubscribe($patterns = null) {
-        return $this->returnCommand(['PUNSUBSCRIBE'], isset($patterns) ? (array) $patterns : null);
+        return $this->returnCommand(['PUNSUBSCRIBE'], null, isset($patterns) ? (array)$patterns : null);
     }
 
     /**
@@ -70,12 +73,13 @@ trait PubSubCommandsTrait {
      * @param string|string[] $channels
      * @param \Closure|string|array $callback
      * @return string[]
+     * @throws InvalidArgumentException
      */
     public function subscribe($channels, $callback) {
         if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Function $callback is not callable');
+            throw new InvalidArgumentException('Function $callback is not callable');
         }
-        return $this->subscribeCommand(['SUBSCRIBE'], ['UNSUBSCRIBE'], (array) $channels, $callback);
+        return $this->subscribeCommand(['SUBSCRIBE'], ['UNSUBSCRIBE'], (array)$channels, $callback);
     }
 
     /**
@@ -87,7 +91,7 @@ trait PubSubCommandsTrait {
      * @return
      */
     public function unsubscribe($channels) {
-        return $this->returnCommand(['UNSUBSCRIBE'], isset($channels) ? (array) $channels : null);
+        return $this->returnCommand(['UNSUBSCRIBE'], null, isset($channels) ? (array)$channels : null);
     }
 
 }

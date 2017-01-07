@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 namespace Test\Unit;
+
 use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Client\Version\RedisClient2x8;
 use RedisClient\Client\Version\RedisClient3x0;

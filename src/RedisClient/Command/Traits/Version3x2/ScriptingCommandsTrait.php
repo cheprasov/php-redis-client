@@ -30,7 +30,7 @@ trait ScriptingCommandsTrait {
      * @return
      */
     public function scriptDebug($param) {
-        return $this->returnCommand(['SCRIPT', 'DEBUG'], [$param]);
+        return $this->returnCommand(['SCRIPT', 'DEBUG'], null, [$param]);
     }
 
 }

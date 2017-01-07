@@ -31,7 +31,7 @@ trait SortedSetsCommandsTrait {
      * @return int|string
      */
     public function zadd($key, array $members) {
-        return $this->returnCommand(['ZADD'], [$key, Parameter::assocArrayFlip($members)]);
+        return $this->returnCommand(['ZADD'], $key, [$key, Parameter::assocArrayFlip($members)]);
     }
 
     /**
@@ -44,7 +44,7 @@ trait SortedSetsCommandsTrait {
      * @return int The cardinality (number of elements) of the sorted set, or 0 if key does not exist.
      */
     public function zcard($key) {
-        return $this->returnCommand(['ZCARD'], [$key]);
+        return $this->returnCommand(['ZCARD'], $key, [$key]);
     }
 
     /**
@@ -59,7 +59,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements in the specified score range.
      */
     public function zcount($key, $min, $max) {
-        return $this->returnCommand(['ZCOUNT'], [$key, $min, $max]);
+        return $this->returnCommand(['ZCOUNT'], $key, [$key, $min, $max]);
     }
 
     /**
@@ -74,7 +74,7 @@ trait SortedSetsCommandsTrait {
      * @return string The new score of member
      */
     public function zincrby($key, $increment, $member) {
-        return $this->returnCommand(['ZINCRBY'], [$key, $increment, $member]);
+        return $this->returnCommand(['ZINCRBY'], $key, [$key, $increment, $member]);
     }
 
     /**
@@ -91,8 +91,8 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements in the resulting sorted set at destination.
      */
     public function zinterstore($destination, $keys, $weights = null, $aggregate = null) {
-        $keys = (array) $keys;
-        $params = [$destination, count($keys), (array) $keys];
+        $keys = (array)$keys;
+        $params = [$destination, count($keys), $keys];
         if ($weights) {
             $params[] = 'WEIGHTS';
             $params[] = (array) $weights;
@@ -101,7 +101,7 @@ trait SortedSetsCommandsTrait {
             $params[] = 'AGGREGATE';
             $params[] = $aggregate;
         }
-        return $this->returnCommand(['ZINTERSTORE'], $params);
+        return $this->returnCommand(['ZINTERSTORE'], $keys, $params);
     }
 
     /**
@@ -123,7 +123,7 @@ trait SortedSetsCommandsTrait {
         if ($withscores) {
             $params[] = 'WITHSCORES';
         }
-        return $this->returnCommand(['ZRANGE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
+        return $this->returnCommand(['ZRANGE'], $key, $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
     }
 
     /**
@@ -150,7 +150,7 @@ trait SortedSetsCommandsTrait {
             $params[] = 'LIMIT';
             $params[] = Parameter::limit($limit);
         }
-        return $this->returnCommand(['ZRANGEBYSCORE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
+        return $this->returnCommand(['ZRANGEBYSCORE'], $key, $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
     }
 
     /**
@@ -164,7 +164,7 @@ trait SortedSetsCommandsTrait {
      * @return int|null
      */
     public function zrank($key, $member) {
-        return $this->returnCommand(['ZRANK'], [$key, $member]);
+        return $this->returnCommand(['ZRANK'], $key, [$key, $member]);
     }
 
     /**
@@ -179,7 +179,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of members removed from the sorted set, not including non existing members.
      */
     public function zrem($key, $members) {
-        return $this->returnCommand(['ZREM'], [$key, (array) $members]);
+        return $this->returnCommand(['ZREM'], $key, [$key, (array) $members]);
     }
 
     /**
@@ -195,7 +195,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements removed.
      */
     public function zremrangebyrank($key, $start, $stop) {
-        return $this->returnCommand(['ZREMRANGEBYRANK'], [$key, $start, $stop]);
+        return $this->returnCommand(['ZREMRANGEBYRANK'], $key, [$key, $start, $stop]);
     }
 
     /**
@@ -211,7 +211,7 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements removed.
      */
     public function zremrangebyscore($key, $min, $max) {
-        return $this->returnCommand(['ZREMRANGEBYSCORE'], [$key, $min, $max]);
+        return $this->returnCommand(['ZREMRANGEBYSCORE'], $key, [$key, $min, $max]);
     }
 
     /**
@@ -233,7 +233,7 @@ trait SortedSetsCommandsTrait {
         if ($withscores) {
             $params[] = 'WITHSCORES';
         }
-        return $this->returnCommand(['ZREVRANGE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
+        return $this->returnCommand(['ZREVRANGE'], $key, $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
     }
 
     /**
@@ -260,7 +260,7 @@ trait SortedSetsCommandsTrait {
             $params[] = 'LIMIT';
             $params[] = Parameter::limit($limit);
         }
-        return $this->returnCommand(['ZREVRANGEBYSCORE'], $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
+        return $this->returnCommand(['ZREVRANGEBYSCORE'], $key, $params, $withscores ? ResponseParser::PARSE_ASSOC_ARRAY : null);
     }
 
     /**
@@ -274,7 +274,7 @@ trait SortedSetsCommandsTrait {
      * @return int|null
      */
     public function zrevrank($key, $member) {
-        return $this->returnCommand(['ZREVRANK'], [$key, $member]);
+        return $this->returnCommand(['ZREVRANK'], $key, [$key, $member]);
     }
 
     /**
@@ -288,7 +288,7 @@ trait SortedSetsCommandsTrait {
      * @return int The score of member (a double precision floating point number), represented as string.
      */
     public function zscore($key, $member) {
-        return $this->returnCommand(['ZSCORE'], [$key, $member]);
+        return $this->returnCommand(['ZSCORE'], $key, [$key, $member]);
     }
 
     /**
@@ -305,8 +305,8 @@ trait SortedSetsCommandsTrait {
      * @return int The number of elements in the resulting sorted set at destination.
      */
     public function zunionstore($destination, $keys, $weights = null, $aggregate = null) {
-        $keys = (array) $keys;
-        $params = [$destination, count($keys), (array) $keys];
+        $keys = (array)$keys;
+        $params = [$destination, count($keys), $keys];
         if ($weights) {
             $params[] = 'WEIGHTS';
             $params[] = (array) $weights;
@@ -315,7 +315,7 @@ trait SortedSetsCommandsTrait {
             $params[] = 'AGGREGATE';
             $params[] = $aggregate;
         }
-        return $this->returnCommand(['ZUNIONSTORE'], $params);
+        return $this->returnCommand(['ZUNIONSTORE'], $keys, $params);
     }
 
 }

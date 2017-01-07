@@ -31,7 +31,8 @@ trait KeysCommandsTrait {
      * Or the number of keys existing among the ones specified as arguments.
      */
     public function exists($keys) {
-        return $this->returnCommand(['EXISTS'], (array) $keys);
+        $keys = (array)$keys;
+        return $this->returnCommand(['EXISTS'], $keys, $keys);
     }
 
     /**
@@ -56,7 +57,7 @@ trait KeysCommandsTrait {
         if ($replace) {
             $params[] = 'REPLACE';
         }
-        return $this->returnCommand(['MIGRATE'], $params);
+        return $this->returnCommand(['MIGRATE'], $key, $params);
     }
 
     /**
@@ -76,7 +77,7 @@ trait KeysCommandsTrait {
         if ($replace) {
             $params[] = 'REPLACE';
         }
-        return $this->returnCommand(['RESTORE'], $params);
+        return $this->returnCommand(['RESTORE'], $key, $params);
     }
 
     /**
@@ -91,7 +92,7 @@ trait KeysCommandsTrait {
      * by all the writes performed in the context of the current connection.
      */
     public function wait($numslaves, $timeout) {
-        return $this->returnCommand(['WAIT'], [$numslaves, $timeout]);
+        return $this->returnCommand(['WAIT'], null, [$numslaves, $timeout]);
     }
 
 }

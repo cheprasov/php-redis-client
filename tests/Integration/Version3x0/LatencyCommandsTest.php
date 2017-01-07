@@ -12,24 +12,6 @@ namespace Test\Integration\Version3x0;
 
 include_once(__DIR__. '/../Version2x8/LatencyCommandsTest.php');
 
-use RedisClient\Client\Version\RedisClient3x0;
-use Test\Integration\Version2x8\LatencyCommandsTest as LatencyCommandsTestVersion2x8;
-
-/**
- * @see \RedisClient\Command\Traits\Version2x8\LatencyCommandsTrait
- */
-class LatencyCommandsTest extends LatencyCommandsTestVersion2x8 {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x0_1;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient3x0([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-    }
+class LatencyCommandsTest extends \Test\Integration\Version2x8\LatencyCommandsTest {
 
 }

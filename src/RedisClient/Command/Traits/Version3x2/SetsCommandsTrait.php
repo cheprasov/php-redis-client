@@ -35,7 +35,7 @@ trait SetsCommandsTrait {
         if ($count) {
             $params[] = $count;
         }
-        return $this->returnCommand(['SPOP'], $params);
+        return $this->returnCommand(['SPOP'], $key, $params);
     }
 
 }

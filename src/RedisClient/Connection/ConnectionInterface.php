@@ -13,20 +13,30 @@ namespace RedisClient\Connection;
 interface ConnectionInterface {
 
     /**
+     * @return string
+     */
+    public function getServer();
+
+    /**
+     * @param callable $callback
+     */
+    public function onConnect($callback);
+
+    /**
      * @param string $string
      * @return int|null
      */
     public function write($string);
 
     /**
-     * @return string|null
-     */
-    public function readLine();
-
-    /**
      * @param int $length
      * @return string|null
      */
     public function read($length);
+
+    /**
+     * @return string|null
+     */
+    public function readLine();
 
 }

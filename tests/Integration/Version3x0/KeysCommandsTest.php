@@ -12,47 +12,12 @@ namespace Test\Integration\Version3x0;
 
 include_once(__DIR__. '/../Version2x8/KeysCommandsTest.php');
 
-use RedisClient\Client\Version\RedisClient3x0;
 use RedisClient\Exception\ErrorResponseException;
-use Test\Integration\Version2x8\KeysCommandsTest as KeysCommandsTestVersion2x8;
 
 /**
  * @see \RedisClient\Command\Traits\Version3x0\KeysCommandsTrait
  */
-class KeysCommandsTest extends KeysCommandsTestVersion2x8 {
-
-    const TEST_REDIS_SERVER_1 = TEST_REDIS_SERVER_3x0_1;
-    const TEST_REDIS_SERVER_2 = TEST_REDIS_SERVER_3x0_2;
-
-    /**
-     * @var RedisClient3x0
-     */
-    protected static $Redis;
-
-    /**
-     * @var RedisClient3x0
-     */
-    protected static $Redis2;
-
-    /**
-     * @var array
-     */
-    protected static $fields;
-
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass() {
-        static::$Redis = new RedisClient3x0([
-            'server' =>  static::TEST_REDIS_SERVER_1,
-            'timeout' => 2,
-        ]);
-        static::$Redis2 = new RedisClient3x0([
-            'server' =>  static::TEST_REDIS_SERVER_2,
-            'timeout' => 2,
-            'password' => TEST_REDIS_SERVER_PASSWORD,
-        ]);
-    }
+class KeysCommandsTest extends \Test\Integration\Version2x8\KeysCommandsTest {
 
     /**
      * @see \RedisClient\Command\Traits\Version3x0\KeysCommandsTrait::exists
@@ -86,7 +51,8 @@ class KeysCommandsTest extends KeysCommandsTestVersion2x8 {
         $this->assertSame(true, $Redis->flushall());
         $this->assertSame(true, $Redis2->flushall());
 
-        list(, $host, $port) = explode(':', str_replace('/', '', static::TEST_REDIS_SERVER_1), 3);
+        $classInfo = static::getTestConfig();
+        list($host, $port) = explode(':', $classInfo['servers'][self::SERVER_1]);
 
         $this->assertSame(true, $Redis2->set('one', 1));
 
