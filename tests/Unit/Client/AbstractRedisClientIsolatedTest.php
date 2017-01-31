@@ -10,16 +10,15 @@
  */
 namespace Test\Unit\Client;
 
-include_once(__DIR__ . '/../GlobalFunctionMock.php');
-
+use ExtraMocks\Mocks;
 use RedisClient\Client\AbstractRedisClient;
 use RedisClient\Exception\MovedResponseException;
 use RedisClient\RedisClient;
-use Test\Unit\GlobalFunctionMock;
 
 /**
  * @see AbstractRedisClient
  * @runTestsInSeparateProcesses
+ * @runInSeparateProcess
  */
 class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
 
@@ -28,38 +27,38 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
     }
 
     protected function mockStream() {
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::stream_socket_client', function($s) {return $s;});
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::stream_set_timeout', function() {return true;});
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fwrite', function($h, $m, $c) {return $c;});
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fgets', function() {return '';});
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fread', function() {return '';});
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fclose', function() {return true;});
+        Mocks::mockGlobalFunction('\RedisClient\Connection\stream_socket_client', function($s) {return $s;});
+        Mocks::mockGlobalFunction('\RedisClient\Connection\stream_set_timeout', function() {return true;});
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fwrite', function($h, $m, $c) {return $c;});
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fgets', function() {return '';});
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fread', function() {return '';});
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fclose', function() {return true;});
     }
 
     public function test_mockStream() {
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fgets', function() {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fgets', function() {
             return "+TEST\r\n";
         });
 
         $Redis = new RedisClient();
         $this->assertSame('TEST', $Redis->ping());
         unset($Redis);
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_socket_client'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_set_timeout'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fwrite'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fgets'));
-        $this->assertSame(0, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fread'));
-        $this->assertSame(0, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fclose'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\stream_socket_client'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\stream_set_timeout'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\fwrite'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\fgets'));
+        $this->assertSame(0, Mocks::getCountCalls('\RedisClient\Connection\fread'));
+        $this->assertSame(0, Mocks::getCountCalls('\RedisClient\Connection\fclose'));
     }
 
     public function test_MovedErrorResponse() {
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fwrite', function($h, $m, $c) {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fwrite', function($h, $m, $c) {
             $this->assertSame('tcp://127.0.0.1:6379', $h);
             $this->assertSame("*2\r\n\$3\r\nGET\r\n\$3\r\nkey\r\n", $m);
             $this->assertSame(22, $c);
             return $c;
         });
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fgets', function() {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fgets', function() {
             return "-MOVED 42 server\r\n";
         });
 
@@ -74,15 +73,15 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
             $this->assertSame('server', $Ex->getServer());
         }
 
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_socket_client'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_set_timeout'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fwrite'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fgets'));
-        $this->assertSame(0, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fread'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\stream_socket_client'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\stream_set_timeout'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\fwrite'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\fgets'));
+        $this->assertSame(0, Mocks::getCountCalls('\RedisClient\Connection\fread'));
     }
 
     public function test_ClusterEmptyMovedErrorResponse() {
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fwrite', function($h, $m, $c) {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fwrite', function($h, $m, $c) {
             static $data = [
                 ['tcp://127.0.0.1:7001', "*2\r\n\$3\r\nGET\r\n\$3\r\nfoo\r\n"],
                 ['tcp://127.0.0.3:7003', "*2\r\n\$3\r\nGET\r\n\$3\r\nfoo\r\n"],
@@ -97,7 +96,7 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
             return $c;
         });
 
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fgets', function() {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fgets', function() {
             static $data = [
                 "-MOVED 12182 127.0.0.3:7003\r\n",
                 "\$3\r\n",
@@ -110,7 +109,7 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
             return $datum;
         });
 
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fread', function() {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fread', function() {
             static $data = [
                 "bar\r\n",
                 "bar1\r\n",
@@ -134,26 +133,26 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('bar2', $Redis->get('foo2'));
         $this->assertSame('bar3', $Redis->get('foo2'));
 
-        $this->assertSame(2, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_socket_client'));
-        $this->assertSame(2, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_set_timeout'));
-        $this->assertSame(6, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fwrite'));
-        $this->assertSame(6, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fgets'));
-        $this->assertSame(4, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fread'));
+        $this->assertSame(2, Mocks::getCountCalls('\RedisClient\Connection\stream_socket_client'));
+        $this->assertSame(2, Mocks::getCountCalls('\RedisClient\Connection\stream_set_timeout'));
+        $this->assertSame(6, Mocks::getCountCalls('\RedisClient\Connection\fwrite'));
+        $this->assertSame(6, Mocks::getCountCalls('\RedisClient\Connection\fgets'));
+        $this->assertSame(4, Mocks::getCountCalls('\RedisClient\Connection\fread'));
     }
 
     public function test_ClusterFullMovedErrorResponse() {
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fwrite', function($h, $m, $c) {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fwrite', function($h, $m, $c) {
             $this->assertSame('tcp://127.0.0.3:7003', $h);
             $this->assertSame("*2\r\n\$3\r\nGET\r\n\$3\r\nfoo\r\n", $m);
             $this->assertSame(22, $c);
             return $c;
         });
 
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fgets', function() {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fgets', function() {
             return "\$3\r\n";
         });
 
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fread', function() {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fread', function() {
             return "bar\r\n";
         });
 
@@ -171,15 +170,15 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertSame('bar', $Redis->get('foo'));
 
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_socket_client'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_set_timeout'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fwrite'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fgets'));
-        $this->assertSame(1, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fread'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\stream_socket_client'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\stream_set_timeout'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\fwrite'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\fgets'));
+        $this->assertSame(1, Mocks::getCountCalls('\RedisClient\Connection\fread'));
     }
 
     public function test_ClusterFullAskErrorResponse() {
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fwrite', function($h, $m, $c) {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fwrite', function($h, $m, $c) {
             static $data = [
                 [
                     'tcp://127.0.0.3:7003',
@@ -204,7 +203,7 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
             return $c;
         });
 
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fgets', function() {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fgets', function() {
             static $data = [
                 "-ASK 12182 127.0.0.2:7002\r\n",
                 "+OK\r\n",
@@ -214,7 +213,7 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
             return array_shift($data);
         });
 
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fread', function() {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fread', function() {
             static $data = [
                 "bar\r\n",
                 "bar-bar\r\n"
@@ -237,15 +236,15 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('bar', $Redis->get('foo'));
         $this->assertSame('bar-bar', $Redis->get('foo'));
 
-        $this->assertSame(2, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_socket_client'));
-        $this->assertSame(2, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_set_timeout'));
-        $this->assertSame(4, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fwrite'));
-        $this->assertSame(4, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fgets'));
-        $this->assertSame(2, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fread'));
+        $this->assertSame(2, Mocks::getCountCalls('\RedisClient\Connection\stream_socket_client'));
+        $this->assertSame(2, Mocks::getCountCalls('\RedisClient\Connection\stream_set_timeout'));
+        $this->assertSame(4, Mocks::getCountCalls('\RedisClient\Connection\fwrite'));
+        $this->assertSame(4, Mocks::getCountCalls('\RedisClient\Connection\fgets'));
+        $this->assertSame(2, Mocks::getCountCalls('\RedisClient\Connection\fread'));
     }
 
     public function test_ClusterEmptyMixResponse() {
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fwrite', function($h, $m, $c) {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fwrite', function($h, $m, $c) {
             static $data = [
                 ['tcp://127.0.0.1:7001', "*2\r\n\$3\r\nGET\r\n\$3\r\nfoo\r\n"],
                 ['tcp://127.0.0.3:7003', "*2\r\n\$3\r\nGET\r\n\$3\r\nfoo\r\n"],
@@ -264,7 +263,7 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
             return $c;
         });
 
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fgets', function() {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fgets', function() {
             static $data = [
                 "-MOVED 12182 127.0.0.3:7003\r\n",
                 "-ASK 12182 127.0.0.2:7002\r\n",
@@ -281,7 +280,7 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
             return $datum;
         });
 
-        GlobalFunctionMock::mockFunction('RedisClient\Connection::fread', function() {
+        Mocks::mockGlobalFunction('\RedisClient\Connection\fread', function() {
             static $data = [
                 "bar\r\n",
                 "bar1\r\n",
@@ -309,10 +308,10 @@ class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame('bar4', $Redis->get('foo2'));
         $this->assertSame('bar5', $Redis->get('foo1'));
 
-        $this->assertSame(3, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_socket_client'));
-        $this->assertSame(3, GlobalFunctionMock::getCountCalls('RedisClient\Connection::stream_set_timeout'));
-        $this->assertSame(10, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fwrite'));
-        $this->assertSame(10, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fgets'));
-        $this->assertSame(6, GlobalFunctionMock::getCountCalls('RedisClient\Connection::fread'));
+        $this->assertSame(3, Mocks::getCountCalls('\RedisClient\Connection\stream_socket_client'));
+        $this->assertSame(3, Mocks::getCountCalls('\RedisClient\Connection\stream_set_timeout'));
+        $this->assertSame(10, Mocks::getCountCalls('\RedisClient\Connection\fwrite'));
+        $this->assertSame(10, Mocks::getCountCalls('\RedisClient\Connection\fgets'));
+        $this->assertSame(6, Mocks::getCountCalls('\RedisClient\Connection\fread'));
     }
 }
