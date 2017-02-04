@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### v1.6.1 (2017-02-04)
+- Added check for empty data on reading response.
+- Fixed some tests.
+
 ### v1.6.0 (2017-01-07)
 - Added support for Redis 4.0 (the Client was tested with Redis 4.0 RC2).
 - Added support for Redis Cluster.

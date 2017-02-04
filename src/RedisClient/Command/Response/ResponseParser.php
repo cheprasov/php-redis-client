@@ -105,7 +105,7 @@ class ResponseParser {
         if (!$response) {
             return $response;
         }
-        $response = trim((string) $response);
+        $response = trim((string)$response);
         $result = [];
         $link = &$result;
         foreach (explode("\n", $response) as $line) {
