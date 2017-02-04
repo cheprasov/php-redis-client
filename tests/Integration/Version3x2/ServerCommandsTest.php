@@ -22,7 +22,7 @@ class ServerCommandsTest extends \Test\Integration\Version3x0\ServerCommandsTest
      */
     public function test_commandCount() {
         $Redis = static::$Redis;
-        $this->assertSame(172, $Redis->commandCount());
+        $this->assertSame(174, $Redis->commandCount());
     }
 
     /**
@@ -49,9 +49,11 @@ class ServerCommandsTest extends \Test\Integration\Version3x0\ServerCommandsTest
             'debug',
             'echo',
             'eval',
+            'host:',
             'latency',
             'pfdebug',
             'pfselftest',
+            'post',
             'psync',
             'replconf',
             'restore-asking',

@@ -91,7 +91,7 @@ class Parameter {
     /**
      * @param string $operation
      * @return string
-     * @return InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function bitOperation($operation) {
         $operation = strtoupper((string)$operation);
@@ -134,7 +134,7 @@ class Parameter {
      * @return float
      */
     public static function float($float) {
-        return (float) $float;
+        return (float)$float;
     }
 
     /**
@@ -145,7 +145,8 @@ class Parameter {
 
     /**
      * @param string $unit
-     * @return string mixed
+     * @return string
+     * @throws InvalidArgumentException
      */
     public static function geoUnit($unit) {
         if (!in_array($unit, static::$geoUnits)) {
@@ -193,6 +194,7 @@ class Parameter {
     /**
      * @param int|string|int[]|string[] $limit
      * @return int[]
+     * @throws InvalidArgumentException
      */
     public static function limit($limit) {
         if (is_numeric($limit)) {
@@ -200,7 +202,7 @@ class Parameter {
         }
         if (is_array($limit) && isset($limit['count'])) {
             return [
-                empty($limit['offset']) ? 0: (int) $limit['offset'],
+                empty($limit['offset']) ? 0: (int)$limit['offset'],
                 (int)$limit['count'],
             ];
         }
@@ -223,6 +225,7 @@ class Parameter {
     /**
      * @param int|string $param
      * @return int|string
+     * @throws InvalidArgumentException
      */
     public static function minMax($param) {
         $param = trim($param);
@@ -235,6 +238,7 @@ class Parameter {
     /**
      * @param string $param
      * @return string
+     * @throws InvalidArgumentException
      */
     public static function nxXx($param) {
         if ($param === 'NX' || $param === 'XX') {
@@ -253,6 +257,7 @@ class Parameter {
     /**
      * @param int|float|string $int
      * @return int
+     * @throws InvalidArgumentException
      */
     public static function port($int) {
         $int = (int)$int;
@@ -267,6 +272,7 @@ class Parameter {
     /**
      * @param string|int $param
      * @return string
+     * @throws InvalidArgumentException
      */
     public static function specifyInterval($param) {
         $param = trim($param);

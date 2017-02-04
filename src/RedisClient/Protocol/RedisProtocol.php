@@ -58,7 +58,7 @@ class RedisProtocol implements ProtocolInterface {
      */
     protected function pack($data) {
         if (is_string($data) || is_int($data) || is_bool($data) || is_float($data) || is_null($data)) {
-            return $this->packProtocolBulkString((string) $data);
+            return $this->packProtocolBulkString((string)$data);
         }
         if (is_array($data)) {
             return $this->packProtocolArray($data);
@@ -119,7 +119,11 @@ class RedisProtocol implements ProtocolInterface {
             if ($length === -1) {
                 return null;
             }
-            return substr($this->Connection->read($length + 2), 0, -2);
+            $read = $this->Connection->read($length + 2);
+            if (is_null($read)) {
+                throw new EmptyResponseException('Can not read response. Please, check connection timeout.');
+            }
+            return substr($read, 0, -2);
         }
 
         if ($type === self::TYPE_SIMPLE_STRINGS) {
@@ -130,7 +134,7 @@ class RedisProtocol implements ProtocolInterface {
         }
 
         if ($type === self::TYPE_INTEGERS) {
-            return (int) $data;
+            return (int)$data;
         }
 
         if ($type === self::TYPE_ARRAYS) {
