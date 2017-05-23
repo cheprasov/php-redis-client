@@ -30,17 +30,24 @@ class StreamConnection implements ConnectionInterface {
     protected $timeout;
 
     /**
+     * @var bool
+     */
+    protected $persistent;
+
+    /**
      * @var callable
      */
     protected $onConnectCallback;
 
     /**
-     * @param string $server
+     * @param string         $server
      * @param int|float|null $timeout
+     * @param bool           $persistent
      */
-    public function __construct($server, $timeout = null) {
+    public function __construct($server, $timeout = null, $persistent = null) {
         $this->setServer($server);
         $this->setTimeout($timeout);
+        $this->setPersistent($persistent);
     }
 
     /**
@@ -59,6 +66,14 @@ class StreamConnection implements ConnectionInterface {
      */
     protected function setTimeout($timeout = null) {
         $this->timeout = $timeout ? ceil($timeout * 1000000) : null;
+    }
+
+    /**
+     * @param bool $persistent
+     */
+    protected function setPersistent($persistent = null)
+    {
+        $this->persistent = $persistent ? true : false;
     }
 
     /**
@@ -92,7 +107,11 @@ class StreamConnection implements ConnectionInterface {
         if (!$this->resource) {
             $errno = null;
             $errstr = null;
-            if (!$this->resource = stream_socket_client($this->server, $errno, $errstr)) {
+            $flags = STREAM_CLIENT_CONNECT;
+            if ($this->persistent) {
+                $flags |= STREAM_CLIENT_PERSISTENT;
+            }
+            if (!$this->resource = stream_socket_client($this->server, $errno, $errstr, $this->timeout, $flags)) {
                 throw new ConnectionException('Unable to connect to '. $this->server . ' ('. $errstr .')');
             }
             if (isset($this->timeout)) {

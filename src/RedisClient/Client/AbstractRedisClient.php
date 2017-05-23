@@ -28,12 +28,13 @@ abstract class AbstractRedisClient {
 
     const VERSION = '1.6.1';
 
-    const CONFIG_SERVER   = 'server';
-    const CONFIG_TIMEOUT  = 'timeout';
-    const CONFIG_DATABASE = 'database';
-    const CONFIG_PASSWORD = 'password';
-    const CONFIG_CLUSTER  = 'cluster';
-    const CONFIG_VERSION  = 'version';
+    const CONFIG_SERVER     = 'server';
+    const CONFIG_TIMEOUT    = 'timeout';
+    const CONFIG_PERSISTENT = 'persistent';
+    const CONFIG_DATABASE   = 'database';
+    const CONFIG_PASSWORD   = 'password';
+    const CONFIG_CLUSTER    = 'cluster';
+    const CONFIG_VERSION    = 'version';
 
     /**
      * Default configuration
@@ -42,6 +43,7 @@ abstract class AbstractRedisClient {
     protected static $defaultConfig = [
         self::CONFIG_SERVER => '127.0.0.1:6379', // or tcp://127.0.0.1:6379 or 'unix:///tmp/redis.sock'
         self::CONFIG_TIMEOUT => 1, // in seconds
+        self::CONFIG_PERSISTENT => false,
         self::CONFIG_DATABASE => 0, // default db
         self::CONFIG_CLUSTER => [
             'enabled' => false,

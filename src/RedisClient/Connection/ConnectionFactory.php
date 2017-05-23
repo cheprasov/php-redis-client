@@ -18,8 +18,8 @@ class ConnectionFactory {
      * @param callable $onConnect
      * @return StreamConnection
      */
-    public static function createStreamConnection($server, $timeout, $onConnect = null) {
-        $Connection = new StreamConnection($server, $timeout);
+    public static function createStreamConnection($server, $timeout, $persistent, $onConnect = null) {
+        $Connection = new StreamConnection($server, $timeout, $persistent);
         if ($onConnect) {
             $Connection->onConnect($onConnect);
         }
