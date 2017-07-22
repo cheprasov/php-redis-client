@@ -63,7 +63,7 @@ $config = [
         // command CLUSTER SLOTS to update cluster slot map
         'init_on_error_moved' => true,
 
-        // Optional. Defatult = 0.25 sec. It is timeout before next attempt on TRYAGAIN error.
+        // Optional. Defatult = 0.05 sec. It is timeout before next attempt on TRYAGAIN error.
         'timeout_on_error_tryagain' => 0.25, // sec
     ]
 ];
