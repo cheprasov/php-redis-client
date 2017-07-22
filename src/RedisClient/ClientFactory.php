@@ -25,7 +25,7 @@ class ClientFactory {
     const REDIS_VERSION_3x0 = '3.0';
     const REDIS_VERSION_3x2 = '3.2';
     const REDIS_VERSION_4x0 = '4.0';
-    const REDIS_VERSION_DEFAULT = self::REDIS_VERSION_3x2;
+    const REDIS_VERSION_DEFAULT = self::REDIS_VERSION_4x0;
 
     /**
      * @var string|null

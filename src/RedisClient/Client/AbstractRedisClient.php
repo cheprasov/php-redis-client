@@ -26,7 +26,7 @@ use RedisClient\RedisClient;
 
 abstract class AbstractRedisClient {
 
-    const VERSION = '1.6.1';
+    const VERSION = '1.7.0';
 
     const CONFIG_SERVER   = 'server';
     const CONFIG_TIMEOUT  = 'timeout';

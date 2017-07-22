@@ -29,7 +29,7 @@ $Redis = new RedisClient();
 $Redis->executeRaw(['SET', 'foo', 'bar']);
 echo 'result: '. $Redis->executeRaw(['GET', 'foo']) .PHP_EOL; // bar
 
-// Example 2. As string by <executeRawString>
+// DEPRECATED Example 2. As string by <executeRawString>
 // It is better to use executeRaw from example 1.
 $Redis->executeRawString('SET foo bar');
 echo 'result: '. $Redis->executeRawString('GET foo') .PHP_EOL; // bar

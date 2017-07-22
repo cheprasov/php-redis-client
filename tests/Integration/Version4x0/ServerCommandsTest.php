@@ -41,7 +41,7 @@ class ServerCommandsTest extends \Test\Integration\Version3x2\ServerCommandsTest
     public function test_commandCount() {
         $Redis = static::$Redis;
 
-        $this->assertSame(178, $Redis->commandCount());
+        $this->assertSame(180, $Redis->commandCount());
     }
 
     /**
@@ -68,6 +68,8 @@ class ServerCommandsTest extends \Test\Integration\Version3x2\ServerCommandsTest
             'debug',
             'echo',
             'eval',
+            'georadius_ro',
+            'georadiusbymember_ro',
             'host:',
             'latency',
             'memory',
