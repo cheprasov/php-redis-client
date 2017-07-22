@@ -4,6 +4,7 @@
 - The client was checked with Redis-4.0.0
 - The client uses last stable redis version (Redis-4.0.0) by default.
 - Deprecated client's methods: **executeRawString**, **parseRawString**
+- Changed timeout on error **timeout_on_error_tryagain** from 0.25 sec to 0.05 sec.
 
 ### v1.6.1 (2017-02-04)
 - Added check for empty data on reading response.
