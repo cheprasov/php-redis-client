@@ -48,7 +48,7 @@ abstract class AbstractRedisClient {
             'clusters' => [],
             'init_on_start' => false,
             'init_on_error_moved' => false,
-            'timeout_on_error_tryagain' => 0.25,
+            'timeout_on_error_tryagain' => 0.05,
         ],
     ];
 
@@ -103,11 +103,21 @@ abstract class AbstractRedisClient {
     }
 
     /**
+     * @param AbstractRedisClient $RedisClient
+     * @param $config
+     * @return \RedisClient\Protocol\ProtocolInterface
+     */
+    protected function createProtocol(AbstractRedisClient $RedisClient, $config)
+    {
+        return ProtocolFactory::createRedisProtocol($RedisClient, $config);
+    }
+
+    /**
      * @return ProtocolInterface
      */
     protected function getProtocol() {
         if (!$this->Protocol) {
-            $this->Protocol = ProtocolFactory::createRedisProtocol($this, $this->getConfig());
+            $this->Protocol = $this->createProtocol($this, $this->getConfig());
             if ($this->ClusterMap) {
                 $this->ClusterMap->addProtocol($this->Protocol);
             }
@@ -177,7 +187,7 @@ abstract class AbstractRedisClient {
             if ($response instanceof AskResponseException) {
                 $config = $this->getConfig();
                 $config['server'] = $response->getServer();
-                $TempRedisProtocol = ProtocolFactory::createRedisProtocol($this, $config);
+                $TempRedisProtocol = $this->createProtocol($this, $config);
                 $TempRedisProtocol->send(['ASKING']);
                 return $this->executeProtocolCommand($TempRedisProtocol, $command, $params);
             }
@@ -291,6 +301,7 @@ abstract class AbstractRedisClient {
     }
 
     /**
+     * @deprecated
      * Command will parsed by the client, before sent to server
      * @param string $command
      * @return mixed
@@ -300,6 +311,7 @@ abstract class AbstractRedisClient {
     }
 
     /**
+     * @deprecated
      * @param string $command
      * @return string[]
      */
