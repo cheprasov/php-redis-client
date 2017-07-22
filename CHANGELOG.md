@@ -1,5 +1,10 @@
 ## CHANGELOG
 
+### v1.7.0 (2017-07-22)
+- The client was checked with Redis-4.0.0
+- The client uses last stable redis version (Redis-4.0.0) by default.
+- Deprecated client's methods: **executeRawString**, **parseRawString**
+
 ### v1.6.1 (2017-02-04)
 - Added check for empty data on reading response.
 - Fixed some tests.
