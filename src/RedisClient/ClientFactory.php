@@ -104,6 +104,8 @@ class ClientFactory {
                     if (self::setDefaultRedisVersion($v)) {
                         return new RedisClient($config);
                     }
+                } elseif (self::$defaultRedisVersion == $v) {
+                    return new RedisClient($config);
                 }
                 break;
             }
