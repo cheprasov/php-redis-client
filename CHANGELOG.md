@@ -1,5 +1,8 @@
 ## CHANGELOG
 
+### v1.7.1 (2017-08-19)
+- Fixed bug of ClientFactory with default client version
+
 ### v1.7.0 (2017-07-22)
 - The client was checked with Redis-4.0.0
 - The client uses last stable redis version (Redis-4.0.0) by default.
