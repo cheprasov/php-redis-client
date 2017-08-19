@@ -1,6 +1,6 @@
 ## CHANGELOG
 
-### v1.7.1 (2017-08-19)
+### v1.7.2 (2017-08-19)
 - Fixed bug of ClientFactory with default client version
 
 ### v1.7.0 (2017-07-22)
