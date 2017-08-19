@@ -54,8 +54,12 @@ class ClientFactory {
      * @param string $version
      * @throws InvalidArgumentException
      * @throws ErrorException
+     * @return bool
      */
     public static function setDefaultRedisVersion($version) {
+        if (self::$defaultRedisVersion == $version) {
+            return true;
+        }
         if (class_exists('\RedisClient\RedisClient', false)) {
             throw new ErrorException('You can setup default version only if class "\RedisClient\RedisClient" is not loaded.');
         }
@@ -68,6 +72,7 @@ class ClientFactory {
             );
         }
         self::$defaultRedisVersion = $version;
+        return true;
     }
 
     /**
@@ -96,7 +101,9 @@ class ClientFactory {
             if ($v >= $ver) {
                 $class = self::$versions[$v];
                 if (!self::$defaultRedisVersion) {
-                    self::setDefaultRedisVersion($v);
+                    if (self::setDefaultRedisVersion($v)) {
+                        return new RedisClient($config);
+                    }
                 }
                 break;
             }
