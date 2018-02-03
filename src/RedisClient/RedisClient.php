@@ -33,6 +33,6 @@ switch (ClientFactory::getDefaultRedisVersion()) {
         class RedisClient extends RedisClient4x0 {};
         break;
     default:
-        class RedisClient extends RedisClient3x2 {};
+        class RedisClient extends RedisClient4x0 {};
         break;
 }
