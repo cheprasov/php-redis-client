@@ -34,6 +34,7 @@ class ProtocolFactory {
             ConnectionFactory::createStreamConnection(
                 $config[AbstractRedisClient::CONFIG_SERVER],
                 $config[AbstractRedisClient::CONFIG_TIMEOUT],
+                $config[AbstractRedisClient::CONFIG_CONNECTION],
                 $onConnect
             )
         );
