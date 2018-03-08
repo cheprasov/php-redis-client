@@ -1,7 +1,7 @@
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![Latest Stable Version](https://poser.pugx.org/cheprasov/php-redis-client/v/stable)](https://packagist.org/packages/cheprasov/php-redis-client)
 [![Total Downloads](https://poser.pugx.org/cheprasov/php-redis-client/downloads)](https://packagist.org/packages/cheprasov/php-redis-client)
-# RedisClient v1.7.2 for PHP >= 5.5
+# RedisClient v1.8.0 for PHP >= 5.5
 
 ## About
 RedisClient is a fast, fully-functional and user-friendly client for Redis, optimized for performance. RedisClient supports the latest versions of Redis starting from __2.6__ to __4.0__
@@ -17,7 +17,7 @@ RedisClient is a fast, fully-functional and user-friendly client for Redis, opti
 - Easy to use with IDE, client has PHPDocs for all supported versions.
 - By default, the client works with the latest stable version of Redis (4.0).
 - The client was tested on the next latest versions of Redis: 2.6.17, 2.8.24, 3.0.7, 3.2.8, 4.0.8.
-- Also, the client was tested on PHP 5.5, 5.6, 7.0, 7.1, HHVM.
+- Also, the client was tested on PHP 5.5, 5.6, 7.0, 7.1, 7.2, HHVM.
 
 ## Usage
 
@@ -29,7 +29,22 @@ $config = [
     'server' => '127.0.0.1:6379',
 
     // Optional. Default = 1
+    // The timeout for reading/writing data over the socket
     'timeout' => 2,
+
+    // Optional. Default = null
+    // See more here: http://php.net/manual/en/function.stream-socket-client.php
+    'connection' => [
+        // Optional. Default = ini_get("default_socket_timeout")
+        // The timeout only applies while making connecting the socket
+        'timeout' => 2,
+
+        // Optional. Default = STREAM_CLIENT_CONNECT
+        // Bitmask field which may be set to any combination of connection flags.
+        // Currently the select of connection flags is limited to STREAM_CLIENT_CONNECT (default),
+        // STREAM_CLIENT_ASYNC_CONNECT and STREAM_CLIENT_PERSISTENT.
+        'flags' => STREAM_CLIENT_CONNECT
+    ],
 
     // Optional. Specify version to avoid some unexpected errors.
     'version' => '3.2.8',

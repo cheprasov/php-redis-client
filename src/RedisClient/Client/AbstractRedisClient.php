@@ -26,14 +26,15 @@ use RedisClient\RedisClient;
 
 abstract class AbstractRedisClient {
 
-    const VERSION = '1.7.2';
+    const VERSION = '1.8.0';
 
-    const CONFIG_SERVER   = 'server';
-    const CONFIG_TIMEOUT  = 'timeout';
+    const CONFIG_SERVER = 'server';
+    const CONFIG_TIMEOUT = 'timeout';
     const CONFIG_DATABASE = 'database';
     const CONFIG_PASSWORD = 'password';
-    const CONFIG_CLUSTER  = 'cluster';
-    const CONFIG_VERSION  = 'version';
+    const CONFIG_CLUSTER = 'cluster';
+    const CONFIG_VERSION = 'version';
+    const CONFIG_CONNECTION = 'connection';
 
     /**
      * Default configuration
@@ -50,6 +51,7 @@ abstract class AbstractRedisClient {
             'init_on_error_moved' => false,
             'timeout_on_error_tryagain' => 0.05,
         ],
+        self::CONFIG_CONNECTION => null,
     ];
 
     /**

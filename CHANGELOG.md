@@ -1,5 +1,8 @@
 ## CHANGELOG
 
+### v1.8.0 (2018-03-08)
+- Added configuration for connection: timeout & flags.
+
 ### v1.7.2 (2017-08-19)
 - Fixed bug of ClientFactory with default client version
 

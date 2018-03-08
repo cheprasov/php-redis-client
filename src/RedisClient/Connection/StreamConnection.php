@@ -30,6 +30,16 @@ class StreamConnection implements ConnectionInterface {
     protected $timeout;
 
     /**
+     * @var int|float
+     */
+    protected $connection_timeout;
+
+    /**
+     * @var int
+     */
+    protected $connection_flags;
+
+    /**
      * @var callable
      */
     protected $onConnectCallback;
@@ -37,10 +47,12 @@ class StreamConnection implements ConnectionInterface {
     /**
      * @param string $server
      * @param int|float|null $timeout
+     * @param array|null $connection
      */
-    public function __construct($server, $timeout = null) {
+    public function __construct($server, $timeout = null, array $connection = null) {
         $this->setServer($server);
         $this->setTimeout($timeout);
+        $this->setConnection($connection);
     }
 
     /**
@@ -59,6 +71,23 @@ class StreamConnection implements ConnectionInterface {
      */
     protected function setTimeout($timeout = null) {
         $this->timeout = $timeout ? ceil($timeout * 1000000) : null;
+    }
+
+    /**
+     * @param null|array $connection
+     */
+    protected function setConnection(array $connection = null) {
+        if (isset($connection['timeout'])) {
+            $this->connection_timeout = $connection['timeout'];
+        } else {
+            $this->connection_timeout = ini_get('default_socket_timeout');
+        }
+
+        if (isset($connection['flags'])) {
+            $this->connection_flags = $connection['flags'];
+        } else {
+            $this->connection_flags = STREAM_CLIENT_CONNECT;
+        }
     }
 
     /**
@@ -92,7 +121,16 @@ class StreamConnection implements ConnectionInterface {
         if (!$this->resource) {
             $errno = null;
             $errstr = null;
-            if (!$this->resource = stream_socket_client($this->server, $errno, $errstr)) {
+
+            $this->resource = stream_socket_client(
+                $this->server,
+                $errno,
+                $errstr,
+                $this->connection_timeout,
+                $this->connection_flags
+            );
+
+            if (!$this->resource) {
                 throw new ConnectionException('Unable to connect to '. $this->server . ' ('. $errstr .')');
             }
             if (isset($this->timeout)) {
