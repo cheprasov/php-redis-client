@@ -218,7 +218,7 @@ trait ServerCommandsTrait {
      * @link http://redis.io/commands/info
      *
      * @param string $section
-     * @return string
+     * @return array
      */
     public function info($section = null) {
         return $this->returnCommand(['INFO'], null, $section ? [$section] : null, ResponseParser::PARSE_INFO);
