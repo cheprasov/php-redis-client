@@ -56,8 +56,9 @@ class CommonTest extends \Test\Integration\BaseVersionTest {
     public function test_bigData() {
         $Redis = static::$Redis;
 
-        $string = str_repeat(microtime(true), 1024 * 1024);
+        $string = str_repeat(sha1(microtime(true)), 1024 * 1024);
         $md5 = md5($string);
+        $this->assertSame(1024 * 1024 * 40, strlen($string));
 
         $this->assertSame(true, $Redis->set('foo', $string));
         $this->assertSame($string, $Redis->get('foo'));
