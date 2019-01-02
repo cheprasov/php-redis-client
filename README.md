@@ -51,7 +51,7 @@ $config = [
     ],
 
     // Optional. Specify version to avoid some unexpected errors.
-    'version' => '3.2.8',
+    'version' => '4.0.10',
 
     // Optional. Use it only if Redis server requires password (AUTH)
     'password' => 'some-password',
