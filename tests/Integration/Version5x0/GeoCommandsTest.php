@@ -10,8 +10,6 @@
  */
 namespace Test\Integration\Version5x0;
 
-use RedisClient\Exception\ErrorResponseException;
-
 include_once(__DIR__ . '/../Version4x0/GeoCommandsTest.php');
 
 class GeoCommandsTest extends \Test\Integration\Version4x0\GeoCommandsTest {}

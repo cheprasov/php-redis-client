@@ -35,7 +35,7 @@ trait StreamsCommandsTrait {
     }
 
     /**
-     * XADD key ID field string [field string ...]
+     * XADD key ID [MAXLEN ~ maxlen] field string [field string ...]
      * Available since 5.0.0.
      * Time complexity: O(1)
      * @link https://redis.io/commands/xadd
@@ -73,7 +73,7 @@ trait StreamsCommandsTrait {
      * @param bool $justid
      * @return array
      */
-    public function XCLAIM($key, $group, $consumer, $minIdleTime, $ids, $idle = null, $time = null, $retrycount = null, $force = false, $justid = false) {
+    public function xclaim($key, $group, $consumer, $minIdleTime, $ids, $idle = null, $time = null, $retrycount = null, $force = false, $justid = false) {
         $params = [$key, $group, $consumer, $minIdleTime, (array)$ids];
         if (isset($idle)) {
             $params[] = ['IDLE', $idle];
@@ -181,10 +181,10 @@ trait StreamsCommandsTrait {
      * @param bool $help
      * @return array
      */
-    public function xinfo($consumers = null, $groupsKey = null, $streamKey = null, $help = false) {
+    public function xinfo($consumersKey = null, $consumersGroup = null, $groupsKey = null, $streamKey = null, $help = false) {
         $params = [];
-        if (isset($consumers)) {
-            $params[] = $consumers;
+        if (isset($consumersKey, $consumersGroup)) {
+            $params[] = ['CONSUMERS', $consumersKey, $consumersGroup];
         }
         if (isset($groupsKey)) {
             $params[] = ['GROUPS', $groupsKey];
@@ -195,7 +195,7 @@ trait StreamsCommandsTrait {
         if ($help) {
             $params[] = 'HELP';
         }
-        return $this->returnCommand(['XINFO'], null, ['HELP']);
+        return $this->returnCommand(['XINFO'], null, $params);
     }
 
     /**
@@ -307,7 +307,7 @@ trait StreamsCommandsTrait {
      */
     public function xreadgroup($group, $consumer, $keys, $ids, $noack = false, $count = null, $block = null) {
         $keys = (array)$keys;
-        $params = [$group, $consumer];
+        $params = ['GROUP', $group, $consumer];
         if (isset($count)) {
             $params[] = ['COUNT', $count];
         }
@@ -329,19 +329,18 @@ trait StreamsCommandsTrait {
      * If N is constant (e.g. always asking for the first 10 elements with COUNT), you can consider it O(1).
      * @link https://redis.io/commands/xrevrange
      *
-     * @param string $keys
+     * @param string $key
      * @param string $end
      * @param string $start
      * @param string|null $count
      * @return array
      */
-    public function xrevrange($keys, $end, $start, $count = null) {
-        $keys = (array)$keys;
-        $params = [$keys, $end, $start];
+    public function xrevrange($key, $end, $start, $count = null) {
+        $params = [$key, $end, $start];
         if (isset($count)) {
             $params[] = ['COUNT', $count];
         }
-        return $this->returnCommand(['XREVRANGE'], $keys, $params);
+        return $this->returnCommand(['XREVRANGE'], [$key], $params);
     }
 
     /**
@@ -355,15 +354,15 @@ trait StreamsCommandsTrait {
      * @param string $key
      * @param bool $withTilde
      * @param int $count
-     * @return array
+     * @return int
      */
     public function xtrim($key, $count, $withTilde = false) {
-        $params = [$key];
+        $params = [$key, 'MAXLEN'];
         if ($withTilde) {
             $params[] = '~';
         }
         $params[] = $count;
-        return $this->returnCommand(['xtrim'], [$key], $params);
+        return $this->returnCommand(['XTRIM'], [$key], $params);
     }
 
     /**
