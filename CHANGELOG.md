@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+### v1.9.0 (2019-07-16)
+- Support Redis 5
+- Added stream commands: XACK, XADD, XCLAIM, XDEL, XGROUP, XINFO, XLEN, XPENDING, XRANGE, XREAD, XREADGROUP, XREVRANGE, XTRIM.
+- Added server commands: LOLWUT, REPLICAOF
+- Added sorted sets commands: BZPOPMAX, BZPOPMIN, ZPOPMAX, ZPOPMIN
+- The client was checked with Redis-5.0.5, Redis-4.0.14 and older versions
+
 ### v1.8.0 (2018-03-08)
 - Added configuration for connection: timeout & flags.
 

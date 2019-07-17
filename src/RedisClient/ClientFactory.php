@@ -15,6 +15,7 @@ use RedisClient\Client\Version\RedisClient2x8;
 use RedisClient\Client\Version\RedisClient3x0;
 use RedisClient\Client\Version\RedisClient3x2;
 use RedisClient\Client\Version\RedisClient4x0;
+use RedisClient\Client\Version\RedisClient5x0;
 use RedisClient\Exception\ErrorException;
 use RedisClient\Exception\InvalidArgumentException;
 
@@ -25,7 +26,8 @@ class ClientFactory {
     const REDIS_VERSION_3x0 = '3.0';
     const REDIS_VERSION_3x2 = '3.2';
     const REDIS_VERSION_4x0 = '4.0';
-    const REDIS_VERSION_DEFAULT = self::REDIS_VERSION_4x0;
+    const REDIS_VERSION_5x0 = '5.0';
+    const REDIS_VERSION_DEFAULT = self::REDIS_VERSION_5x0;
 
     /**
      * @var string|null
@@ -41,6 +43,7 @@ class ClientFactory {
         self::REDIS_VERSION_3x0 => RedisClient3x0::class,
         self::REDIS_VERSION_3x2 => RedisClient3x2::class,
         self::REDIS_VERSION_4x0 => RedisClient4x0::class,
+        self::REDIS_VERSION_5x0 => RedisClient5x0::class,
     ];
 
     /**
@@ -77,7 +80,7 @@ class ClientFactory {
 
     /**
      * @param null|array $config
-     * @return RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0|RedisClient
+     * @return RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0|RedisClient5x0|RedisClient
      */
     public static function create($config = null) {
         if (isset($config['version'])) {
@@ -89,7 +92,7 @@ class ClientFactory {
     /**
      * @param string $version
      * @param null|array $config
-     * @return RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0
+     * @return RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0|RedisClient5x0
      * @throws InvalidArgumentException
      */
     public static function createClientByVersion($version, $config = null) {

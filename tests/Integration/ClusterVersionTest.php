@@ -14,6 +14,7 @@ use RedisClient\Client\AbstractRedisClient;
 use RedisClient\Client\Version\RedisClient3x0;
 use RedisClient\Client\Version\RedisClient3x2;
 use RedisClient\Client\Version\RedisClient4x0;
+use RedisClient\Client\Version\RedisClient5x0;
 
 class ClusterVersionTest extends \PHPUnit_Framework_TestCase {
 
@@ -29,6 +30,11 @@ class ClusterVersionTest extends \PHPUnit_Framework_TestCase {
             TEST_REDIS_SERVER_3x2_CLUSTER_C
         ],
         RedisClient4x0::class => [
+            TEST_REDIS_SERVER_3x2_CLUSTER_A,
+            TEST_REDIS_SERVER_3x2_CLUSTER_B,
+            TEST_REDIS_SERVER_3x2_CLUSTER_C
+        ],
+        RedisClient5x0::class => [
             TEST_REDIS_SERVER_3x2_CLUSTER_A,
             TEST_REDIS_SERVER_3x2_CLUSTER_B,
             TEST_REDIS_SERVER_3x2_CLUSTER_C

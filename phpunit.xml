@@ -43,6 +43,8 @@
         <const name="TEST_REDIS_SERVER_3x2_2" value="localhost:6388" />
         <const name="TEST_REDIS_SERVER_4x0_1" value="127.0.0.1:6389" />
         <const name="TEST_REDIS_SERVER_4x0_2" value="localhost:6390" />
+        <const name="TEST_REDIS_SERVER_5x0_1" value="127.0.0.1:6391" />
+        <const name="TEST_REDIS_SERVER_5x0_2" value="localhost:6392" />
 
         <const name="TEST_REDIS_SERVER_3x2_CLUSTER_A"  value="127.0.0.1:7001" />
         <const name="TEST_REDIS_SERVER_3x2_CLUSTER_A1" value="127.0.0.1:7004" />

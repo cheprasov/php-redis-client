@@ -29,6 +29,8 @@ class RedisVersionTest extends \PHPUnit_Framework_TestCase {
         [TEST_REDIS_SERVER_3x2_2, '3.2', '3.2.x'],
         [TEST_REDIS_SERVER_4x0_1, '4.0', '4.0.x'],
         [TEST_REDIS_SERVER_4x0_2, '4.0', '4.0.x'],
+        [TEST_REDIS_SERVER_5x0_1, '5.0', '5.0.x'],
+        [TEST_REDIS_SERVER_5x0_2, '5.0', '5.0.x'],
     ];
 
     /**

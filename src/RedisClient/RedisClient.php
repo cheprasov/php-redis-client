@@ -15,6 +15,7 @@ use RedisClient\Client\Version\RedisClient2x8;
 use RedisClient\Client\Version\RedisClient3x0;
 use RedisClient\Client\Version\RedisClient3x2;
 use RedisClient\Client\Version\RedisClient4x0;
+use RedisClient\Client\Version\RedisClient5x0;
 
 switch (ClientFactory::getDefaultRedisVersion()) {
     case ClientFactory::REDIS_VERSION_2x6:
@@ -32,7 +33,10 @@ switch (ClientFactory::getDefaultRedisVersion()) {
     case ClientFactory::REDIS_VERSION_4x0:
         class RedisClient extends RedisClient4x0 {};
         break;
+    case ClientFactory::REDIS_VERSION_5x0:
+        class RedisClient extends RedisClient5x0 {};
+        break;
     default:
-        class RedisClient extends RedisClient4x0 {};
+        class RedisClient extends RedisClient5x0 {};
         break;
 }
