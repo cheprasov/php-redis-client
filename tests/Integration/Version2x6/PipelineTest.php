@@ -36,7 +36,19 @@ class PipelineTest extends \Test\Integration\BaseVersionTest {
         $this->assertSame($Pipeline, $Pipeline->incr('bar'));
         $this->assertSame($Pipeline, $Pipeline->get('bar'));
         $this->assertSame($Pipeline, $Pipeline->mget(['foo', 'bar']));
-        $this->assertSame([true, 5, '5', true, 3, '3', ['5', '3']], $Redis->pipeline($Pipeline));
+        $this->assertSame($Pipeline, $Pipeline->time());
+
+        $result = $Redis->pipeline($Pipeline);
+
+        $this->assertSame(8, count($result));
+        $this->assertSame(true, $result[0]);
+        $this->assertSame(5, $result[1]);
+        $this->assertSame('5', $result[2]);
+        $this->assertSame(true, $result[3]);
+        $this->assertSame(3, $result[4]);
+        $this->assertSame('3', $result[5]);
+        $this->assertSame(['5', '3'], $result[6]);
+        $this->assertSame(true, is_numeric($result[7]));
 
         /** @var Pipeline $Pipeline */
         $Pipeline = $Redis->pipeline();
@@ -61,14 +73,27 @@ class PipelineTest extends \Test\Integration\BaseVersionTest {
         $Pipeline = $Redis->pipeline();
         $this->assertInstanceOf(PipelineInterface::class, $Pipeline);
 
-        $this->assertSame(
-            [true, 5, '5', true, 3, '3', ['5', '3']],
-            $Redis->pipeline(
-                $Pipeline->set('foo', '4')->incr('foo')->get('foo')
-                    ->set('bar', '2')->incr('bar')->get('bar')
-                    ->mget(['foo', 'bar'])
-            )
+        $result = $Redis->pipeline(
+            $Pipeline
+                ->set('foo', '4')
+                ->incr('foo')
+                ->get('foo')
+                ->set('bar', '2')
+                ->incr('bar')
+                ->get('bar')
+                ->mget(['foo', 'bar'])
+                ->time()
         );
+
+        $this->assertSame(8, count($result));
+        $this->assertSame(true, $result[0]);
+        $this->assertSame(5, $result[1]);
+        $this->assertSame('5', $result[2]);
+        $this->assertSame(true, $result[3]);
+        $this->assertSame(3, $result[4]);
+        $this->assertSame('3', $result[5]);
+        $this->assertSame(['5', '3'], $result[6]);
+        $this->assertSame(true, is_numeric($result[7]));
 
         /** @var Pipeline $Pipeline */
         $Pipeline = $Redis->pipeline();
@@ -127,10 +152,11 @@ class PipelineTest extends \Test\Integration\BaseVersionTest {
                 ->set('bar', 'new')
                 ->get('bar')
                 ->echo('hello word')
+                ->time()
                 ->exec();
         });
 
-        $this->assertSame(10, count($result));
+        $this->assertSame(11, count($result));
         $this->assertSame(true, $result[0]);
         $this->assertSame('QUEUED', $result[1]);
         $this->assertSame('QUEUED', $result[2]);
@@ -140,10 +166,11 @@ class PipelineTest extends \Test\Integration\BaseVersionTest {
         $this->assertSame('QUEUED', $result[6]);
         $this->assertSame('QUEUED', $result[7]);
         $this->assertSame('QUEUED', $result[8]);
+        $this->assertSame('QUEUED', $result[9]);
 
-        $result = $result[9];
+        $result = $result[10];
 
-        $this->assertSame(8, count($result));
+        $this->assertSame(9, count($result));
         $this->assertSame(true, $result[0]);
         $this->assertSame(true, $result[1]);
         $this->assertSame('bar', $result[2]);
@@ -152,6 +179,37 @@ class PipelineTest extends \Test\Integration\BaseVersionTest {
         $this->assertSame(true, $result[5]);
         $this->assertSame('new', $result[6]);
         $this->assertSame('hello word', $result[7]);
+        $this->assertSame(true, is_string($result[8]));
+        $this->assertSame(true, is_numeric($result[8][0]));
+    }
+
+    public function test_transactionWithoutPipeline() {
+        $Redis = static::$Redis;
+
+            /** @var Pipeline $Pipeline */
+        $this->assertSame(true, $Redis->multi());
+        $this->assertSame('QUEUED', $Redis->set('foo', 'foo'));
+        $this->assertSame('QUEUED', $Redis->set('bar', 'bar'));
+        $this->assertSame('QUEUED', $Redis->get('bar'));
+        $this->assertSame('QUEUED', $Redis->hincrby('foo', 'foo', 1));
+        $this->assertSame('QUEUED', $Redis->lpush('bar', 'bar'));
+        $this->assertSame('QUEUED', $Redis->set('bar', 'new'));
+        $this->assertSame('QUEUED', $Redis->get('bar'));
+        $this->assertSame('QUEUED', $Redis->echo('hello word'));
+        $this->assertSame('QUEUED', $Redis->time());
+        $result = $Redis->exec();
+
+        $this->assertSame(9, count($result));
+        $this->assertSame(true, $result[0]);
+        $this->assertSame(true, $result[1]);
+        $this->assertSame('bar', $result[2]);
+        $this->assertInstanceOf(ErrorResponseException::class, $result[3]);
+        $this->assertInstanceOf(ErrorResponseException::class, $result[4]);
+        $this->assertSame(true, $result[5]);
+        $this->assertSame('new', $result[6]);
+        $this->assertSame('hello word', $result[7]);
+        $this->assertSame(true, is_string($result[8]));
+        $this->assertSame(true, is_numeric($result[8][0]));
     }
 
 }

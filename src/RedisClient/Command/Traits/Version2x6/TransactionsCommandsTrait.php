@@ -10,6 +10,8 @@
  */
 namespace RedisClient\Command\Traits\Version2x6;
 
+use RedisClient\Client\AbstractRedisClient;
+
 /**
  * Transactions Commands
  * @link http://redis.io/commands#transactions
@@ -36,6 +38,7 @@ trait TransactionsCommandsTrait {
      * @return mixed
      */
     public function exec() {
+        $this->setTransactionMode(AbstractRedisClient::TRANSACTION_MODE_EXECUTED);
         return $this->returnCommand(['EXEC']);
     }
 
@@ -47,6 +50,7 @@ trait TransactionsCommandsTrait {
      * @return bool Always True
      */
     public function multi() {
+        $this->setTransactionMode(AbstractRedisClient::TRANSACTION_MODE_STARTED);
         return $this->returnCommand(['MULTI']);
     }
 

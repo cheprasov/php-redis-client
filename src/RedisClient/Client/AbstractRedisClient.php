@@ -26,7 +26,7 @@ use RedisClient\RedisClient;
 
 abstract class AbstractRedisClient {
 
-    const VERSION = '1.9.0';
+    const VERSION = '1.9.1';
 
     const CONFIG_SERVER = 'server';
     const CONFIG_TIMEOUT = 'timeout';
@@ -35,6 +35,12 @@ abstract class AbstractRedisClient {
     const CONFIG_CLUSTER = 'cluster';
     const CONFIG_VERSION = 'version';
     const CONFIG_CONNECTION = 'connection';
+
+    const TRANSACTION_RESPONSE_QUEUED = 'QUEUED';
+
+    const TRANSACTION_MODE_NONE = 0;
+    const TRANSACTION_MODE_STARTED = 1;
+    const TRANSACTION_MODE_EXECUTED = 2;
 
     /**
      * Default configuration
@@ -68,6 +74,17 @@ abstract class AbstractRedisClient {
      * @var ClusterMap
      */
     protected $ClusterMap;
+
+
+    /**
+     * @var int
+     */
+    protected $transactionMode = self::TRANSACTION_MODE_NONE;
+
+    /**
+     * @var array[]|null
+     */
+    protected $responseParsers = null;
 
     /**
      * @param array|null $config
@@ -159,9 +176,25 @@ abstract class AbstractRedisClient {
         if ($response instanceof ErrorResponseException) {
             throw $response;
         }
-        if (isset($parserId)) {
-            return ResponseParser::parse($parserId, $response);
+
+        if ($this->transactionMode === self::TRANSACTION_MODE_NONE) {
+            if (isset($parserId)) {
+                return ResponseParser::parse($parserId, $response);
+            }
+        } else {
+            if ($this->transactionMode === self::TRANSACTION_MODE_STARTED) {
+                if ($response === self::TRANSACTION_RESPONSE_QUEUED) {
+                    $this->responseParsers[] = $parserId;
+                }
+            } elseif ($this->transactionMode === self::TRANSACTION_MODE_EXECUTED) {
+                $this->setTransactionMode(self::TRANSACTION_MODE_NONE);
+                if (is_array($response) && count($this->responseParsers)
+                    && count($this->responseParsers) === count($response)) {
+                    return array_map([ResponseParser::class, 'parse'], $this->responseParsers, $response);
+                }
+            }
         }
+
         return $response;
     }
 
@@ -263,6 +296,13 @@ abstract class AbstractRedisClient {
             }
         }
         return $command;
+    }
+
+    /**
+     * @param int $transactionMode
+     */
+    protected function setTransactionMode($transactionMode) {
+        $this->transactionMode = $transactionMode;
     }
 
     /**

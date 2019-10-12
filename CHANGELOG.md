@@ -1,5 +1,8 @@
 ## CHANGELOG
 
+### v1.9.1 (2019-10-12)
+- Fixed bug: parser result error for transactions/pipelines https://github.com/cheprasov/php-redis-client/issues/72
+
 ### v1.9.0 (2019-07-16)
 - Support Redis 5
 - Added stream commands: XACK, XADD, XCLAIM, XDEL, XGROUP, XINFO, XLEN, XPENDING, XRANGE, XREAD, XREADGROUP, XREVRANGE, XTRIM.
