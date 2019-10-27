@@ -10,6 +10,7 @@
  */
 namespace RedisClient\Pipeline;
 
+use RedisClient\Client\AbstractRedisClient;
 use RedisClient\Command\Response\ResponseParser;
 use RedisClient\Exception\CommandNotFoundException;
 use RedisClient\Exception\ErrorException;
@@ -25,6 +26,11 @@ abstract class AbstractPipeline implements PipelineInterface {
      * @var string
      */
     protected $keys = [];
+
+    /**
+     * @var int
+     */
+    protected $transactionMode = AbstractRedisClient::TRANSACTION_MODE_NONE;
 
     /**
      * @param \Closure|null $Closure
@@ -75,6 +81,13 @@ abstract class AbstractPipeline implements PipelineInterface {
     }
 
     /**
+     * @param int $transactionMode
+     */
+    protected function setTransactionMode($transactionMode) {
+        $this->transactionMode = $transactionMode;
+    }
+
+    /**
      * @return array[]
      */
     public function getStructure() {
@@ -102,13 +115,30 @@ abstract class AbstractPipeline implements PipelineInterface {
      * @return mixed
      */
     public function parseResponse($responses) {
-        foreach ($responses as $n => $response) {
-            if (empty($this->commandLines[$n][2])) {
-                // todo: check
-                continue;
+        if ($this->transactionMode === AbstractRedisClient::TRANSACTION_MODE_NONE) {
+            foreach ($responses as $n => $response) {
+                if (empty($this->commandLines[$n][2])) {
+                    // todo: check
+                    continue;
+                }
+                $responses[$n] = ResponseParser::parse($this->commandLines[$n][2], $response);
             }
-            $responses[$n] = ResponseParser::parse($this->commandLines[$n][2], $response);
+            return $responses;
         }
+
+        if ($this->transactionMode === AbstractRedisClient::TRANSACTION_MODE_EXECUTED) {
+            $this->transactionMode = AbstractRedisClient::TRANSACTION_MODE_NONE;
+            $execResponses = array_pop($responses);
+            foreach ($execResponses as $n => $response) {
+                // MULTI command is ignored
+                if (empty($this->commandLines[$n + 1][2])) {
+                    continue;
+                }
+                $execResponses[$n] = ResponseParser::parse($this->commandLines[$n + 1][2], $response);
+            }
+            $responses[] = $execResponses;
+        }
+
         return $responses;
     }
 
