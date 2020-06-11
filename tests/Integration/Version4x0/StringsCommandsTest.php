@@ -31,13 +31,13 @@ class StringsCommandsTest extends \Test\Integration\Version3x2\StringsCommandsTe
         $this->assertSame('4.15159265', $Redis->incrbyfloat('float', 1.01));
         $this->assertSame('3.14159265', $Redis->incrbyfloat('float', -1.01));
 
-        $this->setExpectedException(ErrorResponseException::class);
+        $this->expectException(ErrorResponseException::class);
         $this->assertSame('17.5', $Redis->incrbyfloat('bin', 17.5));
 
-        $this->setExpectedException(ErrorResponseException::class);
+        $this->expectException(ErrorResponseException::class);
         $this->assertSame(8, $Redis->incrbyfloat('string', 8));
 
-        $this->setExpectedException(ErrorResponseException::class);
+        $this->expectException(ErrorResponseException::class);
         $Redis->incrbyfloat('hash', 2.2);
     }
 }

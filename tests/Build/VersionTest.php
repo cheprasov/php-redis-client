@@ -10,9 +10,10 @@
  */
 namespace Test\Build;
 
+use PHPUnit\Framework\TestCase;
 use RedisClient\Client\AbstractRedisClient;
 
-class VersionTest extends \PHPUnit_Framework_TestCase {
+class VersionTest extends TestCase {
 
     public function test_version() {
         chdir(__DIR__.'/../../');

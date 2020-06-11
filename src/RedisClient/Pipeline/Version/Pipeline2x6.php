@@ -16,13 +16,12 @@ use RedisClient\Pipeline\AbstractPipeline;
 /**
  * Redis version 2.6
  *
- * Connection
- * @method Pipeline2x6 auth($password)
- * @method Pipeline2x6 echo($message)
- * @method Pipeline2x6 echoMessage($message) - alias method for reversed word <echo>
- * @method Pipeline2x6 ping()
- * @method Pipeline2x6 quit()
- * @method Pipeline2x6 select($db)
+ * Transactions
+ * @method Pipeline2x6 discard()
+ * @method Pipeline2x6 exec()
+ * @method Pipeline2x6 multi()
+ * @method Pipeline2x6 unwatch()
+ * @method Pipeline2x6 watch($keys)
  *
  * Hashes
  * @method Pipeline2x6 hdel($key, $fields)
@@ -38,6 +37,31 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline2x6 hset($key, $field, $value)
  * @method Pipeline2x6 hsetnx($key, $field, $value)
  * @method Pipeline2x6 hvals($key)
+ *
+ * Strings
+ * @method Pipeline2x6 append($key, $value)
+ * @method Pipeline2x6 bitcount($key, $start = null, $end = null)
+ * @method Pipeline2x6 bitop($operation, $destkey, $keys)
+ * @method Pipeline2x6 decr($key)
+ * @method Pipeline2x6 decrby($key, $decrement)
+ * @method Pipeline2x6 get($key)
+ * @method Pipeline2x6 getbit($key, $offset)
+ * @method Pipeline2x6 getrange($key, $start, $end)
+ * @method Pipeline2x6 substr($key, $start, $end)
+ * @method Pipeline2x6 getset($key, $value)
+ * @method Pipeline2x6 incr($key)
+ * @method Pipeline2x6 incrby($key, $increment)
+ * @method Pipeline2x6 incrbyfloat($key, $increment)
+ * @method Pipeline2x6 mget($keys)
+ * @method Pipeline2x6 mset(array $keyValues)
+ * @method Pipeline2x6 msetnx(array $keyValues)
+ * @method Pipeline2x6 psetex($key, $milliseconds, $value)
+ * @method Pipeline2x6 set($key, $value, $seconds = null, $milliseconds = null, $exist = null)
+ * @method Pipeline2x6 setbit($key, $offset, $bit)
+ * @method Pipeline2x6 setex($key, $seconds, $value)
+ * @method Pipeline2x6 setnx($key, $value)
+ * @method Pipeline2x6 setrange($key, $offset, $value)
+ * @method Pipeline2x6 strlen($key)
  *
  * Keys
  * @method Pipeline2x6 del($keys)
@@ -61,29 +85,31 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline2x6 ttl($key)
  * @method Pipeline2x6 type($key)
  *
- * Lists
- * @method Pipeline2x6 blpop($keys, $timeout)
- * @method Pipeline2x6 brpop($keys, $timeout)
- * @method Pipeline2x6 brpoplpush($source, $destination, $timeout)
- * @method Pipeline2x6 lindex($key, $index)
- * @method Pipeline2x6 linsert($key, $after = true, $pivot, $value)
- * @method Pipeline2x6 llen($key)
- * @method Pipeline2x6 lpop($key)
- * @method Pipeline2x6 lpush($key, $values)
- * @method Pipeline2x6 lpushx($key, $value)
- * @method Pipeline2x6 lrange($key, $start, $stop)
- * @method Pipeline2x6 lrem($key, $count, $value)
- * @method Pipeline2x6 lset($key, $index, $value)
- * @method Pipeline2x6 ltrim($key, $start, $stop)
- * @method Pipeline2x6 rpop($key)
- * @method Pipeline2x6 rpoplpush($source, $destination)
- * @method Pipeline2x6 rpush($key, $values)
- * @method Pipeline2x6 rpushx($key, $value)
+ * SortedSets
+ * @method Pipeline2x6 zadd($key, array $members)
+ * @method Pipeline2x6 zcard($key)
+ * @method Pipeline2x6 zcount($key, $min, $max)
+ * @method Pipeline2x6 zincrby($key, $increment, $member)
+ * @method Pipeline2x6 zinterstore($destination, $keys, $weights = null, $aggregate = null)
+ * @method Pipeline2x6 zrange($key, $start, $stop, $withscores = false)
+ * @method Pipeline2x6 zrangebyscore($key, $min, $max, $withscores = false, $limit = null)
+ * @method Pipeline2x6 zrank($key, $member)
+ * @method Pipeline2x6 zrem($key, $members)
+ * @method Pipeline2x6 zremrangebyrank($key, $start, $stop)
+ * @method Pipeline2x6 zremrangebyscore($key, $min, $max)
+ * @method Pipeline2x6 zrevrange($key, $start, $stop, $withscores = false)
+ * @method Pipeline2x6 zrevrangebyscore($key, $max, $min, $withscores = false, $limit = null)
+ * @method Pipeline2x6 zrevrank($key, $member)
+ * @method Pipeline2x6 zscore($key, $member)
+ * @method Pipeline2x6 zunionstore($destination, $keys, $weights = null, $aggregate = null)
  *
- * PubSub
- * @method Pipeline2x6 publish($channel, $message)
- * @method Pipeline2x6 punsubscribe($patterns = null)
- * @method Pipeline2x6 unsubscribe($channels)
+ * Connection
+ * @method Pipeline2x6 auth($password)
+ * @method Pipeline2x6 echo($message)
+ * @method Pipeline2x6 echoMessage($message) - alias method for reversed word <echo>
+ * @method Pipeline2x6 ping()
+ * @method Pipeline2x6 quit()
+ * @method Pipeline2x6 select($db)
  *
  * Scripting
  * @method Pipeline2x6 eval($script, $keys = null, $args = null)
@@ -118,6 +144,11 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline2x6 sync()
  * @method Pipeline2x6 time()
  *
+ * PubSub
+ * @method Pipeline2x6 publish($channel, $message)
+ * @method Pipeline2x6 punsubscribe($patterns = null)
+ * @method Pipeline2x6 unsubscribe($channels)
+ *
  * Sets
  * @method Pipeline2x6 sadd($key, $members)
  * @method Pipeline2x6 scard($key)
@@ -134,55 +165,24 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline2x6 sunion($keys)
  * @method Pipeline2x6 sunionstore($destination, $keys)
  *
- * SortedSets
- * @method Pipeline2x6 zadd($key, array $members)
- * @method Pipeline2x6 zcard($key)
- * @method Pipeline2x6 zcount($key, $min, $max)
- * @method Pipeline2x6 zincrby($key, $increment, $member)
- * @method Pipeline2x6 zinterstore($destination, $keys, $weights = null, $aggregate = null)
- * @method Pipeline2x6 zrange($key, $start, $stop, $withscores = false)
- * @method Pipeline2x6 zrangebyscore($key, $min, $max, $withscores = false, $limit = null)
- * @method Pipeline2x6 zrank($key, $member)
- * @method Pipeline2x6 zrem($key, $members)
- * @method Pipeline2x6 zremrangebyrank($key, $start, $stop)
- * @method Pipeline2x6 zremrangebyscore($key, $min, $max)
- * @method Pipeline2x6 zrevrange($key, $start, $stop, $withscores = false)
- * @method Pipeline2x6 zrevrangebyscore($key, $max, $min, $withscores = false, $limit = null)
- * @method Pipeline2x6 zrevrank($key, $member)
- * @method Pipeline2x6 zscore($key, $member)
- * @method Pipeline2x6 zunionstore($destination, $keys, $weights = null, $aggregate = null)
- *
- * Strings
- * @method Pipeline2x6 append($key, $value)
- * @method Pipeline2x6 bitcount($key, $start = null, $end = null)
- * @method Pipeline2x6 bitop($operation, $destkey, $keys)
- * @method Pipeline2x6 decr($key)
- * @method Pipeline2x6 decrby($key, $decrement)
- * @method Pipeline2x6 get($key)
- * @method Pipeline2x6 getbit($key, $offset)
- * @method Pipeline2x6 getrange($key, $start, $end)
- * @method Pipeline2x6 substr($key, $start, $end)
- * @method Pipeline2x6 getset($key, $value)
- * @method Pipeline2x6 incr($key)
- * @method Pipeline2x6 incrby($key, $increment)
- * @method Pipeline2x6 incrbyfloat($key, $increment)
- * @method Pipeline2x6 mget($keys)
- * @method Pipeline2x6 mset(array $keyValues)
- * @method Pipeline2x6 msetnx(array $keyValues)
- * @method Pipeline2x6 psetex($key, $milliseconds, $value)
- * @method Pipeline2x6 set($key, $value, $seconds = null, $milliseconds = null, $exist = null)
- * @method Pipeline2x6 setbit($key, $offset, $bit)
- * @method Pipeline2x6 setex($key, $seconds, $value)
- * @method Pipeline2x6 setnx($key, $value)
- * @method Pipeline2x6 setrange($key, $offset, $value)
- * @method Pipeline2x6 strlen($key)
- *
- * Transactions
- * @method Pipeline2x6 discard()
- * @method Pipeline2x6 exec()
- * @method Pipeline2x6 multi()
- * @method Pipeline2x6 unwatch()
- * @method Pipeline2x6 watch($keys)
+ * Lists
+ * @method Pipeline2x6 blpop($keys, $timeout)
+ * @method Pipeline2x6 brpop($keys, $timeout)
+ * @method Pipeline2x6 brpoplpush($source, $destination, $timeout)
+ * @method Pipeline2x6 lindex($key, $index)
+ * @method Pipeline2x6 linsert($key, $after = true, $pivot, $value)
+ * @method Pipeline2x6 llen($key)
+ * @method Pipeline2x6 lpop($key)
+ * @method Pipeline2x6 lpush($key, $values)
+ * @method Pipeline2x6 lpushx($key, $value)
+ * @method Pipeline2x6 lrange($key, $start, $stop)
+ * @method Pipeline2x6 lrem($key, $count, $value)
+ * @method Pipeline2x6 lset($key, $index, $value)
+ * @method Pipeline2x6 ltrim($key, $start, $stop)
+ * @method Pipeline2x6 rpop($key)
+ * @method Pipeline2x6 rpoplpush($source, $destination)
+ * @method Pipeline2x6 rpush($key, $values)
+ * @method Pipeline2x6 rpushx($key, $value)
  * 
  */
 class Pipeline2x6 extends AbstractPipeline {

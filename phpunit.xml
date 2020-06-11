@@ -12,11 +12,8 @@
     stopOnIncomplete            = "false"
     stopOnSkipped               = "false"
     bootstrap                   = "vendor/autoload.php"
-    syntaxCheck                 = "true"
     verbose                     = "true"
-    checkForUnintentionallyCoveredCode  = "false"
     beStrictAboutOutputDuringTests      = "false"
-    beStrictAboutTestSize               = "true"
 >
     <testsuites>
         <testsuite name="Build Tests">
@@ -26,9 +23,9 @@
             <directory suffix="Test.php" >./tests/Unit/</directory>
         </testsuite>
         <testsuite name="Integration tests">
+            <directory suffix="Test.php" >./tests/Integration/</directory>
             <exclude>./tests/Integration/BaseVersionTest.php</exclude>
             <exclude>./tests/Integration/ClusterVersionTest.php</exclude>
-            <directory suffix="Test.php" >./tests/Integration/</directory>
         </testsuite>
     </testsuites>
 

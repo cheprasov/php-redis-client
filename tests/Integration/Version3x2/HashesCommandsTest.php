@@ -60,7 +60,7 @@ class HashesCommandsTest extends \Test\Integration\Version3x0\HashesCommandsTest
         $this->assertSame(48, $Redis->hincrby('hash', 'integer', 6));
         $this->assertSame(0, $Redis->hincrby('hash', 'integer', -48));
 
-        $this->setExpectedException(ErrorResponseException::class);
+        $this->expectException(ErrorResponseException::class);
         $Redis->hincrby('', 'null', 2);
 
         try {

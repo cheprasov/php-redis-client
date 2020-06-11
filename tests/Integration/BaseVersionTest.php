@@ -10,6 +10,7 @@
  */
 namespace Test\Integration;
 
+use PHPUnit\Framework\TestCase;
 use RedisClient\Client\AbstractRedisClient;
 use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Client\Version\RedisClient2x8;
@@ -18,7 +19,7 @@ use RedisClient\Client\Version\RedisClient3x2;
 use RedisClient\Client\Version\RedisClient4x0;
 use RedisClient\Client\Version\RedisClient5x0;
 
-class BaseVersionTest extends \PHPUnit_Framework_TestCase {
+class BaseVersionTest extends TestCase {
 
     const SERVER_1 = 0;
     const SERVER_2 = 1;
@@ -79,7 +80,7 @@ class BaseVersionTest extends \PHPUnit_Framework_TestCase {
         if (false === strpos(static::class, '\Version')) {
             return null;
         }
-        list($testClass, $testVersion) = array_reverse(explode('\\', static::class));
+        [$testClass, $testVersion] = array_reverse(explode('\\', static::class));
         $version = str_ireplace(['version'], [''], $testVersion);
         $class = str_replace('RedisClient2x6', 'RedisClient' . $version, RedisClient2x6::class);
         $servers = self::$servers_map[$class];
@@ -113,12 +114,12 @@ class BaseVersionTest extends \PHPUnit_Framework_TestCase {
         return new $class($config);
     }
 
-    public static function setUpBeforeClass() {
+    public static function setUpBeforeClass(): void {
         static::$Redis  = self::getRedisClient(self::SERVER_1);
         static::$Redis2 = self::getRedisClient(self::SERVER_2);
     }
 
-    public static function tearDownAfterClass() {
+    public static function tearDownAfterClass(): void {
         if (static::$Redis) {
             static::$Redis->select(0);
             static::$Redis->flushall();
@@ -131,7 +132,7 @@ class BaseVersionTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
-    protected function setUp() {
+    protected function setUp(): void {
         static::tearDownAfterClass();
     }
 

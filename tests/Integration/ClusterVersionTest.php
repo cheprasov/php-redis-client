@@ -10,13 +10,14 @@
  */
 namespace Test\Integration;
 
+use PHPUnit\Framework\TestCase;
 use RedisClient\Client\AbstractRedisClient;
 use RedisClient\Client\Version\RedisClient3x0;
 use RedisClient\Client\Version\RedisClient3x2;
 use RedisClient\Client\Version\RedisClient4x0;
 use RedisClient\Client\Version\RedisClient5x0;
 
-class ClusterVersionTest extends \PHPUnit_Framework_TestCase {
+class ClusterVersionTest extends TestCase {
 
     static protected $servers_map = [
         RedisClient3x0::class => [
@@ -52,7 +53,7 @@ class ClusterVersionTest extends \PHPUnit_Framework_TestCase {
         if (false === strpos(static::class, '\Version')) {
             return null;
         }
-        list($testClass, $testVersion) = array_reverse(explode('\\', static::class));
+        [$testClass, $testVersion] = array_reverse(explode('\\', static::class));
         $version = str_ireplace(['version'], [''], $testVersion);
         $class = str_replace('RedisClient3x0', 'RedisClient' . $version, RedisClient3x0::class);
         return $class;

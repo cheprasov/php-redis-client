@@ -10,16 +10,17 @@
  */
 namespace Test\Unit\Command\Response;
 
+use PHPUnit\Framework\TestCase;
 use RedisClient\Client\AbstractRedisClient;
 use RedisClient\Command\Response\ResponseParser;
 
 /**
  * @see ResponseParser
  */
-class ResponseParserTest extends \PHPUnit_Framework_TestCase {
+class ResponseParserTest extends TestCase {
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|AbstractRedisClient
+     * @return \PHPUnit\Framework\MockObject\MockObject|AbstractRedisClient
      */
     protected function getAbstractRedisClientMock() {
         $Mock = $this->getMockForAbstractClass(AbstractRedisClient::class);

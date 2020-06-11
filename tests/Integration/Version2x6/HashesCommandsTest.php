@@ -27,7 +27,7 @@ class HashesCommandsTest extends \Test\Integration\BaseVersionTest {
     /**
      * @inheritdoc
      */
-    protected function setUp() {
+    protected function setUp(): void {
         static::$Redis->flushall();
         static::$fields = [
             'string'  => 'value',

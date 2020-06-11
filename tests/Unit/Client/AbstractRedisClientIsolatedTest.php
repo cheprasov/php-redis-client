@@ -11,6 +11,7 @@
 namespace Test\Unit\Client;
 
 use ExtraMocks\Mocks;
+use PHPUnit\Framework\TestCase;
 use RedisClient\Client\AbstractRedisClient;
 use RedisClient\Exception\MovedResponseException;
 use RedisClient\RedisClient;
@@ -20,9 +21,9 @@ use RedisClient\RedisClient;
  * @runTestsInSeparateProcesses
  * @runInSeparateProcess
  */
-class AbstractRedisClientIsolatedTest extends \PHPUnit_Framework_TestCase {
+class AbstractRedisClientIsolatedTest extends TestCase {
 
-    public function setUp() {
+    public function setUp(): void {
         $this->mockStream();
     }
 

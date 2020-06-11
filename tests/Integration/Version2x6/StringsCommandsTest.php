@@ -27,7 +27,7 @@ class StringsCommandsTest extends \Test\Integration\BaseVersionTest {
     /**
      * @inheritdoc
      */
-    protected function setUp() {
+    protected function setUp(): void {
         parent::setUp();
         static::$fields = [
             'string'  => 'value',

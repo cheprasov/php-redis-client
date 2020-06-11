@@ -10,12 +10,13 @@
  */
 namespace Test\Integration;
 
+use PHPUnit\Framework\TestCase;
 use RedisClient\ClientFactory;
 
 /**
  * Check Redis Versions
  */
-class RedisVersionTest extends \PHPUnit_Framework_TestCase {
+class RedisVersionTest extends TestCase {
 
     // <server>, <client version>, <expected server version>
     protected $versions = [
@@ -38,7 +39,7 @@ class RedisVersionTest extends \PHPUnit_Framework_TestCase {
      */
     public function test_RedisVersions() {
         foreach ($this->versions as $n => $arr) {
-            list($server, $clientVersion, $serverVersion) = $arr;
+            [$server, $clientVersion, $serverVersion] = $arr;
 
             $Redis = ClientFactory::create([
                 'server' => $server,
