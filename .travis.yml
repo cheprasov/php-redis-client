@@ -1,5 +1,5 @@
-sudo: required
-
+os: linux
+dist: xenial
 language: php
 php:
   - '7.2'
@@ -7,7 +7,7 @@ php:
   - '7.4'
   - hhvm
 
-matrix:
+jobs:
   allow_failures:
     - php: hhvm
 
@@ -15,40 +15,40 @@ services:
   - docker
 
 install:
-   - composer install
+  - composer install
 
 before_install:
-   - docker pull cheprasov/redis-for-tests:latest;
-   - docker pull cheprasov/redis-cluster-for-tests:latest;
+  - docker pull cheprasov/redis-for-tests:latest;
+  - docker pull cheprasov/redis-cluster-for-tests:latest;
 
-   - |
-      docker run -i -t -d \
-        -p 127.0.0.1:6381:6381 \
-        -p 127.0.0.1:6382:6382 \
-        -p 127.0.0.1:6383:6383 \
-        -p 127.0.0.1:6384:6384 \
-        -p 127.0.0.1:6385:6385 \
-        -p 127.0.0.1:6386:6386 \
-        -p 127.0.0.1:6387:6387 \
-        -p 127.0.0.1:6388:6388 \
-        -p 127.0.0.1:6389:6389 \
-        -p 127.0.0.1:6390:6390 \
-        -p 127.0.0.1:6391:6391 \
-        -p 127.0.0.1:6392:6392 \
-        cheprasov/redis-for-tests
+  - |
+    docker run -i -t -d \
+      -p 127.0.0.1:6381:6381 \
+      -p 127.0.0.1:6382:6382 \
+      -p 127.0.0.1:6383:6383 \
+      -p 127.0.0.1:6384:6384 \
+      -p 127.0.0.1:6385:6385 \
+      -p 127.0.0.1:6386:6386 \
+      -p 127.0.0.1:6387:6387 \
+      -p 127.0.0.1:6388:6388 \
+      -p 127.0.0.1:6389:6389 \
+      -p 127.0.0.1:6390:6390 \
+      -p 127.0.0.1:6391:6391 \
+      -p 127.0.0.1:6392:6392 \
+      cheprasov/redis-for-tests
 
-   - |
-      docker run -i -t -d \
-        -p 127.0.0.1:7001:7001 \
-        -p 127.0.0.1:7002:7002 \
-        -p 127.0.0.1:7003:7003 \
-        -p 127.0.0.1:7004:7004 \
-        -p 127.0.0.1:7005:7005 \
-        -p 127.0.0.1:7006:7006 \
-        cheprasov/redis-cluster-for-tests
+  - |
+    docker run -i -t -d \
+      -p 127.0.0.1:7001:7001 \
+      -p 127.0.0.1:7002:7002 \
+      -p 127.0.0.1:7003:7003 \
+      -p 127.0.0.1:7004:7004 \
+      -p 127.0.0.1:7005:7005 \
+      -p 127.0.0.1:7006:7006 \
+      cheprasov/redis-cluster-for-tests
 
-   - docker ps;
-   - sleep 5;
+  - docker ps;
+  - sleep 5;
 
 before_script:
-   - if [[ $TRAVIS_PHP_VERSION = 'hhvm' ]] ; then rm ./tests/Unit/Client/AbstractRedisClientIsolatedTest.php; fi;
+  - if [[ $TRAVIS_PHP_VERSION = 'hhvm' ]] ; then rm ./tests/Unit/Client/AbstractRedisClientIsolatedTest.php; fi;
