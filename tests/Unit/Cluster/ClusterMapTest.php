@@ -10,17 +10,18 @@
  */
 namespace Test\Unit\Cluster;
 
+use PHPUnit\Framework\TestCase;
 use RedisClient\Cluster\ClusterMap;
 use RedisClient\RedisClient;
 
 /**
- * @see RedisClient\Cluster\ClusterMap
+ * @see \RedisClient\Cluster\ClusterMap
  */
-class ClusterMapTest extends \PHPUnit_Framework_TestCase {
+class ClusterMapTest extends TestCase {
 
     protected function getClusterMap($RedisClient = null, $config = []) {
         if (!$RedisClient) {
-            /** @var RedisClient|\PHPUnit_Framework_MockObject_MockObject $RedisClient */
+            /** @var RedisClient|\PHPUnit\Framework\MockObject\MockObject $RedisClient */
             $RedisClient = $this->getMockBuilder(RedisClient::class)
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -94,7 +95,7 @@ class ClusterMapTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see RedisClient\Cluster\ClusterMap::getSlotByKey
+     * @see \RedisClient\Cluster\ClusterMap::getSlotByKey
      * @dataProvider provider_getSlotByKey
      * @param string $key
      * @param int $slot
@@ -137,7 +138,7 @@ class ClusterMapTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see RedisClient\Cluster\ClusterMap::getServerBySlot
+     * @see \RedisClient\Cluster\ClusterMap::getServerBySlot
      * @dataProvider provider_getServerBySlot
      * @param int $slot
      * @param string $expect
@@ -155,7 +156,7 @@ class ClusterMapTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see RedisClient\Cluster\ClusterMap::setClusters
+     * @see \RedisClient\Cluster\ClusterMap::setClusters
      */
     public function test_setClusters() {
         $ClusterMap = $this->getClusterMap();
@@ -198,7 +199,7 @@ class ClusterMapTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @see RedisClient\Cluster\ClusterMap::addCluster
+     * @see \RedisClient\Cluster\ClusterMap::addCluster
      */
     public function test_addCluster() {
         $ClusterMap = $this->getClusterMap();

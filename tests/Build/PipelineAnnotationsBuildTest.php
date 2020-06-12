@@ -10,7 +10,9 @@
  */
 namespace Test\Build;
 
-class PipelineAnnotationsBuildTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class PipelineAnnotationsBuildTest extends TestCase {
 
     /**
      * Update annotations for pipeline on tests

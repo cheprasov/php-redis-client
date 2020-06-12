@@ -10,16 +10,16 @@
  */
 namespace Test\Unit\Client;
 
+use PHPUnit\Framework\TestCase;
 use RedisClient\Client\AbstractRedisClient;
-use RedisClient\RedisClient;
 
 /**
  * @see AbstractRedisClient
  */
-class AbstractRedisClientTest extends \PHPUnit_Framework_TestCase {
+class AbstractRedisClientTest extends TestCase {
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|AbstractRedisClient
+     * @return \PHPUnit\Framework\MockObject\MockObject|AbstractRedisClient
      */
     protected function getAbstractRedisClientMock() {
         $Mock = $this->getMockForAbstractClass(AbstractRedisClient::class);
@@ -33,7 +33,7 @@ class AbstractRedisClientTest extends \PHPUnit_Framework_TestCase {
             [['SET', 'foo', 'hello world'],  'SET foo "hello world"'],
             [['SET', '', 'hello world'],  'SET "" "hello world"'],
             [['SET', 'some key', 'hello world'],  'SET "some key" "hello world"'],
-        
+
             [
                 ['SET', 'some "key"', 'hello my "little" world'],
                 'SET "some \"key\"" "hello my \"little\" world"'

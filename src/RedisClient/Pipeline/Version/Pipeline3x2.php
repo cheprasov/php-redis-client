@@ -16,13 +16,12 @@ use RedisClient\Pipeline\AbstractPipeline;
 /**
  * Redis version 2.6
  *
- * Connection
- * @method Pipeline3x2 auth($password)
- * @method Pipeline3x2 echo($message)
- * @method Pipeline3x2 echoMessage($message) - alias method for reversed word <echo>
- * -method Pipeline3x2 ping()
- * @method Pipeline3x2 quit()
- * @method Pipeline3x2 select($db)
+ * Transactions
+ * @method Pipeline3x2 discard()
+ * @method Pipeline3x2 exec()
+ * @method Pipeline3x2 multi()
+ * @method Pipeline3x2 unwatch()
+ * @method Pipeline3x2 watch($keys)
  *
  * Hashes
  * @method Pipeline3x2 hdel($key, $fields)
@@ -38,6 +37,31 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 hset($key, $field, $value)
  * @method Pipeline3x2 hsetnx($key, $field, $value)
  * @method Pipeline3x2 hvals($key)
+ *
+ * Strings
+ * @method Pipeline3x2 append($key, $value)
+ * @method Pipeline3x2 bitcount($key, $start = null, $end = null)
+ * @method Pipeline3x2 bitop($operation, $destkey, $keys)
+ * @method Pipeline3x2 decr($key)
+ * @method Pipeline3x2 decrby($key, $decrement)
+ * @method Pipeline3x2 get($key)
+ * @method Pipeline3x2 getbit($key, $offset)
+ * @method Pipeline3x2 getrange($key, $start, $end)
+ * @method Pipeline3x2 substr($key, $start, $end)
+ * @method Pipeline3x2 getset($key, $value)
+ * @method Pipeline3x2 incr($key)
+ * @method Pipeline3x2 incrby($key, $increment)
+ * @method Pipeline3x2 incrbyfloat($key, $increment)
+ * @method Pipeline3x2 mget($keys)
+ * @method Pipeline3x2 mset(array $keyValues)
+ * @method Pipeline3x2 msetnx(array $keyValues)
+ * @method Pipeline3x2 psetex($key, $milliseconds, $value)
+ * @method Pipeline3x2 set($key, $value, $seconds = null, $milliseconds = null, $exist = null)
+ * @method Pipeline3x2 setbit($key, $offset, $bit)
+ * @method Pipeline3x2 setex($key, $seconds, $value)
+ * @method Pipeline3x2 setnx($key, $value)
+ * @method Pipeline3x2 setrange($key, $offset, $value)
+ * @method Pipeline3x2 strlen($key)
  *
  * Keys
  * @method Pipeline3x2 del($keys)
@@ -61,29 +85,31 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 ttl($key)
  * @method Pipeline3x2 type($key)
  *
- * Lists
- * @method Pipeline3x2 blpop($keys, $timeout)
- * @method Pipeline3x2 brpop($keys, $timeout)
- * @method Pipeline3x2 brpoplpush($source, $destination, $timeout)
- * @method Pipeline3x2 lindex($key, $index)
- * @method Pipeline3x2 linsert($key, $after = true, $pivot, $value)
- * @method Pipeline3x2 llen($key)
- * @method Pipeline3x2 lpop($key)
- * @method Pipeline3x2 lpush($key, $values)
- * @method Pipeline3x2 lpushx($key, $value)
- * @method Pipeline3x2 lrange($key, $start, $stop)
- * @method Pipeline3x2 lrem($key, $count, $value)
- * @method Pipeline3x2 lset($key, $index, $value)
- * @method Pipeline3x2 ltrim($key, $start, $stop)
- * @method Pipeline3x2 rpop($key)
- * @method Pipeline3x2 rpoplpush($source, $destination)
- * @method Pipeline3x2 rpush($key, $values)
- * @method Pipeline3x2 rpushx($key, $value)
+ * SortedSets
+ * -method Pipeline3x2 zadd($key, array $members)
+ * @method Pipeline3x2 zcard($key)
+ * @method Pipeline3x2 zcount($key, $min, $max)
+ * @method Pipeline3x2 zincrby($key, $increment, $member)
+ * @method Pipeline3x2 zinterstore($destination, $keys, $weights = null, $aggregate = null)
+ * @method Pipeline3x2 zrange($key, $start, $stop, $withscores = false)
+ * @method Pipeline3x2 zrangebyscore($key, $min, $max, $withscores = false, $limit = null)
+ * @method Pipeline3x2 zrank($key, $member)
+ * @method Pipeline3x2 zrem($key, $members)
+ * @method Pipeline3x2 zremrangebyrank($key, $start, $stop)
+ * @method Pipeline3x2 zremrangebyscore($key, $min, $max)
+ * @method Pipeline3x2 zrevrange($key, $start, $stop, $withscores = false)
+ * @method Pipeline3x2 zrevrangebyscore($key, $max, $min, $withscores = false, $limit = null)
+ * @method Pipeline3x2 zrevrank($key, $member)
+ * @method Pipeline3x2 zscore($key, $member)
+ * @method Pipeline3x2 zunionstore($destination, $keys, $weights = null, $aggregate = null)
  *
- * PubSub
- * @method Pipeline3x2 publish($channel, $message)
- * @method Pipeline3x2 punsubscribe($patterns = null)
- * @method Pipeline3x2 unsubscribe($channels)
+ * Connection
+ * @method Pipeline3x2 auth($password)
+ * @method Pipeline3x2 echo($message)
+ * @method Pipeline3x2 echoMessage($message) - alias method for reversed word <echo>
+ * -method Pipeline3x2 ping()
+ * @method Pipeline3x2 quit()
+ * @method Pipeline3x2 select($db)
  *
  * Scripting
  * @method Pipeline3x2 eval($script, $keys = null, $args = null)
@@ -118,6 +144,11 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 sync()
  * @method Pipeline3x2 time()
  *
+ * PubSub
+ * @method Pipeline3x2 publish($channel, $message)
+ * @method Pipeline3x2 punsubscribe($patterns = null)
+ * @method Pipeline3x2 unsubscribe($channels)
+ *
  * Sets
  * @method Pipeline3x2 sadd($key, $members)
  * @method Pipeline3x2 scard($key)
@@ -134,63 +165,26 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 sunion($keys)
  * @method Pipeline3x2 sunionstore($destination, $keys)
  *
- * SortedSets
- * -method Pipeline3x2 zadd($key, array $members)
- * @method Pipeline3x2 zcard($key)
- * @method Pipeline3x2 zcount($key, $min, $max)
- * @method Pipeline3x2 zincrby($key, $increment, $member)
- * @method Pipeline3x2 zinterstore($destination, $keys, $weights = null, $aggregate = null)
- * @method Pipeline3x2 zrange($key, $start, $stop, $withscores = false)
- * @method Pipeline3x2 zrangebyscore($key, $min, $max, $withscores = false, $limit = null)
- * @method Pipeline3x2 zrank($key, $member)
- * @method Pipeline3x2 zrem($key, $members)
- * @method Pipeline3x2 zremrangebyrank($key, $start, $stop)
- * @method Pipeline3x2 zremrangebyscore($key, $min, $max)
- * @method Pipeline3x2 zrevrange($key, $start, $stop, $withscores = false)
- * @method Pipeline3x2 zrevrangebyscore($key, $max, $min, $withscores = false, $limit = null)
- * @method Pipeline3x2 zrevrank($key, $member)
- * @method Pipeline3x2 zscore($key, $member)
- * @method Pipeline3x2 zunionstore($destination, $keys, $weights = null, $aggregate = null)
- *
- * Strings
- * @method Pipeline3x2 append($key, $value)
- * @method Pipeline3x2 bitcount($key, $start = null, $end = null)
- * @method Pipeline3x2 bitop($operation, $destkey, $keys)
- * @method Pipeline3x2 decr($key)
- * @method Pipeline3x2 decrby($key, $decrement)
- * @method Pipeline3x2 get($key)
- * @method Pipeline3x2 getbit($key, $offset)
- * @method Pipeline3x2 getrange($key, $start, $end)
- * @method Pipeline3x2 substr($key, $start, $end)
- * @method Pipeline3x2 getset($key, $value)
- * @method Pipeline3x2 incr($key)
- * @method Pipeline3x2 incrby($key, $increment)
- * @method Pipeline3x2 incrbyfloat($key, $increment)
- * @method Pipeline3x2 mget($keys)
- * @method Pipeline3x2 mset(array $keyValues)
- * @method Pipeline3x2 msetnx(array $keyValues)
- * @method Pipeline3x2 psetex($key, $milliseconds, $value)
- * @method Pipeline3x2 set($key, $value, $seconds = null, $milliseconds = null, $exist = null)
- * @method Pipeline3x2 setbit($key, $offset, $bit)
- * @method Pipeline3x2 setex($key, $seconds, $value)
- * @method Pipeline3x2 setnx($key, $value)
- * @method Pipeline3x2 setrange($key, $offset, $value)
- * @method Pipeline3x2 strlen($key)
- *
- * Transactions
- * @method Pipeline3x2 discard()
- * @method Pipeline3x2 exec()
- * @method Pipeline3x2 multi()
- * @method Pipeline3x2 unwatch()
- * @method Pipeline3x2 watch($keys)
+ * Lists
+ * @method Pipeline3x2 blpop($keys, $timeout)
+ * @method Pipeline3x2 brpop($keys, $timeout)
+ * @method Pipeline3x2 brpoplpush($source, $destination, $timeout)
+ * @method Pipeline3x2 lindex($key, $index)
+ * @method Pipeline3x2 linsert($key, $after = true, $pivot, $value)
+ * @method Pipeline3x2 llen($key)
+ * @method Pipeline3x2 lpop($key)
+ * @method Pipeline3x2 lpush($key, $values)
+ * @method Pipeline3x2 lpushx($key, $value)
+ * @method Pipeline3x2 lrange($key, $start, $stop)
+ * @method Pipeline3x2 lrem($key, $count, $value)
+ * @method Pipeline3x2 lset($key, $index, $value)
+ * @method Pipeline3x2 ltrim($key, $start, $stop)
+ * @method Pipeline3x2 rpop($key)
+ * @method Pipeline3x2 rpoplpush($source, $destination)
+ * @method Pipeline3x2 rpush($key, $values)
+ * @method Pipeline3x2 rpushx($key, $value)
  *
  * Redis version 2.8
- *
- * Connection
- * @method Pipeline3x2 ping($message = null)
- *
- * Hashes
- * @method Pipeline3x2 hscan($key, $cursor, $pattern = null, $count = null)
  *
  * HyperLogLog
  * @method Pipeline3x2 pfadd($key, $elements)
@@ -198,6 +192,12 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 pfmerge($destkey, $sourcekeys)
  * @method Pipeline3x2 pfdebug($subcommand, $key)
  * @method Pipeline3x2 pfselftest()
+ *
+ * Hashes
+ * @method Pipeline3x2 hscan($key, $cursor, $pattern = null, $count = null)
+ *
+ * Strings
+ * @method Pipeline3x2 bitpos($key, $bit, $start = null, $end = null)
  *
  * Keys
  * @method Pipeline3x2 scan($cursor, $pattern = null, $count = null)
@@ -209,8 +209,15 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 latencyGraph($eventName)
  * @method Pipeline3x2 latencyDoctor()
  *
- * PubSub
- * @method Pipeline3x2 pubsub($subcommand, $arguments = null)
+ * SortedSets
+ * @method Pipeline3x2 zlexcount($key, $min, $max)
+ * @method Pipeline3x2 zrangebylex($key, $min, $max, $limit = null)
+ * @method Pipeline3x2 zremrangebylex($key, $min, $max)
+ * @method Pipeline3x2 zrevrangebylex($key, $max, $min, $limit = null)
+ * @method Pipeline3x2 zscan($key, $cursor, $pattern = null, $count = null)
+ *
+ * Connection
+ * @method Pipeline3x2 ping($message = null)
  *
  * Server
  * @method Pipeline3x2 command()
@@ -220,18 +227,11 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 configRewrite()
  * @method Pipeline3x2 role()
  *
+ * PubSub
+ * @method Pipeline3x2 pubsub($subcommand, $arguments = null)
+ *
  * Sets
  * @method Pipeline3x2 sscan($key, $cursor, $pattern = null, $count = null)
- *
- * SortedSets
- * @method Pipeline3x2 zlexcount($key, $min, $max)
- * @method Pipeline3x2 zrangebylex($key, $min, $max, $limit = null)
- * @method Pipeline3x2 zremrangebylex($key, $min, $max)
- * @method Pipeline3x2 zrevrangebylex($key, $max, $min, $limit = null)
- * @method Pipeline3x2 zscan($key, $cursor, $pattern = null, $count = null)
- *
- * Strings
- * @method Pipeline3x2 bitpos($key, $bit, $start = null, $end = null)
  *
  * Redis version 2.9
  *
@@ -239,6 +239,15 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 clientPause($timeout)
  *
  * Redis version 3.0
+ *
+ * Keys
+ * @method Pipeline3x2 exists($keys)
+ * -method Pipeline3x2 migrate($host, $port, $key, $destinationDb, $timeout, $copy = false, $replace = false)
+ * @method Pipeline3x2 restore($key, $ttl, $serializedValue, $replace = false)
+ * @method Pipeline3x2 wait($numslaves, $timeout)
+ *
+ * SortedSets
+ * @method Pipeline3x2 zadd($key, array $members, $nx = null, $ch = false, $incr = false)
  *
  * Cluster
  * @method Pipeline3x2 clusterAddslots($slots)
@@ -262,28 +271,13 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 readonly()
  * @method Pipeline3x2 readwrite()
  *
- * Keys
- * @method Pipeline3x2 exists($keys)
- * -method Pipeline3x2 migrate($host, $port, $key, $destinationDb, $timeout, $copy = false, $replace = false)
- * @method Pipeline3x2 restore($key, $ttl, $serializedValue, $replace = false)
- * @method Pipeline3x2 wait($numslaves, $timeout)
- *
- * SortedSets
- * @method Pipeline3x2 zadd($key, array $members, $nx = null, $ch = false, $incr = false)
- *
  * Redis version 3.2
- *
- * Geo
- * @method Pipeline3x2 geoadd($key, array $members)
- * @method Pipeline3x2 geodist($key, $member1, $member2, $unit = null)
- * @method Pipeline3x2 geohash($key, $members)
- * @method Pipeline3x2 geopos($key, $members)
- * @method Pipeline3x2 georadius($key, $longitude, $latitude, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null, $storeKey = null, $storeDist = false)
- * @method Pipeline3x2 georadiusbymember($key, $member, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null, $storeKey = null, $storeDist = false)
- * @method Pipeline3x2 geodel($key, $members)
  *
  * Hashes
  * @method Pipeline3x2 hstrlen($key, $field)
+ *
+ * Strings
+ * @method Pipeline3x2 bitfield($key, array $subcommands)
  *
  * Keys
  * @method Pipeline3x2 migrate($host, $port, $keys, $destinationDb, $timeout, $copy = false, $replace = false)
@@ -296,11 +290,17 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline3x2 clientReply($param)
  * @method Pipeline3x2 debugHelp()
  *
+ * Geo
+ * @method Pipeline3x2 geoadd($key, array $members)
+ * @method Pipeline3x2 geodist($key, $member1, $member2, $unit = null)
+ * @method Pipeline3x2 geohash($key, $members)
+ * @method Pipeline3x2 geopos($key, $members)
+ * @method Pipeline3x2 georadius($key, $longitude, $latitude, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null, $storeKey = null, $storeDist = false)
+ * @method Pipeline3x2 georadiusbymember($key, $member, $radius, $unit, $withcoord = false, $withdist = false, $withhash = false, $count = null, $asc = null, $storeKey = null, $storeDist = false)
+ * @method Pipeline3x2 geodel($key, $members)
+ *
  * Sets
  * @method Pipeline3x2 spop($key, $count = null)
- *
- * Strings
- * @method Pipeline3x2 bitfield($key, array $subcommands)
  * 
  */
 class Pipeline3x2 extends AbstractPipeline {

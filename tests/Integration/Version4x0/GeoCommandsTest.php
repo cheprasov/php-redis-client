@@ -42,7 +42,7 @@ class GeoCommandsTest extends \Test\Integration\Version3x2\GeoCommandsTest {
         $this->assertSame(null, $Redis->geodist('Sicily', 'bar', 'foo'));
 
         $Redis->set('foo', 'bar');
-        $this->setExpectedException(ErrorResponseException::class);
+        $this->expectException(ErrorResponseException::class);
         $Redis->geodist('foo', 'bar', 'foo');
     }
 

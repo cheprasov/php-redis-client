@@ -16,11 +16,16 @@
       "RedisClient\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\": "tests/"
+    }
+  },
   "require": {
-    "php": ">=5.5"
+    "php": ">=7.2"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.8.*",
+    "phpunit/phpunit": "^8.5.5",
     "cheprasov/php-extra-mocks": "^1.0.0"
   }
 }

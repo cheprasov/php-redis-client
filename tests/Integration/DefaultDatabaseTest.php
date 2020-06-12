@@ -10,12 +10,13 @@
  */
 namespace Test\Integration;
 
+use PHPUnit\Framework\TestCase;
 use RedisClient\Client\Version\RedisClient2x6;
 
 /**
  * Check Redis Versions
  */
-class DefaultDatabaseTest extends \PHPUnit_Framework_TestCase {
+class DefaultDatabaseTest extends TestCase {
 
     public function test_defaultDatabase() {
         $Redis = new RedisClient2x6([

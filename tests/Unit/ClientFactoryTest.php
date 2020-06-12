@@ -10,6 +10,7 @@
  */
 namespace Test\Unit;
 
+use PHPUnit\Framework\TestCase;
 use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Client\Version\RedisClient2x8;
 use RedisClient\Client\Version\RedisClient3x0;
@@ -19,7 +20,7 @@ use RedisClient\ClientFactory;
 /**
  * @see ClientFactory
  */
-class ClientFactoryTest extends \PHPUnit_Framework_TestCase {
+class ClientFactoryTest extends TestCase {
 
     /**
      * @see RedisProtocol::createClientByVersion

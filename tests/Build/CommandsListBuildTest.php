@@ -10,7 +10,9 @@
  */
 namespace Test\Build;
 
-class CommandsListBuildTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class CommandsListBuildTest extends TestCase {
 
     public function test_generate_commands_list() {
         chdir(__DIR__.'/../../');

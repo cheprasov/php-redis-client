@@ -10,14 +10,15 @@
  */
 namespace Test\Unit\Protocol;
 
+use PHPUnit\Framework\TestCase;
 use RedisClient\Connection\StreamConnection;
 use RedisClient\Exception\ErrorResponseException;
 use RedisClient\Protocol\RedisProtocol;
 
-class RedisProtocolTest extends \PHPUnit_Framework_TestCase {
+class RedisProtocolTest extends TestCase {
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StreamConnection
+     * @return \PHPUnit\Framework\MockObject\MockObject|StreamConnection
      */
     protected function getConnectionMock() {
         $ConnectionMock = $this->getMockBuilder(StreamConnection::class)
