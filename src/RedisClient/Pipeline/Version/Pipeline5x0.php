@@ -324,6 +324,10 @@ use RedisClient\Pipeline\AbstractPipeline;
  *
  * Redis version 5.0
  *
+ * Connection
+ * @method Pipeline5x0 clientId()
+ * @method Pipeline5x0 clientUnblock($clientId, $timeoutOrError = null)
+ *
  * Server
  * @method Pipeline5x0 lolwut($param1 = null, $param2 = null, $param3 = null)
  * @method Pipeline5x0 replicaof($host, $port)

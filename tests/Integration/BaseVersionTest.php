@@ -17,19 +17,20 @@ use RedisClient\Client\Version\RedisClient3x0;
 use RedisClient\Client\Version\RedisClient3x2;
 use RedisClient\Client\Version\RedisClient4x0;
 use RedisClient\Client\Version\RedisClient5x0;
+use RedisClient\Client\Version\RedisClient6x0;
 
-class BaseVersionTest extends \PHPUnit_Framework_TestCase {
+abstract class BaseVersionTest extends \PHPUnit_Framework_TestCase {
 
     const SERVER_1 = 0;
     const SERVER_2 = 1;
 
     /**
-     * @var AbstractRedisClient|RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0|RedisClient5x0
+     * @var AbstractRedisClient|RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0|RedisClient5x0|RedisClient6x0
      */
     protected static $Redis;
 
     /**
-     * @var AbstractRedisClient|RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0
+     * @var AbstractRedisClient|RedisClient2x6|RedisClient2x8|RedisClient3x0|RedisClient3x2|RedisClient4x0|RedisClient5x0|RedisClient6x0
      */
     static protected $Redis2;
 
@@ -40,6 +41,7 @@ class BaseVersionTest extends \PHPUnit_Framework_TestCase {
         RedisClient3x2::class => [TEST_REDIS_SERVER_3x2_1, TEST_REDIS_SERVER_3x2_2],
         RedisClient4x0::class => [TEST_REDIS_SERVER_4x0_1, TEST_REDIS_SERVER_4x0_2],
         RedisClient5x0::class => [TEST_REDIS_SERVER_5x0_1, TEST_REDIS_SERVER_5x0_2],
+        RedisClient6x0::class => [TEST_REDIS_SERVER_6x0_1, TEST_REDIS_SERVER_6x0_2],
     ];
 
     static protected $test_config_map = [
