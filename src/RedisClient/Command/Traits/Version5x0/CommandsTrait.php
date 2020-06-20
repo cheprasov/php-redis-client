@@ -22,7 +22,6 @@ use RedisClient\Command\Traits\Version3x2\HashesCommandsTrait;
 use RedisClient\Command\Traits\Version3x2\ScriptingCommandsTrait;
 use RedisClient\Command\Traits\Version3x2\SetsCommandsTrait;
 use RedisClient\Command\Traits\Version3x2\StringsCommandsTrait;
-use RedisClient\Command\Traits\Version4x0\ConnectionCommandsTrait;
 use RedisClient\Command\Traits\Version4x0\KeysCommandsTrait;
 use RedisClient\Command\Traits\Version4x0\MemoryCommandsTrait;
 
