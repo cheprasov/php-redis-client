@@ -14,6 +14,10 @@ use RedisClient\Client\Version\RedisClient2x6;
 use RedisClient\Client\Version\RedisClient2x8;
 use RedisClient\Client\Version\RedisClient3x0;
 use RedisClient\Client\Version\RedisClient3x2;
+use RedisClient\Client\Version\RedisClient4x0;
+use RedisClient\Client\Version\RedisClient5x0;
+use RedisClient\Client\Version\RedisClient6x0;
+
 use RedisClient\ClientFactory;
 
 /**
@@ -64,6 +68,7 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf(RedisClient2x6::class, ClientFactory::createClientByVersion('2'));
         $this->assertInstanceOf(RedisClient2x6::class, ClientFactory::createClientByVersion(2));
 
-        $this->assertInstanceOf(RedisClient2x6::class, ClientFactory::create());
+        $this->assertInstanceOf(RedisClient6x0::class, ClientFactory::createClientByVersion('6.0.5'));
+        $this->assertInstanceOf(RedisClient5x0::class, ClientFactory::createClientByVersion('5.0.5'));
     }
 }

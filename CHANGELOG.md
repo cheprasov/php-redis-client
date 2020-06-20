@@ -1,5 +1,14 @@
 ## CHANGELOG
 
+### v1.10.0 (2020-06-20)
+- Added support Redis 6
+- Updated server commands: ACL commands,
+- Updated connection commands: CLIENT ID, CLIENT UNBLOCK, CLIENT CACHING, CLIENT GETREDIR, CLIENT TRACKING, HELLO
+- Updated stream commands: XINFO (added FULL param)
+- Added lists commands: LPOS
+- Added strings commands: STRALGO LCS
+- The client was checked with Redis-6.0.5, Redis-5.0.5, Redis-4.0.14 and older versions
+
 ### v1.9.1 (2019-10-12)
 - Fixed bug: parser result error for transactions/pipelines https://github.com/cheprasov/php-redis-client/issues/72
 

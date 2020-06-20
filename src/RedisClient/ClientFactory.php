@@ -16,6 +16,7 @@ use RedisClient\Client\Version\RedisClient3x0;
 use RedisClient\Client\Version\RedisClient3x2;
 use RedisClient\Client\Version\RedisClient4x0;
 use RedisClient\Client\Version\RedisClient5x0;
+use RedisClient\Client\Version\RedisClient6x0;
 use RedisClient\Exception\ErrorException;
 use RedisClient\Exception\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class ClientFactory {
     const REDIS_VERSION_3x2 = '3.2';
     const REDIS_VERSION_4x0 = '4.0';
     const REDIS_VERSION_5x0 = '5.0';
-    const REDIS_VERSION_DEFAULT = self::REDIS_VERSION_5x0;
+    const REDIS_VERSION_6x0 = '6.0';
+    const REDIS_VERSION_DEFAULT = self::REDIS_VERSION_6x0;
 
     /**
      * @var string|null
@@ -44,6 +46,7 @@ class ClientFactory {
         self::REDIS_VERSION_3x2 => RedisClient3x2::class,
         self::REDIS_VERSION_4x0 => RedisClient4x0::class,
         self::REDIS_VERSION_5x0 => RedisClient5x0::class,
+        self::REDIS_VERSION_6x0 => RedisClient6x0::class,
     ];
 
     /**

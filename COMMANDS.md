@@ -304,6 +304,10 @@
 - [flushdb($async = false)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version4x0/ServerCommandsTrait.php)
 ## Redis version 5.0
 
+### Connection
+- [clientId()](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version5x0/ConnectionCommandsTrait.php)
+- [clientUnblock($clientId, $timeoutOrError = null)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version5x0/ConnectionCommandsTrait.php)
+
 ### Server
 - [lolwut($param1 = null, $param2 = null, $param3 = null)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version5x0/ServerCommandsTrait.php)
 - [replicaof($host, $port)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version5x0/ServerCommandsTrait.php)
@@ -333,4 +337,34 @@
 - [xrevrange($key, $end, $start, $count = null)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version5x0/StreamsCommandsTrait.php)
 - [xtrim($key, $count, $withTilde = false)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version5x0/StreamsCommandsTrait.php)
 - [xsetid($stream, $groupname, $id)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version5x0/StreamsCommandsTrait.php)
+## Redis version 6.0
+
+### Connection
+- [clientCaching($isEnabled)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ConnectionCommandsTrait.php)
+- [clientCetredir()](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ConnectionCommandsTrait.php)
+- [clientTracking($isEnabled, $redirectClientId = null, $prefixes = null, $bcast = null, $optin = null, $optout = null, $noloop = null)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ConnectionCommandsTrait.php)
+- [hello($protover, $username = null, $password = null, $clientName = null)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ConnectionCommandsTrait.php)
+
+### Lists
+- [lpos($key, $element, $rank = null, $numMatches = null, $len = null)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ListsCommandsTrait.php)
+
+### Server
+- [aclCat($categoryName = null)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+- [aclDeluser($usernames)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+- [aclGenpass($bits = null)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+- [aclGetuser($username)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+- [aclHelp()](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+- [aclList()](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+- [aclLog($count = null)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+- [aclLogReset()](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+- [aclSave()](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+- [aclSetuser($username, $rules = null)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+- [aclUsers()](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+- [aclWhoami()](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/ServerCommandsTrait.php)
+
+### Streams
+- [xinfo($consumersKey = null, $consumersGroup = null, $groupsKey = null, $streamKey = null, $streamFull = null, $help = false)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/StreamsCommandsTrait.php)
+
+### Strings
+- [stralgoLcs(array $algoSpecificArguments)](https://github.com/cheprasov/php-redis-client/blob/master/src/RedisClient/Command/Traits/Version6x0/StringsCommandsTrait.php)
 

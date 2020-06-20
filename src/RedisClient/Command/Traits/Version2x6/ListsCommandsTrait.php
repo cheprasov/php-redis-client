@@ -108,7 +108,6 @@ trait ListsCommandsTrait {
         return $this->returnCommand(['LLEN'], $key, [$key]);
     }
 
-
     /**
      * LPOP key
      * Available since 1.0.0.

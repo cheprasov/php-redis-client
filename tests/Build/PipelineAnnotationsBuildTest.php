@@ -20,7 +20,7 @@ class PipelineAnnotationsBuildTest extends \PHPUnit_Framework_TestCase {
         $result = `php ./tools/generate_annotations_for_pipeline.php update`;
 
         $lines = explode("\n", trim($result));
-        $this->assertSame(6, count($lines));
+        $this->assertSame(7, count($lines));
 
         foreach ($lines as $line) {
             $this->assertSame(true, strpos($line, 'updated') > 0 || strpos($line, 'has not changes') > 0);
