@@ -164,7 +164,10 @@ class ServerCommandsTest extends \Test\Integration\BaseVersionTest {
         $this->assertSame(true, is_array($info['CPU']));
         $this->assertSame(true, is_array($info['Keyspace']));
 
-        $this->assertSame($info['Server'], $Redis->info('Server'));
+        $serverInfo = $Redis->info('Server');
+        $info['Server']['lru_clock'] = $serverInfo['lru_clock'];
+        $this->assertSame($info['Server'], $serverInfo);
+
         $this->assertSame($info['Clients'], $Redis->info('Clients'));
         $this->assertSame($info['Persistence'], $Redis->info('Persistence'));
         $this->assertSame($info['Replication'], $Redis->info('Replication'));
