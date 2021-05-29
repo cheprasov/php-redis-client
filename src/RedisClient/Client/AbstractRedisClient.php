@@ -162,7 +162,6 @@ abstract class AbstractRedisClient {
     }
 
     /**
-     * @param array $command
      * @param null|string|string[] $command
      * @param array|null $params
      * @param int|null $parserId
