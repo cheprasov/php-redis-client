@@ -9,6 +9,7 @@ php:
   - '7.2'
   - '7.3'
   - '7.4'
+  - '8.0'
   - hhvm
 
 matrix:
@@ -22,6 +23,7 @@ install:
    - composer install
 
 before_install:
+   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
    - docker pull cheprasov/redis-for-tests:latest;
    - docker pull cheprasov/redis-cluster-for-tests:latest;
 
