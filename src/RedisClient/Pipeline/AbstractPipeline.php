@@ -76,7 +76,7 @@ abstract class AbstractPipeline implements PipelineInterface {
     /**
      * @inheritdoc
      */
-    protected function subscribeCommand(array $subCommand, array $unsubCommand, array $params = null, $callback) {
+    protected function subscribeCommand(array $subCommand, array $unsubCommand, ?array $params, $callback) {
         throw new ErrorException('Do not use subscribe in pipeline');
     }
 

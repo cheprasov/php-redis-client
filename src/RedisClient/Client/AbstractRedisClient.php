@@ -270,7 +270,7 @@ abstract class AbstractRedisClient {
     /**
      * @inheritdoc
      */
-    protected function subscribeCommand(array $subCommand, array $unsubCommand, array $params = null, $callback) {
+    protected function subscribeCommand(array $subCommand, array $unsubCommand, ?array $params, $callback) {
         $Protocol = $this->getProtocol();
         $Protocol->subscribe($this->getStructure($subCommand, $params), $callback);
         return $this->executeProtocolCommand($Protocol, $unsubCommand, $params);

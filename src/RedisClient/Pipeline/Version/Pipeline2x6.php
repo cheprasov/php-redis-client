@@ -66,7 +66,7 @@ use RedisClient\Pipeline\AbstractPipeline;
  * @method Pipeline2x6 brpop($keys, $timeout)
  * @method Pipeline2x6 brpoplpush($source, $destination, $timeout)
  * @method Pipeline2x6 lindex($key, $index)
- * @method Pipeline2x6 linsert($key, $after = true, $pivot, $value)
+ * @method Pipeline2x6 linsert($key, $after, $pivot, $value)
  * @method Pipeline2x6 llen($key)
  * @method Pipeline2x6 lpop($key)
  * @method Pipeline2x6 lpush($key, $values)
