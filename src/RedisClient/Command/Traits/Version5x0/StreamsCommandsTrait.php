@@ -282,9 +282,10 @@ trait StreamsCommandsTrait {
         if (isset($block)) {
             $params[] = ['BLOCK', $block];
         }
+        $params[] = 'STREAMS';
         $params[] = $keys;
         $params[] = (array)$ids;
-        return $this->returnCommand(['XRANGE'], $keys, $params);
+        return $this->returnCommand(['XREAD'], $keys, $params);
     }
 
     /**
