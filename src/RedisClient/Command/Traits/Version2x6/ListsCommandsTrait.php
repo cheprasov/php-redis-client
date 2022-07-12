@@ -91,7 +91,7 @@ trait ListsCommandsTrait {
      * @return int The length of the list after the insert operation,
      * or -1 when the value pivot was not found. Or 0 when key was not found.
      */
-    public function linsert($key, $after = true, $pivot, $value) {
+    public function linsert($key, $after = true, $pivot = '', $value = '') {
         return $this->returnCommand(['LINSERT'], $key, [$key, $after ? 'AFTER' : 'BEFORE', $pivot, $value]);
     }
 
