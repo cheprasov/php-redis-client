@@ -85,13 +85,13 @@ trait ListsCommandsTrait {
      * @link http://redis.io/commands/linsert
      *
      * @param string $key
-     * @param bool|true $after
+     * @param bool $after
      * @param string $pivot
      * @param string $value
      * @return int The length of the list after the insert operation,
      * or -1 when the value pivot was not found. Or 0 when key was not found.
      */
-    public function linsert($key, $after = true, $pivot, $value) {
+    public function linsert($key, $after, $pivot, $value) {
         return $this->returnCommand(['LINSERT'], $key, [$key, $after ? 'AFTER' : 'BEFORE', $pivot, $value]);
     }
 

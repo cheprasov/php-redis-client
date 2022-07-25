@@ -27,7 +27,7 @@ trait AbstractCommandsTrait {
      * @param \Closure|string|array $callback
      * @return mixed
      */
-    abstract protected function subscribeCommand(array $subCommand, array $unsubCommand, array $params = null, $callback);
+    abstract protected function subscribeCommand(array $subCommand, array $unsubCommand, ?array $params, $callback);
 
     /**
      * @return string
